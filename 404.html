@@ -1,0 +1,188 @@
+---
+permalink: /404
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>404 ERROR</title>
+
+<meta name="robots" content="noindex, follow">
+
+<link rel="icon" type="image/png" href="/favicon-light.png" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: light)">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MH68ZWLYM8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MH68ZWLYM8');
+</script>
+
+<style>
+  @media (pointer: coarse) {
+    a,
+    button,
+    img,
+    label,
+    input,
+    select,
+    .toggle,
+    .switch,
+    .slider,
+    textarea {
+      -webkit-tap-highlight-color: transparent;
+      outline: none;
+    }
+
+  @media (pointer: coarse) {
+    * {
+      -webkit-tap-highlight-color: transparent;
+    }
+  }
+
+    a:focus-visible,
+    button:focus-visible,
+    input:focus-visible,
+    select:focus-visible,
+    textarea:focus-visible {
+      outline: none;
+    }
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Rubik', sans-serif;
+  }
+
+  body {
+    background: linear-gradient(135deg, #4AA9A1, #2CA877, #62A78A);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    flex-direction: column;
+  }
+
+  h1 {
+    font-size: 5rem;
+    font-weight: 900;
+    margin: 0;
+    margin-bottom: -1.5rem;
+    letter-spacing: -0.1;
+  }
+
+  p {
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-bottom: 0rem;
+    opacity: 0.85;
+  }
+
+  .btn-glass {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: white;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 45px;
+    text-decoration: none;
+    transition: transform 0.2s, background 0.2s;
+    box-shadow:
+      0 4px 16px rgba(0,0,0,0.1),
+      inset 0 0 10px rgba(255 255 255 / 0.2);
+    margin-bottom: 1rem;
+  }
+
+
+  .btn-glass:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.01);
+    box-shadow:
+      0 6px 20px rgba(0,0,0,0.20),
+      inset 0 0 10px rgba(255 255 255 / 0.2);
+  }
+
+  .socials {
+    margin-top: 2rem;
+    display: flex;
+    gap: 8rem;
+  }
+
+  .socials a {
+    color: white;
+    font-size: 1rem;
+    text-decoration: none;
+    opacity: 0.75;
+    transition: opacity 0.2s;
+  }
+
+  .socials a:hover {
+    opacity: 1;
+  }
+  
+  .error-mascotte {
+    width: 460px;
+    max-width: 70%;
+    margin: 24px auto 32px;
+    display: block;
+    opacity: 1;
+  }
+
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 3.9rem;
+      font-weight: 900;
+    }
+    p {
+      font-size: 1rem;
+    }
+    .error-mascotte {
+      width: 500px;
+      max-width: 70%;
+      margin: 0px auto 0px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h1>OUPSI</h1>
+<p>Cette page n'existe pas</p>
+
+<img 
+  src="/pics/cat/cat-404.svg" 
+  alt="Mascotte Perspikative"
+  class="error-mascotte"
+/>
+
+<a class="btn-glass" href="/">RETOURNER À L'ACCUEIL</a>
+
+<div class="socials">
+  <a href="https://instagram.com/perspikative" target="_blank">IG</a>
+  <a href="https://youtube.com/@perspikative" target="_blank">YT</a>
+  <a href="https://linktr.ee/perspikative" target="_blank">LINKTREE</a>
+</div>
+
+<script>
+document.addEventListener("contextmenu", e => e.preventDefault());
+</script>
+
+</body>
+</html>

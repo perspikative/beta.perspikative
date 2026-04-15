@@ -1,0 +1,669 @@
+---
+permalink: /rechercher
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>Rechercher</title>
+
+  <meta name="description" content="Recherche et explore facilement ce que tu veux dans l'univers de Perspikative, grâce à un moteur de recherche intuitif et créatif.">
+  <meta name="keywords" content="recherche artistique, explorer portfolio, moteur de recherche art, créations, illustrations, projets, Perspikative">
+  <meta name="robots" content="index, follow">
+
+  <meta name="theme-color" content="#58b3a2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#344f4a" media="(prefers-color-scheme: dark)">
+
+  <link rel="icon" type="image/png" href="/favicon-light.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: light)">
+
+  <link rel="stylesheet" href="/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    .search-history {
+      margin-top: 10px;
+      width: 100%;
+      padding: 0;
+      margin-left: 1rem;
+    }
+
+    .search-history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      width: 100%;
+      border: 0;
+      background: transparent;
+      color: #ffffff;
+      font: inherit;
+      cursor: pointer;
+      text-align: left;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    .history-item:hover,
+    .history-item:focus-visible {
+      transform: translateX(2px);
+      opacity: 1;
+      outline: none;
+    }
+
+    .history-item-icon {
+      width: 18px;
+      height: 18px;
+      opacity: 1;
+      flex-shrink: 0;
+    }
+
+    .search-history-clear {
+      margin-top: 0.65rem;
+      margin-left: 0.4rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.9);
+      font: inherit;
+      font-size: 1rem;
+      line-height: 1;
+      cursor: pointer;
+      padding: 0.34rem 0.62rem;
+      border-radius: 999px;
+      transition: all 0.2s ease;
+      box-shadow:
+        inset 0 0 8px rgba(255, 255, 255, 0.25),
+        0 6px 18px rgba(0, 0, 0, 0.06);
+    }
+
+    .search-history-clear:hover,
+    .search-history-clear:focus-visible {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-1px);
+      outline: none;
+      box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3),
+        0 6px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    @media (max-width: 600px) {
+      .search-history {
+        margin-left: 0.3rem;
+      }
+    }
+  </style>
+</head>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MH68ZWLYM8"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MH68ZWLYM8');
+</script>
+
+<body class="search">
+
+  <nav class="mobile-nav">
+    <a href="/" class="nav-icon" title="Accueil">
+      <img src="/icons/accueil.svg" alt="Accueil">
+    </a>
+    <a href="/portfolio" class="nav-icon" title="Portfolio">
+      <img src="/icons/portfolio.svg" alt="Portfolio">
+    </a>
+    <a href="/rechercher" class="nav-icon active" title="Rechercher">
+      <img src="/icons/rechercher-active.svg" alt="Rechercher">
+    </a>
+    <a href="/actus" class="nav-icon" title="Actus">
+      <img src="/icons/actus.svg" alt="Actus">
+    </a>
+    <a href="/contact" class="nav-icon" title="Contact">
+      <img src="/icons/contact.svg" alt="Contact">
+    </a>
+  </nav>
+
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <a href="/"><img src="/logo.svg" alt="Perspikative logo"></a>
+      </div>
+
+      <div class="nav-right">
+        <ul class="nav-tabs">
+          <li>
+            <a href="/" class="tab">
+              <img src="/icons/accueil.svg" alt="" class="tab-icon"> ACCUEIL
+            </a>
+          </li>
+          <li>
+            <a href="/portfolio" class="tab">
+              <img src="/icons/portfolio.svg" alt="" class="tab-icon"> PORTFOLIO
+            </a>
+          </li>
+          <li>
+            <a href="/actus" class="tab">
+              <img src="/icons/actus.svg" alt="" class="tab-icon"> ACTUS
+            </a>
+          </li>
+          <li>
+            <a href="/contact" class="tab">
+              <img src="/icons/contact.svg" alt="" class="tab-icon"> CONTACT
+            </a>
+          </li>
+        </ul>
+
+        <input type="checkbox" id="menuToggle" />
+        <label for="menuToggle" class="burger-icon" title="Menu">
+          <img id="menuIcon" src="icons/menu.svg" alt="Menu">
+        </label>
+        
+        <div class="mobile-menu">
+          <ul>
+            <li><a href="/faq">FAQ</a></li>
+            <li><a href="/art-challenge">ART CHALLENGE</a></li>
+            <li><a href="/parametres">PARAMÈTRES</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="blur-overlay"></div>
+
+  <section class="search-page-container">
+    <div class="search-box-wrapper">
+        
+      <div class="search-bubble">
+        <img src="/icons/rechercher.svg" alt="Loupe" class="search-logo">
+        <input type="text" id="searchInput" placeholder="Rechercher..." class="search-input" autocomplete="off" autofocus>
+      </div>
+
+      <div id="searchResults"></div>
+
+      <div id="defaultViews">
+        
+        <div id="searchHistory" class="search-history" hidden>
+          <div class="section-title">Recherches récentes</div>
+          <div id="searchHistoryList" class="search-history-list"></div>
+          <button type="button" id="clearSearchHistory" class="search-history-clear">Effacer l'historique</button>
+        </div>
+
+        <div id="popularContent" class="popular-content">
+          <div class="section-title">Contenu populaire</div>
+          <div id="popularList" class="popular-list"></div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <footer>
+    <div class="social-icons">
+      <a href="https://linktr.ee/perspikative" target="_blank" aria-label="Linktree">
+        <img src="/icons/linktree.svg" alt="Linktree">
+      </a>
+      <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" aria-label="Chaîne WhatsApp">
+        <img src="/icons/whatsapp-channel.svg" alt="Chaîne WhatsApp">
+      </a>
+      <a href="https://www.instagram.com/perspikative" target="_blank" aria-label="Instagram">
+        <img src="/icons/instagram.svg" alt="Instagram">
+      </a>
+      <a href="https://youtube.com/@perspikative" target="_blank" aria-label="YouTube">
+        <img src="/icons/youtube.svg" alt="YouTube">
+      </a>
+      <a href="https://www.pinterest.com/perspikative" target="_blank" aria-label="Pinterest">
+        <img src="/icons/pinterest.svg" alt="Pinterest">
+      </a>
+    </div>
+
+    <p>&copy; 2026 Perspikative™. Tous droits réservés.</p>
+    <p><a href="/mentions-legales" class="footer-link">Mentions légales</a></p>
+    <p><a href="/politique-de-confidentialite" class="footer-link">Politique de confidentialité</a></p>
+    <p><a href="/position-ia" class="footer-link">Position sur l'IA</a></p>
+  </footer>
+
+<script>
+    // --- UTILS (Tolérance fautes et accents) ---
+    function normalizeText(str) {
+      if (!str) return "";
+      return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+    }
+
+    function levenshtein(a, b) {
+      const matrix = [];
+      for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+      for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+      for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+          if (b.charAt(i - 1) === a.charAt(j - 1)) matrix[i][j] = matrix[i - 1][j - 1];
+          else matrix[i][j] = Math.min(matrix[i - 1][j - 1] + 1, Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1));
+        }
+      }
+      return matrix[b.length][a.length];
+    }
+
+    // --- EASTER EGGS ---
+    const easterEggs = {
+      "caca": { text: "Et merde alors" },
+      "kk": { text: "Et merde alors" },
+      "merde": { text: "Et merde alors" },
+      "perspikative": { img: "/logo.svg", text: "T'y es déjà canaille" },
+      "bonjour": { text: "Heyy!" },
+      "secret": { text: "Perspikative regorge de secrets..." },
+      "tout": { text: "Ta recherche est un peu vaste, non ?" },
+      "hack": { text: "Bien essayé, farfadet." },
+      "mascotte": { img: "/pics/easter-eggs/cat-book.svg", text: "Tadam!" },
+      "ok": { text: "Et c'est ok" },
+      "je suis perdu": { text: "Tu vas t'en sortir :)" },
+      "perdu": { text: "Tu vas t'en sortir :)" },
+      "help": { text: "Besoin d'aide ? Tu n'es pas seul. Parle à une personne de confiance." },
+      "aide": { text: "Besoin d'aide ? Tu n'es pas seul. Parle à une personne de confiance." },
+      "fuck": { text: "Hep hep hep pas de grossiereté ici" },
+      "tg": { text: "Hep hep hep pas de grossiereté ici" },
+      "putain": { text: "Hep hep hep pas de grossiereté ici" },
+      "ptn": { text: "Hep hep hep pas de grossiereté ici" },
+      "ta gueule": { text: "Hep hep hep pas de grossiereté ici" },
+      "donald trump": { img: "/pics/easter-eggs/trump.webp", text: "Ohh non pas lui" },
+      "trump": { img: "/pics/easter-eggs/trump.webp", text: "Ohh non pas lui" },
+      "ice out": { img: "/pics/easter-eggs/ice-out.webp" },
+      "ice": { img: "/pics/easter-eggs/ice-out.webp" },
+      "capybara": { img: "/pics/easter-eggs/capybara.webp" },
+      "for sure": { img: "/pics/easter-eggs/for-sure.webp" },
+      "...": { text: "... K?" },
+      "cherche": { text: "Tu cherches la recherche dans la recherche ?" },
+      "/rainbow": { 
+        text: "C'est la fête des couleurs !", 
+        action: () => {
+          document.body.style.animation = "rainbow-bg 5s infinite";
+          const style = document.createElement('style');
+          style.innerHTML = "@keyframes rainbow-bg { 0% { background: #ffadad; } 20% { background: #ffd6a5; } 40% { background: #fdffb6; } 60% { background: #caffbf; } 80% { background: #a0c4ff; } 100% { background: #ffadad; } }";
+          document.head.appendChild(style);
+        }
+      },
+      "/draw": {
+            text: "À toi de dessiner !",
+            action: () => {
+                  if (document.getElementById('doodle-svg')) return;
+                  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+                  svg.id = "doodle-svg";
+                  svg.style = "position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:10000;pointer-events:all;touch-action:none;cursor:crosshair;";
+                  document.body.appendChild(svg);
+                  let isDrawing = false, points = [], currentPath = null;
+                  const getCoords = (e) => {
+                        const t = e.touches ? e.touches[0] : e;
+                        return { x: t.clientX, y: t.clientY };
+                  };
+                  const startDrawing = (e) => {
+                        isDrawing = true;
+                        points = [getCoords(e)];
+                        currentPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+                        currentPath.setAttribute("fill", "none");
+                        currentPath.setAttribute("stroke", "#FFFFFF");
+                        currentPath.setAttribute("stroke-width", "6");
+                        currentPath.setAttribute("stroke-linecap", "round");
+                        currentPath.setAttribute("stroke-linejoin", "round");
+                        svg.appendChild(currentPath);
+                  };
+                  const draw = (e) => {
+                        if (!isDrawing) return;
+                        if (e.cancelable) e.preventDefault();
+                        points.push(getCoords(e));
+                        if (points.length > 2) {
+                              let d = `M ${points[0].x} ${points[0].y}`;
+                              for (let i = 1; i < points.length - 2; i++) {
+                                    const xc = (points[i].x + points[i + 1].x) / 2;
+                                    const yc = (points[i].y + points[i + 1].y) / 2;
+                                    d += ` Q ${points[i].x} ${points[i].y} ${xc} ${yc}`;
+                              }
+                              const n = points.length;
+                              d += ` Q ${points[n-2].x} ${points[n-2].y} ${points[n-1].x} ${points[n-1].y}`;
+                              currentPath.setAttribute("d", d);
+                        }
+                  };
+                  svg.addEventListener('mousedown', startDrawing);
+                  window.addEventListener('mousemove', draw);
+                  window.addEventListener('mouseup', () => { isDrawing = false; points = []; });
+                  svg.addEventListener('touchstart', startDrawing, { passive: false });
+                  svg.addEventListener('touchmove', draw, { passive: false });
+                  svg.addEventListener('touchend', () => { isDrawing = false; points = []; });
+            }
+      },
+      "/reset": { 
+        text: "Retour à la normale...", 
+        action: () => {
+            document.body.style.filter = "";
+            document.body.style.animation = "";
+            document.body.style.transform = "";
+        }
+      },
+    };
+
+    // --- 1. BASE DE DONNÉES ---
+    const siteContent = [
+      { title: "Accueil", category: "Page", url: "/", tags: "maison home accueil perspikative", img: "/icons/accueil.svg" },
+      { title: "Portfolio", category: "Portfolio", url: "/portfolio", tags: "dessin art création illustration projet couleur traditionnel digital peinture aquarelle", img: "/icons/portfolio.svg" },
+      { title: "Créations", category: "Portfolio", url: "/portfolio/creations", tags: "créations dessin peinture art couleur traditionnel", img: "/icons/creations.svg" },
+      { title: "Illustrations", category: "Portfolio", url: "/portfolio/illustrations", tags: "illustrations dessin digital", img: "/icons/illustrations.svg" },
+      { title: "Projets", category: "Portfolio", url: "/portfolio/projets", tags: "projets dessin concept traditionnel", img: "/icons/projets.svg" },
+      { title: "Art Challenge", category: "Challenge", url: "/art-challenge", tags: "art challenge défi concours thème dessin", img: "/icons/art-challenge.svg" },
+      { title: "Contact", category: "Contact", url: "/contact", tags: "contact message email", img: "/icons/contact.svg" },
+      { title: "FAQ", category: "FAQ", url: "/faq", tags: "FAQ questions réponses", img: "/icons/faq.svg" },
+      { title: "Actus", category: "Actus", url: "/actus", tags: "actus articles actualité actu nouveauté infos feed", img: "/icons/actus.svg" },
+      { title: "Mentions légales", category: "Légal", url: "/mentions-legales", tags: "mention légales", img: "/icons/mentions-legales.svg" },
+      { title: "Politique de confidentialité", category: "Légal", url: "/politique-de-confidentialite", tags: "politique de confidentialité", img: "/icons/politique-de-confidentialite.svg" },
+      { title: "Position sur l'IA", category: "Légal", url: "/position-ia", tags: "position ia intelligence artificielle", img: "/icons/contrat.svg" },
+      { title: "Brand guidelines", category: "Légal", url: "/brand-guidelines", tags: "brand guidelines utilisation marque", img: "/icons/brand-guidelines.svg" },
+      { title: "404 ERROR", category: "404", url: "/404", tags: "erreur oupsi", img: "/icons/404.svg" },
+
+      { title: "FAQ - Général", category: "FAQ", url: "/faq/general", tags: "FAQ général", img: "/icons/general.svg" },
+      { title: "FAQ - Portfolio", category: "FAQ", url: "/faq/portfolio", tags: "FAQ portfolio", img: "/icons/portfolio.svg" },
+      { title: "FAQ - Contact", category: "FAQ", url: "/faq/contact", tags: "FAQ contact", img: "/icons/contact.svg" },
+      { title: "FAQ - Confidentialié", category: "FAQ", url: "/faq/confidentialite", tags: "FAQ confidentialité", img: "/icons/confidentialite.svg" },
+      { title: "FAQ - Actus", category: "FAQ", url: "/faq/actus", tags: "FAQ actus", img: "/icons/actus.svg" },
+      { title: "FAQ - Fonctionnalités", category: "FAQ", url: "/faq/fonctionnalites", tags: "FAQ fonctionnalités", img: "/icons/fonctionnalites.svg" },
+      { title: "FAQ - ART Challenge", category: "FAQ", url: "/faq/art-challenge", tags: "FAQ art challenge", img: "/icons/art-challenge.svg" },
+      { title: "FAQ - Recherche", category: "FAQ", url: "/faq/recherche", tags: "FAQ recherche", img: "/icons/rechercher.svg" },
+
+      { title: "Perspikative Birthday", category: "Actus", url: "/actus/2026/perspikative-birthday", tags: "perspikative birthday actus anniversaire perspikative 2 ans years deux article", img: "/icons/article.svg" },
+      { title: "Nouveautés de la recherche", category: "Actus", url: "/actus/2026/nouveautes-recherche", tags: "nouveautés recherche actus articles actualité", img: "/icons/article.svg" },
+
+      { title: "YouTube", category: "Social", url: "https://youtube.com/@perspikative", tags: "YouTube vidéos shorts videos réseau social", img: "/icons/youtube.svg" },
+      { title: "Instagram", category: "Social", url: "https://instagram.com/perspikative", tags: "Instagram reels réseau social", img: "/icons/instagram.svg" },
+      { title: "Linktree", category: "Social", url: "https://linktr.ee/perspikative", tags: "Linktree liens tree réseau social", img: "/icons/linktree.svg" },
+      { title: "WhatsApp", category: "Social", url: "https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y", tags: "WhatsApp réseau social", img: "/icons/whatsapp-channel.svg" },
+      { title: "Pinterest", category: "Social", url: "https://pinterest.com/perspikative", tags: "Pinterest réseau social", img: "/icons/pinterest.svg" },
+      { title: "NGL", category: "Social", url: "https://ngl.link/perspikative", tags: "NGL messages anonymes réseau social", img: "/icons/ngl.png" },
+
+      { title: "となりのトトロ", category: "Œuvre", url: "/portfolio/creations#my-neighbor-totoro", tags: "mon voisin totoro ghibli hayao miyazaki nature esprit foret forêt collab", img: "/icons/creations.svg" },
+      { title: "KAYOU's DINER", category: "Œuvre", url: "/portfolio/creations#kayous-diner", tags: "kayou's diner cailloux resto restaurant cacahuètes orange roche kayoupolis", img: "/icons/creations.svg" },
+      { title: "The Castle Byers", category: "Œuvre", url: "/portfolio/creations#the-castle-byers", tags: "the castle byers château maison forêt stranger things", img: "/icons/creations.svg" },
+      { title: "The Lil Stork", category: "Œuvre", url: "/portfolio/creations#the-lil-stork", tags: "the lil stork cigogne oiseau étang forêt arbre mare maison", img: "/icons/creations.svg" },
+      { title: "The Cozy House of the field mouse", category: "Œuvre", url: "/portfolio/creations#the-cozy-house-of-the-field-mouse", tags: "the cozy house of the field mouse souris cozy livre assiette cheminée feu tapis", img: "/icons/creations.svg" },
+      { title: "A Wanderer in Ginger Wood", category: "Œuvre", url: "/portfolio/creations#a-wanderer-in-ginger-wood", tags: "a wanderer in ginger wood valise forêt automne fille bois rousse", img: "/icons/creations.svg" },
+      { title: "The Old, Old Lighthouse", category: "Œuvre", url: "/portfolio/creations#the-old-old-lighthouse", tags: "the old, old lighthouse phare nuages ciel baleines", img: "/icons/creations.svg" },
+      { title: "The IA Home", category: "Œuvre", url: "/portfolio/creations#the-ia-home", tags: "the ia home intelligence artificielle code erreur bocal cerveau", img: "/icons/creations.svg" },
+      { title: "Creative Thoughts", category: "Œuvre", url: "/portfolio/creations#creative-thoughts", tags: "creative thoughts collage pensées sketchbook", img: "/icons/creations.svg" },
+      { title: "The Blue Bakery", category: "Œuvre", url: "/portfolio/creations#the-blue-bakery", tags: "the blue bakery boulangerie bleu", img: "/icons/creations.svg" },
+      { title: "Meeting in the Valley", category: "Œuvre", url: "/portfolio/creations#meeting-in-the-valley", tags: "meeting in the valley vallées ville éclairage lumière", img: "/icons/creations.svg" },
+      { title: "The Moon Meadows Stable", category: "Œuvre", url: "/portfolio/creations#the-moon-meadows-stable", tags: "the moon meadows stable étable tournage caméra scène cheval centre equestre équestre equitation équitation collab", img: "/icons/creations.svg" },
+      { title: "POP-BOX flowers", category: "Œuvre", url: "/portfolio/creations#pop-box-flowers", tags: "pop-box flowers bouquet fleur corn", img: "/icons/creations.svg" },
+      { title: "Once upon a dream", category: "Œuvre", url: "/portfolio/creations#once-upon-a-dream", tags: "once upon a dream rêves nuit", img: "/icons/creations.svg" },
+      { title: "Birkskov", category: "Œuvre", url: "/portfolio/creations#birkskov", tags: "birkskov forêt bouleau neige", img: "/icons/creations.svg" },
+      { title: "Heading for the Door", category: "Œuvre", url: "/portfolio/creations#heading-for-the-door", tags: "heading for the door porte 2025 nouvel an fête feu d'artifice", img: "/icons/creations.svg" },
+      { title: "Winter Lights", category: "Œuvre", url: "/portfolio/creations#winter-lights", tags: "winter lights hiver noel guirlande neige noël", img: "/icons/creations.svg" },
+      { title: "Le Palais des Rêves", category: "Œuvre", url: "/portfolio/creations#le-palais-des-reves", tags: "le palais des rêves boules pont jaune mauve reves", img: "/icons/creations.svg" },
+      { title: "the bird house", category: "Œuvre", url: "/portfolio/creations#the-bird-house", tags: "the bird house maison oiseau automne arbres", img: "/icons/creations.svg" },
+      { title: "Airplane", category: "Œuvre", url: "/portfolio/creations#airplane", tags: "airplane avion nuage nuages rose collab", img: "/icons/creations.svg" },
+      { title: "L'auberge", category: "Œuvre", url: "/portfolio/creations#l-auberge", tags: "l'auberge maison ciel rêve jaune violet orange bleu reve", img: "/icons/creations.svg" },
+      { title: "My Music Art", category: "Œuvre", url: "/portfolio/creations#my-music-art", tags: "my music art musique note artiste chanson", img: "/icons/creations.svg" },
+      { title: "La Cité des Bulles", category: "Œuvre", url: "/portfolio/creations#la-cite-des-bulles", tags: "la cité des bulles ville bleu bulle bubullienne futuriste écran ecran affiche cite", img: "/icons/creations.svg" },
+      { title: "Là-Haut", category: "Œuvre", url: "/portfolio/creations#la-haut", tags: "là-haut maison vole ballon disney pixar ciel Karl film dessin animé la haut", img: "/icons/creations.svg" },
+      { title: "Architecture", category: "Œuvre", url: "/portfolio/creations#architecture", tags: "maison ville europe rue architecture européen europeen", img: "/icons/creations.svg" },
+      { title: "日本国", category: "Œuvre", url: "/portfolio/creations#temple-japonais", tags: "temple japonais asie asiatique rouge traditionnel", img: "/icons/creations.svg" },
+      { title: "Vegetal Desert", category: "Œuvre", url: "/portfolio/creations#vegetal-desert", tags: "vegetal desert serre sahara afrique beige sable désert vegétal végetal végétal", img: "/icons/creations.svg" },
+      { title: "Red Fashion", category: "Œuvre", url: "/portfolio/creations#red-fashion", tags: "red fashion rouge bonhomme bonshommes noir peinture mode", img: "/icons/creations.svg" },
+      { title: "Le Café Enchanté", category: "Œuvre", url: "/portfolio/creations#le-cafe-enchante", tags: "le café enchanté fantastique enchante cafe", img: "/icons/creations.svg" },
+      { title: "The Dragon Kingdom", category: "Œuvre", url: "/portfolio/creations#the-dragon-kingdom", tags: "the dragon kingdom royauté royaume isométrie isométrique", img: "/icons/creations.svg" },
+      { title: "Espace Côtier avec un ciel paranormal", category: "Œuvre", url: "/portfolio/creations#espace-cotier-avec-un-ciel-paranormal", tags: "esapce côtier ciel paranormal rose mer côte", img: "/icons/creations.svg" },
+      { title: "Little Cottage", category: "Œuvre", url: "/portfolio/creations#little-cottage", tags: "little cottage maison noir blanc", img: "/icons/creations.svg" },
+      { title: "Route 66, USA", category: "Œuvre", url: "/portfolio/creations#route-66-usa", tags: "route 66 usa panneau états-unis rouge bleu", img: "/icons/creations.svg" },
+      { title: "Welcome in the house", category: "Œuvre", url: "/portfolio/creations#welcome-in-the-house", tags: "welcome in the house maison salon isométrie isométrique", img: "/icons/creations.svg" },
+      { title: "Alfaborg, la cité des fées", category:"Œuvre", url: "/portfolio/creations#alfaborg-la-cite-des-fees", tags: "alfaborg la cité des fées arbre islande champ", img: "/icons/creations.svg" },
+      { title: "Hollande, Pays-Bas", category: "Œuvre", url: "/portfolio/creations#hollande-pays-bas", tags: "hollande pays bas europe moulin champs coucher soleil", img: "/icons/creations.svg" },
+      { title: "Circuit de karting", category: "Œuvre", url: "/portfolio/creations#circuit-de-karting", tags: "circuit de karting voiture kart pneu", img: "/icons/creations.svg" },
+      { title: "Cartoon World", category: "Œuvre", url: "/portfolio/creations#cartoon-world", tags: "cartoon world cabane arbre", img: "/icons/creations.svg" },
+      { title: "Candy House", category: "Œuvre", url: "/portfolio/creations#candy-house", tags: "candy house maison bonbon nuage", img: "/icons/creations.svg" },
+      { title: "New-York", category: "Œuvre", url: "/portfolio/creations#new-york", tags: "new-york ville building skyscraper gratte-ciel new york gratte ciel", img: "/icons/creations.svg" },
+      { title: "Maison retro futuriste", category: "Œuvre", url: "/portfolio/creations#maison-retro-futuriste", tags: "maison retro futuriste cabane", img: "/icons/creations.svg" },
+      { title: "Abstrakt City", category: "Œuvre", url: "/portfolio/creations#abstrakt-city", tags: "abstrakt city ville", img: "/icons/creations.svg" },
+      { title: "Minecraft", category: "Œuvre", url: "/portfolio/creations#minecraft", tags: "minecraft bloc isométrique jeu vidéo", img: "/icons/creations.svg" },
+
+      { title: "the 2 Year Building", category: "Illustration", url: "/portfolio/illustrations#the-2-year-building", tags: "the 2 year building tour architecture anniversaire isométrique isométrie rose deux ans", img: "/icons/illustrations.svg" },
+      
+      { title: "i'm the orange of ur blue", category: "Projet", url: "/portfolio/projets#im-the-orange-of-ur-blue", tags: "i'm the orange of your blue collaboration bleu", img: "/icons/projets.svg" },
+      { title: "ART Tower", category: "Projet", url: "/portfolio/projets#art-tower", tags: "art tower tour architecture collab métier art", img: "/icons/projets.svg" },
+      { title: "Perspika City", category: "Projet", url: "/portfolio/projets#perspika-city", tags: "perspika city ville volante collab", img: "/icons/projets.svg" },
+    ];
+
+    // --- 2. MOTEUR ---
+    const searchInput = document.getElementById('searchInput');
+    const resultsContainer = document.getElementById('searchResults');
+    const defaultViews = document.getElementById('defaultViews');
+    const historyContainer = document.getElementById('searchHistory');
+    const historyList = document.getElementById('searchHistoryList');
+    const clearHistoryBtn = document.getElementById('clearSearchHistory');
+    const popularList = document.getElementById('popularList');
+
+    const SEARCH_HISTORY_KEY = 'perspikative_search_history';
+    const SEARCH_HISTORY_LIMIT = 5;
+    let noResultTimer = null;
+
+    // --- CONTENU POPULAIRE À METTRE EN AVANT ---
+    const popularSearches = [
+      { title: "i'm the orange of ur blue", icon: "/icons/projets-active.svg", url: "/portfolio/projets#im-the-orange-of-ur-blue" },
+      { title: "Portfolio", icon: "/icons/portfolio-active.svg", url: "/portfolio" },
+      { title: "となりのトトロ", icon: "/icons/creations-active.svg", url: "/portfolio/creations#my-neighbor-totoro" },
+      { title: "Actus", icon: "/icons/actus-active.svg", url: "/actus" },
+    ];
+
+    function renderPopularContent() {
+      if (!popularList) return;
+      popularList.innerHTML = '';
+      popularSearches.forEach(item => {
+        const a = document.createElement('a');
+        a.href = item.url;
+        a.className = 'popular-item';
+        a.innerHTML = `<img src="${item.icon}" alt=""><span>${item.title}</span>`;
+        popularList.appendChild(a);
+      });
+    }
+
+    function loadSearchHistory() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(SEARCH_HISTORY_KEY) || '[]');
+        return Array.isArray(parsed) ? parsed : [];
+      } catch { return []; }
+    }
+
+    function saveSearchHistory(history) {
+      localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(history.slice(0, SEARCH_HISTORY_LIMIT)));
+    }
+
+    function addToSearchHistory(value) {
+      const term = value.toLowerCase().trim();
+      if (term.length < 2) return;
+      const current = loadSearchHistory();
+      const next = [term, ...current.filter(item => item !== term)].slice(0, SEARCH_HISTORY_LIMIT);
+      saveSearchHistory(next);
+      renderSearchHistory();
+    }
+
+    function renderSearchHistory() {
+      const history = loadSearchHistory();
+      historyList.innerHTML = '';
+      history.forEach(term => {
+        const itemBtn = document.createElement('button');
+        itemBtn.type = 'button';
+        itemBtn.className = 'history-item';
+        itemBtn.dataset.term = term;
+        const icon = document.createElement('img');
+        icon.src = '/icons/rechercher.svg';
+        icon.className = 'history-item-icon';
+        const label = document.createElement('span');
+        label.textContent = term;
+        itemBtn.appendChild(icon);
+        itemBtn.appendChild(label);
+        historyList.appendChild(itemBtn);
+      });
+      // On cache le bloc historique s'il est vide
+      historyContainer.hidden = history.length === 0;
+    }
+
+    // --- MOTEUR DE RECHERCHE ---
+    function runSearch(query, rawValue) {
+      if (noResultTimer) clearTimeout(noResultTimer);
+      resultsContainer.innerHTML = '';
+      const cleanQuery = normalizeText(query);
+      
+      const searchTerms = cleanQuery.split(/\s+/).filter(t => t.length >= 2);
+
+      // --- UN SEUL BLOC EASTER EGGS ---
+      for (let key in easterEggs) {
+        if (normalizeText(key) === cleanQuery) {
+          const egg = easterEggs[key];
+          
+          if (typeof egg.action === 'function') {
+            egg.action();
+          }
+
+          let html = `<div class="easter-egg">`;
+          if (egg.img) html += `<img src="${egg.img}" alt="Easter egg">`;
+          if (egg.text) html += `<p>${egg.text}</p>`;
+          html += `</div>`;
+          resultsContainer.innerHTML = html;
+          
+          return;
+        }
+      }
+
+      if (searchTerms.length === 0) return;
+
+      let scoredResults = siteContent.map(item => {
+        let score = 0;
+        let matchedTermsCount = 0;
+        const cleanTitle = normalizeText(item.title);
+        const titleWords = cleanTitle.split(/\s+/);
+        const tags = item.tags.split(/\s+/).map(t => normalizeText(t));
+
+        searchTerms.forEach(term => {
+          let hasMatch = false;
+
+          // 1. Check Titre
+          if (cleanTitle.includes(term)) {
+            score += 50;
+            hasMatch = true;
+          } else {
+            // Flou sur le titre
+            titleWords.forEach(w => {
+              if (levenshtein(w, term) <= 1) { score += 20; hasMatch = true; }
+            });
+          }
+
+          // 2. Check Tags
+          tags.forEach(tag => {
+            if (tag.includes(term)) { score += 20; hasMatch = true; }
+          });
+
+          if (hasMatch) matchedTermsCount++;
+        });
+
+        if (matchedTermsCount === searchTerms.length && searchTerms.length > 1) {
+          score += 100;
+        }
+
+        return { ...item, score };
+      });
+
+      const filteredResults = scoredResults
+        .filter(item => item.score > 0)
+        .sort((a, b) => b.score - a.score);
+
+      if (filteredResults.length === 0) {
+        resultsContainer.innerHTML = `<div class="no-results-container"><div class="no-results-text">Aucun résultat pour "${rawValue}"</div></div>`;
+        noResultTimer = setTimeout(() => {
+          const container = resultsContainer.querySelector('.no-results-container');
+          if (container) {
+            const btn = document.createElement('a');
+            btn.href = '/rechercher';
+            btn.className = 'btn-search-again fade-in-btn';
+            btn.textContent = 'Rechercher autre chose';
+            container.appendChild(btn);
+          }
+        }, 1500);
+      } else {
+        filteredResults.forEach(item => {
+          const imageSrc = item.img ? item.img : 'icons/rechercher.svg';
+          resultsContainer.innerHTML += `
+            <a href="${item.url}" class="result-item">
+              <img src="${imageSrc}" alt="miniature" class="result-thumb">
+              <div class="result-info">
+                <h3>${item.title} <span class="badge-cat">${item.category}</span></h3>
+                <p>Mots-clés : ${item.tags.substring(0, 40)}...</p>
+              </div>
+            </a>`;
+        });
+      }
+    }
+
+    searchInput.addEventListener('input', function(e) {
+      const rawValue = e.target.value.trim();
+      if (rawValue === '') {
+        if (noResultTimer) clearTimeout(noResultTimer);
+        resultsContainer.innerHTML = '';
+        defaultViews.hidden = false; // Affiche Populaire + Historique
+        renderSearchHistory();
+        return;
+      }
+      defaultViews.hidden = true; // Cache Populaire + Historique pendant la recherche
+      runSearch(rawValue.toLowerCase(), e.target.value);
+    });
+
+    searchInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') addToSearchHistory(searchInput.value);
+    });
+
+    searchInput.addEventListener('blur', function() {
+      addToSearchHistory(searchInput.value);
+      if (searchInput.value.trim() === '') {
+        defaultViews.hidden = false;
+        renderSearchHistory();
+      }
+    });
+
+    resultsContainer.addEventListener('click', function(e) {
+      if (e.target.closest('.result-item')) addToSearchHistory(searchInput.value);
+    });
+
+    historyList.addEventListener('click', function(e) {
+      const item = e.target.closest('.history-item');
+      if (!item) return;
+      const term = item.dataset.term || '';
+      searchInput.value = term;
+      defaultViews.hidden = true; // On cache les vues par défaut
+      runSearch(term.toLowerCase(), term);
+      addToSearchHistory(term);
+      searchInput.focus();
+    });
+
+    clearHistoryBtn.addEventListener('click', function() {
+      localStorage.removeItem(SEARCH_HISTORY_KEY);
+      renderSearchHistory();
+    });
+
+    // Initialisation
+    renderPopularContent();
+    renderSearchHistory();
+
+    const menuToggle = document.getElementById('menuToggle');
+    if(menuToggle) {
+        menuToggle.addEventListener('change', (e) => {
+          document.body.classList.toggle('menu-open', e.target.checked);
+        });
+    }
+</script>
+
+  <script src="/script.js"></script>
+</body>
+
+</html>

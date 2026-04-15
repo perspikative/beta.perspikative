@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Page d'accueil -->
+  <url>
+    <loc>https://www.perspikative.com/</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- Actus -->
+  <url>
+    <loc>https://www.perspikative.com/actus</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Portfolio -->
+  <url>
+    <loc>https://www.perspikative.com/portfolio</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Portfolio / Créations -->
+  <url>
+    <loc>https://www.perspikative.com/portfolio/creations</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Portfolio / Illustrations -->
+  <url>
+    <loc>https://www.perspikative.com/portfolio/illustrations</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Portfolio / Projets -->
+  <url>
+    <loc>https://www.perspikative.com/portfolio/projets</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Contact -->
+  <url>
+    <loc>https://www.perspikative.com/contact</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- ART Challenge -->
+  <url>
+    <loc>https://www.perspikative.com/art-challenge</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Rechercher -->
+  <url>
+    <loc>https://www.perspikative.com/rechercher</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- FAQ -->
+  <url>
+    <loc>https://www.perspikative.com/faq</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- FAQ / Actus -->
+  <url>
+    <loc>https://www.perspikative.com/faq/actus</loc>
+    <lastmod>2026-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- FAQ / Art Challenge -->
+  <url>
+    <loc>https://www.perspikative.com/faq/art-challenge</loc>
+    <lastmod>2026-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- FAQ / Confidentialité -->
+  <url>
+    <loc>https://www.perspikative.com/faq/confidentialite</loc>
+    <lastmod>2026-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- FAQ / Contact -->
+  <url>
+    <loc>https://www.perspikative.com/faq/contact</loc>
+    <lastmod>2026-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- FAQ / Fonctionnalités -->
+  <url>
+    <loc>https://www.perspikative.com/faq/fonctionnalites</loc>
+    <lastmod>2026-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- FAQ / Général -->
+  <url>
+    <loc>https://www.perspikative.com/faq/general</loc>
+    <lastmod>2026-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- FAQ / Portfolio -->
+  <url>
+    <loc>https://www.perspikative.com/faq/portfolio</loc>
+    <lastmod>2026-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- FAQ / Recherche -->
+  <url>
+    <loc>https://www.perspikative.com/faq/recherche</loc>
+    <lastmod>2026-01-28</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <!-- Article Perspikative Birthday / Actus -->
+  <url>
+    <loc>https://www.perspikative.com/actus/2026/perspikative-birthday</loc>
+    <lastmod>2026-03-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- Mentions légales -->
+  <url>
+    <loc>https://www.perspikative.com/mentions-legales</loc>
+    <lastmod>2026-01-28</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- Politique de confidentialité -->
+  <url>
+    <loc>https://www.perspikative.com/politique-de-confidentialite</loc>
+    <lastmod>2026-01-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- Position sur l'IA -->
+  <url>
+    <loc>https://www.perspikative.com/position-ia</loc>
+    <lastmod>2026-01-26</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+</urlset>
