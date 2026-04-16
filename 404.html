@@ -78,35 +78,36 @@ permalink: /404
   }
 
   h1 {
-    font-size: 5rem;
+    font-size: 5.6rem;
     font-weight: 900;
     margin: 0;
     margin-bottom: -1.5rem;
-    letter-spacing: -0.1;
+    letter-spacing: -3px;
   }
 
   p {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-weight: 400;
     margin-bottom: 0rem;
     opacity: 0.85;
+    margin-top: 4px;
   }
 
   .btn-glass {
-    padding: 0.8rem 1.5rem;
-    font-size: 1rem;
+    padding: 0.6rem 1.2rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: white;
     background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border-radius: 45px;
+    border-radius: 50px;
     text-decoration: none;
     transition: transform 0.2s, background 0.2s;
     box-shadow:
       0 4px 16px rgba(0,0,0,0.1),
-      inset 0 0 10px rgba(255 255 255 / 0.2);
+      inset 0 0 10px rgba(255 255 255 / 0.25);
     margin-bottom: 1rem;
   }
 
@@ -118,24 +119,6 @@ permalink: /404
       0 6px 20px rgba(0,0,0,0.20),
       inset 0 0 10px rgba(255 255 255 / 0.2);
   }
-
-  .socials {
-    margin-top: 2rem;
-    display: flex;
-    gap: 8rem;
-  }
-
-  .socials a {
-    color: white;
-    font-size: 1rem;
-    text-decoration: none;
-    opacity: 0.75;
-    transition: opacity 0.2s;
-  }
-
-  .socials a:hover {
-    opacity: 1;
-  }
   
   .error-mascotte {
     width: 460px;
@@ -145,14 +128,45 @@ permalink: /404
     opacity: 1;
   }
 
-  @media (max-width: 600px) {
+  .social-icons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2rem;
+    padding: 0rem 0;
+  }
+
+  .social-icons a img {
+    width: 31px;
+    height: 31px;
+    opacity: 0.8;
+    transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
+  }
+
+  .social-icons a:hover img {
+    opacity: 1;
+  }
+
+  @media (max-width: 900px) {
+    .social-icons {
+      gap: 0.2rem;
+      padding: 0rem 0;
+    }
+
+    .social-icons a img {
+      width: 30px;
+      height: 30px;
+    }
+
     h1 {
       font-size: 3.9rem;
       font-weight: 900;
     }
+
     p {
       font-size: 1rem;
     }
+
     .error-mascotte {
       width: 500px;
       max-width: 70%;
@@ -174,10 +188,22 @@ permalink: /404
 
 <a class="btn-glass" href="/">RETOURNER À L'ACCUEIL</a>
 
-<div class="socials">
-  <a href="https://instagram.com/perspikative" target="_blank">IG</a>
-  <a href="https://youtube.com/@perspikative" target="_blank">YT</a>
-  <a href="https://linktr.ee/perspikative" target="_blank">LINKTREE</a>
+<div class="social-icons">
+  <a href="https://linktr.ee/perspikative" target="_blank" aria-label="Linktree">
+    <img src="/icons/linktree.svg" alt="Linktree">
+  </a>
+  <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" aria-label="Chaîne WhatsApp">
+    <img src="/icons/whatsapp-channel.svg" alt="Chaîne WhatsApp">
+  </a>
+  <a href="https://www.instagram.com/perspikative" target="_blank" aria-label="Instagram">
+    <img src="/icons/instagram.svg" alt="Instagram">
+  </a>
+  <a href="https://youtube.com/@perspikative" target="_blank" aria-label="YouTube">
+    <img src="/icons/youtube.svg" alt="YouTube">
+  </a>
+  <a href="https://www.pinterest.com/perspikative" target="_blank" aria-label="Pinterest">
+    <img src="/icons/pinterest.svg" alt="Pinterest">
+  </a>
 </div>
 
 <script>
