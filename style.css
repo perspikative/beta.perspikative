@@ -340,10 +340,13 @@ header h1 {
   z-index: 10001;
   box-shadow: 0 10px 25px rgba(0,0,0,0.2),
               inset 0 0 13px rgba(255, 255, 255, 0.2);
-  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   transform: translateY(-10px);
   opacity: 0;
+  transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              visibility 0.25s; /* Ajout d'une transition pour visibility */
+  visibility: hidden;    /* Empêche le focus et cache l'élément proprement */
+  pointer-events: none;  /* Les clics passent à travers l'élément */
 }
 
 .blur-overlay {
@@ -418,8 +421,9 @@ body.menu-open .blur-overlay {
   opacity: 1;
   transform: translateY(0);
   transition: opacity 0.5s ease, transform 0.5s ease; /* plus doux */
+  visibility: visible;
+  pointer-events: auto; /* Rend le menu cliquable à nouveau */
 }
-
 
 /* --- Mobile nav bar --- */
 .mobile-nav {
