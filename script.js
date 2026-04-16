@@ -101,161 +101,47 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-
-// ============================= 2. LIGHTBOX POUR LES CRÉATIONS =============================
+// ============================= 2. LIGHTBOX - VERSION CORRIGÉE =============================
+// On déclare les variables en dehors pour qu'elles soient accessibles partout
+let openLightbox; 
 
 document.addEventListener('DOMContentLoaded', () => {
-  const lightbox      = document.getElementById('lightbox');
+  const lightbox = document.getElementById('lightbox');
   if (!lightbox) return;
 
-  const lightboxImg   = document.getElementById('lightbox-img');
+  const lightboxImg = document.getElementById('lightbox-img');
   const lightboxTitle = document.getElementById('lightbox-title');
-  const lightboxDate  = document.getElementById('lightbox-date');
-  const lightboxDesc  = document.getElementById('lightbox-desc');
-  const lightboxExtra = document.getElementById('lightbox-extra');
-  const closeBtn      = document.getElementById('lightbox-close');
-  const lbLikeBtn     = document.getElementById('lb-like-btn');
-  const lbLikeIcon    = document.getElementById('lb-like-icon');
-  const lbShareBtn    = document.getElementById('lb-share-btn');
+  const lightboxDate = document.getElementById('lightbox-date');
+  const lightboxDesc = document.getElementById('lightbox-desc');
+  const closeBtn = document.getElementById('lightbox-close');
 
-  if (!lightboxImg || !lightboxTitle || !lightboxDesc || !closeBtn) {
-    console.warn('Lightbox : certains éléments sont manquants.');
-    return;
-  }
+  // FONCTION UNIVERSELLE D'OUVERTURE
+  openLightbox = function(imgElement) {
+    if (!imgElement) return;
+    
+    lightboxImg.src = imgElement.src;
+    lightboxImg.alt = imgElement.alt || '';
+    lightboxTitle.textContent = imgElement.dataset.title || '';
+    if (lightboxDate) lightboxDate.textContent = imgElement.dataset.date || '';
+    if (lightboxDesc) lightboxDesc.innerHTML = imgElement.dataset.desc || '';
 
-  let currentId = null;
-
-  // ── LIKES STORE (localStorage) ──────────────────────────────────────────
-  const LikesStore = {
-    _key: 'prspk_likes',
-    _data: function() {
-      try { return JSON.parse(localStorage.getItem(this._key)) || {}; }
-      catch(e) { return {}; }
-    },
-    _save: function(data) {
-      localStorage.setItem(this._key, JSON.stringify(data));
-    },
-    hasLiked: function(id) {
-      return !!this._data()[id];
-    },
-    toggle: function(id) {
-      var data = this._data();
-      data[id] = !data[id];
-      this._save(data);
-      return data[id];
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    
+    // Met à jour l'URL si l'image a un ID
+    if (imgElement.id) {
+      history.pushState(null, '', `#${imgElement.id}`);
     }
   };
 
-  // ── UI like ──────────────────────────────────────────────────────────────
-  function updateLikeUI(id) {
-    if (!lbLikeBtn || !lbLikeIcon) return;
-    var liked = LikesStore.hasLiked(id);
-    lbLikeIcon.src = liked ? '/icons/like-active.svg' : '/icons/like.svg';
-    lbLikeBtn.classList.toggle('liked', liked);
-  }
-
-  // ── Animation like ───────────────────────────────────────────────────────
-  function animateLike(liked) {
-    if (!liked || !lbLikeBtn) return;
-    lbLikeBtn.classList.remove('like-pop');
-    void lbLikeBtn.offsetWidth;
-    lbLikeBtn.classList.add('like-pop');
-    spawnHearts(lbLikeBtn);
-  }
-
-  function spawnHearts(btn) {
-    for (var i = 0; i < 6; i++) {
-      var heart = document.createElement('span');
-      heart.className = 'like-particle';
-      heart.textContent = '\u2665';
-      var angle = Math.random() * 160 - 80;
-      var dist  = 30 + Math.random() * 30;
-      heart.style.setProperty('--angle', angle + 'deg');
-      heart.style.setProperty('--dist', dist + 'px');
-      heart.style.setProperty('--delay', (i * 40) + 'ms');
-      btn.appendChild(heart);
-      heart.addEventListener('animationend', function() { this.remove(); });
-    }
-  }
-
-  // ── Toast partage ────────────────────────────────────────────────────────
-  function showShareToast() {
-    var toast = document.getElementById('share-toast');
-    if (!toast) {
-      toast = document.createElement('div');
-      toast.id = 'share-toast';
-      toast.className = 'share-toast';
-      toast.textContent = 'Lien copié ! 🔗';
-      document.body.appendChild(toast);
-    }
-    toast.classList.add('visible');
-    setTimeout(function() { toast.classList.remove('visible'); }, 2500);
-  }
-
-  // ── Ouverture de la lightbox ─────────────────────────────────────────────
-  var thumbs = document.querySelectorAll('.prspk-thumb');
-
-  thumbs.forEach(function(img) {
-    img.addEventListener('click', function() {
-      lightboxImg.src               = img.src;
-      lightboxImg.alt               = img.alt || '';
-      lightboxTitle.textContent     = img.dataset.title || '';
-      if (lightboxDate) lightboxDate.textContent = img.dataset.date || '';
-      lightboxDesc.innerHTML        = img.dataset.desc || '';
-
-      currentId = img.id || img.src;
-      lightbox.dataset.id = currentId;
-
-      if (lbLikeBtn) updateLikeUI(currentId);
-
-      lightbox.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    });
-  });
-
-  // ── Bouton like ──────────────────────────────────────────────────────────
-  if (lbLikeBtn) {
-    lbLikeBtn.addEventListener('click', function() {
-      if (!currentId) return;
-      var liked = LikesStore.toggle(currentId);
-      updateLikeUI(currentId);
-      animateLike(liked);
-    });
-  }
-
-  // ── Bouton partager ──────────────────────────────────────────────────────
-  if (lbShareBtn) {
-    lbShareBtn.addEventListener('click', function() {
-      if (!currentId) return;
-      var url   = window.location.origin + '/portfolio/creations/' + currentId;
-      var texte = 'Jette un oeil à cette création sur Perspikative ! ' + url;
-
-      if (navigator.share) {
-        navigator.share({ title: 'Perspikative', text: texte, url: url })
-          .catch(function() {});
-      } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(texte).then(function() {
-          showShareToast();
-        });
-      }
-    });
-  }
-
-  // ── Fermeture ────────────────────────────────────────────────────────────
-  closeBtn.addEventListener('click', function() {
+  // Fermeture (inchangée)
+  closeBtn.addEventListener('click', () => {
     lightbox.classList.remove('active');
     document.body.style.overflow = '';
   });
 
-  lightbox.addEventListener('click', function(e) {
+  lightbox.addEventListener('click', (e) => {
     if (e.target === lightbox) {
-      lightbox.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-  });
-
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && lightbox.classList.contains('active')) {
       lightbox.classList.remove('active');
       document.body.style.overflow = '';
     }
@@ -317,54 +203,43 @@ document.addEventListener("contextmenu", e => e.preventDefault());
 
 
 
-// ============================= 5. OUVRIR LES HASHS DE LA RECHERCHE POUR LES LIGHTBOXS =============================
+// ============================= 5. GESTION DU CLIC ET DU HASH =============================
 
-// Ouvrir automatiquement la lightbox si un hash est présent
-window.addEventListener('DOMContentLoaded', () => {
-  const hash = window.location.hash.substring(1); // enlève le #
-  if (!hash) return;
-
-  const targetImg = document.getElementById(hash);
-  if (targetImg) {
-    // Réutilise exactement la même logique que pour le clic
-    lightboxImg.src = targetImg.src;
-    lightboxTitle.textContent = targetImg.dataset.title || '';
-    lightboxDate.textContent = targetImg.dataset.date || '';
-    lightboxDesc.innerHTML = targetImg.dataset.desc || '';
-
-    lightbox.classList.add('active');
-    document.body.style.overflow = 'hidden';
+document.addEventListener('DOMContentLoaded', () => {
+  
+  // 1. Gérer le Hash au chargement (ex: site.fr/#creation1)
+  const hash = window.location.hash.substring(1);
+  if (hash) {
+    // Petit délai pour laisser le temps aux images de charger en local
+    setTimeout(() => {
+      const targetImg = document.getElementById(hash);
+      if (targetImg && typeof openLightbox === 'function') {
+        openLightbox(targetImg);
+      }
+    }, 500);
   }
-});
 
-document.addEventListener('click', (e) => {
-  const clickedImg = e.target.closest('.prspk-thumb');
-  if (!clickedImg) return;
+  // 2. Gérer le clic sur TOUTES les images (Délégation d'événement)
+  document.addEventListener('click', (e) => {
+    const clickedImg = e.target.closest('.prspk-thumb');
+    if (!clickedImg) return;
 
-  // Si l'image cliquée n'a PAS de data-title, on est en 2 colonnes
-  if (!clickedImg.dataset.title) {
-    const id = clickedImg.id;
-    if (!id) return;
-
-    // On va chercher l'image "riche" dans la version 3 colonnes
-    const sourceImg = document.querySelector(
-      `.layout-3colonnes .prspk-thumb#${CSS.escape(id)}`
-    );
-
-    if (!sourceImg) return;
-
-    // On simule exactement l'ouverture normale de la lightbox
-    lightboxImg.src = sourceImg.src;
-    lightboxTitle.textContent = sourceImg.dataset.title || '';
-    lightboxDate.textContent = targetImg.dataset.date || '';
-    lightboxDesc.innerHTML = sourceImg.dataset.desc || '';
-
-    lightbox.classList.add('active');
-    document.body.style.overflow = 'hidden';
-
-    // Bonus : met à jour l'URL
-    history.pushState(null, '', `#${id}`);
-  }
+    // Si c'est l'image de la grille principale (elle a un titre)
+    if (clickedImg.dataset.title) {
+      openLightbox(clickedImg);
+    } 
+    // Si c'est l'image "simplifiée" (2 colonnes), on cherche sa version riche
+    else {
+      const id = clickedImg.id;
+      const sourceImg = document.querySelector(`.layout-3colonnes .prspk-thumb#${CSS.escape(id)}`);
+      if (sourceImg) {
+        openLightbox(sourceImg);
+      } else {
+        // Au cas où, on ouvre quand même la version cliquée
+        openLightbox(clickedImg);
+      }
+    }
+  });
 });
 
 
