@@ -192,69 +192,26 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(function() { toast.classList.remove('visible'); }, 2500);
   }
 
-// ── Ouverture de la lightbox ─────────────────────────────────────────────
-var thumbs = document.querySelectorAll('.prspk-thumb');
-var isMobile = () => window.matchMedia('(max-width: 768px)').matches;
+  // ── Ouverture de la lightbox ─────────────────────────────────────────────
+  var thumbs = document.querySelectorAll('.prspk-thumb');
 
-thumbs.forEach(function(img) {
-  img.addEventListener('click', function() {
-    lightboxImg.src               = img.src;
-    lightboxImg.alt               = img.alt || '';
-    lightboxTitle.textContent     = img.dataset.title || '';
-    if (lightboxDate) lightboxDate.textContent = img.dataset.date || '';
-    lightboxDesc.innerHTML        = img.dataset.desc || '';
+  thumbs.forEach(function(img) {
+    img.addEventListener('click', function() {
+      lightboxImg.src               = img.src;
+      lightboxImg.alt               = img.alt || '';
+      lightboxTitle.textContent     = img.dataset.title || '';
+      if (lightboxDate) lightboxDate.textContent = img.dataset.date || '';
+      lightboxDesc.innerHTML        = img.dataset.desc || '';
 
-    currentId = img.id || img.src;
-    lightbox.dataset.id = currentId;
+      currentId = img.id || img.src;
+      lightbox.dataset.id = currentId;
 
-    if (lbLikeBtn) updateLikeUI(currentId);
+      if (lbLikeBtn) updateLikeUI(currentId);
 
-    // ── Animation "glisse depuis la thumbnail" — mobile uniquement ──
-    if (isMobile()) {
-      const rect = img.getBoundingClientRect();
-      const startX = rect.left + rect.width / 2 - window.innerWidth / 2;
-      const startY = rect.top + rect.height / 2 - window.innerHeight / 2;
-      const scaleX = rect.width / window.innerWidth;
-      const scaleY = rect.height / window.innerHeight;
-
-      // Ouvre la lightbox sans fond visible
-      lightbox.style.transition = 'none';
-      lightbox.style.background = 'rgba(0,0,0,0)';
       lightbox.classList.add('active');
-
-      // Image positionnée à l'endroit de la thumbnail
-      lightboxImg.style.transition = 'none';
-      lightboxImg.style.transform = `translate(${startX}px, ${startY}px) scale(${scaleX}, ${scaleY})`;
-      lightboxImg.style.opacity = '0.5';
-      lightboxImg.style.transformOrigin = 'center center';
-
-      // Force le reflow
-      lightboxImg.getBoundingClientRect();
-
-      // Lance l'animation de l'image
-      lightboxImg.style.transition = 'transform 0.42s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease';
-      lightboxImg.style.transform = 'translate(0,0) scale(1)';
-      lightboxImg.style.opacity = '1';
-
-      // Fond noir apparaît légèrement après
-      setTimeout(function() {
-        lightbox.style.transition = 'background 0.3s ease';
-        lightbox.style.background = 'rgba(0,0,0,0.75)';
-      }, 150);
-
-    } else {
-      // Desktop : comportement normal sans animation
-      lightboxImg.style.transition = '';
-      lightboxImg.style.transform = '';
-      lightboxImg.style.opacity = '';
-      lightbox.style.transition = '';
-      lightbox.style.background = '';
-      lightbox.classList.add('active');
-    }
-
-    document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+    });
   });
-});
 
   // ── Bouton like ──────────────────────────────────────────────────────────
   if (lbLikeBtn) {

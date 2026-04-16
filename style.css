@@ -3822,13 +3822,3 @@ body {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
-
-
-
-
-/* Sur mobile, la lightbox doit passer AU-DESSUS du header sticky (z-index: 9999) */
-@media (max-width: 768px) {
-  #lightbox {
-    z-index: 99999;
-  }
-}
