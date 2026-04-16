@@ -101,51 +101,110 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// ============================= 2. LIGHTBOX - VERSION CORRIGÉE =============================
-// On déclare les variables en dehors pour qu'elles soient accessibles partout
+// ============================= 2. LIGHTBOX - VERSION FINALE =============================
 let openLightbox; 
 
 document.addEventListener('DOMContentLoaded', () => {
   const lightbox = document.getElementById('lightbox');
   if (!lightbox) return;
 
-  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxImg   = document.getElementById('lightbox-img');
   const lightboxTitle = document.getElementById('lightbox-title');
-  const lightboxDate = document.getElementById('lightbox-date');
-  const lightboxDesc = document.getElementById('lightbox-desc');
-  const closeBtn = document.getElementById('lightbox-close');
+  const lightboxDate  = document.getElementById('lightbox-date');
+  const lightboxDesc  = document.getElementById('lightbox-desc');
+  const closeBtn      = document.getElementById('lightbox-close');
+  const lbLikeBtn     = document.getElementById('lb-like-btn');
+  const lbLikeIcon    = document.getElementById('lb-like-icon');
+  const lbShareBtn    = document.getElementById('lb-share-btn');
 
-  // FONCTION UNIVERSELLE D'OUVERTURE
+  // Variable interne pour savoir quelle image est ouverte
+  let currentId = null;
+
+  // --- LOGIQUE LIKES (Conservation de ton code existant) ---
+  const LikesStore = {
+    _key: 'prspk_likes',
+    _data: function() { try { return JSON.parse(localStorage.getItem(this._key)) || {}; } catch(e) { return {}; } },
+    _save: function(data) { localStorage.setItem(this._key, JSON.stringify(data)); },
+    hasLiked: function(id) { return !!this._data()[id]; },
+    toggle: function(id) {
+      var data = this._data();
+      data[id] = !data[id];
+      this._save(data);
+      return data[id];
+    }
+  };
+
+  function updateLikeUI(id) {
+    if (!lbLikeBtn || !lbLikeIcon) return;
+    const liked = LikesStore.hasLiked(id);
+    lbLikeIcon.src = liked ? '/icons/like-active.svg' : '/icons/like.svg';
+    lbLikeBtn.classList.toggle('liked', liked);
+  }
+
+  // --- FONCTION UNIVERSELLE D'OUVERTURE ---
   openLightbox = function(imgElement) {
     if (!imgElement) return;
     
+    // 1. Remplissage des données
     lightboxImg.src = imgElement.src;
     lightboxImg.alt = imgElement.alt || '';
     lightboxTitle.textContent = imgElement.dataset.title || '';
     if (lightboxDate) lightboxDate.textContent = imgElement.dataset.date || '';
     if (lightboxDesc) lightboxDesc.innerHTML = imgElement.dataset.desc || '';
 
+    // 2. Gestion de l'ID pour Likes et Partage
+    currentId = imgElement.id || imgElement.src;
+    lightbox.dataset.id = currentId;
+
+    // 3. Update de l'icône Like
+    updateLikeUI(currentId);
+
+    // 4. Affichage
     lightbox.classList.add('active');
     document.body.style.overflow = 'hidden';
     
-    // Met à jour l'URL si l'image a un ID
     if (imgElement.id) {
       history.pushState(null, '', `#${imgElement.id}`);
     }
   };
 
-  // Fermeture (inchangée)
-  closeBtn.addEventListener('click', () => {
+  // --- ÉVÉNEMENTS BOUTONS ---
+
+  // Like
+  if (lbLikeBtn) {
+    lbLikeBtn.addEventListener('click', () => {
+      if (!currentId) return;
+      const liked = LikesStore.toggle(currentId);
+      updateLikeUI(currentId);
+      if (typeof animateLike === 'function') animateLike(liked); // Appelle ton animation si elle est définie
+    });
+  }
+
+  // Partage
+  if (lbShareBtn) {
+    lbShareBtn.addEventListener('click', () => {
+      if (!currentId) return;
+      const url = window.location.origin + '/portfolio/creations/' + currentId;
+      const texte = 'Jette un oeil à cette création sur Perspikative ! ' + url;
+
+      if (navigator.share) {
+        navigator.share({ title: 'Perspikative', text: texte, url: url }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(texte).then(() => {
+          if (typeof showShareToast === 'function') showShareToast();
+        });
+      }
+    });
+  }
+
+  // Fermeture
+  const closeLightbox = () => {
     lightbox.classList.remove('active');
     document.body.style.overflow = '';
-  });
+  };
 
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) {
-      lightbox.classList.remove('active');
-      document.body.style.overflow = '';
-    }
-  });
+  closeBtn.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
 });
 
 
