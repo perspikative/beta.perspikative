@@ -3822,3 +3822,73 @@ body {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
 }
+
+
+
+
+
+
+
+
+/* ============================= SOUS-MENU MOBILE ============================= */
+
+/* Conteneur du lien parent pour gérer le débordement */
+.mobile-menu ul li.has-submenu {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Style de base du sous-menu (Caché) */
+.submenu {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* Indentation visuelle douce avec une petite ligne repère */
+  padding-left: 16px;
+  margin-left: 12px;
+  border-left: 1px solid rgba(255, 255, 255, 0.15);
+  margin-top: 0;
+  
+  /* Transition fluide (ease-out pour un effet naturel) */
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+              opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+              margin-top 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Apparition au survol (desktop) OU au focus/clic (mobile) */
+.mobile-menu ul li.has-submenu:hover .submenu,
+.mobile-menu ul li.has-submenu:focus-within .submenu {
+  max-height: 150px; /* Doit être supérieur à la hauteur totale des sous-liens */
+  opacity: 1;
+  margin-top: 8px; /* Espace entre COMMUNAUTÉ et le premier sous-lien */
+}
+
+/* Surcouche stylistique pour les liens du sous-menu (intégration à la DA) */
+.mobile-menu ul .submenu li a {
+  font-size: 0.9rem; /* Légèrement plus petit pour la hiérarchie */
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 20px;
+  
+  /* On adoucit l'effet glassmorphism par rapport aux boutons principaux */
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px) saturate(140%);
+  -webkit-backdrop-filter: blur(15px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Ajustement de l'effet pseudo-element du CSS existant pour le submenu */
+.mobile-menu ul .submenu li a::before {
+  background-color: transparent;
+}
+
+/* Hover des sous-liens */
+.mobile-menu ul .submenu li a:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transform: translateX(3px); /* Petit effet de glissement vers la droite au survol */
+}
