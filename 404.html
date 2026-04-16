@@ -60,6 +60,20 @@ permalink: /404
     }
   }
 
+  :root {
+    /* Couleurs par défaut (Mode Clair) */
+    --bg-color: linear-gradient(135deg, #4AA9A1, #2CA877, #62A78A);
+    --text-color: #ffffff;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      /* Couleurs pour le Mode Sombre */
+      --bg-color: #121212; /* Un noir profond ou gris très sombre */
+      --text-color: #f5f5f5;
+    }
+  }
+
   html, body {
     margin: 0;
     padding: 0;
@@ -68,13 +82,14 @@ permalink: /404
   }
 
   body {
-    background: linear-gradient(135deg, #4AA9A1, #2CA877, #62A78A);
+    background: var(--bg-color);
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
-    color: white;
+    color: var(--text-color);
     flex-direction: column;
+    transition: background-color 0.6s ease;
   }
 
   h1 {
