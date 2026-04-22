@@ -101,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
+
 // ============================= 2. LIGHTBOX - VERSION FINALE =============================
 let openLightbox; 
 
