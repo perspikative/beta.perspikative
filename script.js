@@ -102,31 +102,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// ============================= 2. LIGHTBOX - VERSION FINALE =============================
-let openLightbox; 
+// ============================= 2. LIGHTBOX POUR LES CRÉATIONS =============================
 
 document.addEventListener('DOMContentLoaded', () => {
-  const lightbox = document.getElementById('lightbox');
+  const lightbox      = document.getElementById('lightbox');
   if (!lightbox) return;
 
   const lightboxImg   = document.getElementById('lightbox-img');
   const lightboxTitle = document.getElementById('lightbox-title');
   const lightboxDate  = document.getElementById('lightbox-date');
   const lightboxDesc  = document.getElementById('lightbox-desc');
+  const lightboxExtra = document.getElementById('lightbox-extra');
   const closeBtn      = document.getElementById('lightbox-close');
   const lbLikeBtn     = document.getElementById('lb-like-btn');
   const lbLikeIcon    = document.getElementById('lb-like-icon');
   const lbShareBtn    = document.getElementById('lb-share-btn');
 
-  // Variable interne pour savoir quelle image est ouverte
+  if (!lightboxImg || !lightboxTitle || !lightboxDesc || !closeBtn) {
+    console.warn('Lightbox : certains éléments sont manquants.');
+    return;
+  }
+
   let currentId = null;
 
-  // --- LOGIQUE LIKES (Conservation de ton code existant) ---
+  // ── LIKES STORE (localStorage) ──────────────────────────────────────────
   const LikesStore = {
     _key: 'prspk_likes',
-    _data: function() { try { return JSON.parse(localStorage.getItem(this._key)) || {}; } catch(e) { return {}; } },
-    _save: function(data) { localStorage.setItem(this._key, JSON.stringify(data)); },
-    hasLiked: function(id) { return !!this._data()[id]; },
+    _data: function() {
+      try { return JSON.parse(localStorage.getItem(this._key)) || {}; }
+      catch(e) { return {}; }
+    },
+    _save: function(data) {
+      localStorage.setItem(this._key, JSON.stringify(data));
+    },
+    hasLiked: function(id) {
+      return !!this._data()[id];
+    },
     toggle: function(id) {
       var data = this._data();
       data[id] = !data[id];
@@ -135,77 +146,166 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+  // ── UI like ──────────────────────────────────────────────────────────────
   function updateLikeUI(id) {
     if (!lbLikeBtn || !lbLikeIcon) return;
-    const liked = LikesStore.hasLiked(id);
+    var liked = LikesStore.hasLiked(id);
     lbLikeIcon.src = liked ? '/icons/like-active.svg' : '/icons/like.svg';
     lbLikeBtn.classList.toggle('liked', liked);
   }
 
-  // --- FONCTION UNIVERSELLE D'OUVERTURE ---
-  openLightbox = function(imgElement) {
-    if (!imgElement) return;
-    
-    // 1. Remplissage des données
-    lightboxImg.src = imgElement.src;
-    lightboxImg.alt = imgElement.alt || '';
-    lightboxTitle.textContent = imgElement.dataset.title || '';
-    if (lightboxDate) lightboxDate.textContent = imgElement.dataset.date || '';
-    if (lightboxDesc) lightboxDesc.innerHTML = imgElement.dataset.desc || '';
+  // ── Animation like ───────────────────────────────────────────────────────
+  function animateLike(liked) {
+    if (!liked || !lbLikeBtn) return;
+    lbLikeBtn.classList.remove('like-pop');
+    void lbLikeBtn.offsetWidth;
+    lbLikeBtn.classList.add('like-pop');
+    spawnHearts(lbLikeBtn);
+  }
 
-    // 2. Gestion de l'ID pour Likes et Partage
-    currentId = imgElement.id || imgElement.src;
+  function spawnHearts(btn) {
+    for (var i = 0; i < 6; i++) {
+      var heart = document.createElement('span');
+      heart.className = 'like-particle';
+      heart.textContent = '\u2665';
+      var angle = Math.random() * 160 - 80;
+      var dist  = 30 + Math.random() * 30;
+      heart.style.setProperty('--angle', angle + 'deg');
+      heart.style.setProperty('--dist', dist + 'px');
+      heart.style.setProperty('--delay', (i * 40) + 'ms');
+      btn.appendChild(heart);
+      heart.addEventListener('animationend', function() { this.remove(); });
+    }
+  }
+
+  // ── Toast partage ────────────────────────────────────────────────────────
+  function showShareToast() {
+    var toast = document.getElementById('share-toast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'share-toast';
+      toast.className = 'share-toast';
+      toast.textContent = 'Lien copié ! 🔗';
+      document.body.appendChild(toast);
+    }
+    toast.classList.add('visible');
+    setTimeout(function() { toast.classList.remove('visible'); }, 2500);
+  }
+
+  // ── Résolution de la source : image desktop correspondante ───────────────
+  // Pour une image mobile (avec ou sans data-title), retrouve l'image
+  // de référence dans la layout-3colonnes via l'id ou le src.
+  function resolveSource(img) {
+    // Cas 1 : l'image a ses propres data-title → elle est sa propre source
+    if (img.dataset.title) return img;
+
+    // Cas 2 : elle a un id → on cherche l'équivalent dans la version desktop
+    if (img.id) {
+      var desktop = document.querySelector(
+        '.layout-3colonnes .prspk-thumb#' + CSS.escape(img.id)
+      );
+      if (desktop) return desktop;
+    }
+
+    // Cas 3 : pas d'id mais un src → on cherche par src dans la version desktop
+    var srcPath = img.getAttribute('src');
+    if (srcPath) {
+      var match = document.querySelector(
+        '.layout-3colonnes .prspk-thumb[src="' + srcPath + '"]'
+      );
+      if (match) return match;
+    }
+
+    return null;
+  }
+
+  // ── Ouverture de la lightbox ─────────────────────────────────────────────
+  function openLightbox(img) {
+    var source = resolveSource(img);
+    if (!source) return;
+
+    lightboxImg.src           = source.src;
+    lightboxImg.alt           = source.alt || '';
+    lightboxTitle.textContent = source.dataset.title || '';
+    if (lightboxDate) lightboxDate.textContent = source.dataset.date || '';
+    lightboxDesc.innerHTML    = source.dataset.desc || '';
+
+    currentId = source.id || source.src;
     lightbox.dataset.id = currentId;
 
-    // 3. Update de l'icône Like
-    updateLikeUI(currentId);
+    if (lbLikeBtn) updateLikeUI(currentId);
 
-    // 4. Affichage
     lightbox.classList.add('active');
     document.body.style.overflow = 'hidden';
-    
-    if (imgElement.id) {
-      history.pushState(null, '', `#${imgElement.id}`);
+
+    if (source.id) {
+      history.pushState(null, '', '#' + source.id);
     }
-  };
+  }
 
-  // --- ÉVÉNEMENTS BOUTONS ---
+  // Écoute les clics sur toutes les images des deux layouts
+  document.querySelectorAll(
+    '.layout-3colonnes img, .layout-2colonnes img'
+  ).forEach(function(img) {
+    img.addEventListener('click', function() {
+      openLightbox(img);
+    });
+  });
 
-  // Like
+  // ── Ouverture via hash (depuis la page recherche, par ex.) ───────────────
+  var hash = window.location.hash.substring(1);
+  if (hash) {
+    var targetImg = document.querySelector(
+      '.layout-3colonnes .prspk-thumb#' + CSS.escape(hash)
+    );
+    if (targetImg) openLightbox(targetImg);
+  }
+
+  // ── Bouton like ──────────────────────────────────────────────────────────
   if (lbLikeBtn) {
-    lbLikeBtn.addEventListener('click', () => {
+    lbLikeBtn.addEventListener('click', function() {
       if (!currentId) return;
-      const liked = LikesStore.toggle(currentId);
+      var liked = LikesStore.toggle(currentId);
       updateLikeUI(currentId);
-      if (typeof animateLike === 'function') animateLike(liked); // Appelle ton animation si elle est définie
+      animateLike(liked);
     });
   }
 
-  // Partage
+  // ── Bouton partager ──────────────────────────────────────────────────────
   if (lbShareBtn) {
-    lbShareBtn.addEventListener('click', () => {
+    lbShareBtn.addEventListener('click', function() {
       if (!currentId) return;
-      const url = window.location.origin + '/portfolio/creations/' + currentId;
-      const texte = 'Jette un oeil à cette création sur Perspikative ! ' + url;
+      var url   = window.location.origin + '/portfolio/creations#' + currentId;
+      var texte = 'Jette un oeil à cette création sur Perspikative ! ' + url;
 
       if (navigator.share) {
-        navigator.share({ title: 'Perspikative', text: texte, url: url }).catch(() => {});
-      } else {
-        navigator.clipboard.writeText(texte).then(() => {
-          if (typeof showShareToast === 'function') showShareToast();
+        navigator.share({ title: 'Perspikative', text: texte, url: url })
+          .catch(function() {});
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(texte).then(function() {
+          showShareToast();
         });
       }
     });
   }
 
-  // Fermeture
-  const closeLightbox = () => {
+  // ── Fermeture ────────────────────────────────────────────────────────────
+  function closeLightbox() {
     lightbox.classList.remove('active');
     document.body.style.overflow = '';
-  };
+  }
 
   closeBtn.addEventListener('click', closeLightbox);
-  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+
+  lightbox.addEventListener('click', function(e) {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+      closeLightbox();
+    }
+  });
 });
 
 
@@ -263,44 +363,8 @@ document.addEventListener("contextmenu", e => e.preventDefault());
 
 
 
-// ============================= 5. GESTION DU CLIC ET DU HASH =============================
-
-document.addEventListener('DOMContentLoaded', () => {
-  
-  // 1. Gérer le Hash au chargement (ex: site.fr/#creation1)
-  const hash = window.location.hash.substring(1);
-  if (hash) {
-    // Petit délai pour laisser le temps aux images de charger en local
-    setTimeout(() => {
-      const targetImg = document.getElementById(hash);
-      if (targetImg && typeof openLightbox === 'function') {
-        openLightbox(targetImg);
-      }
-    }, 500);
-  }
-
-  // 2. Gérer le clic sur TOUTES les images (Délégation d'événement)
-  document.addEventListener('click', (e) => {
-    const clickedImg = e.target.closest('.prspk-thumb');
-    if (!clickedImg) return;
-
-    // Si c'est l'image de la grille principale (elle a un titre)
-    if (clickedImg.dataset.title) {
-      openLightbox(clickedImg);
-    } 
-    // Si c'est l'image "simplifiée" (2 colonnes), on cherche sa version riche
-    else {
-      const id = clickedImg.id;
-      const sourceImg = document.querySelector(`.layout-3colonnes .prspk-thumb#${CSS.escape(id)}`);
-      if (sourceImg) {
-        openLightbox(sourceImg);
-      } else {
-        // Au cas où, on ouvre quand même la version cliquée
-        openLightbox(clickedImg);
-      }
-    }
-  });
-});
+// ============================= 5. OUVRIR LES HASHS DE LA RECHERCHE POUR LES LIGHTBOXS =============================
+// → Intégré directement dans la section 2 (fonction openLightbox + résolution via hash au chargement)
 
 
 
