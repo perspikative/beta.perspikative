@@ -18,11 +18,7 @@ permalink: /commus
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* ─── RESET ─────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg-base:      #62a78a;
       --bg-mid:       #14311f;
       --green-vivid:  #2ecc71;
       --green-soft:   #5de8a0;
@@ -55,29 +51,6 @@ permalink: /commus
       min-height: 100vh;
       overflow-x: hidden;
     }
-
-    /* ─── NAV ────────────────────────────────────────────── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 16px 40px;
-      background: rgba(14,35,24,0.55);
-      backdrop-filter: blur(22px) saturate(1.5);
-      border-bottom: 1px solid var(--glass-border);
-      box-shadow: var(--glass-inset);
-    }
-    .nav-logo {
-      font-weight: 900; font-size: 1.1rem;
-      letter-spacing: -0.02em; color: var(--text-main); text-decoration: none;
-    }
-    .nav-logo span { color: var(--accent); }
-    .nav-links { display: flex; gap: 28px; list-style: none; }
-    .nav-links a {
-      color: var(--text-muted); text-decoration: none;
-      font-size: 0.87rem; font-weight: 400; letter-spacing: -0.01em; transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--text-main); }
-    .nav-links a.active { color: var(--accent); font-weight: 500; }
 
     /* ─── HERO ───────────────────────────────────────────── */
     .hero {
