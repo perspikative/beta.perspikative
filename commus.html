@@ -29,44 +29,36 @@ permalink: /commu
 
       --glass-bg:     rgba(255,255,255,0.07);
       --glass-border: rgba(255,255,255,0.16);
-      --glass-inset:  inset 0 1px 0 rgba(255,255,255,0.18), inset 0 -1px 0 rgba(255,255,255,0.04);
+      --glass-inset:  inset 0 0 10px rgba(255, 255, 255, 0.3), 0 8px 16px rgba(0, 0, 0, 0.12);
       --glass-inset-strong: inset 0 1.5px 0 rgba(255,255,255,0.28), inset 0 -1px 0 rgba(255,255,255,0.06), inset 1px 0 0 rgba(255,255,255,0.10);
-
-      --text-main:    #dff5ea;
-      --text-muted:   rgba(190,235,210,0.62);
-      --text-soft:    rgba(190,235,210,0.38);
-
-      --accent:       #2ecc71;
-      --accent2:      #1cc5a0;
-      --radius:       18px;
-      --radius-lg:    28px;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Rubik', sans-serif;
-      background: var(--bg-base);
-      color: var(--text-main);
-      min-height: 100vh;
-      overflow-x: hidden;
     }
 
     /* ─── HERO ───────────────────────────────────────────── */
     .hero {
-      position: relative; min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      text-align: center; padding: 130px 24px 90px; z-index: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 24px 90px;
     }
 
     .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: var(--glass-bg); border: 1px solid var(--glass-border);
-      box-shadow: var(--glass-inset); border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-inset);
+      border-radius: 50px;
       padding: 6px 20px 6px 12px;
-      font-size: 0.72rem; font-weight: 500; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--teal-pale);
-      margin-bottom: 32px; backdrop-filter: blur(12px);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase; 
+      color: var(--teal-pale);
+      backdrop-filter: blur(12px);
       animation: fadeDown 0.8s ease both;
     }
     .hero-badge .dot {
@@ -79,10 +71,11 @@ permalink: /commu
     }
 
     .hero h1 {
+      font-family: "Rubik", sans-serif;
       font-weight: 900;
       font-size: clamp(3.4rem, 9vw, 7.5rem);
-      line-height: 0.95;
-      letter-spacing: -0.06em;
+      line-height: 0.8;
+      letter-spacing: -0.04em;
       background: linear-gradient(130deg, #c8f5df 0%, #ffffff 35%, #ffffff 65%, #ffffff 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -92,9 +85,14 @@ permalink: /commu
 
     }
     .hero p {
-      font-size: clamp(0.95rem, 1.8vw, 1.15rem); font-weight: 300; letter-spacing: -0.01em;
-      color: var(--text-muted); max-width: 520px; line-height: 1.75;
-      margin-bottom: 48px; animation: fadeDown 1s 0.2s ease both;
+      font-size: clamp(0.95rem, 1.8vw, 1.15rem);
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      color: white;
+      max-width: 520px;
+      line-height: 1.1;
+      margin-bottom: 48px;
+      animation: fadeDown 1s 0.2s ease both;
     }
     .hero-actions {
       display: flex; gap: 14px; flex-wrap: wrap; justify-content: center;
@@ -104,17 +102,7 @@ permalink: /commu
       from { opacity: 0; transform: translateY(-18px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    .scroll-hint {
-      position: absolute; bottom: 38px; left: 50%; transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: 8px;
-      color: var(--text-soft); font-size: 0.68rem; letter-spacing: 0.14em;
-      text-transform: uppercase; animation: fadeDown 1.5s 0.6s ease both;
-    }
-    .scroll-line {
-      width: 1px; height: 32px;
-      background: linear-gradient(to bottom, var(--teal), transparent);
-      animation: scrollAnim 2.2s ease-in-out infinite;
-    }
+
     @keyframes scrollAnim {
       0%   { transform: scaleY(0); transform-origin: top; }
       48%  { transform: scaleY(1); transform-origin: top; }
@@ -134,10 +122,18 @@ permalink: /commu
       background: linear-gradient(135deg, #2ecc71, #1cc5a0); color: #081a10;
       font-weight: 700; box-shadow: 0 6px 28px rgba(46,204,113,0.32), var(--glass-inset);
     }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(46,204,113,0.48), var(--glass-inset); }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 40px rgba(46,204,113,0.48), var(--glass-inset);
+    }
+
     .btn-ghost {
-      background: var(--glass-bg); border: 1px solid var(--glass-border);
-      color: var(--text-main); backdrop-filter: blur(12px); box-shadow: var(--glass-inset);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--glass-inset);
+
     }
     .btn-ghost:hover { transform: translateY(-2px); background: rgba(255,255,255,0.11); }
     .btn-whatsapp {
@@ -449,23 +445,14 @@ permalink: /commu
 
 <!-- HERO -->
 <section class="hero">
-  <div class="orb orb-1"></div>
-  <div class="orb orb-2"></div>
-  <div class="orb orb-3"></div>
-
   <div class="hero-badge"><span class="dot"></span>Espace Communauté</div>
-  <h1>REJOINS<br>L'UNIVERS.</h1>
+  <h1>SHAPE<br>WHAT'S NEXT.</h1>
   <p>Perspikative, c'est pas juste un portfolio — c'est un projet vivant. Découvre la team qui l'anime et les espaces pour vivre l'évolution de l'intérieur.</p>
 
   <div class="hero-actions">
     <a href="#perspikateam" class="btn btn-primary">La Perspikateam →</a>
     <a href="#beta" class="btn btn-ghost">Beta Program</a>
     <a href="#whatsapp" class="btn btn-ghost">Canal WhatsApp</a>
-  </div>
-
-  <div class="scroll-hint">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
   </div>
 </section>
 
