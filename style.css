@@ -3835,3 +3835,202 @@ body {
     margin-left: 0.4rem;
   }
 }
+
+
+
+
+
+/* ============================= COUPS DE CŒUR ============================= */
+
+.liked-drawings-section {
+  width: 100%;
+  margin-top: 1.8rem;
+}
+
+.liked-drawings-box {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 14px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    inset 0 0 18px rgba(255, 255, 255, 0.06),
+    0 6px 24px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.liked-drawings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 10px;
+}
+
+.liked-drawing-thumb {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.liked-drawing-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.liked-drawing-thumb:hover img {
+  transform: scale(1.06);
+}
+
+.liked-drawing-thumb a {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.liked-drawings-overflow {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+  font-family: 'Rubik', sans-serif;
+  transition: background 0.2s ease;
+}
+
+.liked-drawings-overflow:hover {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.liked-drawings-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 20px 10px;
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.88rem;
+  text-align: center;
+  grid-column: 1 / -1;
+}
+
+.liked-drawings-empty img {
+  width: 28px;
+  height: 28px;
+  opacity: 0.3;
+}
+
+/* -- Modale tous les coups de coeur -- */
+
+.liked-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.liked-modal-overlay.visible {
+  opacity: 1;
+}
+
+.liked-modal {
+  background: rgba(30, 50, 46, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 22px;
+  padding: 20px;
+  width: 100%;
+  max-width: 480px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow:
+    inset 0 0 24px rgba(255, 255, 255, 0.06),
+    0 12px 40px rgba(0, 0, 0, 0.3);
+  transform: translateY(10px);
+  transition: transform 0.25s ease;
+}
+
+.liked-modal-overlay.visible .liked-modal {
+  transform: translateY(0);
+}
+
+.liked-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.liked-modal-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.liked-modal-close {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+  transition: background 0.2s ease;
+  font-family: 'Rubik', sans-serif;
+}
+
+.liked-modal-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.liked-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  #defaultViews {
+    margin-left: 0.5rem;
+  }
+
+  .liked-drawings-grid {
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+    gap: 8px;
+  }
+
+  .liked-modal-grid {
+    grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  }
+}
+
+
+
+
