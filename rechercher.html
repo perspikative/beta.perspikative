@@ -112,11 +112,12 @@ permalink: /rechercher
         inset 0 0 22px rgba(255, 255, 255, 0.2),
         0 6px 24px rgba(0, 0, 0, 0.12);
       overflow: hidden;
+      margin-right: 0.4rem;
     }
 
     .liked-drawings-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 10px;
     }
 
@@ -308,8 +309,12 @@ permalink: /rechercher
       }
 
       .liked-drawings-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 8px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 6px;
+      }
+
+      .liked-drawings-grid {
+        padding: 0px;
       }
 
       .liked-modal-grid {
