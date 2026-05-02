@@ -151,19 +151,20 @@ permalink: /rechercher
     .liked-drawings-overflow {
       aspect-ratio: 1;
       border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 0px;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.9rem;
       font-weight: 700;
       color: #fff;
-      letter-spacing: 0.02em;
+      letter-spacing: 0rem;
       cursor: pointer;
       font-family: 'Rubik', sans-serif;
       transition: transform 0.15s ease;
       position: relative;
       overflow: hidden;
+      box-shadow: inset 0 0 22px rgba(255, 255, 255, 0.2);
     }
 
     .liked-drawings-overflow-bg {
@@ -179,7 +180,7 @@ permalink: /rechercher
     .liked-drawings-overflow-label {
       position: relative;
       z-index: 1;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+      text-shadow: 0 2px 5px rgba(0,0,0,0.4);
     }
 
     .liked-drawings-overflow:hover {
@@ -191,7 +192,7 @@ permalink: /rechercher
     .liked-modal-overlay {
       position: fixed;
       inset: 0;
-      z-index: 9000;
+      z-index: 10001;
       background: rgba(0, 0, 0, 0.55);
       backdrop-filter: blur(6px);
       -webkit-backdrop-filter: blur(6px);
