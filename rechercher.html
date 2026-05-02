@@ -208,7 +208,9 @@ permalink: /rechercher
     }
 
     .liked-modal {
-      background: rgba(18, 18, 18, 0.95);
+      background: rgba(18, 18, 18, 0.36);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 25px;
       padding: 20px;
@@ -240,11 +242,11 @@ permalink: /rechercher
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
+      margin-bottom: 10px;
     }
 
     .liked-modal-title {
-      font-size: 0.9rem;
+      font-size: 0.96rem;
       font-weight: 700;
       color: rgb(255, 255, 255);
       text-transform: uppercase;
@@ -1030,6 +1032,15 @@ permalink: /rechercher
           document.body.classList.toggle('menu-open', e.target.checked);
         });
     }
+</script>
+
+<script>
+  function openLikedModal() {
+    const modalOverlay = document.getElementById('likedModalOverlay');
+    modalOverlay.classList.add('visible');
+    // On ajoute la classe au body pour bloquer le scroll
+    document.body.classList.add('modal-open');
+  }
 </script>
 
   <script src="/script.js"></script>
