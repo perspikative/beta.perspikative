@@ -8,10 +8,10 @@ permalink: /portfolio/projets
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Projets</title>
-  
-<meta name="description" content="Explore les projets de Perspikative, des œuvres qui respirent la créativité, mêlant architecture, perspective et fantastique." />
-  <meta name="keywords" content="projets, portfolio, œuvres artistiques, architecture, perspective, fantastique, grands dessins, Perspikative">
+  <title>Projets 2</title>
+
+  <meta name="description" content="Explore les projets de Perspikative, des oeuvres qui respirent la créativité, mêlant architecture, perspective et fantastique." />
+  <meta name="keywords" content="projets, portfolio, œuvres artistiques, architecture, perspective, fantastique, dessins, Perspikative">
   <meta name="robots" content="index, follow">
 
   <meta name="theme-color" content="#58b3a2" media="(prefers-color-scheme: light)">
@@ -91,11 +91,10 @@ permalink: /portfolio/projets
         </label>
       <div class="mobile-menu">
         <ul>
-          <li><a href="/faq">FAQ</a></li>
+          <li><a href="/commu">COMMUNAUTÉ</a></li>
           <li><a href="/art-challenge">ART CHALLENGE</a></li>
-          <li><a href="/parametres">PARAMÈTRES</a></li>
-          </ul>
-        </div>
+          <li><a href="/faq">FAQ</a></li>
+        </ul>
       </div>
     </div>
   </header>
@@ -247,76 +246,18 @@ permalink: /portfolio/projets
         <p id="lightbox-date" class="lightbox-date"></p>
         <p id="lightbox-desc"></p>
         <div class="lightbox-extra-images" id="lightbox-extra"></div>
+
+        <div class="lightbox-actions">
+          <button class="lb-btn lb-like-btn" id="lb-like-btn" aria-label="Liker">
+            <img src="/icons/like.svg" alt="Like" id="lb-like-icon" class="lb-btn-icon">
+          </button>
+          <button class="lb-btn lb-share-btn" id="lb-share-btn" aria-label="Partager">
+            <img src="/icons/share.svg" alt="Partager" class="lb-btn-icon">
+          </button>
+        </div>
       </div>
     </div>
   </div>
-
-  <script>
-
-    // ----- LIGHTBOX -----
-const thumbs = document.querySelectorAll('.prspk-thumb');
-const lightbox = document.getElementById('lightbox');
-const lightboxImg = document.getElementById('lightbox-img');
-const lightboxTitle = document.getElementById('lightbox-title');
-const lightboxDate = document.getElementById('lightbox-date');
-const lightboxDesc = document.getElementById('lightbox-desc');
-const lightboxExtra = document.getElementById('lightbox-extra');
-const closeBtn = document.getElementById('lightbox-close');
-const lightboxHeart = document.createElement('button'); // cœur dans la lightbox
-lightboxHeart.className = 'like-bubble lightbox-like';
-lightboxHeart.innerHTML = `<img class="like-icon" alt=""><span class="like-count"></span>`;
-
-
-thumbs.forEach(img => {
-  img.addEventListener('click', () => {
-    // Image principale
-    lightboxImg.src = img.src;
-
-    // Titre
-    lightboxTitle.textContent = img.dataset.title || '';
-
-    // Date
-    lightboxDate.textContent = img.dataset.date || '';
-
-    // Description avec HTML interprété (<br>, <strong>, etc.)
-    lightboxDesc.innerHTML = img.dataset.desc || '';
-
-    // Afficher la lightbox et bloquer le scroll
-    lightbox.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  });
-});
-
-// Fermer avec le bouton
-closeBtn.addEventListener('click', () => {
-  lightbox.classList.remove('active');
-  document.body.style.overflow = '';
-});
-
-// Fermer en cliquant sur le fond
-lightbox.addEventListener('click', (e) => {
-  if (e.target === lightbox) {
-    lightbox.classList.remove('active');
-    document.body.style.overflow = '';
-  }
-});
-
-const id = img.id; // id de la création cliquée
-lightbox.dataset.id = id;
-
-if (!lightboxHeart.isConnected) {
-  lightbox.querySelector('.lightbox-right').appendChild(lightboxHeart);
-  lightboxHeart.addEventListener('click', () => {
-    LikesStore.toggle(id);
-    updateLikeUI(id);
-  });
-}
-
-updateLikeUI(id); // met à jour icône + compteur
-
-  </script>
-
-
 
   <script>
     const menuToggle = document.getElementById('menuToggle');
