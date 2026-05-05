@@ -118,7 +118,7 @@ header {
   padding: 18px 30px;
   text-align: center;
   border-radius: 0 0 20px 20px;
-  border: 1px solid rgba(255 255 255 / 0.1);
+  border: 1px solid rgba(255 255 255 / 0.15);
   position: relative;
   z-index: 1000;
   cursor: auto;
@@ -522,11 +522,11 @@ main {
   border-radius: 20px;
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255 255 255 / 0.1);
+  border: 1px solid rgba(255 255 255 / 0.25);
   color: white;
   user-select: text;
   box-shadow:
-    inset 0 0 14px rgba(255 255 255 / 0.15),
+    inset 0 0 10px rgba(255 255 255 / 0.15),
     0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
@@ -1900,17 +1900,17 @@ main.creations h2 {
   border-radius: 50px;
   background: rgba(255,255,255,0.05);
   backdrop-filter: blur(15px);
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.35);
   cursor: pointer;
   transition: box-shadow 0.2s ease;
   box-shadow:
-    inset 0 0 12px rgba(255,255,255,0.3),
+    inset 0 0 10px rgba(255,255,255,0.3),
     0 4px 15px rgba(0,0,0,0.1);
 }
 
 .social-button:hover {
   box-shadow:
-    inset 0 0 14px rgba(255,255,255,0.35),
+    inset 0 0 10px rgba(255,255,255,0.3),
     0 8px 16px rgba(0,0,0,0.15);
 }
 
@@ -2604,9 +2604,10 @@ footer {
   padding-top: 0px;
   font-size: 0.95rem;
   border-radius: 20px 20px 0 0;
-  border: 1px solid rgba(255 255 255 / 0.1);
+  border: 1px solid rgba(255 255 255 / 0.25);
   font-family: "Rubik", Arial, sans-serif;
   font-weight: 500;
+  cursor: url('../images/fermer.svg'), auto;
   box-shadow:
     inset 0 0 10px rgba(255 255 255 / 0.2),
     0 8px 30px rgba(0, 0, 0, 0.1);
@@ -3470,12 +3471,11 @@ body {
 /* --- SECTION PAR DÉFAUT (Historique + Populaire) --- */
 .section-title {
   font-size: 0.9rem;
-  color: rgb(255, 255, 255);
+  color: rgba(255, 255, 255, 0.5);
   margin: 1.5rem 0 0.8rem 0.5rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   text-align: left;
-  opacity: 0.6;
 }
 
 .popular-content {
@@ -3839,3 +3839,15 @@ body {
 
 
 
+
+
+
+.icon {
+  width: 20px;
+  height: 20px;
+  margin-left: -2px;
+  vertical-align: middle;
+  transform: scaleX(-1);
+  filter: brightness(0) saturate(100%);
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
