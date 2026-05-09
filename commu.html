@@ -67,11 +67,15 @@ permalink: /commu
       animation: fadeDown 0.8s ease both;
     }
     .hero-badge .dot {
-      width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: white;
+      opacity: 0.4;
       animation: pulseDot 2s infinite;
     }
     @keyframes pulseDot {
-      0%,100% { box-shadow: 0 0 0 0 rgba(46,204,113,0.55); }
+      0%,100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.55); }
       50%      { box-shadow: 0 0 0 7px rgba(46,204,113,0); }
     }
 
@@ -275,20 +279,30 @@ permalink: /commu
     }
     .team-notice-icon { font-size: 1.8rem; flex-shrink: 0; }
     .team-notice-text { flex: 1; }
-    .team-notice-text h4 { font-weight: 700; color: rgb(255, 255, 255) ;font-size: 0.95rem; letter-spacing: -0.02em; margin-bottom: 4px; }
-    .team-notice-text p { color: var(--text-muted); font-size: 0.83rem; font-weight: 300; letter-spacing: -0.005em; line-height: 1.55; }
+    .team-notice-text h4 { font-weight: 700; color: rgb(255, 255, 255); margin: 0px; font-size: 1.2rem; letter-spacing: -0.02em; margin-bottom: 4px; }
+    .team-notice-text p { color: var(--text-muted); font-size: 1rem; font-weight: 300; letter-spacing: -0.005em; line-height: 1; }
 
     .status-pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(46,204,113,0.10); border: 1px solid rgba(46,204,113,0.28);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.06);
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
-      border-radius: 999px; padding: 6px 14px;
-      font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em;
-      text-transform: uppercase; color: var(--accent); flex-shrink: 0;
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: white;
+      flex-shrink: 0;
     }
     .status-pill .blink {
-      width: 6px; height: 6px; border-radius: 50%; background: var(--accent);
-      animation: blinkDot 1.5s step-end infinite;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: white;
+      animation: blinkDot 1.4s step-end infinite;
     }
     @keyframes blinkDot { 0%,100%{opacity:1} 50%{opacity:0} }
 
@@ -296,10 +310,18 @@ permalink: /commu
     .beta-section { padding-bottom: 80px; }
     .beta-main-card { padding: 60px 56px; position: relative; overflow: hidden; }
     .beta-main-card::after {
-      content: 'β'; position: absolute; right: -10px; top: -60px;
-      font-size: 26rem; font-weight: 900;
-      color: rgba(46,204,113,0.04); pointer-events: none; line-height: 1;
-      user-select: none; letter-spacing: -0.05em;
+      content: 'β';
+      position: absolute;
+      right: -10px;
+      top: -60px;
+      font-size: 26rem;
+      font-weight: 900;
+      color: rgba(0, 0, 0, 0.05);
+      pointer-events: none;
+      z-index: 1;
+      line-height: 1;
+      user-select: none;
+      letter-spacing: -0.05em;
     }
     .beta-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
     .beta-perks { display: flex; flex-direction: column; gap: 14px; }
@@ -378,12 +400,14 @@ permalink: /commu
       overflow: hidden;
       box-shadow: var(--glass-inset-strong), 0 8px 32px rgba(0,0,0,0.15);
     }
+
     .wa-card::before {
       content: ''; position: absolute;
       width: 300px; height: 300px; border-radius: 50%;
       background: radial-gradient(circle, rgba(37,211,102,0.12) 0%, transparent 70%);
       right: -60px; top: -80px; pointer-events: none;
     }
+
     .wa-layout { display: grid; grid-template-columns: auto 1fr auto; gap: 36px; align-items: center; }
     .wa-icon-wrap {
       width: 80px; height: 80px; border-radius: 22px;
@@ -393,6 +417,7 @@ permalink: /commu
       box-shadow: 0 10px 30px rgba(37,211,102,0.30), inset 0 1px 0 rgba(255,255,255,0.25);
       flex-shrink: 0;
     }
+
     .wa-text h3 {
       font-weight: 900;
       font-size: clamp(1.5rem, 3vw, 2.1rem);
@@ -403,7 +428,9 @@ permalink: /commu
     }
     .wa-text h3 .wa-grad {
       background: linear-gradient(135deg, #4eff9a, #25D366, #38f9d7);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     .wa-text p {
       color: var(--text-muted);
@@ -413,7 +440,7 @@ permalink: /commu
       line-height: 1;
       max-width: 420px;
     }
-    .wa-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 16px; flex-shrink: 0; }
+
     .wa-stats { display: flex; gap: 16px; }
     .wa-stat {
       text-align: center; padding: 14px 20px;
@@ -422,8 +449,11 @@ permalink: /commu
       border-radius: 14px;
     }
     .wa-stat-num {
-      font-weight: 900; font-size: 1.3rem; letter-spacing: -0.04em;
-      color: var(--green-soft); display: block;
+      font-weight: 900;
+      font-size: 1.3rem;
+      letter-spacing: -0.04em;
+      color: var(--green-soft);
+      display: block;
     }
     .wa-stat-label { font-size: 0.68rem; font-weight: 400; color: var(--text-muted); letter-spacing: 0.04em; text-transform: uppercase; }
 
@@ -439,13 +469,15 @@ permalink: /commu
       .team-cta-col p { text-align: left; }
       .team-grid { grid-template-columns: 1fr; gap: 14px; }
       .team-notice { flex-direction: column; align-items: flex-start; }
-      .beta-main-card { padding: 36px 28px; }
-      .beta-layout { grid-template-columns: 1fr; gap: 40px; }
+      .beta-main-card { padding: 16px 0px; }
+      .beta-perk { box-shadow: none; border: none; background: transparent; }
+      .beta-perk:hover { box-shadow: none; border: none; background: transparent; }
+      .beta-layout { grid-template-columns: 1fr; gap: 20px; }
       .beta-main-card::after { display: none; }
-      .beta-cta-col { align-items: flex-start; text-align: left; }
+      .beta-cta-col { align-items: center; text-align: center; margin-bottom: 20px; }
+      .wa-text h3 { margin: 0px 0px -10px 0px; }
       .wa-card { padding: 36px 28px; }
       .wa-layout { grid-template-columns: 1fr; gap: 28px; }
-      .wa-meta { align-items: flex-start; }
     }
   </style>
 </head>
@@ -654,21 +686,10 @@ permalink: /commu
           <h3>Chaîne <span class="wa-grad">WhatsApp</span><br>Perspikative</h3>
           <p>Les coulisses en temps réel. Nouveaux posts, infos exclusives, FAQ, concours... et tout ce qui se passe dans l'univers Perspikative, directement dans ta poche. Une chaîne pour les plus connectés et ne rien manquer.</p>
         </div>
-        <div class="wa-meta">
-          <div class="wa-stats">
-            <div class="wa-stat">
-              <span class="wa-stat-num">∞</span>
-              <span class="wa-stat-label">Updates</span>
-            </div>
-            <div class="wa-stat">
-              <span class="wa-stat-num">0</span>
-              <span class="wa-stat-label">Spam</span>
-            </div>
-          </div>
-          <a href="https://whatsapp.com/channel/perspikative" target="_blank" rel="noopener" class="btn btn-whatsapp">
-            Rejoindre le canal 📲
-          </a>
         </div>
+        <a href="https://whatsapp.com/channel/perspikative" target="_blank" rel="noopener" class="btn btn-whatsapp">
+          Rejoindre le canal 📲
+        </a>
       </div>
     </div>
   </div>
