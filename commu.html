@@ -172,13 +172,13 @@ permalink: /commu
       border: 1px solid var(--glass-border);
       border-radius: var(--radius-lg);
       backdrop-filter: blur(12px);
-      box-shadow: var(--glass-inset-strong), 0 6px 20px rgba(0,0,0,0.1);
+      box-shadow: var(--glass-inset-strong), 0 4px 16px rgba(0,0,0,0.06);
       overflow: hidden;
       transition: all 0.3s ease;
     }
     .glass-card:hover {
       transform: translateY(-2px);
-      box-shadow: var(--glass-inset-strong), 0 20px 56px rgba(0,0,0,0.26), 0 0 0 1px rgba(46,204,113,0.12);
+      box-shadow: var(--glass-inset-strong), 0 10px 28px rgba(0,0,0,0.15);
     }
 
     /* ─── SECTIONS ───────────────────────────────────────── */
@@ -199,9 +199,10 @@ permalink: /commu
     .section-eyebrow::before {
       content: '';
       display: block;
-      width: 22px;
-      height: 1px;
-      background: var(--teal);
+      border-radius: 50px;
+      width: 24px;
+      height: 2.6px;
+      background: white;
     }
     .section-title {
       font-weight: 900;
@@ -245,9 +246,8 @@ permalink: /commu
     .team-card-icon {
       width: 50px;
       height: 50px;
+      border: 2.4px solid rgba(255, 255, 255, 0.18);
       border-radius: 12px;
-      background: linear-gradient(135deg, rgba(46,204,113,0.25), rgba(28,197,160,0.18));
-      box-shadow: inset 0 0 6px 0 rgba(255, 255, 255, 0.25), 0 0 10px 0 rgba(0, 0, 0, 0.1);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -322,12 +322,19 @@ permalink: /commu
 
     .beta-cta-col { display: flex; flex-direction: column; align-items: center; text-align: center; }
     .beta-cta-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(46,204,113,0.10); border: 1px solid rgba(46,204,113,0.22);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
-      border-radius: 999px; padding: 5px 14px;
-      font-size: 0.68rem; font-weight: 600; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--accent); margin-bottom: 22px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(46,204,113,0.10);
+      box-shadow: inset 0 0 8px 0 rgba(255,255,255,0.15);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: white;
+      margin-bottom: 22px;
     }
     .beta-cta-col h3 {
       font-weight: 900;
@@ -542,7 +549,7 @@ permalink: /commu
     </div>
 
     <div class="team-notice reveal" style="transition-delay:0.2s">
-      <div class="team-notice-icon">🔒</div>
+      <img src="icons/confidentialite.svg" alt="Icône Cadenas" class="team-card-icon">
       <div class="team-notice-text">
         <h4>Composition confidentielle · Recrutement fermé</h4>
         <p>Les membres de la Perspikateam ne sont pas publics. Aucune candidature n'est acceptée — tout passe par invitation directe. Les projets en cours seront révélés en temps voulu.</p>
@@ -568,28 +575,28 @@ permalink: /commu
         <!-- Perks -->
         <div class="beta-perks">
           <div class="beta-perk">
-            <div class="beta-perk-icon">🚀</div>
+            <img src="icons/rocket.svg" alt="Icône Fusée" class="team-card-icon">
             <div class="beta-perk-text">
               <h4>Accès anticipé</h4>
               <p>Tu es parmi les premiers à voir les nouvelles pages, galeries et fonctionnalités avant leur mise en ligne.</p>
             </div>
           </div>
           <div class="beta-perk">
-            <div class="beta-perk-icon">💬</div>
+            <img src="icons/forum.svg" alt="Icône Feedback" class="team-card-icon">
             <div class="beta-perk-text">
               <h4>Feedback direct</h4>
               <p>Tes retours sont lus et pris en compte. T'es pas juste un testeur — t'es une voix dans le processus créatif.</p>
             </div>
           </div>
           <div class="beta-perk">
-            <div class="beta-perk-icon">🎟️</div>
+            <img src="icons/crown.svg" alt="Icône Exclusivité" class="team-card-icon">
             <div class="beta-perk-text">
               <h4>Contenus exclusifs</h4>
               <p>Certaines expériences restent réservées aux membres Beta. Un accès que les autres n'auront pas.</p>
             </div>
           </div>
           <div class="beta-perk">
-            <div class="beta-perk-icon">⭐</div>
+            <img src="icons/perspikateam.svg" alt="Icône Perspikateam" class="team-card-icon">
             <div class="beta-perk-text">
               <h4>Porte vers la Perspikateam</h4>
               <p>Les membres Beta les plus actifs peuvent être invités à rejoindre la team sur des projets futurs.</p>
