@@ -161,10 +161,12 @@ permalink: /commu
     .btn-whatsapp:hover { transform: translateY(-2px); box-shadow: 0 10px 40px rgba(37,211,102,0.48), var(--glass-inset); }
     .btn-linktree {
       background: linear-gradient(135deg, #43E97B, #38f9d7); color: #081a10;
-      font-weight: 700; box-shadow: 0 6px 28px rgba(67,233,123,0.30), var(--glass-inset);
-      font-size: 1rem; padding: 16px 40px;
+      font-weight: 700;
+      box-shadow: 0 6px 28px rgba(0, 0, 0, 0.08), var(--glass-inset);
+      font-size: 1rem;
+      padding: 16px 40px;
     }
-    .btn-linktree:hover { transform: translateY(-3px); box-shadow: 0 14px 44px rgba(67,233,123,0.45), var(--glass-inset); }
+    .btn-linktree:hover { transform: translateY(-1px); box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2), var(--glass-inset); }
 
     /* ─── GLASS CARD ─────────────────────────────────────── */
     .glass-card {
@@ -326,7 +328,7 @@ permalink: /commu
       align-items: center;
       gap: 6px;
       background: rgba(46,204,113,0.10);
-      box-shadow: inset 0 0 8px 0 rgba(255,255,255,0.15);
+      box-shadow: inset 0 0 8px 0 rgba(255,255,255,0.15), 0 4px 20px rgba(0,0,0,0.12);
       border-radius: 999px;
       padding: 5px 14px;
       font-size: 0.8rem;
@@ -340,7 +342,7 @@ permalink: /commu
       font-weight: 900;
       font-size: clamp(1.6rem, 3vw, 2.4rem);
       letter-spacing: -0.04em;
-      line-height: 1.05;
+      line-height: 0.9;
       margin-bottom: 16px;
       color: rgb(255, 255, 255);
     }
@@ -349,8 +351,13 @@ permalink: /commu
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .beta-cta-col > p {
-      color: var(--text-muted); font-size: 0.9rem; font-weight: 300;
-      letter-spacing: -0.01em; line-height: 1.7; max-width: 300px; margin-bottom: 36px;
+      color: var(--text-muted);
+      font-size: 1rem;
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+      max-width: 300px;
+      margin-bottom: 36px;
     }
     .beta-places {
       display: flex; align-items: center; gap: 8px;
@@ -634,7 +641,7 @@ permalink: /commu
 
     <div class="glass-card wa-card reveal">
       <div class="wa-layout">
-        <div class="wa-icon-wrap">💬</div>
+        <img src="icons/whatsapp.svg" alt="Icône WhatsApp" class="team-card-icon">
         <div class="wa-text">
           <h3>Canal <span class="wa-grad">WhatsApp</span><br>Perspikative</h3>
           <p>Les coulisses en temps réel. Nouveaux posts, projets en cours, sneak peeks, et tout ce qui se passe dans l'univers Perspikative — directement dans ta poche. Un canal, pas un groupe : tu reçois, tu vis l'instant.</p>
