@@ -8,10 +8,9 @@ permalink: /art-challenge
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>ART Challenge</title>
-
-  <meta name="description" content="Le ART Challenge est un concours d'art visuel organisé par Perspikative et ouvert à tous. Participe et exprime ta créativité autour de thèmes variés !" />
-  <meta name="keywords" content="art challenge, défi artistique, créativité, art visuel, expérimentation artistique, thème, Perspikative">
+  <title>ART Challenge | Perspikative</title>
+  <meta name="description" content="Le ART Challenge est un concours d'art visuel organisé par Perspikative et ouvert à tous." />
+  <meta name="keywords" content="art challenge, défi artistique, créativité, art visuel, Perspikative">
   <meta name="robots" content="index, follow">
 
   <meta property="og:title" content="ART Challenge | Perspikative" />
@@ -27,8 +26,798 @@ permalink: /art-challenge
   <link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: light)">
 
   <link rel="stylesheet" href="/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
+
+  <style>
+
+    /* =====================================================
+       VARIABLES
+    ===================================================== */
+    :root {
+      --page-bg:           #0d1f1c;
+      --page-bg-alt:       #0f2420;
+
+      --teal:              #58b3a2;
+      --teal-light:        #7ecfbe;
+      --teal-dark:         #2e7f6f;
+      --blue:              #3a7bd5;
+      --blue-light:        #6fa8f5;
+
+      --text-main:         #e8f4f1;
+      --text-muted:        rgba(232, 244, 241, 0.55);
+      --text-accent:       #a8eddf;
+
+      --gradient-brand:    linear-gradient(135deg, #58b3a2 0%, #3a7bd5 100%);
+
+      /* Cards : fond sombre + inset dégradé + ombre derrière */
+      --card-bg:           rgba(15, 36, 32, 0.85);
+      --card-border:       rgba(88, 179, 162, 0.18);
+      --card-shadow:       0 8px 40px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(88,179,162,0.10);
+      --card-inset:        inset 0 1px 0 rgba(88,179,162,0.25), inset 0 -1px 0 rgba(58,123,213,0.15);
+      --card-radius:       24px;
+
+      --btn-radius:        50px;
+      --section-gap:       5rem;
+
+      --transition-fast:   0.2s ease;
+      --transition-med:    0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* =====================================================
+       BASE
+    ===================================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body.art-challenge-page {
+      background-color: var(--page-bg);
+      color: var(--text-main);
+      font-family: 'Rubik', sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    img { display: block; max-width: 100%; }
+    a   { color: inherit; text-decoration: none; }
+
+    /* =====================================================
+       HERO
+    ===================================================== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 7rem 1.5rem 5rem;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 20%, rgba(46,127,111,0.18) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 80% 70%, rgba(58,123,213,0.12) 0%, transparent 60%),
+        var(--page-bg);
+    }
+
+    .hero-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.25;
+      pointer-events: none;
+    }
+    .hero-blob-1 {
+      width: 420px; height: 420px;
+      background: var(--teal-dark);
+      top: -100px; left: -80px;
+      animation: blob-float 9s ease-in-out infinite;
+    }
+    .hero-blob-2 {
+      width: 320px; height: 320px;
+      background: var(--blue);
+      top: 30%; right: -60px;
+      animation: blob-float 11s ease-in-out infinite reverse;
+    }
+    .hero-blob-3 {
+      width: 280px; height: 280px;
+      background: var(--teal);
+      bottom: 5%; left: 25%;
+      animation: blob-float 7s ease-in-out infinite 2s;
+    }
+
+    @keyframes blob-float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50%       { transform: translateY(-24px) scale(1.04); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.6rem;
+    }
+
+    .hero-logo {
+      width: min(260px, 65vw);
+      filter: drop-shadow(0 0 24px rgba(88,179,162,0.45));
+      animation: hero-pop 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    @keyframes hero-pop {
+      from { opacity: 0; transform: scale(0.65); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .hero-eyebrow {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      background: var(--gradient-brand);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fade-up 0.7s 0.25s both;
+    }
+
+    .hero-title {
+      font-size: clamp(2.2rem, 6vw, 4.2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      animation: fade-up 0.7s 0.4s both;
+    }
+    .hero-title span {
+      background: var(--gradient-brand);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--text-muted);
+      max-width: 480px;
+      animation: fade-up 0.7s 0.55s both;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 0.85rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fade-up 0.7s 0.7s both;
+    }
+
+    .btn-primary {
+      padding: 0.8rem 1.8rem;
+      background: var(--gradient-brand);
+      border: none;
+      border-radius: var(--btn-radius);
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 22px rgba(88,179,162,0.35);
+      transition: var(--transition-med);
+      display: inline-block;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(88,179,162,0.5);
+    }
+
+    .btn-ghost {
+      padding: 0.8rem 1.8rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(88,179,162,0.3);
+      border-radius: var(--btn-radius);
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--teal-light);
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      transition: var(--transition-med);
+      display: inline-block;
+    }
+    .btn-ghost:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: var(--teal);
+      transform: translateY(-2px);
+    }
+
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      animation: fade-in 1s 1.4s both;
+    }
+    .hero-scroll-line {
+      width: 1px;
+      height: 36px;
+      background: linear-gradient(to bottom, var(--teal), transparent);
+      animation: scroll-line 2.2s ease-in-out infinite;
+    }
+    @keyframes scroll-line {
+      0%   { transform: scaleY(0); transform-origin: top; }
+      49%  { transform: scaleY(1); transform-origin: top; }
+      50%  { transform: scaleY(1); transform-origin: bottom; }
+      100% { transform: scaleY(0); transform-origin: bottom; }
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes fade-in {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* =====================================================
+       SECTION LAYOUT (partagé)
+    ===================================================== */
+    .section {
+      padding: var(--section-gap) 1.5rem;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .section-alt {
+      background: linear-gradient(180deg, rgba(46,127,111,0.07) 0%, transparent 100%);
+      border-top: 1px solid rgba(88,179,162,0.1);
+      border-bottom: 1px solid rgba(88,179,162,0.1);
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 0.6rem;
+    }
+
+    .section-title {
+      font-size: clamp(1.7rem, 4vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    .section-desc {
+      margin-top: 0.8rem;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      font-size: 0.95rem;
+    }
+
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(88,179,162,0.2) 30%, rgba(88,179,162,0.2) 70%, transparent);
+    }
+
+    /* =====================================================
+       CARD (glassmorphism)
+    ===================================================== */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--card-radius);
+      box-shadow: var(--card-shadow), var(--card-inset);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: var(--transition-med);
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow:
+        0 16px 50px rgba(0,0,0,0.5),
+        0 0 0 1px rgba(88,179,162,0.22),
+        inset 0 1px 0 rgba(88,179,162,0.35),
+        inset 0 -1px 0 rgba(58,123,213,0.2);
+    }
+
+    /* =====================================================
+       CONCEPT
+    ===================================================== */
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .concept-card {
+      padding: 2rem 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .concept-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gradient-brand);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: var(--transition-med);
+      border-radius: 2px 2px 0 0;
+    }
+    .concept-card:hover::before { transform: scaleX(1); }
+
+    .concept-icon { font-size: 2.2rem; margin-bottom: 1rem; }
+    .concept-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--teal-light);
+      margin-bottom: 0.45rem;
+    }
+    .concept-card p { font-size: 0.88rem; color: var(--text-muted); }
+
+    /* =====================================================
+       ÉDITION + COUNTDOWN
+    ===================================================== */
+    .edition-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .consignes-card { padding: 2rem; }
+
+    .edition-badge {
+      display: inline-block;
+      padding: 0.28rem 0.85rem;
+      background: var(--gradient-brand);
+      border-radius: 50px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 1.1rem;
+    }
+
+    .consignes-card h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 1.5rem;
+    }
+
+    .consignes-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .consignes-list li {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 0.75rem;
+      align-items: start;
+    }
+    .rule-icon {
+      width: 36px; height: 36px;
+      background: rgba(88,179,162,0.12);
+      border: 1px solid rgba(88,179,162,0.25);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .rule-label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 0.1rem;
+    }
+    .rule-value { font-size: 0.88rem; color: var(--text-muted); }
+
+    .consignes-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-top: 1.4rem;
+      font-size: 0.85rem;
+      color: var(--teal-light);
+      border-bottom: 1px solid transparent;
+      transition: var(--transition-fast);
+    }
+    .consignes-link:hover { border-color: var(--teal-light); }
+
+    /* Countdown */
+    .countdown-card {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.4rem;
+    }
+    .countdown-card h2 { font-size: 1.2rem; font-weight: 700; color: var(--text-accent); }
+    .countdown-deadline { font-size: 0.85rem; color: var(--text-muted); }
+    .countdown-deadline strong { color: var(--text-main); }
+
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.8rem;
+    }
+    .count-item {
+      text-align: center;
+      background: rgba(88,179,162,0.07);
+      border: 1px solid rgba(88,179,162,0.15);
+      border-radius: 18px;
+      padding: 1rem 0.4rem 0.8rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .count-item::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--gradient-brand);
+    }
+    .count-number {
+      display: block;
+      font-size: 2rem;
+      font-weight: 700;
+      background: var(--gradient-brand);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .count-number.flip { transform: scale(1.18); }
+    .count-label {
+      display: block;
+      font-size: 0.6rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+    }
+
+    .progress-wrap {
+      background: rgba(88,179,162,0.06);
+      border: 1px solid rgba(88,179,162,0.14);
+      border-radius: 16px;
+      padding: 1.1rem;
+    }
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 0.55rem;
+    }
+    .progress-bar-bg {
+      height: 6px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 50px;
+      overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--gradient-brand);
+      border-radius: 50px;
+      transition: width 0.6s ease;
+    }
+
+    /* =====================================================
+       ÉTAPES
+    ===================================================== */
+    .steps-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.8rem;
+      position: relative;
+    }
+    .steps-row::before {
+      content: '';
+      position: absolute;
+      top: 27px;
+      left: calc(10% + 12px);
+      right: calc(10% + 12px);
+      height: 1px;
+      background: linear-gradient(to right, var(--teal-dark), var(--blue), var(--teal-dark));
+      z-index: 0;
+    }
+
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .step-number {
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      background: var(--gradient-brand);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 1rem;
+      box-shadow: 0 0 18px rgba(88,179,162,0.3);
+      flex-shrink: 0;
+    }
+    .step-emoji { font-size: 1.3rem; margin-bottom: 0.6rem; }
+    .step-item h3 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--teal-light);
+      margin-bottom: 0.3rem;
+    }
+    .step-item p { font-size: 0.8rem; color: var(--text-muted); }
+
+    /* =====================================================
+       GALERIE
+    ===================================================== */
+    .gallery-tabs {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .gallery-tab-btn {
+      padding: 0.45rem 1.1rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(88,179,162,0.2);
+      border-radius: 50px;
+      font-family: 'Rubik', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: var(--transition-fast);
+    }
+    .gallery-tab-btn:hover,
+    .gallery-tab-btn.active {
+      background: var(--gradient-brand);
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .gallery-panel { display: none; }
+    .gallery-panel.active { display: block; }
+
+    .gallery-slider-wrap { position: relative; }
+    .gallery-track {
+      display: flex;
+      gap: 1.1rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+      padding: 0.4rem 0.2rem 1rem;
+    }
+    .gallery-track::-webkit-scrollbar { display: none; }
+
+    .art-card {
+      flex: 0 0 240px;
+      scroll-snap-align: start;
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--card-shadow), var(--card-inset);
+      transition: var(--transition-med);
+    }
+    .art-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow:
+        0 20px 50px rgba(0,0,0,0.5),
+        0 0 0 1px rgba(88,179,162,0.3),
+        inset 0 1px 0 rgba(88,179,162,0.35),
+        inset 0 -1px 0 rgba(58,123,213,0.2);
+    }
+
+    .art-card-img-wrap {
+      aspect-ratio: 4/5;
+      overflow: hidden;
+      position: relative;
+    }
+    .art-card-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .art-card:hover .art-card-img-wrap img { transform: scale(1.06); }
+
+    .art-card-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(13,31,28,0.88) 0%, transparent 55%);
+      display: flex;
+      align-items: flex-end;
+      padding: 0.9rem;
+      opacity: 0;
+      transition: opacity 0.28s ease;
+    }
+    .art-card:hover .art-card-overlay { opacity: 1; }
+    .art-card-overlay-text { font-size: 0.78rem; font-weight: 700; color: var(--teal-light); }
+
+    .art-card-info { padding: 0.9rem 1rem; }
+    .art-card-info h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.2rem; }
+    .art-card-meta { font-size: 0.75rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.4rem; }
+    .art-card-rank {
+      font-weight: 700;
+      background: var(--gradient-brand);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .gallery-arrow {
+      position: absolute;
+      top: 40%;
+      transform: translateY(-50%);
+      width: 42px; height: 42px;
+      background: rgba(15,36,32,0.85);
+      border: 1px solid rgba(88,179,162,0.25);
+      border-radius: 50%;
+      font-size: 1.3rem;
+      color: var(--teal-light);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(10px);
+      transition: var(--transition-fast);
+      z-index: 2;
+    }
+    .gallery-arrow:hover { background: rgba(88,179,162,0.15); border-color: var(--teal); }
+    .gallery-arrow.left  { left:  -20px; }
+    .gallery-arrow.right { right: -20px; }
+
+    /* Stats */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: 2.5rem;
+    }
+    .stat-item { text-align: center; padding: 1.4rem 1rem; }
+    .stat-number {
+      display: block;
+      font-size: 2.4rem;
+      font-weight: 700;
+      background: var(--gradient-brand);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+    .stat-label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 0.4rem;
+    }
+
+    /* =====================================================
+       CTA FINALE
+    ===================================================== */
+    .cta-section {
+      position: relative;
+      text-align: center;
+      padding: 6rem 1.5rem;
+      overflow: hidden;
+    }
+    .cta-glow {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(88,179,162,0.12) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .cta-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 580px;
+      margin: 0 auto;
+    }
+    .cta-inner h2 {
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+    }
+    .cta-inner h2 em {
+      font-style: normal;
+      background: var(--gradient-brand);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .cta-inner p { color: var(--text-muted); margin-bottom: 2rem; font-size: 1rem; }
+    .cta-buttons { display: flex; gap: 0.85rem; justify-content: center; flex-wrap: wrap; }
+
+    /* =====================================================
+       SCROLL REVEAL
+    ===================================================== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.65s ease, transform 0.65s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+    @media (max-width: 900px) {
+      .steps-row { grid-template-columns: repeat(3, 1fr); }
+      .steps-row::before { display: none; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 720px) {
+      :root { --section-gap: 3.5rem; }
+      .edition-grid { grid-template-columns: 1fr; }
+      .hero-title { font-size: 2rem; }
+      .gallery-arrow.left  { left: 0; }
+      .gallery-arrow.right { right: 0; }
+    }
+
+    @media (max-width: 560px) {
+      .concept-grid { grid-template-columns: 1fr; }
+      .steps-row { grid-template-columns: 1fr 1fr; }
+      .countdown-grid { grid-template-columns: repeat(2, 1fr); }
+      .art-card { flex: 0 0 78vw; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 380px) {
+      .hero { padding-top: 5.5rem; }
+      .hero-title { font-size: 1.75rem; }
+      .steps-row { grid-template-columns: 1fr; }
+    }
+
+  </style>
 </head>
 
 <!-- Google tag (gtag.js) -->
@@ -37,213 +826,475 @@ permalink: /art-challenge
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-MH68ZWLYM8');
 </script>
 
-<body class="art-challenge">
+<body class="art-challenge-page">
 
+  <!-- NAV MOBILE -->
   <nav class="mobile-nav">
-    <a href="/" class="nav-icon" title="Accueil">
-      <img src="/icons/accueil.svg" alt="Accueil">
-    </a>
-    <a href="/portfolio" class="nav-icon" title="Portfolio">
-      <img src="/icons/portfolio.svg" alt="Portfolio">
-    </a>
-    <a href="/rechercher" class="nav-icon" title="Rechercher">
-      <img src="/icons/rechercher.svg" alt="Rechercher">
-    </a>
-    <a href="/actus" class="nav-icon" title="Actus">
-      <img src="/icons/actus.svg" alt="Actus">
-    </a>
-    <a href="/contact" class="nav-icon" title="Contact">
-      <img src="/icons/contact.svg" alt="Contact">
-    </a>
+    <a href="/" class="nav-icon" title="Accueil"><img src="/icons/accueil.svg" alt="Accueil"></a>
+    <a href="/portfolio" class="nav-icon" title="Portfolio"><img src="/icons/portfolio.svg" alt="Portfolio"></a>
+    <a href="/rechercher" class="nav-icon" title="Rechercher"><img src="/icons/rechercher.svg" alt="Rechercher"></a>
+    <a href="/actus" class="nav-icon" title="Actus"><img src="/icons/actus.svg" alt="Actus"></a>
+    <a href="/contact" class="nav-icon" title="Contact"><img src="/icons/contact.svg" alt="Contact"></a>
   </nav>
 
+  <!-- HEADER -->
   <header>
     <div class="header-content">
       <div class="logo">
         <a href="/"><img src="/logo.svg" alt="Perspikative logo"></a>
       </div>
-
       <div class="nav-right">
         <ul class="nav-tabs">
-          <li>
-            <a href="/" class="tab">
-              <img src="/icons/accueil.svg" alt="" class="tab-icon"> ACCUEIL
-            </a>
-          </li>
-          <li>
-            <a href="/portfolio" class="tab">
-              <img src="/icons/portfolio.svg" alt="" class="tab-icon"> PORTFOLIO
-            </a>
-          </li>
-          <li>
-            <a href="/actus" class="tab">
-              <img src="/icons/actus.svg" alt="" class="tab-icon"> ACTUS
-            </a>
-          </li>
-          <li>
-            <a href="/contact" class="tab">
-              <img src="/icons/contact.svg" alt="" class="tab-icon"> CONTACT
-            </a>
-          </li>
+          <li><a href="/" class="tab"><img src="/icons/accueil.svg" alt="" class="tab-icon"> ACCUEIL</a></li>
+          <li><a href="/portfolio" class="tab"><img src="/icons/portfolio.svg" alt="" class="tab-icon"> PORTFOLIO</a></li>
+          <li><a href="/actus" class="tab"><img src="/icons/actus.svg" alt="" class="tab-icon"> ACTUS</a></li>
+          <li><a href="/contact" class="tab"><img src="/icons/contact.svg" alt="" class="tab-icon"> CONTACT</a></li>
         </ul>
-
         <input type="checkbox" id="menuToggle" />
         <label for="menuToggle" class="burger-icon" title="Menu">
-          <img id="menuIcon" src="icons/menu.svg" alt="Menu">
+          <img id="menuIcon" src="/icons/menu.svg" alt="Menu">
         </label>
-      <div class="mobile-menu">
-        <ul>
-          <li><a href="/commu">COMMUNAUTÉ</a></li>
-          <li><a href="/art-challenge">ART CHALLENGE</a></li>
-          <li><a href="/faq">FAQ</a></li>
-        </ul>
+        <div class="mobile-menu">
+          <ul>
+            <li><a href="/commu">COMMUNAUTÉ</a></li>
+            <li><a href="/art-challenge">ART CHALLENGE</a></li>
+            <li><a href="/faq">FAQ</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </header>
 
   <div class="blur-overlay"></div>
 
-  <main class="art-challenge">
-    <section class="logo-section">
-      <img src="/icons/art-challenge-logo.svg" alt="Art Challenge Logo" class="logo-animated">
-      <h1>MAKE ART. WELCOME TO YOUR WORLD.</h1>
-    </section>
+  <main>
 
-    <section class="intro">
-      <p>Le ART Challenge est un concours organisé par Perspikative</p>
-      <p>À chaque nouvelle édition, un nouveau thème est imposé.</p>
-      <p>Que tu sois dessinateur, graphiste, peintre ou amateur créatif, ce concours est ouvert à tous !</p>
-    </section>
+    <!-- ===================================================
+         HERO
+    =================================================== -->
+    <section class="hero">
+      <div class="hero-blob hero-blob-1"></div>
+      <div class="hero-blob hero-blob-2"></div>
+      <div class="hero-blob hero-blob-3"></div>
 
-    <section class="art-challenge">
-      <div class="section-separator"></div>
+      <div class="hero-content">
+        <img src="/icons/art-challenge-logo.svg" alt="ART Challenge" class="hero-logo" onerror="this.style.display='none'">
 
-      <div class="left">
-        <h2>THÈME DU MOMENT :</h2>
-        <p>Réaliser une œuvre graphique (dessin, peinture, collage, dessin digital, graphisme)</p>
-        <p>Formats acceptés : photo uniquement (JPG, JPEG, PNG, PDF, WEBP, GIF)</p>
-        <p>Thème : aucun (thème libre)</p>
-        <p>Contraintes : aucune</p>
-        <p class="art-challenge-more">
-        Pour plus d'infos, <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" rel="noopener"> cliquez ici</a>
+        <p class="hero-eyebrow">✏️ make art · welcome to your world</p>
+
+        <h1 class="hero-title">
+          Le concours d'art<br><span>Perspikative</span>
+        </h1>
+
+        <p class="hero-subtitle">
+          Exprime ta créativité, partage ton univers.<br>
+          Chaque édition, un nouveau défi pour tous.
         </p>
+
+        <div class="hero-buttons">
+          <a href="#edition" class="btn-primary">Voir l'édition en cours</a>
+          <a href="#galerie" class="btn-ghost">Galerie des gagnants</a>
+        </div>
       </div>
 
-      <div class="right">
-        <p class="deadline">Date limite : 31 juillet 2026, minuit (UTC+2)</p>
-        <div class="countdown">
-          <div class="count-item">
-            <span class="label">Jours</span>
-            <div class="count-bubble" id="days">0</div>
-          </div>
-          <div class="count-item">
-            <span class="label">Heures</span>
-            <div class="count-bubble" id="hours">0</div>
-          </div>
-          <div class="count-item">
-            <span class="label">Minutes</span>
-            <div class="count-bubble" id="minutes">0</div>
-          </div>
-          <div class="count-item">
-            <span class="label">Secondes</span>
-            <div class="count-bubble" id="seconds">0</div>
-          </div>
-        </div>
-      <div class="section-separator"></div>
-    </section>
-    
-    <section class="art-gallery">
-      <h2 class="art-gallery-title">GALERIE DES GAGNANTS</h2>
-      <p class="art-gallery-subtitle">
-        Les réalisations des participants des éditions précédentes
-      </p>
-
-      <div class="art-gallery-wrapper">
-        <button class="gallery-arrow left" aria-label="Précédent">‹</button>
-
-        <div class="art-gallery-track">
-          <a href="https://www.instagram.com/supernovaaa_art_" target="_blank" class="art-card">
-            <img src="/pics/art-challenge/art1.webp" alt="Dessin participant 1">
-          </a>
-          <a href="https://whatsapp.com/channel/0029Vb00P4d2ZjClbiv40f18" target="_blank" class="art-card">
-            <img src="/pics/art-challenge/art2.webp" alt="Dessin participant 2">
-          </a>
-          <a href="https://m.youtube.com/channel/UCCOgAVlXygNrYJith1yb-Hw" target="_blank" class="art-card">
-            <img src="/pics/art-challenge/art3.webp" alt="Dessin participant 3">
-          </a>
-          <a href="https://instagram.com/participant4" target="_blank" class="art-card">
-            <img src="/portfolio/creations/38.webp" alt="Dessin participant 4">
-          </a>
-          <a href="https://instagram.com/participant5" target="_blank" class="art-card">
-            <img src="/portfolio/creations/37.webp" alt="Dessin participant 5">
-          </a>
-        </div>
-
-        <button class="gallery-arrow right" aria-label="Suivant">›</button>
-        </div>
+      <div class="hero-scroll-hint">
+        <span>Découvrir</span>
+        <div class="hero-scroll-line"></div>
       </div>
     </section>
 
-<script>
-function updateCountdown() {
-  const deadline = new Date("July 31, 2026 00:00:00").getTime();
-  const now = new Date().getTime();
-  const distance = deadline - now;
+    <!-- ===================================================
+         CONCEPT
+    =================================================== -->
+    <div class="section reveal" id="concept">
+      <div class="section-header">
+        <p class="section-eyebrow">C'est quoi ?</p>
+        <h2 class="section-title">Le ART Challenge en quelques mots</h2>
+        <p class="section-desc">Un concours artistique bienveillant, ouvert à toutes et à tous, organisé 1 à 2 fois par an par Perspikative.</p>
+      </div>
 
-  const days = Math.max(Math.floor(distance / (1000*60*60*24)), 0);
-  const hours = Math.max(Math.floor((distance % (1000*60*60*24)) / (1000*60*60)), 0);
-  const minutes = Math.max(Math.floor((distance % (1000*60*60)) / (1000*60)), 0);
-  const seconds = Math.max(Math.floor((distance % (1000*60)) / 1000), 0);
+      <div class="concept-grid">
+        <div class="card concept-card reveal">
+          <div class="concept-icon">🎨</div>
+          <h3>Tous les mediums</h3>
+          <p>Dessin, peinture, collage, illustration digitale, graphisme… tout ce qui est visuel est le bienvenu.</p>
+        </div>
+        <div class="card concept-card reveal">
+          <div class="concept-icon">🌍</div>
+          <h3>Ouvert à tous</h3>
+          <p>Débutant ou confirmé, quel que soit ton âge ou ton style. L'essentiel, c'est de s'exprimer.</p>
+        </div>
+        <div class="card concept-card reveal">
+          <div class="concept-icon">🏆</div>
+          <h3>Un vrai podium</h3>
+          <p>Les meilleures œuvres sont sélectionnées et publiées sur les réseaux Perspikative.</p>
+        </div>
+        <div class="card concept-card reveal">
+          <div class="concept-icon">🔁</div>
+          <h3>1 à 2 fois par an</h3>
+          <p>Chaque édition apporte un thème différent, parfois libre, parfois très précis.</p>
+        </div>
+      </div>
+    </div>
 
-  document.getElementById("days").innerText = days;
-  document.getElementById("hours").innerText = hours;
-  document.getElementById("minutes").innerText = minutes;
-  document.getElementById("seconds").innerText = seconds;
-}
+    <div class="section-divider"></div>
 
-setInterval(updateCountdown, 1000);
-updateCountdown();
-</script>
+    <!-- ===================================================
+         ÉDITION EN COURS + COUNTDOWN
+    =================================================== -->
+    <div class="section-alt" id="edition">
+      <div class="section">
+        <div class="section-header reveal">
+          <p class="section-eyebrow">Édition en cours</p>
+          <h2 class="section-title">À toi de jouer !</h2>
+        </div>
 
-<script>
-  const track = document.querySelector('.art-gallery-track');
-  const leftBtn = document.querySelector('.gallery-arrow.left');
-  const rightBtn = document.querySelector('.gallery-arrow.right');
+        <div class="edition-grid">
 
-  leftBtn.addEventListener('click', () => {
-    track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' });
-  });
+          <div class="card consignes-card reveal">
+            <span class="edition-badge">✦ Édition en cours</span>
+            <h2>Thème du moment :<br>🎭 Thème libre</h2>
 
-  rightBtn.addEventListener('click', () => {
-    track.scrollBy({ left: track.clientWidth, behavior: 'smooth' });
-  });
-</script>
+            <ul class="consignes-list">
+              <li>
+                <div class="rule-icon">🖼️</div>
+                <div>
+                  <span class="rule-label">Type d'œuvre</span>
+                  <span class="rule-value">Dessin, peinture, collage, illustration digitale, graphisme</span>
+                </div>
+              </li>
+              <li>
+                <div class="rule-icon">📁</div>
+                <div>
+                  <span class="rule-label">Formats acceptés</span>
+                  <span class="rule-value">JPG, JPEG, PNG, PDF, WEBP, GIF — photo uniquement</span>
+                </div>
+              </li>
+              <li>
+                <div class="rule-icon">✨</div>
+                <div>
+                  <span class="rule-label">Thème</span>
+                  <span class="rule-value">Aucun — totale liberté créative !</span>
+                </div>
+              </li>
+              <li>
+                <div class="rule-icon">⚡</div>
+                <div>
+                  <span class="rule-label">Contraintes</span>
+                  <span class="rule-value">Aucune — fais-toi plaisir</span>
+                </div>
+              </li>
+              <li>
+                <div class="rule-icon">👥</div>
+                <div>
+                  <span class="rule-label">Participation</span>
+                  <span class="rule-value">Individuelle, une seule œuvre par participant</span>
+                </div>
+              </li>
+            </ul>
+
+            <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" rel="noopener" class="consignes-link">
+              Plus d'infos sur la chaîne WhatsApp →
+            </a>
+          </div>
+
+          <div class="card countdown-card reveal">
+            <h2>⏳ Temps restant</h2>
+            <p class="countdown-deadline">Date limite : <strong>31 juillet 2026</strong>, minuit (UTC+2)</p>
+
+            <div class="countdown-grid">
+              <div class="count-item">
+                <span class="count-number" id="count-days">--</span>
+                <span class="count-label">Jours</span>
+              </div>
+              <div class="count-item">
+                <span class="count-number" id="count-hours">--</span>
+                <span class="count-label">Heures</span>
+              </div>
+              <div class="count-item">
+                <span class="count-number" id="count-minutes">--</span>
+                <span class="count-label">Minutes</span>
+              </div>
+              <div class="count-item">
+                <span class="count-number" id="count-seconds">--</span>
+                <span class="count-label">Secondes</span>
+              </div>
+            </div>
+
+            <div class="progress-wrap">
+              <div class="progress-header">
+                <span>Avancement de l'édition</span>
+                <span id="progress-pct">-- %</span>
+              </div>
+              <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+              </div>
+            </div>
+
+            <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" rel="noopener" class="btn-primary" style="text-align:center;">
+              Soumettre mon œuvre
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ===================================================
+         ÉTAPES
+    =================================================== -->
+    <div class="section reveal" id="participer">
+      <div class="section-header">
+        <p class="section-eyebrow">Mode d'emploi</p>
+        <h2 class="section-title">Comment participer ?</h2>
+        <p class="section-desc">Simple, rapide, et 100 % gratuit.</p>
+      </div>
+
+      <div class="steps-row">
+        <div class="step-item reveal">
+          <div class="step-number">1</div>
+          <div class="step-emoji">👀</div>
+          <h3>Prends connaissance du thème</h3>
+          <p>Lis les consignes ci-dessus ou rejoins la chaîne WhatsApp.</p>
+        </div>
+        <div class="step-item reveal">
+          <div class="step-number">2</div>
+          <div class="step-emoji">🎨</div>
+          <h3>Crée ton œuvre</h3>
+          <p>Le medium de ton choix, prends le temps qu'il te faut.</p>
+        </div>
+        <div class="step-item reveal">
+          <div class="step-number">3</div>
+          <div class="step-emoji">📸</div>
+          <h3>Prends-la en photo</h3>
+          <p>Photo nette et bien éclairée. Formats : JPG, PNG, WEBP, GIF, PDF.</p>
+        </div>
+        <div class="step-item reveal">
+          <div class="step-number">4</div>
+          <div class="step-emoji">📩</div>
+          <h3>Envoie ta participation</h3>
+          <p>Via la chaîne WhatsApp Perspikative avant la date limite.</p>
+        </div>
+        <div class="step-item reveal">
+          <div class="step-number">5</div>
+          <div class="step-emoji">🏅</div>
+          <h3>Attends les résultats</h3>
+          <p>Les gagnants sont annoncés sur les réseaux. Les meilleures œuvres rejoignent la galerie !</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <!-- ===================================================
+         GALERIE
+    =================================================== -->
+    <div class="section reveal" id="galerie">
+      <div class="section-header">
+        <p class="section-eyebrow">Mur de la renommée</p>
+        <h2 class="section-title">Galerie des gagnants</h2>
+        <p class="section-desc">Les œuvres des participants des éditions précédentes. Bravo à eux !</p>
+      </div>
+
+      <div class="gallery-tabs">
+        <button class="gallery-tab-btn active" data-tab="all">Toutes éditions</button>
+        <button class="gallery-tab-btn" data-tab="ed3">Édition 3 · 2025</button>
+        <button class="gallery-tab-btn" data-tab="ed2">Édition 2 · 2025</button>
+        <button class="gallery-tab-btn" data-tab="ed1">Édition 1 · 2024</button>
+      </div>
+
+      <!-- Toutes éditions -->
+      <div class="gallery-panel active" id="panel-all">
+        <div class="gallery-slider-wrap">
+          <button class="gallery-arrow left" aria-label="Précédent">‹</button>
+          <div class="gallery-track">
+            <a href="https://www.instagram.com/supernovaaa_art_" target="_blank" class="art-card">
+              <div class="art-card-img-wrap">
+                <img src="/pics/art-challenge/art1.webp" alt="@supernovaaa_art_" loading="lazy">
+                <div class="art-card-overlay"><span class="art-card-overlay-text">Voir le profil →</span></div>
+              </div>
+              <div class="art-card-info">
+                <h4>@supernovaaa_art_</h4>
+                <div class="art-card-meta"><span class="art-card-rank">🥇 1ᵉʳ</span><span>· Édition 3</span></div>
+              </div>
+            </a>
+            <a href="https://whatsapp.com/channel/0029Vb00P4d2ZjClbiv40f18" target="_blank" class="art-card">
+              <div class="art-card-img-wrap">
+                <img src="/pics/art-challenge/art2.webp" alt="Participant 2" loading="lazy">
+                <div class="art-card-overlay"><span class="art-card-overlay-text">Voir le profil →</span></div>
+              </div>
+              <div class="art-card-info">
+                <h4>Participant 2</h4>
+                <div class="art-card-meta"><span class="art-card-rank">🥈 2ᵉ</span><span>· Édition 3</span></div>
+              </div>
+            </a>
+            <a href="https://m.youtube.com/channel/UCCOgAVlXygNrYJith1yb-Hw" target="_blank" class="art-card">
+              <div class="art-card-img-wrap">
+                <img src="/pics/art-challenge/art3.webp" alt="Participant 3" loading="lazy">
+                <div class="art-card-overlay"><span class="art-card-overlay-text">Voir le profil →</span></div>
+              </div>
+              <div class="art-card-info">
+                <h4>Participant 3</h4>
+                <div class="art-card-meta"><span class="art-card-rank">🥉 3ᵉ</span><span>· Édition 3</span></div>
+              </div>
+            </a>
+            <a href="https://instagram.com/participant4" target="_blank" class="art-card">
+              <div class="art-card-img-wrap">
+                <img src="/portfolio/creations/38.webp" alt="Participant 4" loading="lazy">
+                <div class="art-card-overlay"><span class="art-card-overlay-text">Voir le profil →</span></div>
+              </div>
+              <div class="art-card-info">
+                <h4>Participant 4</h4>
+                <div class="art-card-meta"><span class="art-card-rank">🏅 Mention</span><span>· Édition 2</span></div>
+              </div>
+            </a>
+            <a href="https://instagram.com/participant5" target="_blank" class="art-card">
+              <div class="art-card-img-wrap">
+                <img src="/portfolio/creations/37.webp" alt="Participant 5" loading="lazy">
+                <div class="art-card-overlay"><span class="art-card-overlay-text">Voir le profil →</span></div>
+              </div>
+              <div class="art-card-info">
+                <h4>Participant 5</h4>
+                <div class="art-card-meta"><span class="art-card-rank">🥇 1ᵉʳ</span><span>· Édition 1</span></div>
+              </div>
+            </a>
+          </div>
+          <button class="gallery-arrow right" aria-label="Suivant">›</button>
+        </div>
+      </div>
+
+      <!-- Édition 3 -->
+      <div class="gallery-panel" id="panel-ed3">
+        <div class="gallery-slider-wrap">
+          <button class="gallery-arrow left" aria-label="Précédent">‹</button>
+          <div class="gallery-track">
+            <a href="https://www.instagram.com/supernovaaa_art_" target="_blank" class="art-card">
+              <div class="art-card-img-wrap">
+                <img src="/pics/art-challenge/art1.webp" alt="@supernovaaa_art_" loading="lazy">
+                <div class="art-card-overlay"><span class="art-card-overlay-text">Voir le profil →</span></div>
+              </div>
+              <div class="art-card-info">
+                <h4>@supernovaaa_art_</h4>
+                <div class="art-card-meta"><span class="art-card-rank">🥇 1ᵉʳ</span><span>· 2025</span></div>
+              </div>
+            </a>
+            <a href="https://whatsapp.com/channel/0029Vb00P4d2ZjClbiv40f18" target="_blank" class="art-card">
+              <div class="art-card-img-wrap">
+                <img src="/pics/art-challenge/art2.webp" alt="Participant 2" loading="lazy">
+                <div class="art-card-overlay"><span class="art-card-overlay-text">Voir le profil →</span></div>
+              </div>
+              <div class="art-card-info">
+                <h4>Participant 2</h4>
+                <div class="art-card-meta"><span class="art-card-rank">🥈 2ᵉ</span><span>· 2025</span></div>
+              </div>
+            </a>
+            <a href="https://m.youtube.com/channel/UCCOgAVlXygNrYJith1yb-Hw" target="_blank" class="art-card">
+              <div class="art-card-img-wrap">
+                <img src="/pics/art-challenge/art3.webp" alt="Participant 3" loading="lazy">
+                <div class="art-card-overlay"><span class="art-card-overlay-text">Voir le profil →</span></div>
+              </div>
+              <div class="art-card-info">
+                <h4>Participant 3</h4>
+                <div class="art-card-meta"><span class="art-card-rank">🥉 3ᵉ</span><span>· 2025</span></div>
+              </div>
+            </a>
+          </div>
+          <button class="gallery-arrow right" aria-label="Suivant">›</button>
+        </div>
+      </div>
+
+      <!-- Édition 2 -->
+      <div class="gallery-panel" id="panel-ed2">
+        <div class="gallery-slider-wrap">
+          <button class="gallery-arrow left" aria-label="Précédent">‹</button>
+          <div class="gallery-track">
+            <a href="https://instagram.com/participant4" target="_blank" class="art-card">
+              <div class="art-card-img-wrap">
+                <img src="/portfolio/creations/38.webp" alt="Participant 4" loading="lazy">
+                <div class="art-card-overlay"><span class="art-card-overlay-text">Voir le profil →</span></div>
+              </div>
+              <div class="art-card-info">
+                <h4>Participant 4</h4>
+                <div class="art-card-meta"><span class="art-card-rank">🥇 1ᵉʳ</span><span>· 2025</span></div>
+              </div>
+            </a>
+          </div>
+          <button class="gallery-arrow right" aria-label="Suivant">›</button>
+        </div>
+      </div>
+
+      <!-- Édition 1 -->
+      <div class="gallery-panel" id="panel-ed1">
+        <div class="gallery-slider-wrap">
+          <button class="gallery-arrow left" aria-label="Précédent">‹</button>
+          <div class="gallery-track">
+            <a href="https://instagram.com/participant5" target="_blank" class="art-card">
+              <div class="art-card-img-wrap">
+                <img src="/portfolio/creations/37.webp" alt="Participant 5" loading="lazy">
+                <div class="art-card-overlay"><span class="art-card-overlay-text">Voir le profil →</span></div>
+              </div>
+              <div class="art-card-info">
+                <h4>Participant 5</h4>
+                <div class="art-card-meta"><span class="art-card-rank">🥇 1ᵉʳ</span><span>· 2024</span></div>
+              </div>
+            </a>
+          </div>
+          <button class="gallery-arrow right" aria-label="Suivant">›</button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-row reveal">
+        <div class="card stat-item">
+          <span class="stat-number" data-target="3">0</span>
+          <span class="stat-label">Éditions</span>
+        </div>
+        <div class="card stat-item">
+          <span class="stat-number" data-target="47">0</span>
+          <span class="stat-label">Participants</span>
+        </div>
+        <div class="card stat-item">
+          <span class="stat-number" data-target="12">0</span>
+          <span class="stat-label">Gagnants</span>
+        </div>
+        <div class="card stat-item">
+          <span class="stat-number" data-target="100">0</span>
+          <span class="stat-label">% Gratuit</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================================================
+         CTA FINALE
+    =================================================== -->
+    <section class="cta-section reveal">
+      <div class="cta-glow"></div>
+      <div class="cta-inner">
+        <h2>Prêt·e à<br><em>faire de l'art ?</em></h2>
+        <p>Rejoins la communauté Perspikative et soumets ton œuvre avant la date limite. On a hâte de voir ce que tu vas créer.</p>
+        <div class="cta-buttons">
+          <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" rel="noopener" class="btn-primary">Rejoindre la chaîne WhatsApp</a>
+          <a href="/actus" class="btn-ghost">Voir les actus</a>
+        </div>
+      </div>
+    </section>
 
   </main>
 
+  <!-- FOOTER -->
   <footer>
     <div class="social-icons">
-      <a href="https://linktr.ee/perspikative" target="_blank" aria-label="Linktree">
-        <img src="/icons/linktree.svg" alt="Linktree">
-      </a>
-     <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" aria-label="Chaîne WhatsApp">
-        <img src="/icons/whatsapp-channel.svg" alt="Chaîne WhatsApp">
-      </a>
-      <a href="https://www.instagram.com/perspikative" target="_blank" aria-label="Instagram">
-        <img src="/icons/instagram.svg" alt="Instagram">
-      </a>
-      <a href="https://youtube.com/@perspikative" target="_blank" aria-label="YouTube">
-        <img src="/icons/youtube.svg" alt="YouTube">
-      </a>
-      <a href="https://www.pinterest.com/perspikative" target="_blank" aria-label="Pinterest">
-        <img src="/icons/pinterest.svg" alt="Pinterest">
-      </a>
+      <a href="https://linktr.ee/perspikative" target="_blank" aria-label="Linktree"><img src="/icons/linktree.svg" alt="Linktree"></a>
+      <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" aria-label="WhatsApp"><img src="/icons/whatsapp-channel.svg" alt="Chaîne WhatsApp"></a>
+      <a href="https://www.instagram.com/perspikative" target="_blank" aria-label="Instagram"><img src="/icons/instagram.svg" alt="Instagram"></a>
+      <a href="https://youtube.com/@perspikative" target="_blank" aria-label="YouTube"><img src="/icons/youtube.svg" alt="YouTube"></a>
+      <a href="https://www.pinterest.com/perspikative" target="_blank" aria-label="Pinterest"><img src="/icons/pinterest.svg" alt="Pinterest"></a>
     </div>
-
     <p>&copy; 2026 Perspikative™. Tous droits réservés.</p>
     <p><a href="/mentions-legales" class="footer-link">Mentions légales</a></p>
     <p><a href="/politique-de-confidentialite" class="footer-link">Politique de confidentialité</a></p>
@@ -254,11 +1305,131 @@ updateCountdown();
     <img src="/icons/rechercher.svg" alt="Rechercher">
   </a>
 
+  <!-- =====================================================
+       SCRIPTS
+  ===================================================== -->
   <script>
+
+    /* --- MENU TOGGLE --- */
     const menuToggle = document.getElementById('menuToggle');
-    menuToggle.addEventListener('change', (e) => {
-      document.body.classList.toggle('menu-open', e.target.checked);
-    });
+    if (menuToggle) {
+      menuToggle.addEventListener('change', (e) => {
+        document.body.classList.toggle('menu-open', e.target.checked);
+      });
+    }
+
+    /* --- COUNTDOWN --- */
+    (function () {
+      const DEADLINE = new Date("2026-07-31T22:00:00Z").getTime(); // minuit UTC+2
+      const START    = new Date("2026-01-01T00:00:00Z").getTime();
+
+      const elDays    = document.getElementById('count-days');
+      const elHours   = document.getElementById('count-hours');
+      const elMinutes = document.getElementById('count-minutes');
+      const elSeconds = document.getElementById('count-seconds');
+      const elPct     = document.getElementById('progress-pct');
+      const elFill    = document.getElementById('progress-fill');
+
+      const prev = {};
+
+      function pad(n) { return String(n).padStart(2, '0'); }
+
+      function flip(el, val) {
+        if (!el || prev[el.id] === val) return;
+        prev[el.id] = val;
+        el.textContent = val;
+        el.classList.remove('flip');
+        void el.offsetWidth;
+        el.classList.add('flip');
+        setTimeout(() => el.classList.remove('flip'), 320);
+      }
+
+      function tick() {
+        const now  = Date.now();
+        const dist = DEADLINE - now;
+
+        if (dist <= 0) {
+          [elDays, elHours, elMinutes, elSeconds].forEach(el => { if (el) el.textContent = '00'; });
+          if (elPct)  elPct.textContent  = '100 %';
+          if (elFill) elFill.style.width = '100%';
+          return;
+        }
+
+        flip(elDays,    pad(Math.floor(dist / 86400000)));
+        flip(elHours,   pad(Math.floor((dist % 86400000) / 3600000)));
+        flip(elMinutes, pad(Math.floor((dist % 3600000)  / 60000)));
+        flip(elSeconds, pad(Math.floor((dist % 60000)    / 1000)));
+
+        const pct = Math.min(Math.max(Math.round(((now - START) / (DEADLINE - START)) * 100), 0), 100);
+        if (elPct)  elPct.textContent  = pct + ' %';
+        if (elFill) elFill.style.width = pct + '%';
+      }
+
+      tick();
+      setInterval(tick, 1000);
+    })();
+
+    /* --- GALLERY TABS --- */
+    (function () {
+      document.querySelectorAll('.gallery-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.gallery-tab-btn').forEach(b => b.classList.remove('active'));
+          document.querySelectorAll('.gallery-panel').forEach(p => p.classList.remove('active'));
+          btn.classList.add('active');
+          const panel = document.getElementById('panel-' + btn.dataset.tab);
+          if (panel) panel.classList.add('active');
+        });
+      });
+    })();
+
+    /* --- GALLERY ARROWS --- */
+    (function () {
+      document.querySelectorAll('.gallery-slider-wrap').forEach(wrap => {
+        const track = wrap.querySelector('.gallery-track');
+        const left  = wrap.querySelector('.gallery-arrow.left');
+        const right = wrap.querySelector('.gallery-arrow.right');
+        if (!track) return;
+        left?.addEventListener('click',  () => track.scrollBy({ left: -(track.clientWidth * 0.8), behavior: 'smooth' }));
+        right?.addEventListener('click', () => track.scrollBy({ left:  (track.clientWidth * 0.8), behavior: 'smooth' }));
+      });
+    })();
+
+    /* --- SCROLL REVEAL --- */
+    (function () {
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('visible');
+            obs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -36px 0px' });
+
+      document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    })();
+
+    /* --- STATS COUNT-UP --- */
+    (function () {
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (!e.isIntersecting) return;
+          e.target.querySelectorAll('[data-target]').forEach(el => {
+            const target = +el.dataset.target;
+            let current = 0;
+            const step = Math.ceil(target / 60);
+            const timer = setInterval(() => {
+              current = Math.min(current + step, target);
+              el.textContent = current;
+              if (current >= target) clearInterval(timer);
+            }, 18);
+          });
+          obs.unobserve(e.target);
+        });
+      }, { threshold: 0.5 });
+
+      document.querySelectorAll('.stats-row').forEach(el => obs.observe(el));
+    })();
+
   </script>
 
   <script src="/script.js"></script>
