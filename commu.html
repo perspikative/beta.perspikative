@@ -170,13 +170,14 @@ permalink: /commu
     .glass-card {
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
-      border-radius: var(--radius-lg); backdrop-filter: blur(22px) saturate(1.4);
-      box-shadow: var(--glass-inset-strong), 0 8px 32px rgba(0,0,0,0.18);
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--glass-inset-strong), 0 6px 20px rgba(0,0,0,0.1);
       overflow: hidden;
-      transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+      transition: all 0.3s ease;
     }
     .glass-card:hover {
-      transform: translateY(-2px); border-color: rgba(46,204,113,0.28);
+      transform: translateY(-2px);
       box-shadow: var(--glass-inset-strong), 0 20px 56px rgba(0,0,0,0.26), 0 0 0 1px rgba(46,204,113,0.12);
     }
 
@@ -244,14 +245,12 @@ permalink: /commu
     .team-card-icon {
       width: 50px;
       height: 50px;
-      border-radius: 14px;
+      border-radius: 12px;
       background: linear-gradient(135deg, rgba(46,204,113,0.25), rgba(28,197,160,0.18));
-      border: 1px solid rgba(46,204,113,0.22);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.20);
+      box-shadow: inset 0 0 6px 0 rgba(255, 255, 255, 0.25), 0 0 10px 0 rgba(0, 0, 0, 0.1);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.35rem;
     }
     .team-card h3 {
       font-weight: 700;
@@ -526,17 +525,17 @@ permalink: /commu
 
     <div class="team-grid">
       <div class="glass-card team-card reveal" style="transition-delay:0.05s">
-        <div class="team-card-icon">...</div>
+        <img src="icons/projets.svg" alt="Icône Projets" class="team-card-icon">
         <h3>Créatifs & Artistes</h3>
         <p>Ceux qui façonnent l'identité visuelle des projets. Illustrations, concepts, directions artistiques.</p>
       </div>
       <div class="glass-card team-card reveal" style="transition-delay:0.1s">
-        <div class="team-card-icon">⚙️</div>
+        <img src="icons/edit.svg" alt="Icône Développement" class="team-card-icon">
         <h3>Rédacteurs & Builders</h3>
         <p>Ils construisent les fonctionnalités, testent les prototypes et font tourner la machine technique.</p>
       </div>
       <div class="glass-card team-card reveal" style="transition-delay:0.15s">
-        <div class="team-card-icon">🧭</div>
+        <img src="icons/explore.svg" alt="Icône Explorer" class="team-card-icon">
         <h3>Stratèges & Curateurs</h3>
         <p>Ils orientent les décisions de contenu, la direction éditoriale et la vision à long terme du projet.</p>
       </div>
