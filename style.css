@@ -1547,8 +1547,8 @@ main.creations h2 {
   border-radius: 18px;
   padding: 8px;
   text-decoration: none;
-  transition: all 0.2s ease;
-  animation: fadeInUp 0.4s ease;
+  transition: all 0.16s ease;
+  animation: fadeInUp 0.3s ease;
   box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.2), 
     0 4px 12px rgba(0, 0, 0, 0.05);
 }
@@ -1582,7 +1582,7 @@ main.creations h2 {
   color: #fff;
   font-size: 1.05rem;
   font-weight: 700;
-  letter-spacing: 0.1px;
+  letter-spacing: 0.01em;
   line-height: 1;
 }
 
@@ -1603,7 +1603,7 @@ main.creations h2 {
   background: rgba(0, 0, 0, 0.1);
   color: white;
   padding: 2px 8px;
-  border-radius: 8px;
+  border-radius: 25px;
   margin-left: 2px;
   font-weight: normal;
   text-shadow: none;
@@ -1788,6 +1788,10 @@ main.creations h2 {
   
   .blog-content p {
     font-size: 1.05rem;
+  }
+
+  .badge-cat {
+    border: 1px solid rgba(255, 255, 255, 0.2);
   }
 
   .blog-main {
@@ -3540,56 +3544,6 @@ body {
     margin-left: 0rem;
   }
 }
-
-
-
-
-
-/* Cache le curseur par défaut sur les articles */
-.blog-link {
-    cursor: none;
-}
-
-#custom-cursor {
-    position: fixed;
-    top: 0;
-    left: 0;
-    padding: 6px 6px;
-    background: rgba(0, 0, 0, 0.46);
-    backdrop-filter: blur(20px);           /* L'effet de flou */
-    -webkit-backdrop-filter: blur(20px);    /* Support Safari */
-    border-radius: 50px;                   /* Bords très arrondis */
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;                          /* Ajuste selon ton thème */
-    font-size: 0.9rem;
-    font-weight: bold;
-    letter-spacing: 0px;
-    pointer-events: none;                  /* Important : clic traverse l'élément */
-    opacity: 0;                            /* Caché par défaut */
-    z-index: 9999;
-    transform: translate(-50%, -50%);      /* Centre le tag sur la pointe de la souris */
-    transition: opacity 0.3s ease;
-    white-space: nowrap;
-    box-shadow:
-      inset 0 0 10px rgba(255, 255, 255, 0.15),
-      0 4px 12px rgba(0, 0, 0, 0.25); 
-}
-
-/* Affiche le curseur quand on survole un lien du blog */
-.blog-link:hover ~ #custom-cursor,
-.blog-grid:has(.blog-link:hover) + #custom-cursor,
-#custom-cursor.active {
-    opacity: 1;
-}
-
-
-@media (max-width: 600px) {
-  #custom-cursor {
-    display: none;
-  }
-}
-
-
 
 
 
