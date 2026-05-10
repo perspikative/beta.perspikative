@@ -1567,7 +1567,7 @@ main.creations h2 {
   border-radius: 12px;
   object-fit: cover;
   margin-right: 10px;
-  background: rgba(0, 0, 0, 0.12);
+  background: rgba(0, 0, 0, 0.13);
   border: 2.5px solid rgba(255,255,255,0.2);
   flex-shrink: 0;
 }
