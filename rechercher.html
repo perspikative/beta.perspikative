@@ -27,6 +27,7 @@ permalink: /rechercher
       margin-top: 10px;
       width: 100%;
       padding: 0;
+      margin-left: 0.4rem;
     }
 
     .search-history-list {
@@ -69,7 +70,7 @@ permalink: /rechercher
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       background: rgba(255, 255, 255, 0.1);
       color: rgba(255, 255, 255, 0.9);
       font: inherit;
@@ -94,234 +95,9 @@ permalink: /rechercher
         0 6px 15px rgba(0, 0, 0, 0.15);
     }
 
-    /* ── Liked drawings section ── */
-
-    .liked-drawings-section {
-      width: 100%;
-      height: fit-content;
-    }
-
-    .liked-drawings-box {
-      background: rgba(255, 255, 255, 0.07);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 20px;
-      padding: 14px;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      box-shadow:
-        inset 0 0 22px rgba(255, 255, 255, 0.2),
-        0 6px 24px rgba(0, 0, 0, 0.12);
-      overflow: hidden;
-      margin-right: 0.5rem;
-    }
-
-    .liked-drawings-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-    }
-
-    .liked-drawing-thumb {
-      aspect-ratio: 1;
-      border-radius: 10px;
-      overflow: hidden;
-      position: relative;
-      background: rgba(255, 255, 255, 0.05);
-    }
-
-    .liked-drawing-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.2s ease;
-    }
-
-    .liked-drawing-thumb:hover img {
-      transform: scale(1.03);
-    }
-
-    .liked-drawing-thumb a {
-      display: block;
-      width: 100%;
-      height: 100%;
-    }
-
-    .liked-drawings-overflow {
-      aspect-ratio: 1;
-      border-radius: 10px;
-      border: 0px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      font-weight: 700;
-      color: #fff;
-      letter-spacing: 0rem;
-      cursor: pointer;
-      font-family: 'Rubik', sans-serif;
-      transition: transform 0.15s ease;
-      position: relative;
-      overflow: hidden;
-      box-shadow: inset 0 0 22px rgba(255, 255, 255, 0.2);
-    }
-
-    .liked-drawings-overflow-bg {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      filter: blur(3px) brightness(0.6);
-      transform: scale(1.1);
-    }
-
-    .liked-drawings-overflow-label {
-      position: relative;
-      z-index: 1;
-      text-shadow: 0 2px 5px rgba(0,0,0,0.4);
-    }
-
-    .liked-drawings-overflow:hover {
-      transform: scale(1);
-    }
-
-    /* ── Modale tous les coups de cœur ── */
-
-    .liked-modal-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 10001;
-      background: rgba(0, 0, 0, 0.5);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      opacity: 0;
-      transition: opacity 0.25s ease;
-    }
-
-    .liked-modal-overlay.visible {
-      opacity: 1;
-    }
-
-    .liked-modal {
-      background: rgba(18, 18, 18, 0.36);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 25px;
-      padding: 20px;
-      width: 100%;
-      max-width: 500px;
-      max-height: 80vh;
-      overflow-y: auto;
-      box-shadow:
-        inset 0 0 24px rgba(255, 255, 255, 0.06),
-        0 12px 40px rgba(0, 0, 0, 0.3);
-      transform: translateY(18px);
-      opacity: 0;
-      transition: transform 0.28s ease, opacity 0.28s ease;
-    }
-
-    .liked-modal-overlay.visible .liked-modal {
-      transform: translateY(0);
-      opacity: 1;
-      box-shadow: inset 0 0 22px rgba(255, 255, 255, 0.1),
-        0 12px 30px rgba(0, 0, 0, 0.45);
-    }
-
-    .liked-modal-overlay.closing .liked-modal {
-      transform: translateY(18px);
-      opacity: 0;
-    }
-
-    .liked-modal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .liked-modal-title {
-      font-size: 0.96rem;
-      font-weight: 700;
-      color: rgb(255, 255, 255);
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      opacity: 0.8;
-    }
-
-    .liked-modal-close {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      width: 34px;
-      height: 34px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      padding: 6px;
-      box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.2),
-        0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-
-    .liked-modal-close img {
-      width: 100%;
-      height: 100%;
-      opacity: 0.8;
-    }
-
-    .liked-modal-close:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .liked-modal-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
-      gap: 8px;
-    }
-
-    .liked-drawings-empty {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 20px 10px;
-      color: rgb(255, 255, 255);
-      font-size: 0.88rem;
-      text-align: center;
-      grid-column: 1 / -1;
-      opacity: 0.6;
-    }
-
-    .liked-drawings-empty img {
-      width: 38px;
-      height: 38px;
-      opacity: 1;
-    }
-
     @media (max-width: 600px) {
-      #defaultViews {
-        margin-left: 0.5rem;
-      }
-
-      .liked-drawings-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 6px;
-      }
-
-      .liked-drawings-grid {
-        padding: 0px;
-      }
-
-      .liked-modal-grid {
-        grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+      .search-history {
+        margin-left: 0rem;
       }
     }
   </style>
@@ -425,14 +201,6 @@ permalink: /rechercher
         <div id="popularContent" class="popular-content">
           <div class="section-title">Contenu populaire</div>
           <div id="popularList" class="popular-list"></div>
-        </div>
-
-        <!-- ── Mes coups de cœur ── -->
-        <div id="likedDrawingsSection" class="liked-drawings-section">
-          <div class="section-title">Mes coups de cœur</div>
-          <div class="liked-drawings-box">
-            <div id="likedDrawingsGrid" class="liked-drawings-grid"></div>
-          </div>
         </div>
 
       </div>
@@ -671,145 +439,6 @@ permalink: /rechercher
       { title: "Perspika City", category: "Projet", url: "/portfolio/projets#perspika-city", tags: "perspika city ville volante collab", img: "/icons/projets.svg" },
     ];
 
-    // --- MAP id → src pour les coups de cœur ---
-    const creationsImgMap = {
-      "kayous-diner": "creations/43.webp",
-      "the-cozy-house-of-the-field-mouse": "creations/40.webp",
-      "the-ia-home": "creations/37.webp",
-      "meeting-in-the-valley": "creations/34.webp",
-      "once-upon-a-dream": "creations/31.webp",
-      "winter-lights": "creations/28.webp",
-      "airplane": "creations/25.webp",
-      "la-cite-des-bulles": "creations/22.webp",
-      "temple-japonais": "creations/19.webp",
-      "le-cafe-enchante": "creations/16.webp",
-      "little-cottage": "creations/13.webp",
-      "welcome-in-the-house": "creations/10.webp",
-      "circuit-de-karting": "creations/7.webp",
-      "new-york": "creations/4.webp",
-      "the-castle-byers": "creations/42.webp",
-      "a-wanderer-in-ginger-wood": "creations/39.webp",
-      "creative-thoughts": "creations/36.webp",
-      "the-moon-meadows-stable": "creations/33.webp",
-      "birkskov": "creations/30.webp",
-      "le-palais-des-reves": "creations/27.webp",
-      "l-auberge": "creations/24.webp",
-      "la-haut": "creations/21.webp",
-      "vegetal-desert": "creations/18.webp",
-      "the-dragon-kingdom": "creations/15.webp",
-      "un-mistigry-dormeur": "creations/12.webp",
-      "alfaborg-la-cite-des-fees": "creations/9.webp",
-      "cartoon-world": "creations/6.webp",
-      "maison-retro-futuriste": "creations/3.webp",
-      "minecraft": "creations/1.webp",
-      "my-neighbor-totoro": "creations/44.webp",
-      "the-lil-stork": "creations/41.webp",
-      "the-old-old-lighthouse": "creations/38.webp",
-      "the-blue-bakery": "creations/35.webp",
-      "pop-box-flowers": "creations/32.webp",
-      "heading-for-the-door": "creations/29.webp",
-      "the-bird-house": "creations/26.webp",
-      "my-music-art": "creations/23.webp",
-      "architecture": "creations/20.webp",
-      "red-fashion": "creations/17.webp",
-      "espace-cotier-avec-un-ciel-paranormal": "creations/14.webp",
-      "route-66-usa": "creations/11.webp",
-      "hollande-pays-bas": "creations/8.webp",
-      "candy-house": "creations/5.webp",
-      "abstrakt-city": "creations/2.webp",
-    };
-
-    const MAX_VISIBLE_THUMBS = 5;
-
-    function renderLikedDrawings() {
-      const grid = document.getElementById('likedDrawingsGrid');
-      if (!grid) return;
-
-      let likes = {};
-      try { likes = JSON.parse(localStorage.getItem('prspk_likes')) || {}; } catch(e) {}
-
-      const likedIds = Object.keys(likes).filter(id => !!likes[id] && creationsImgMap[id]);
-      grid.innerHTML = '';
-
-      if (likedIds.length === 0) {
-        grid.innerHTML = `
-          <div class="liked-drawings-empty" style="grid-column: 1 / -1;">
-            <img src="/icons/like.svg" alt="">
-            <span>Aucun coup de cœur pour l'instant</span>
-          </div>`;
-        return;
-      }
-
-      const visible = likedIds.slice(0, MAX_VISIBLE_THUMBS);
-      const overflow = likedIds.length - MAX_VISIBLE_THUMBS;
-
-      visible.forEach(id => {
-        const src = '/portfolio/' + creationsImgMap[id];
-        const url = '/portfolio/creations#' + id;
-        const cell = document.createElement('div');
-        cell.className = 'liked-drawing-thumb';
-        cell.innerHTML = `<a href="${url}"><img src="${src}" alt="" loading="lazy"></a>`;
-        grid.appendChild(cell);
-      });
-
-      if (overflow > 0) {
-        // Le dessin derrière le + : on prend le 6e liké (index 5)
-        const bgId = likedIds[MAX_VISIBLE_THUMBS];
-        const bgSrc = bgId ? '/portfolio/' + creationsImgMap[bgId] : '';
-
-        const more = document.createElement('button');
-        more.type = 'button';
-        more.className = 'liked-drawings-overflow';
-        more.setAttribute('aria-label', 'Voir tous les coups de cœur');
-        more.innerHTML = `
-          ${bgSrc ? `<img src="${bgSrc}" alt="" class="liked-drawings-overflow-bg">` : ''}
-          <span class="liked-drawings-overflow-label">+${overflow}</span>`;
-        more.addEventListener('click', openLikedModal);
-        grid.appendChild(more);
-      }
-    }
-
-    function openLikedModal() {
-      let likes = {};
-      try { likes = JSON.parse(localStorage.getItem('prspk_likes')) || {}; } catch(e) {}
-      const likedIds = Object.keys(likes).filter(id => !!likes[id] && creationsImgMap[id]);
-
-      const overlay = document.createElement('div');
-      overlay.id = 'likedModal';
-      overlay.className = 'liked-modal-overlay';
-      overlay.innerHTML = `
-        <div class="liked-modal">
-          <div class="liked-modal-header">
-            <span class="liked-modal-title">Mes coups de cœur</span>
-            <button type="button" class="liked-modal-close" aria-label="Fermer">
-              <img src="/icons/fermer.svg" alt="Fermer">
-            </button>
-          </div>
-          <div class="liked-modal-grid">
-            ${likedIds.map(id => `
-              <div class="liked-drawing-thumb">
-                <a href="/portfolio/creations#${id}">
-                  <img src="/portfolio/${creationsImgMap[id]}" alt="" loading="lazy">
-                </a>
-              </div>`).join('')}
-          </div>
-        </div>`;
-
-      document.body.appendChild(overlay);
-      requestAnimationFrame(() => overlay.classList.add('visible'));
-
-      overlay.querySelector('.liked-modal-close').addEventListener('click', closeLikedModal);
-      overlay.addEventListener('click', e => { if (e.target === overlay) closeLikedModal(); });
-    }
-
-    function closeLikedModal() {
-      const overlay = document.getElementById('likedModal');
-      if (!overlay) return;
-      overlay.classList.add('closing');
-      overlay.classList.remove('visible');
-      overlay.addEventListener('transitionend', () => overlay.remove(), { once: true });
-    }
-
     // --- 2. MOTEUR ---
     const searchInput = document.getElementById('searchInput');
     const resultsContainer = document.getElementById('searchResults');
@@ -880,6 +509,7 @@ permalink: /rechercher
         itemBtn.appendChild(label);
         historyList.appendChild(itemBtn);
       });
+      // On cache le bloc historique s'il est vide
       historyContainer.hidden = history.length === 0;
     }
 
@@ -922,15 +552,18 @@ permalink: /rechercher
         searchTerms.forEach(term => {
           let hasMatch = false;
 
+          // 1. Check Titre
           if (cleanTitle.includes(term)) {
             score += 50;
             hasMatch = true;
           } else {
+            // Flou sur le titre
             titleWords.forEach(w => {
               if (levenshtein(w, term) <= 1) { score += 20; hasMatch = true; }
             });
           }
 
+          // 2. Check Tags
           tags.forEach(tag => {
             if (tag.includes(term)) { score += 20; hasMatch = true; }
           });
@@ -981,11 +614,11 @@ permalink: /rechercher
       if (rawValue === '') {
         if (noResultTimer) clearTimeout(noResultTimer);
         resultsContainer.innerHTML = '';
-        defaultViews.hidden = false;
+        defaultViews.hidden = false; // Affiche Populaire + Historique
         renderSearchHistory();
         return;
       }
-      defaultViews.hidden = true;
+      defaultViews.hidden = true; // Cache Populaire + Historique pendant la recherche
       runSearch(rawValue.toLowerCase(), e.target.value);
     });
 
@@ -1010,7 +643,7 @@ permalink: /rechercher
       if (!item) return;
       const term = item.dataset.term || '';
       searchInput.value = term;
-      defaultViews.hidden = true;
+      defaultViews.hidden = true; // On cache les vues par défaut
       runSearch(term.toLowerCase(), term);
       addToSearchHistory(term);
       searchInput.focus();
@@ -1024,7 +657,6 @@ permalink: /rechercher
     // Initialisation
     renderPopularContent();
     renderSearchHistory();
-    renderLikedDrawings();
 
     const menuToggle = document.getElementById('menuToggle');
     if(menuToggle) {
@@ -1032,15 +664,6 @@ permalink: /rechercher
           document.body.classList.toggle('menu-open', e.target.checked);
         });
     }
-</script>
-
-<script>
-  function openLikedModal() {
-    const modalOverlay = document.getElementById('likedModalOverlay');
-    modalOverlay.classList.add('visible');
-    // On ajoute la classe au body pour bloquer le scroll
-    document.body.classList.add('modal-open');
-  }
 </script>
 
   <script src="/script.js"></script>
