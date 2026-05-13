@@ -105,10 +105,31 @@ permalink: /actus
     <h2 class="blog-title">ACTUS</h2>
     <section class="blog-grid">
 
-      <a href="/actus/2026/nouveautes-recherche" class="blog-link">
+      <a href="/actus/2026/pourquoi-jai-change-mes-filigranes" class="blog-link">
         <article class="blog-card">
           <div class="blog-image">
-            <img src="/pics/actus/2026/nouveautes-recherche.webp" alt="Nouveautés de la recherche">
+            <img src="/pics/actus/2026/pourquoi-jai-change-mes-filigranes.jpg" alt="Pourquoi j'ai changé mes filigranes">
+            <span class="blog-tag fonctionnalite">blog</span>
+          </div>
+          <div class="blog-content">
+            <div class="blog-header">
+              <h2>Pourquoi j'ai changé mes filigranes</h2>
+              <div class="blog-date">
+                <img src="/icons/calendar.svg" alt="date">
+                <span>14/05/2026</span>
+              </div>
+            </div>
+            <p>
+              Découvrez comment le retrait du filigrane change tout.
+            </p>
+          </div>
+        </article>
+      </a>
+
+      <a href="/actus/2026/nouveautes-de-la-recherche" class="blog-link">
+        <article class="blog-card">
+          <div class="blog-image">
+            <img src="/pics/actus/2026/nouveautes-de-la-recherche.webp" alt="Nouveautés de la recherche">
             <span class="blog-tag fonctionnalite">fonctionnalité</span>
           </div>
           <div class="blog-content">
@@ -146,90 +167,6 @@ permalink: /actus
           </div>
         </article>
       </a>
-
-      <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" class="blog-link">
-        <article class="blog-card">
-          <div class="blog-image">
-            <img src="/pics/actus/2026/coming-soon.webp" alt="Coming soon">
-            <span class="blog-tag fonctionnalite">coming soon</span>
-          </div>
-          <div class="blog-content">
-            <div class="blog-header">
-              <h2>Coming soon</h2>
-              <div class="blog-date">
-                <img src="/icons/calendar.svg" alt="date">
-                <span>21/03/2026</span>
-              </div>
-            </div>
-            <p>
-              De nouveaux articles arrivent bientôt ! Restez connectés pour découvrir les dernières actus en suivant Perspikative sur WhatsApp.
-            </p>
-          </div>
-        </article>
-      </a>
-
-      <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" class="blog-link">
-        <article class="blog-card">
-          <div class="blog-image">
-            <img src="/pics/actus/2026/coming-soon.webp" alt="Coming soon">
-            <span class="blog-tag fonctionnalite">coming soon</span>
-          </div>
-          <div class="blog-content">
-            <div class="blog-header">
-              <h2>Coming soon</h2>
-              <div class="blog-date">
-                <img src="/icons/calendar.svg" alt="date">
-                <span>21/03/2026</span>
-              </div>
-            </div>
-            <p>
-              De nouveaux articles arrivent bientôt ! Restez connectés pour découvrir les dernières actus en suivant Perspikative sur WhatsApp.
-            </p>
-          </div>
-        </article>
-      </a>
-
-      <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" class="blog-link">
-        <article class="blog-card">
-          <div class="blog-image">
-            <img src="/pics/actus/2026/coming-soon.webp" alt="Coming soon">
-            <span class="blog-tag fonctionnalite">coming soon</span>
-          </div>
-          <div class="blog-content">
-            <div class="blog-header">
-              <h2>Coming soon</h2>
-              <div class="blog-date">
-                <img src="/icons/calendar.svg" alt="date">
-                <span>21/03/2026</span>
-              </div>
-            </div>
-            <p>
-              De nouveaux articles arrivent bientôt ! Restez connectés pour découvrir les dernières actus en suivant Perspikative sur WhatsApp.
-            </p>
-          </div>
-        </article>
-      </a>
-
-      <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" class="blog-link">
-        <article class="blog-card">
-          <div class="blog-image">
-            <img src="/pics/actus/2026/coming-soon.webp" alt="Coming soon">
-            <span class="blog-tag fonctionnalite">coming soon</span>
-          </div>
-          <div class="blog-content">
-            <div class="blog-header">
-              <h2>Coming soon</h2>
-              <div class="blog-date">
-                <img src="/icons/calendar.svg" alt="date">
-                <span>21/03/2026</span>
-              </div>
-            </div>
-            <p>
-              De nouveaux articles arrivent bientôt ! Restez connectés pour découvrir les dernières actus en suivant Perspikative sur WhatsApp.
-            </p>
-          </div>
-        </article>
-      </a>
     </section>
   </main>
 
@@ -261,38 +198,12 @@ permalink: /actus
   <a href="/rechercher" class="search-float-btn" title="Rechercher">
     <img src="/icons/rechercher.svg" alt="Rechercher">
   </a>
-  
-  <div id="custom-cursor">
-    <img src="/icons/eye.svg" alt="Voir">
-  </div>
 
   <script>
     const menuToggle = document.getElementById('menuToggle');
     menuToggle.addEventListener('change', (e) => {
       document.body.classList.toggle('menu-open', e.target.checked);
     });
-  </script>
-
-  <script>
-const cursor = document.getElementById('custom-cursor');
-const links = document.querySelectorAll('.blog-link');
-
-// 1. Suivi de la souris
-document.addEventListener('mousemove', (e) => {
-    // On utilise les coordonnées client (fenêtre)
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-});
-
-// 2. Apparition / Disparition
-links.forEach(link => {
-    link.addEventListener('mouseenter', () => {
-        cursor.style.opacity = '1';
-    });
-    link.addEventListener('mouseleave', () => {
-        cursor.style.opacity = '0';
-    });
-});
   </script>
 
   <script src="/script.js"></script>
