@@ -4161,8 +4161,8 @@ h2 {
 .feature-card--wide .feature-icon { margin-bottom: 0; }
 
 .feature-icon img {
-  width: 24px; height: 24px;
-  filter: brightness(0) saturate(100%) invert(65%) sepia(50%) saturate(500%) hue-rotate(112deg);
+  width: 34px;
+  height: 34px;
 }
 
 .feature-card h3 {
