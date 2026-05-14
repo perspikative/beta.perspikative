@@ -271,18 +271,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ── Bouton partager ──────────────────────────────────────────────────────
+  // ── Bouton partager (Version Corrigée) ───────────────────────────────────
   if (lbShareBtn) {
     lbShareBtn.addEventListener('click', function() {
       if (!currentId) return;
-      var url   = window.location.origin + '/portfolio/creations#' + currentId;
-      var texte = 'Jette un oeil à cette création sur Perspikative ! ' + url;
+
+      // On récupère l'image source pour voir s'il y a une page dédiée
+      const source = document.getElementById(currentId);
+      let shareUrl = window.location.origin + '/portfolio/creations#' + currentId;
+
+      // Si l'image a un attribut data-page (ex: /portfolio/creations/kayous-diner)
+      if (source && source.dataset.page) {
+        shareUrl = window.location.origin + source.dataset.page;
+      }
+
+      const textePartage = 'Jette un œil à cette création sur Perspikative !';
 
       if (navigator.share) {
-        navigator.share({ title: 'Perspikative', text: texte, url: url })
-          .catch(function() {});
+        // En séparant texte et url, WhatsApp ne doublera plus le lien
+        navigator.share({ 
+          title: 'Perspikative', 
+          text: textePartage, 
+          url: shareUrl 
+        }).catch(function() {});
       } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(texte).then(function() {
+        // Pour PC : on copie le texte + l'espace + l'URL
+        navigator.clipboard.writeText(textePartage + ' ' + shareUrl).then(function() {
           showShareToast();
         });
       }
