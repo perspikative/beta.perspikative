@@ -3814,3 +3814,22 @@ body {
   transition: transform 0.2s ease, filter 0.2s ease;
 }
 
+
+
+.cat-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 20px; /* Espace pour ne pas coller aux boutons */
+}
+
+.cat-footer {
+    width: 180px; /* Ajustez selon vos besoins */
+    height: auto;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Petit effet de "saut" au survol */
+.cat-footer:hover {
+    transform: translateY(-6px) scale(1.05);
+}
