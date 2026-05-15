@@ -3817,19 +3817,30 @@ body {
 
 
 .cat-container {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    margin-top: 20px; /* Espace pour ne pas coller aux boutons */
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 20px; /* Espace pour ne pas coller aux boutons */
 }
 
 .cat-footer {
-    width: 180px; /* Ajustez selon vos besoins */
-    height: auto;
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  width: 180px; /* Ajustez selon vos besoins */
+  height: auto;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 /* Petit effet de "saut" au survol */
 .cat-footer:hover {
-    transform: translateY(-6px) scale(1.05);
+  transform: translateY(-6px) scale(1.05);
+}
+
+/* Media Query pour écrans mobiles */
+@media (max-width: 600px) {
+  .cat-container {
+    margin-top: 28px; /* On réduit un peu l'espace sur mobile */
+  }
+
+  .cat-footer {
+    width: 150px; /* On réduit la taille pour ne pas prendre trop de place */
+  }
 }
