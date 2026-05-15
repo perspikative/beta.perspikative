@@ -26,8 +26,8 @@
             border-top: 3px solid #40916c;
         }
         #cat {
-            position: absolute; bottom: 80px; left: 80px;
-            width: 80px; height: 80px;
+            position: absolute; bottom: 70px; left: 40px;
+            width: 60px; height: 60px;
             cursor: pointer; transition: none;
             animation: catRun 0.6s steps(2) infinite;
         }
@@ -36,10 +36,10 @@
             50% { transform: scaleX(1); }
         }
         .obstacle {
-            position: absolute; bottom: 80px;
-            width: 30px; height: 50px;
+            position: absolute; bottom: 70px;
+            width: 25px; height: 40px;
             background: linear-gradient(135deg, #1b9e77 0%, #d95f02 100%);
-            border-radius: 4px;
+            border-radius: 3px;
         }
         #score-display {
             position: absolute; top: 20px; right: 30px;
@@ -75,8 +75,7 @@
   <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
  </head>
  <body data-template-id="__page-root" style="background: linear-gradient(135deg, rgb(15, 32, 39), rgb(32, 58, 67), rgb(44, 83, 100));">
-  <div id="game-wrapper">
-   <img id="bg-layer" data-template-id="bg-image" class="canva-image" loading="lazy" src="portfolio/projets/3.webp" alt="Forêt de bouleaux avec maison dessinée">
+  <div id="game-wrapper"><img id="bg-layer" data-template-id="bg-image" class="canva-image" loading="lazy" src="portfolio/projets/3.webp" alt="Forêt de bouleaux avec maison dessinée">
    <div id="ground"></div><img id="cat" data-template-id="cat-sprite" class="canva-image" loading="lazy" src="pics/cat/cat-letter.svg" alt="Chat noir personnage du jeu"> <img id="logo-display" data-template-id="logo-image" class="canva-image" loading="lazy" src="logo.svg" alt="Logo Perspikative">
    <div id="score-display">
     0
@@ -140,7 +139,7 @@
                 o.el.style.left = o.x + 'px';
                 if (o.x < -40) { o.el.remove(); obstacles.splice(i, 1); continue; }
                 // Collision
-                if (o.x < 140 && o.x > 60 && catY > -50) {
+                if (o.x < 100 && o.x > 40 && catY > -40) {
                     endGame(); return;
                 }
             }
@@ -179,5 +178,5 @@
             if (e.code === 'Space') { e.preventDefault(); if (!running) start(); else jump(); }
         });
     </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fc280c0b669e209',t:'MTc3ODg1MTg4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9fc288ede588e209',t:'MTc3ODg1MjIyMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body></html>
