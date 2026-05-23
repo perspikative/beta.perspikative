@@ -187,7 +187,6 @@ permalink: /commu
     /* ─── GLASS CARD ─────────────────────────────────────── */
     .glass-card {
       background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
       border-radius: var(--radius-lg);
       backdrop-filter: blur(12px);
       box-shadow: var(--glass-inset-strong), 0 4px 16px rgba(0,0,0,0.06);
@@ -267,7 +266,7 @@ permalink: /commu
       width: 50px;
       height: 50px;
       border: 2.4px solid rgba(255, 255, 255, 0.18);
-      border-radius: 12px;
+      border-radius: var(--radius);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -293,7 +292,7 @@ permalink: /commu
     .team-notice-icon { font-size: 1.8rem; flex-shrink: 0; }
     .team-notice-text { flex: 1; }
     .team-notice-text h4 { font-weight: 700; color: rgb(255, 255, 255); margin: 0px; font-size: 1.2rem; letter-spacing: -0.02em; margin-bottom: 4px; }
-    .team-notice-text p { color: var(--text-muted); font-size: 1rem; font-weight: 300; letter-spacing: -0.005em; line-height: 1; }
+    .team-notice-text p { color: var(--text-muted); font-size: 1rem; font-weight: 300; margin: 0px; letter-spacing: 0em; line-height: 1; }
 
     .status-pill {
       display: inline-flex;
@@ -321,7 +320,7 @@ permalink: /commu
 
     /* ─── BETA PROGRAM ───────────────────────────────────── */
     .beta-section { padding-bottom: 60px; }
-    .beta-main-card { padding: 60px 56px; position: relative; overflow: hidden; }
+    .beta-main-card { padding: 46px 60px; position: relative; overflow: hidden; }
     .beta-main-card::after {
       content: 'β';
       position: absolute;
@@ -341,15 +340,15 @@ permalink: /commu
     .beta-perk {
       display: flex;
       align-items: flex-start;
-      gap: 14px;
-      padding: 18px 20px;
+      gap: 12px;
+      padding: 16px 16px;
       background: rgba(255,255,255,0.04);
       border: 1px solid var(--glass-border);
-      border-radius: var(--radius);
-      box-shadow: inset 0 0 8px 0 rgba(255, 255, 255, 0.2), 0 4px 16px rgba(0, 0, 0, 0.08);
-      transition: all 0.3s ease;
+      border-radius: var(--radius-lg);
+      box-shadow: inset 0 0 8px 0 rgba(255, 255, 255, 0.18), 0 4px 16px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s ease;
     }
-    .beta-perk:hover { box-shadow: inset 0 0 10px 0 rgba(255, 255, 255, 0.3), 0 4px 16px rgba(0, 0, 0, 0.1); }
+    .beta-perk:hover { background: rgba(255, 255, 255, 0.08); box-shadow: inset 0 0 10px 0 rgba(255, 255, 255, 0.25), 0 4px 16px rgba(0, 0, 0, 0.1); }
     .beta-perk-icon {
       width: 38px;
       height: 38px;
@@ -487,7 +486,7 @@ permalink: /commu
       .hero p { font-size: clamp(1.1rem, 2vw, 1.1rem); max-width: 320px; }
       .hero-actions { gap: 10px; }
       .nav-links { display: none; }
-      .section-title { font-weight: 900; font-size: clamp(2.6rem, 6vw, 4.3rem); letter-spacing: -0.04em; line-height: 0.88; margin: 22px 0px 16px 0px; }
+      .section-title { font-size: clamp(2.6rem, 6vw, 4.3rem); margin: 22px 0px 16px 0px; }
       .team-header { grid-template-columns: 1fr; gap: 28px; }
       .team-cta-col { align-items: flex-start; }
       .team-cta-col p { text-align: left; }
@@ -605,12 +604,12 @@ permalink: /commu
       <div class="glass-card team-card reveal" style="transition-delay:0.05s">
         <img src="icons/projets.svg" alt="Icône Projets" class="team-card-icon">
         <h3>Créatifs & Artistes</h3>
-        <p>Ceux qui façonnent l'identité visuelle des projets. Illustrations, concepts, directions artistiques.</p>
+        <p>Ils font des retours sur les dessins de Perspikative. Ils donnent de nouvelles idées pour les créations suivantes et m'aident à m'améliorer.</p>
       </div>
       <div class="glass-card team-card reveal" style="transition-delay:0.1s">
         <img src="icons/edit.svg" alt="Icône Développement" class="team-card-icon">
         <h3>Rédacteurs & Builders</h3>
-        <p>Ils construisent les fonctionnalités, testent les prototypes et font tourner la machine technique.</p>
+        <p>Ils font des retours sur le contenu posté par Perspikative , testent les prototypes et font tourner la machine technique.</p>
       </div>
       <div class="glass-card team-card reveal" style="transition-delay:0.15s">
         <img src="icons/explore.svg" alt="Icône Explorer" class="team-card-icon">
@@ -622,8 +621,8 @@ permalink: /commu
     <div class="team-notice reveal" style="transition-delay:0.2s">
       <img src="icons/confidentialite.svg" alt="Icône Cadenas" class="team-card-icon">
       <div class="team-notice-text">
-        <h4>Composition confidentielle · Recrutement fermé</h4>
-        <p>Les membres de la Perspikateam ne sont pas publics. Aucune candidature n'est acceptée — tout passe par invitation directe. Les projets en cours seront révélés en temps voulu.</p>
+        <h4>Recrutement fermé</h4>
+        <p>A l'heure actuelle, aucune nouvelle candidature n'est acceptée — tout passe par invitation directe.</p>
       </div>
       <div class="status-pill"><span class="blink"></span>En activité</div>
     </div>
@@ -638,7 +637,7 @@ permalink: /commu
     <div style="margin-bottom:48px" class="reveal">
       <div class="section-eyebrow">Programme officiel</div>
       <h2 class="section-title">Perspikative<br><span class="grad">Beta Program</span></h2>
-      <p class="section-desc">Accès anticipé aux nouvelles fonctionnalités du site avant tout le monde. Tu testes, tu donnes ton avis, tu shapes Perspikative.</p>
+      <p class="section-desc">Accès anticipé aux nouvelles fonctionnalités du site avant tout le monde. Tu testes, tu donnes ton avis, et tu contribues au futur de Perspikative.</p>
     </div>
 
     <div class="glass-card beta-main-card reveal">
@@ -649,20 +648,20 @@ permalink: /commu
             <img src="icons/rocket.svg" alt="Icône Fusée" class="team-card-icon">
             <div class="beta-perk-text">
               <h4>Accès anticipé</h4>
-              <p>Tu es parmi les premiers à voir les nouvelles pages, galeries et fonctionnalités avant leur mise en ligne.</p>
+              <p>Tu es parmi les premiers à voir les nouvelles pages, fonctionnalités, articles et bien plus avant leur mise en ligne.</p>
             </div>
           </div>
           <div class="beta-perk">
             <img src="icons/forum.svg" alt="Icône Feedback" class="team-card-icon">
             <div class="beta-perk-text">
               <h4>Feedback direct</h4>
-              <p>Tes retours sont lus et pris en compte. T'es pas juste un testeur — t'es une voix dans le processus créatif.</p>
+              <p>Tes retours sont lus soigneusement et pris en compte. Toutes tes contributions comptent et idées sont précieuses.</p>
             </div>
           </div>
           <div class="beta-perk">
             <img src="icons/crown.svg" alt="Icône Exclusivité" class="team-card-icon">
             <div class="beta-perk-text">
-              <h4>Contenus exclusifs</h4>
+              <h4>Contenu exclusif</h4>
               <p>Certaines expériences restent réservées aux membres Beta. Un accès que les autres n'auront pas.</p>
             </div>
           </div>
@@ -670,7 +669,7 @@ permalink: /commu
             <img src="icons/perspikateam.svg" alt="Icône Perspikateam" class="team-card-icon">
             <div class="beta-perk-text">
               <h4>Porte vers la Perspikateam</h4>
-              <p>Les membres Beta les plus actifs peuvent être invités à rejoindre la team sur des projets futurs.</p>
+              <p>Les membres du programme les plus actifs peuvent être invités à rejoindre la Perspikateam sur des projets futurs.</p>
             </div>
           </div>
         </div>

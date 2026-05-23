@@ -154,7 +154,7 @@ header h1 {
 /* --- Cacher les onglets de navigation sur mobile --- */
 @media (max-width: 800px) {
   header {
-    background: rgba(91, 179, 163, 0.70);
+    background: var(--header-bg);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     color: white;
