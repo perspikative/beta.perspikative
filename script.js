@@ -527,99 +527,85 @@ observer.observe(document.querySelector('footer'));
 
 
 // ============================= 11. PARALLAX SUR LES IMAGES DE L'ACCUEIL =============================
-document.addEventListener('mousemove', (e) => {
-  const mouseX = (e.clientX - window.innerWidth / 2);
-  const mouseY = (e.clientY - window.innerHeight / 2);
-
-
-  // On sélectionne toutes les images de décor
-  const images = document.querySelectorAll('.p-img');
-
-
-  images.forEach((img) => {
-    // On définit la force de l'effet selon la classe ou le z-index
-    // Plus le chiffre est petit, plus l'image fuit loin
-    let intensity = 0.02;
-
-    if (img.classList.contains('pos-1')) intensity = 0.04;
-    if (img.classList.contains('pos-3')) intensity = 0.006; // Fond lointain
-    if (img.classList.contains('cat-mascot')) intensity = 0.07; // Premier plan
-
-    // Calcul du mouvement inversé (-)
-    const x = mouseX * -intensity;
-    const y = mouseY * -intensity;
-
-    img.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-  });
-});
-
-
+// Intensités calées sur les vrais z-index CSS :
+//   z-index 20  (pos-8)  → bouge le plus   (devant)
+//   z-index 14  (pos-2)  → …
+//   z-index 12  (pos-6)  → …
+//   z-index 10  (pos-3)  → …
+//   z-index  7  (pos-4)  → …
+//   z-index  6  (pos-7)  → …
+//   z-index -20 (pos-1, pos-5) → bouge le moins (fond)
+//
+// Chaque image garde sa rotation CSS via getComputedStyle.
+// Lerp par image pour des vitesses de réponse différentes selon le calque.
 
 document.addEventListener('DOMContentLoaded', () => {
-  const images = document.querySelectorAll('.p-img');
+  if (window.innerWidth <= 768) return;
 
-  // On stocke la rotation initiale de chaque image pour ne pas la perdre
-  const imgData = Array.from(images).map(img => {
-    const style = window.getComputedStyle(img);
-    const matrix = new WebKitCSSMatrix(style.transform);
-    const angle = Math.round(Math.atan2(matrix.b, matrix.a) * (180/Math.PI));
+  // Déplacement max en px selon z-index (devant = plus grand)
+  const DEPTH = {
+    'pos-8': 40,   // z 20  — tout devant
+    'pos-2': 30,   // z 14
+    'pos-6': 26,   // z 12
+    'pos-3': 22,   // z 10
+    'pos-4': 16,   // z  7
+    'pos-7': 14,   // z  6
+    'pos-1':  4,   // z -20 — fond
+    'pos-5':  4,   // z -20 — fond
+  };
 
-    // On définit l'intensité selon le z-index
-    const z = parseInt(style.zIndex);
-    let intensity = 0.04;
-    if (z < 5) intensity = 0.006; // Fond
-    if (z > 10) intensity = 0.07; // Premier plan
+  // Vitesse de lerp par calque : les images de devant suivent plus vite
+  const SMOOTH = {
+    'pos-8': 0.10,
+    'pos-2': 0.09,
+    'pos-6': 0.08,
+    'pos-3': 0.07,
+    'pos-4': 0.06,
+    'pos-7': 0.055,
+    'pos-1': 0.04,
+    'pos-5': 0.04,
+  };
 
-    return { el: img, rot: angle, speed: intensity };
+  const imgData = Array.from(document.querySelectorAll('.p-img')).map(img => {
+    const posClass = [...img.classList].find(c => c.startsWith('pos-'));
+    const maxDist  = posClass ? (DEPTH[posClass]  ?? 12)   : 12;
+    const smooth   = posClass ? (SMOOTH[posClass] ?? 0.06) : 0.06;
+
+    // Lire la rotation initiale depuis le CSS (transform ou rotate)
+    const computed = window.getComputedStyle(img);
+    const matrix   = new DOMMatrix(computed.transform);
+    const rot      = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI);
+
+    return { el: img, maxDist, smooth, rot, cx: 0, cy: 0 };
   });
 
-  window.addEventListener('mousemove', (e) => {
-    const mouseX = (e.clientX - window.innerWidth / 2);
-    const mouseY = (e.clientY - window.innerHeight / 2);
+  let targetX = 0, targetY = 0;
 
+  const lerp = (a, b, t) => a + (b - a) * t;
+
+  function animate() {
     imgData.forEach(item => {
+      item.cx = lerp(item.cx, targetX, item.smooth);
+      item.cy = lerp(item.cy, targetY, item.smooth);
 
-      // Mouvement opposé (-)
-      const x = mouseX * -item.speed;
-      const y = mouseY * -item.speed;
+      const x = item.cx * -item.maxDist;
+      const y = item.cy * -item.maxDist;
 
       item.el.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${item.rot}deg)`;
     });
-  });
-});
 
-
-
-document.addEventListener('DOMContentLoaded', () => {
-  const images = document.querySelectorAll('.p-img');
-
-  // Pré-calcul des intensités pour éviter de lire le DOM à chaque mouvement
-  const imgData = Array.from(images).map(img => {
-    let intensity = 0.03; // Défaut
-
-    // Intensité basée sur ton setup
-    if (img.classList.contains('pos-1')) intensity = 0.05;
-    if (img.classList.contains('pos-3')) intensity = 0.006;
-    if (img.classList.contains('cat-mascot')) intensity = 0.08;
-    if (img.classList.contains('pos-8')) intensity = 0.06;
-
-    return { el: img, speed: intensity };
-  });
+    requestAnimationFrame(animate);
+  }
 
   window.addEventListener('mousemove', (e) => {
-    // Uniquement sur Desktop (on check la largeur)
-    if (window.innerWidth > 768) {
-      const mouseX = (e.clientX - window.innerWidth / 2);
-      const mouseY = (e.clientY - window.innerHeight / 2);
+    // Normalise entre -1 et 1
+    targetX = (e.clientX - window.innerWidth  / 2) / (window.innerWidth  / 2);
+    targetY = (e.clientY - window.innerHeight / 2) / (window.innerHeight / 2);
+  }, { passive: true });
 
-      imgData.forEach(item => {
-        const x = mouseX * -item.speed;
-        const y = mouseY * -item.speed;
-        // On utilise translate3d pour la performance GPU
-        item.el.style.transform = `translate3d(${x}px, ${y}px, 0)`;
-      });
-    }
-  });
+  document.addEventListener('mouseleave', () => { targetX = 0; targetY = 0; });
+
+  requestAnimationFrame(animate);
 });
 
 
