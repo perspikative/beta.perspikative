@@ -214,6 +214,7 @@ permalink: /commu
       color: var(--teal-pale);
       margin-bottom: 14px;
     }
+
     .section-eyebrow::before {
       content: '';
       display: block;
@@ -222,20 +223,23 @@ permalink: /commu
       height: 2.6px;
       background: white;
     }
+
     .section-title {
       font-weight: 900;
-      font-size: clamp(2.6rem, 5.8vw, 4.2rem);
+      font-size: clamp(2.6rem, 6vw, 4.3rem);
       letter-spacing: -0.04em;
-      line-height: 0.9;
-      margin-bottom: 18px;
+      line-height: 0.88;
+      margin: 40px 0px 18px 0px;
       color: rgb(255, 255, 255);
     }
+
     .section-title .grad {
       background: linear-gradient(135deg, var(--green-vivid) 0%, var(--teal) 55%, var(--blue-accent) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
+
     .section-desc {
       color: var(--text-muted);
       font-size: 1.1rem;
@@ -483,6 +487,7 @@ permalink: /commu
       .hero p { font-size: clamp(1.1rem, 2vw, 1.1rem); max-width: 320px; }
       .hero-actions { gap: 10px; }
       .nav-links { display: none; }
+      .section-title { font-weight: 900; font-size: clamp(2.6rem, 6vw, 4.3rem); letter-spacing: -0.04em; line-height: 0.88; margin: 22px 0px 16px 0px; }
       .team-header { grid-template-columns: 1fr; gap: 28px; }
       .team-cta-col { align-items: flex-start; }
       .team-cta-col p { text-align: left; }
