@@ -589,6 +589,14 @@ permalink: /commu/perspikateam
       margin: 0;
     }
 
+    /* Style principal des icônes des valeurs */
+    .value-icon {
+      width: 44px;         
+      height: 44px;        
+      object-fit: contain;
+      transition: transform 0.3s ease;
+    }
+
     /* ─── SECTION : RÉCOMPENSES ──────────────────────────── */
     .rewards-section { padding-top: 60px; padding-bottom: 60px; }
     .rewards-grid {
@@ -854,7 +862,7 @@ permalink: /commu/perspikateam
     /* ─── MOBILE ─────────────────────────────────────────── */
     @media (max-width: 860px) {
       .hero { padding: 70px 20px 60px; }
-      .hero h1 { font-size: clamp(3.5rem, 12vw, 7rem); }
+      .hero h1 { font-size: clamp(2.8rem, 12vw, 5rem); }
       .hero p { font-size: 1rem; max-width: 320px; }
       .hero-actions { gap: 10px; }
       .hero-stats { gap: 20px; margin-top: 36px; }
@@ -1023,62 +1031,77 @@ permalink: /commu/perspikateam
         <!-- Membre fondateur mis en avant -->
         <div class="member-card role-founder featured reveal" style="transition-delay:0.05s">
           <svg class="featured-crown" viewBox="0 0 24 24" fill="none">
-            <path d="M3 17L5 10L9 14L12 6L15 14L19 10L21 17H3Z" fill="rgba(245,230,66,0.5)" stroke="rgba(245,230,66,0.7)" stroke-width="1.5" stroke-linejoin="round"/>
+            <path d="M3 17L5 10L9 14L12 6L15 14L19 10L21 17H3Z" fill="rgba(245,230,66,0.5)" stroke="rgba(245,230,66,0.7)" stroke-width="1.8" stroke-linejoin="round"/>
           </svg>
-          <div class="member-avatar">T</div>
-          <div class="member-name">Tartineske</div>
+          <div class="member-avatar">
+            <img src="/pics/commu/perspikateam/tartineske.webp" alt="Photo de Tartineske">
+          </div>
           <span class="member-role-badge founder">Fondateur</span>
           <p class="member-desc">Créateur et directeur artistique de Perspikative. Dessine, code, imagine — tout à la fois.</p>
         </div>
 
         <!-- Membres (placeholders à compléter) -->
         <div class="member-card role-creator reveal" style="transition-delay:0.1s">
-          <div class="member-avatar">A</div>
-          <div class="member-name">Pseudo</div>
+          <div class="member-avatar">
+            <img src="/pics/commu/perspikateam/alice.webp" alt="Photo de Alice">
+          </div>
+          <div class="member-name">Alice</div>
+          <span class="member-role-badge creator">Créative</span>
+          <p class="member-desc">Retours artistiques et idées fraîches pour les prochaines créations.</p>
+        </div>
+
+        <div class="member-card role-creator reveal" style="transition-delay:0.1s">
+          <div class="member-avatar">
+            <img src="/pics/commu/perspikateam/andy.webp" alt="Photo de Andy">
+          </div>
+          <div class="member-name">Andy</div>
           <span class="member-role-badge creator">Créatif</span>
           <p class="member-desc">Retours artistiques et idées fraîches pour les prochaines créations.</p>
         </div>
 
+        <div class="member-card role-builder reveal" style="transition-delay:0.3s">
+          <div class="member-avatar">
+            <img src="/pics/commu/perspikateam/calimero.webp" alt="Photo de Calimero">
+          </div>
+          <div class="member-name">Calimero</div>
+          <span class="member-role-badge builder">Builder</span>
+          <p class="member-desc">Rédaction, relecture et amélioration du contenu publié.</p>
+        </div>
+
         <div class="member-card role-builder reveal" style="transition-delay:0.15s">
-          <div class="member-avatar">B</div>
-          <div class="member-name">Pseudo</div>
+          <div class="member-avatar">
+            <img src="/pics/commu/perspikateam/cinnamon.webp" alt="Photo de Cinnamon">
+          </div>
+          <div class="member-name">Cinnamon</div>
           <span class="member-role-badge builder">Builder</span>
           <p class="member-desc">Teste les prototypes, rapporte les bugs, fait tourner la machine technique.</p>
         </div>
 
         <div class="member-card role-strategist reveal" style="transition-delay:0.2s">
-          <div class="member-avatar">C</div>
-          <div class="member-name">Pseudo</div>
+          <div class="member-avatar">
+            <img src="/pics/commu/perspikateam/kam.webp" alt="Photo de Kam">
+          </div>
+          <div class="member-name">Kam</div>
           <span class="member-role-badge strategist">Stratège</span>
           <p class="member-desc">Oriente la direction éditoriale et les décisions de contenu à long terme.</p>
         </div>
 
         <div class="member-card role-creator reveal" style="transition-delay:0.25s">
-          <div class="member-avatar">D</div>
-          <div class="member-name">Pseudo</div>
+          <div class="member-avatar">
+            <img src="/pics/commu/perspikateam/lafrez.webp" alt="Photo de Lafrez">
+          </div>
+          <div class="member-name">Lafrez</div>
           <span class="member-role-badge creator">Créatif</span>
           <p class="member-desc">Œil aiguisé pour les couleurs, la composition et le style visuel de Perspikative.</p>
         </div>
 
         <div class="member-card role-builder reveal" style="transition-delay:0.3s">
-          <div class="member-avatar">E</div>
-          <div class="member-name">Pseudo</div>
+          <div class="member-avatar">
+            <img src="/pics/commu/perspikateam/river.webp" alt="Photo de RiveR">
+          </div>
+          <div class="member-name">RiveR</div>
           <span class="member-role-badge builder">Builder</span>
           <p class="member-desc">Rédaction, relecture et amélioration du contenu publié.</p>
-        </div>
-
-        <div class="member-card role-strategist reveal" style="transition-delay:0.35s">
-          <div class="member-avatar">F</div>
-          <div class="member-name">Pseudo</div>
-          <span class="member-role-badge strategist">Stratège</span>
-          <p class="member-desc">Curatrice de tendances et vigile des évolutions du milieu créatif.</p>
-        </div>
-
-        <div class="member-card role-creator reveal" style="transition-delay:0.4s">
-          <div class="member-avatar">G</div>
-          <div class="member-name">Pseudo</div>
-          <span class="member-role-badge creator">Créatif</span>
-          <p class="member-desc">Concepteur de concepts, spécialiste des retours constructifs et bienveillants.</p>
         </div>
 
       </div>
@@ -1143,42 +1166,42 @@ permalink: /commu/perspikateam
 
       <div class="values-grid">
         <div class="value-item reveal" style="transition-delay:0.05s">
-          <span class="value-emoji">🎨</span>
+          <img src="/icons/projets.svg" class="value-icon" alt="Créatifs">
           <div class="value-text">
             <h4>La créativité avant tout</h4>
             <p>On croit à l'art comme moteur. Les idées bizarres sont bienvenues, les prises de risque aussi.</p>
           </div>
         </div>
         <div class="value-item reveal" style="transition-delay:0.1s">
-          <span class="value-emoji">🔒</span>
+          <img src="/icons/confidentialite.svg" class="value-icon" alt="Confidentialité">
           <div class="value-text">
             <h4>Confidentialité & respect</h4>
             <p>Ce qui se passe en interne reste en interne. La confiance n'est pas négociable.</p>
           </div>
         </div>
         <div class="value-item reveal" style="transition-delay:0.15s">
-          <span class="value-emoji">⚡</span>
+          <img src="/icons/flash.svg" class="value-icon" alt="Réactivité">
           <div class="value-text">
             <h4>Réactivité & présence</h4>
             <p>On s'implique quand c'est nécessaire. Pas de fantômes, pas de demi-mesures.</p>
           </div>
         </div>
         <div class="value-item reveal" style="transition-delay:0.2s">
-          <span class="value-emoji">🌱</span>
+          <img src="/icons/interests.svg" class="value-icon" alt="Amélioration">
           <div class="value-text">
             <h4>Amélioration continue</h4>
             <p>Le projet évolue, la team aussi. On apprend ensemble et on se remet en question sans ego.</p>
           </div>
         </div>
         <div class="value-item reveal" style="transition-delay:0.25s">
-          <span class="value-emoji">🤝</span>
+          <img src="/icons/kindness.svg" class="value-icon" alt="Bienveillance">
           <div class="value-text">
             <h4>Bienveillance active</h4>
             <p>Les retours sont francs mais construits. On soutient, on n'écrase pas.</p>
           </div>
         </div>
         <div class="value-item reveal" style="transition-delay:0.3s">
-          <span class="value-emoji">✦</span>
+          <img src="/icons/work.svg" class="value-icon" alt="Travail">
           <div class="value-text">
             <h4>Fierté du travail</h4>
             <p>On fait partie de quelque chose qu'on construit ensemble. On en est fier, et ça se voit.</p>
@@ -1203,32 +1226,32 @@ permalink: /commu/perspikateam
 
       <div class="rewards-grid">
         <div class="reward-card gold reveal" style="transition-delay:0.05s">
-          <span class="reward-badge-icon">👑</span>
+          <img src="/icons/crown.svg" class="value-icon" alt="Amélioration">
           <div class="reward-title">Badge Perspikateam</div>
           <p class="reward-desc">Un badge exclusif visible dans les coulisses du projet. La marque officielle des membres.</p>
         </div>
         <div class="reward-card teal reveal" style="transition-delay:0.1s">
-          <span class="reward-badge-icon">🚀</span>
+          <img src="/icons/rocket.svg" class="value-icon" alt="Accès Early">
           <div class="reward-title">Accès Early</div>
           <p class="reward-desc">Toutes les nouvelles créations, pages et fonctionnalités avant tout le monde. Sans exception.</p>
         </div>
         <div class="reward-card blue reveal" style="transition-delay:0.15s">
-          <span class="reward-badge-icon">🎯</span>
+          <img src="/icons/communaute.svg" class="value-icon" alt="Influence directe">
           <div class="reward-title">Influence directe</div>
           <p class="reward-desc">Les suggestions des membres pèsent lourd dans les décisions créatives et éditoriales.</p>
         </div>
         <div class="reward-card teal reveal" style="transition-delay:0.2s">
-          <span class="reward-badge-icon">🤫</span>
+          <img src="/icons/secret-key.svg" class="value-icon" alt="Coulisses exclusives">
           <div class="reward-title">Coulisses exclusives</div>
           <p class="reward-desc">Les processus créatifs, les WIPs, les brouillons — rien ne reste secret pour la team.</p>
         </div>
         <div class="reward-card gold reveal" style="transition-delay:0.25s">
-          <span class="reward-badge-icon">✉️</span>
+          <img src="/icons/contact.svg" class="value-icon" alt="Mention publique">
           <div class="reward-title">Mention publique</div>
           <p class="reward-desc">Les membres peuvent être mentionnés et mis en lumière sur les posts et pages de Perspikative.</p>
         </div>
         <div class="reward-card blue reveal" style="transition-delay:0.3s">
-          <span class="reward-badge-icon">🌐</span>
+          <img src="/icons/bookmark-star.svg" class="value-icon" alt="Page dédiée">
           <div class="reward-title">Page dédiée</div>
           <p class="reward-desc">Une présence sur cette même page. Pseudo, rôle, photo de profil — immortalisé dans le projet.</p>
         </div>
