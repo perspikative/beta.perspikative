@@ -672,4 +672,212 @@ document.addEventListener('DOMContentLoaded', () => {
   }, LAYOUT_DELAY);
 });
 
+
+
+// ============================= 13. FILTRE COUPS DE CŒUR =============================
+
+document.addEventListener('DOMContentLoaded', function () {
+  var filterBtn  = document.getElementById('filter-likes-btn');
+  var filterIcon = document.getElementById('filter-likes-icon');
+  if (!filterBtn) return;
+
+  var filterActive = false;
+
+  // ── LikesStore local (lecture seule, même clé que la section 2) ──────────
+  var LikesStoreRead = {
+    _key: 'prspk_likes',
+    _data: function () {
+      try { return JSON.parse(localStorage.getItem(this._key)) || {}; }
+      catch (e) { return {}; }
+    },
+    hasLiked: function (id) {
+      return !!this._data()[id];
+    }
+  };
+
+  // ── Résoudre l'id d'une image ────────────────────────────────────────────
+  function resolveId(img) {
+    if (img.id) return img.id;
+    var srcPath = img.getAttribute('src');
+    if (srcPath) {
+      var desktop = document.querySelector(
+        '.layout-3colonnes .prspk-thumb[src="' + srcPath + '"]'
+      );
+      if (desktop && desktop.id) return desktop.id;
+      if (desktop) return desktop.src;
+    }
+    return null;
+  }
+
+  // ── Message "aucun liké" ─────────────────────────────────────────────────
+  var emptyMsg = document.getElementById('filter-likes-empty');
+  if (!emptyMsg) {
+    emptyMsg = document.createElement('div');
+    emptyMsg.id = 'filter-likes-empty';
+    emptyMsg.className = 'filter-likes-empty';
+    emptyMsg.innerHTML =
+      '<img src="/icons/like.svg" alt="" class="filter-likes-empty-icon">' +
+      '<p>Aucun coup de cœur pour l\'instant.<br>Like des dessins depuis la lightbox !</p>';
+    emptyMsg.style.display = 'none';
+    var main = document.querySelector('main');
+    if (main) main.appendChild(emptyMsg);
+  }
+
+  // ── Conteneur temporaire pour le filtre (remplace les layouts) ───────────
+  var filterGrid = document.getElementById('filter-likes-grid');
+  if (!filterGrid) {
+    filterGrid = document.createElement('div');
+    filterGrid.id = 'filter-likes-grid';
+    filterGrid.className = 'filter-likes-grid';
+    filterGrid.style.display = 'none';
+    var main = document.querySelector('main');
+    if (main) main.appendChild(filterGrid);
+  }
+
+  // Stocke les positions d'origine pour pouvoir remettre les images en place
+  var savedPositions = [];
+
+  // ── Appliquer le filtre ──────────────────────────────────────────────────
+  function applyFilter() {
+    savedPositions = [];
+    filterGrid.innerHTML = '';
+
+    // Collecter uniquement les images de la layout-3colonnes (desktop)
+    // On ignore layout-2colonnes pour éviter les doublons
+    var allImgs = document.querySelectorAll('.layout-3colonnes img');
+    var likedImgs = [];
+
+    allImgs.forEach(function (img) {
+      var id = resolveId(img);
+      if (id && LikesStoreRead.hasLiked(id)) {
+        likedImgs.push(img);
+      }
+    });
+
+    if (likedImgs.length === 0) {
+      // Masquer les layouts, afficher message vide
+      document.querySelectorAll('.layout-3colonnes, .layout-2colonnes').forEach(function (s) {
+        s.style.opacity = '0';
+        s.style.pointerEvents = 'none';
+        s.style.position = 'absolute';
+      });
+      emptyMsg.style.display = 'flex';
+      requestAnimationFrame(function () {
+        emptyMsg.style.opacity = '1';
+      });
+      return;
+    }
+
+    // Masquer les layouts originaux avec fondu
+    document.querySelectorAll('.layout-3colonnes, .layout-2colonnes').forEach(function (s) {
+      s.style.transition = 'opacity 0.22s ease';
+      s.style.opacity = '0';
+      s.style.pointerEvents = 'none';
+    });
+
+    // Après le fondu sortant, déplacer les images likées dans le grid temporaire
+    setTimeout(function () {
+      document.querySelectorAll('.layout-3colonnes, .layout-2colonnes').forEach(function (s) {
+        s.style.position = 'absolute';
+        s.style.visibility = 'hidden';
+      });
+
+      likedImgs.forEach(function (img) {
+        // Sauvegarder position d'origine
+        savedPositions.push({ img: img, parent: img.parentNode, next: img.nextSibling });
+
+        // Cloner les attributs visuels mais déplacer l'image réelle
+        filterGrid.appendChild(img);
+      });
+
+      // Afficher le grid temporaire
+      filterGrid.style.display = 'flex';
+      filterGrid.style.opacity = '0';
+
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          filterGrid.style.transition = 'opacity 0.22s ease';
+          filterGrid.style.opacity = '1';
+        });
+      });
+
+    }, 300);
+  }
+
+  // ── Retirer le filtre ────────────────────────────────────────────────────
+  function removeFilter() {
+    // Fondu sortant du grid temporaire
+    filterGrid.style.transition = 'opacity 0.22s ease';
+    filterGrid.style.opacity = '0';
+
+    emptyMsg.style.transition = 'opacity 0.22s ease';
+    emptyMsg.style.opacity = '0';
+
+    setTimeout(function () {
+      // Remettre les images à leur place d'origine
+      savedPositions.forEach(function (pos) {
+        if (pos.next) {
+          pos.parent.insertBefore(pos.img, pos.next);
+        } else {
+          pos.parent.appendChild(pos.img);
+        }
+      });
+      savedPositions = [];
+
+      filterGrid.style.display = 'none';
+      filterGrid.innerHTML = '';
+      emptyMsg.style.display = 'none';
+      emptyMsg.style.opacity = '';
+
+      // Réafficher les layouts avec fondu entrant
+      document.querySelectorAll('.layout-3colonnes, .layout-2colonnes').forEach(function (s) {
+        s.style.position = '';
+        s.style.visibility = '';
+        s.style.transition = 'opacity 0.22s ease';
+        s.style.opacity = '0';
+      });
+
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          document.querySelectorAll('.layout-3colonnes, .layout-2colonnes').forEach(function (s) {
+            s.style.opacity = '1';
+          });
+        });
+      });
+
+      setTimeout(function () {
+        document.querySelectorAll('.layout-3colonnes, .layout-2colonnes').forEach(function (s) {
+          s.style.transition = '';
+          s.style.opacity = '';
+          s.style.pointerEvents = '';
+        });
+      }, 400);
+
+    }, 300);
+  }
+
+  // ── Toggle au clic ───────────────────────────────────────────────────────
+  filterBtn.addEventListener('click', function () {
+    filterActive = !filterActive;
+    filterBtn.classList.toggle('active', filterActive);
+    filterIcon.src = filterActive ? '/icons/like-active.svg' : '/icons/like.svg';
+
+    if (filterActive) {
+      applyFilter();
+    } else {
+      removeFilter();
+    }
+  });
+
+  // ── Sync quand un like change depuis la lightbox ─────────────────────────
+  document.addEventListener('prspk:like-changed', function () {
+    if (filterActive) {
+      removeFilter();
+      filterActive = false;
+      filterBtn.classList.remove('active');
+      filterIcon.src = '/icons/like.svg';
+    }
+  });
+});
+
 // ============================= FIN DU SCRIPT =============================
