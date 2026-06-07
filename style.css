@@ -3887,28 +3887,27 @@ body {
   height: 44px;
   border-radius: 50%;
   border: none;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.14);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   box-shadow:
-    inset 0 0 10px rgba(255, 255, 255, 0.18),
+    inset 0 0 10px rgba(255, 255, 255, 0.12),
     0 4px 16px rgba(0, 0, 0, 0.28);
   cursor: pointer;
   z-index: 10001;
-  transition: background 0.2s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
 }
 
 .lightbox-arrow:hover {
-  background: rgba(255, 255, 255, 0.22);
-  transform: translateY(-50%) scale(1.08);
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateY(-50%) scale(1.06);
   box-shadow:
     inset 0 0 12px rgba(255, 255, 255, 0.26),
     0 6px 20px rgba(0, 0, 0, 0.32);
 }
 
 .lightbox-arrow:disabled {
-  cursor: default;
-  pointer-events: none;
+  filter: opacity(0);
 }
 
 .lightbox-arrow img {
@@ -3949,9 +3948,16 @@ body {
     -webkit-backdrop-filter: blur(12px);
     flex-shrink: 0;
   }
+  
+  .lightbox-arrow:disabled {
+    cursor: default;
+    pointer-events: none;
+    filter: opacity(0);
+  }
 
   .lightbox-arrow:hover {
     transform: scale(1.06);
+    background: rgba(0, 0, 0, 0.5);
   }
 
   .lightbox-arrow img {
