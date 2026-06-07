@@ -118,6 +118,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const lbLikeIcon    = document.getElementById('lb-like-icon');
   const lbShareBtn    = document.getElementById('lb-share-btn');
   const lbCopyBtn     = document.getElementById('lb-copy-btn');
+  const lbPrevBtn     = document.getElementById('lb-prev');
+  const lbNextBtn     = document.getElementById('lb-next');
 
   if (!lightboxImg || !lightboxTitle || !lightboxDesc || !closeBtn) {
     console.warn('Lightbox : certains éléments sont manquants.');
@@ -125,6 +127,31 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   let currentId = null;
+
+  // ── Index de navigation : trié par numéro de fichier (1.webp → 45.webp) ──
+  function getNavItems() {
+    const items = Array.from(document.querySelectorAll('.layout-3colonnes .prspk-thumb'));
+    return items.sort((a, b) => {
+      const numA = parseInt(a.getAttribute('src').match(/(\d+)\.webp/)?.[1] ?? '0', 10);
+      const numB = parseInt(b.getAttribute('src').match(/(\d+)\.webp/)?.[1] ?? '0', 10);
+      return numA - numB;
+    });
+  }
+
+  function getCurrentIndex() {
+    const items = getNavItems();
+    return items.findIndex(img => (img.id || img.src) === currentId);
+  }
+
+  function updateNavButtons() {
+    if (!lbPrevBtn || !lbNextBtn) return;
+    const items = getNavItems();
+    const idx = getCurrentIndex();
+    lbPrevBtn.disabled = idx <= 0;
+    lbNextBtn.disabled = idx >= items.length - 1;
+    lbPrevBtn.style.opacity = idx <= 0 ? '0.3' : '1';
+    lbNextBtn.style.opacity = idx >= items.length - 1 ? '0.3' : '1';
+  }
 
   // ── LIKES STORE (localStorage) ──────────────────────────────────────────
   const LikesStore = {
@@ -215,11 +242,25 @@ document.addEventListener('DOMContentLoaded', () => {
     return null;
   }
 
-  // ── Ouverture de la lightbox ─────────────────────────────────────────────
-  function openLightbox(img) {
-    var source = resolveSource(img);
-    if (!source) return;
+  // ── Transition flou au changement d'image ────────────────────────────────
+  function switchImage(callback) {
+    const win = lightbox.querySelector('.lightbox-window');
+    win.style.transition = 'opacity 0.20s cubic-bezier(0.4, 0, 0.2, 1), transform 0.16s cubic-bezier(0.4, 0, 0.2, 1)';
+    win.style.opacity    = '0.7';
+    win.style.transform  = 'scale(0.98)';
 
+    setTimeout(() => {
+      callback();
+      requestAnimationFrame(() => {
+        win.style.transition = 'opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1), transform 0.28s cubic-bezier(0.22, 1, 0.36, 1)';
+        win.style.opacity    = '1';
+        win.style.transform  = 'scale(1)';
+      });
+    }, 180);
+  }
+
+  // ── Remplissage du contenu lightbox ─────────────────────────────────────
+  function fillLightbox(source) {
     lightboxImg.src           = source.src;
     lightboxImg.alt           = source.alt || '';
     lightboxTitle.textContent = source.dataset.title || '';
@@ -230,13 +271,45 @@ document.addEventListener('DOMContentLoaded', () => {
     lightbox.dataset.id = currentId;
 
     if (lbLikeBtn) updateLikeUI(currentId);
-
-    lightbox.classList.add('active');
-    document.body.style.overflow = 'hidden';
+    updateNavButtons();
 
     if (source.id) {
       history.pushState(null, '', '#' + source.id);
     }
+  }
+
+  // ── Ouverture de la lightbox ─────────────────────────────────────────────
+  function openLightbox(img) {
+    var source = resolveSource(img);
+    if (!source) return;
+
+    fillLightbox(source);
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  // ── Navigation prev / next ───────────────────────────────────────────────
+  function navigateLightbox(direction) {
+    const items = getNavItems();
+    const idx = getCurrentIndex();
+    const newIdx = idx + direction;
+    if (newIdx < 0 || newIdx >= items.length) return;
+
+    switchImage(() => fillLightbox(items[newIdx]));
+  }
+
+  if (lbPrevBtn) {
+    lbPrevBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      navigateLightbox(-1);
+    });
+  }
+
+  if (lbNextBtn) {
+    lbNextBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      navigateLightbox(1);
+    });
   }
 
   // Écoute les clics sur toutes les images des deux layouts
@@ -304,10 +377,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const textePartage = 'Jette un œil à cette création sur Perspikative !';
 
       if (navigator.share) {
-        navigator.share({ 
-          title: 'Perspikative', 
-          text: textePartage, 
-          url: shareUrl 
+        navigator.share({
+          title: 'Perspikative',
+          text: textePartage,
+          url: shareUrl
         }).catch(function() {});
       } else if (navigator.clipboard) {
         navigator.clipboard.writeText(textePartage + ' ' + shareUrl).then(function() {
@@ -330,9 +403,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && lightbox.classList.contains('active')) {
-      closeLightbox();
-    }
+    if (!lightbox.classList.contains('active')) return;
+    if (e.key === 'Escape')      closeLightbox();
+    if (e.key === 'ArrowLeft')   navigateLightbox(-1);
+    if (e.key === 'ArrowRight')  navigateLightbox(1);
   });
 });
 

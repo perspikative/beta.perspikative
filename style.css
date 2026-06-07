@@ -3678,7 +3678,7 @@ body {
 
 .lightbox-actions {
   display: flex;
-  gap: 10px;
+  gap: 7px;
   justify-content: flex-end;
   padding-top: 16px;
 }
@@ -3791,6 +3791,11 @@ body {
   z-index: 9999;
 }
 
+.share-toast.hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(20px);
+}
+
 .share-toast.visible {
   opacity: 1;
   transform: translateX(-50%) translateY(0);
@@ -3846,4 +3851,129 @@ body {
   .cat-footer {
     width: 150px; /* On réduit la taille pour ne pas prendre trop de place */
   }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ─── LIGHTBOX NAVIGATION ARROWS ──────────────────────────────────────── */
+
+/* Conteneur des deux flèches */
+.lightbox-nav-arrows {
+  display: contents; /* Les flèches s'affichent en tant qu'éléments indépendants */
+}
+
+/* Flèche générique */
+.lightbox-arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    inset 0 0 10px rgba(255, 255, 255, 0.18),
+    0 4px 16px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  z-index: 10001;
+  transition: background 0.2s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+}
+
+.lightbox-arrow:hover {
+  background: rgba(255, 255, 255, 0.22);
+  transform: translateY(-50%) scale(1.08);
+  box-shadow:
+    inset 0 0 12px rgba(255, 255, 255, 0.26),
+    0 6px 20px rgba(0, 0, 0, 0.32);
+}
+
+.lightbox-arrow:disabled {
+  cursor: default;
+  pointer-events: none;
+}
+
+.lightbox-arrow img {
+  width: 36px;
+  height: 36px;
+  display: block;
+  pointer-events: none;
+}
+
+/* Positionnement gauche / droite desktop */
+.lightbox-arrow-prev {
+  left: 24px;
+}
+
+.lightbox-arrow-next {
+  right: 24px;
+}
+
+/* ── Mobile (≤700px) : 2 boutons ronds côte à côte en haut à gauche ── */
+@media (max-width: 700px) {
+  .lightbox-nav-arrows {
+    display: flex;
+    gap: 10px;
+    position: fixed;
+    top: 15px;
+    left: 20px;
+    z-index: 10001;
+  }
+
+  .lightbox-arrow {
+    position: static;         /* Annule le fixed hérité */
+    top: auto;
+    transform: none;
+    width: 42px;
+    height: 42px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    flex-shrink: 0;
+  }
+
+  .lightbox-arrow:hover {
+    transform: scale(1.06);
+  }
+
+  .lightbox-arrow img {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+
+/* ─── Transition flou au changement de dessin ──────────────────────────── */
+
+#lightbox-img {
+  transition:
+    opacity 0.1s ease;
+}
+
+/* ─── Transition fluide au changement de dessin (style iOS) ────────────── */
+
+.lightbox-window {
+  will-change: opacity, transform;
+}
+
+#lightbox-img.lb-switching {
+  opacity: 0.7;
 }
