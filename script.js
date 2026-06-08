@@ -247,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const win = lightbox.querySelector('.lightbox-window');
     win.style.transition = 'opacity 0.20s cubic-bezier(0.4, 0, 0.2, 1), transform 0.16s cubic-bezier(0.4, 0, 0.2, 1)';
     win.style.opacity    = '0.7';
-    win.style.transform  = 'scale(0.98)';
+    win.style.transform  = 'scale(0.97)';
 
     setTimeout(() => {
       callback();

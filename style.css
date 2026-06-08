@@ -1324,8 +1324,8 @@ main.creations h2 {
 }
 
 .lightbox-close img {
-  width: 30px;
-  height: 30px;
+  width: 29px;
+  height: 29px;
   display: block;
 }
 
@@ -1374,6 +1374,11 @@ main.creations h2 {
     font-size: 2.2rem;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
+  }
+  
+  .lightbox-close img {
+    width: 24px;
+    height: 24px;
   }
 
   .lightbox-date {
@@ -3952,7 +3957,6 @@ body {
   .lightbox-arrow:disabled {
     cursor: default;
     pointer-events: none;
-    filter: opacity(0);
   }
 
   .lightbox-arrow:hover {
@@ -3971,7 +3975,7 @@ body {
 
 #lightbox-img {
   transition:
-    opacity 0.1s ease;
+    opacity 0.12s ease;
 }
 
 /* ─── Transition fluide au changement de dessin (style iOS) ────────────── */
