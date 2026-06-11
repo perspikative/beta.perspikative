@@ -4406,12 +4406,6 @@ body {
     inset 0 0 12px 0 rgba(255, 255, 255, 0.24);
 }
 
-.report-btn:active {
-  transform: translateY(-1px) scale(0.98);
-  border-radius: var(--radius-btn);
-  transition-duration: 0.12s;
-}
-
 /* ── ICÔNE GAUCHE (remplace l'emoji) ── */
 .btn-icon {
   width: 30px;
