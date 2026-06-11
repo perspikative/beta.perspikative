@@ -4348,15 +4348,15 @@ body {
 
 
 .hero h1 {
-  font-size: clamp(2rem, 6vw, 2.8rem);
+  font-size: clamp(2.2rem, 6.4vw, 3rem);
   font-weight: 900;
   color: #ffffff;
   font-family: 'Rubik', sans-serif;
   text-transform: uppercase;
   letter-spacing: .0em;
-  line-height: 1.1;
+  line-height: 0.9;
   text-align: center;
-  margin-bottom: 0rem;
+  margin-bottom: 1rem;
 }
 
 .hero p {
@@ -4376,6 +4376,7 @@ body {
   width: 100%;
   max-width: 720px;
   margin-bottom: 20px;
+  margin-top: 30px;
 }
 
 .report-btn {
@@ -4425,16 +4426,42 @@ body {
   width: 22px;
   height: 22px;
   flex-shrink: 0;
-  opacity: 0.8;
+  opacity: 0.74;
   transition: all 0.35s ease;
 }
 
 .report-btn:hover .btn-external {
-  opacity: 0.85;
+  opacity: 1;
   transform: translateX(4px) scale(1.1);
 }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 600px) {
   .btn-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2.4rem; }
+  .help-center-hero-image {max-width: 400px; align-self: center; margin-bottom: 24px; }
+  .help-center { width: 125%; }
+}
+
+.help-center-hero-image {
+  width: 100%;
+  max-width: 400px; /* Limite la taille maximale de l'illustration */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  margin-bottom: 20px;
+}
+
+.help-center {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.3s ease;
+  align-items: center;
+}
+
+/* Petit effet interactif au survol de la souris */
+.help-center:hover {
+    transform: scale(1.03); /* Zoom très léger */
 }
