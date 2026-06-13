@@ -44,17 +44,11 @@ permalink: /
   <link rel="stylesheet" href="/style.css">
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+  
+  <script type="module" src="firebase-init.js"></script>
+  <script src="script-comments.js"></script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="18d7b0fd-c5fb-4b2e-a43b-10cc734daa8f"></script>
 </head>
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MH68ZWLYM8"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-MH68ZWLYM8');
-</script>
 
 <body class="home">
 
@@ -150,31 +144,6 @@ permalink: /
       <img src="/portfolio/creations/34.webp" class="p-img pos-8" alt="Work 34">
     </div>
   </section>
-  
-  <section class="portfolio-cta">
-    <div class="portfolio-cta-container">
-  
-      <!-- La carte entière devient un lien -->
-      <a href="/portfolio" class="portfolio-card-cta">
-        <img src="/portfolio/collage-portfolio.webp"
-             alt="Collage de dessins"
-             class="portfolio-collage">
-
-        <div class="portfolio-btn">
-          VISITER LE PORTFOLIO
-        </div>
-      </a>
-
-      <!-- Images flottantes autour -->
-      <img src="/portfolio/projets/3.webp"
-        alt="Illustration flottante 1"
-        class="floating-img floating-left">
-      <img src="/portfolio/projets/2.webp"
-        alt="Illustration flottante 2"
-        class="floating-img floating-right">
-        
-    </div>
-  </section>
 
   <section class="cta-section">
     <div class="cta-container">
@@ -207,7 +176,7 @@ permalink: /
         <iframe 
           width="315" 
           height="560"
-          src="https://www.youtube.com/embed/XqasZKmptGs"
+          src="https://www.youtube-nocookie.com/embed/XqasZKmptGs"
           class="short"
           title="The Castle Byers"
           frameborder="0"
@@ -253,6 +222,7 @@ permalink: /
     <p>&copy; 2026 Perspikative™. Tous droits réservés.</p>
     <p><a href="/mentions-legales" class="footer-link">Mentions légales</a></p>
     <p><a href="/politique-de-confidentialite" class="footer-link">Politique de confidentialité</a></p>
+    <p><a href="/help-center" class="footer-link">Centre d'aide</a></p>
     <p><a href="/position-ia" class="footer-link">Position sur l'IA</a></p>
     <p><a href="/brand-guidelines" class="footer-link">Brand guidelines</a></p>
   </footer>
@@ -278,35 +248,12 @@ permalink: /
     });
   </script>
   
-  <script>
-  let deferredPrompt;
-  const installBtn = document.getElementById("install-btn");
-  const installSection = document.getElementById("install-section");
-
-  // Quand la PWA peut être installée
-  window.addEventListener("beforeinstallprompt", (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    installBtn.style.display = "inline-block";
-  });
-
-  // Quand l'utilisateur clique sur le bouton
-  installBtn.addEventListener("click", async () => {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    console.log(`Installation: ${outcome}`);
-
-    // On cache le bouton et la section si l'utilisateur accepte ou refuse
-    deferredPrompt = null;
-    installSection.style.display = "none";
-  });
-
-  // Optionnel : si la PWA est déjà installée, on cache direct la section
-  window.addEventListener('appinstalled', () => {
-    installSection.style.display = "none";
-    console.log('Perspikative a été installée ✅');
-  });
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js');
+    });
+  }
 </script>
 
   <script src="/script.js"></script>

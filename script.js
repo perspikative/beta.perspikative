@@ -276,6 +276,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (source.id) {
       history.pushState(null, '', '#' + source.id);
     }
+
+    // 🆕 Notifie script-comments.js qu'un dessin est affiché
+    document.dispatchEvent(new CustomEvent('prspk:lightbox-opened', {
+      detail: { drawingId: currentId }
+    }));
   }
 
   // ── Ouverture de la lightbox ─────────────────────────────────────────────

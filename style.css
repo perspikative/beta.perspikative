@@ -4033,17 +4033,19 @@ body {
 .lb-comments-title {
   font-family: 'Rubik', sans-serif;
   font-weight: 700;
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: rgba(255, 255, 255, 0.55);
+  color: #ffffff;
+  opacity: 0.7;
 }
 
 .lb-comments-count {
   font-family: 'Rubik', sans-serif;
   font-weight: 400;
-  font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.8rem;
+  color: #ffffff;
+  opacity: 0.7;
 }
 
 /* ── Spinner de chargement ──────────────────────────────────────────────── */
@@ -4095,7 +4097,7 @@ body {
 
 .lb-comment-item {
   display: flex;
-  gap: 10px;
+  gap: 7px;
   align-items: flex-start;
   animation: lb-comment-in 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -4106,8 +4108,8 @@ body {
 }
 
 .lb-comment-pfp {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
@@ -4117,10 +4119,12 @@ body {
 .lb-comment-body {
   flex: 1;
   background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 12px;
+  border-radius: 17px;
   padding: 8px 12px;
   position: relative;
+  box-shadow:
+    inset 0 0 10px rgba(255, 255, 255, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .lb-comment-meta {
@@ -4133,7 +4137,7 @@ body {
 .lb-comment-pseudo {
   font-family: 'Rubik', sans-serif;
   font-weight: 700;
-  font-size: 0.82rem;
+  font-size: 0.86rem;
   color: #fff;
 }
 
@@ -4147,7 +4151,7 @@ body {
 .lb-comment-text {
   font-family: 'Rubik', sans-serif;
   font-weight: 300;
-  font-size: 0.88rem;
+  font-size: 0.95rem;
   line-height: 1.45;
   color: rgba(255,255,255,0.90);
   word-break: break-word;
@@ -4160,22 +4164,23 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  opacity: 0;
+  opacity: 0.7;
   transition: opacity 0.18s ease;
   padding: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 80, 80, 0.75);
+  color: rgb(255, 255, 255);
 }
-
+ 
 .lb-comment-body:hover .lb-comment-delete {
   opacity: 1;
+  color: rgba(255, 80, 80, 0.75);
 }
-
-.lb-comment-delete svg {
-  width: 13px;
-  height: 13px;
+ 
+.lb-comment-delete img {
+  width: 18px;
+  height: 18px;
 }
 
 /* ── Bouton Afficher plus ───────────────────────────────────────────────── */
@@ -4228,23 +4233,26 @@ body {
 .lb-comment-guest p {
   font-family: 'Rubik', sans-serif;
   font-weight: 300;
-  font-size: 0.84rem;
-  color: rgba(255,255,255,0.50);
+  font-size: 0.9rem;
+  color: #ffffff;
+  opacity: 0.75;
   margin: 0;
 }
 
 .lb-comment-login-btn {
   font-family: 'Rubik', sans-serif;
-  font-size: 0.80rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  color: #fff;
+  color: #ffffff;
   background: rgba(255,255,255,0.10);
-  border: 1px solid rgba(255,255,255,0.18);
   border-radius: 20px;
   padding: 6px 16px;
   text-decoration: none;
   transition: background 0.2s ease;
   white-space: nowrap;
+  box-shadow:
+    inset 0 0 10px rgba(255, 255, 255, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .lb-comment-login-btn:hover {
@@ -4273,10 +4281,12 @@ body {
   align-items: flex-end;
   gap: 7px;
   background: rgba(255,255,255,0.07);
-  border: 1px solid rgba(255,255,255,0.10);
   border-radius: 16px;
   padding: 8px 10px;
-  transition: border-color 0.2s ease;
+  transition: all 0.2s ease;
+  box-shadow:
+    inset 0 0 10px rgba(255, 255, 255, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .lb-comment-input-inner:focus-within {
@@ -4290,10 +4300,10 @@ body {
   outline: none;
   resize: none;
   font-family: 'Rubik', sans-serif;
-  font-size: 0.88rem;
+  font-size: 0.9rem;
   font-weight: 300;
-  color: #fff;
-  line-height: 1.45;
+  color: #ffffff;
+  line-height: 1.4;
   min-height: 22px;
   max-height: 100px;
   overflow-y: auto;
@@ -4464,4 +4474,217 @@ body {
 /* Petit effet interactif au survol de la souris */
 .help-center:hover {
     transform: scale(1.03); /* Zoom très léger */
+}
+
+
+
+
+
+
+
+
+.lightbox-window {
+  display: flex;
+  flex-wrap: wrap; /* ← permet au bloc commentaires de passer en dessous */
+}
+
+.lb-comments {
+  width: 100%; /* ← prend toute la largeur sous les deux colonnes */
+  /* tes autres styles existants... */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ─── LIGHTBOX OVERLAY : fond fixe + scroll interne ───────────────────── */
+
+.lightbox-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(10, 10, 10, 0.64);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  /* Scroll vertical, fond immobile */
+  overflow-y: scroll;
+  overflow-x: hidden;
+
+  /* Aligne la fenêtre en haut (pas au centre) pour qu'elle déborde en bas */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;         /* ← était "center" */
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s;
+  z-index: 9999;
+}
+
+/* ─── LIGHTBOX WINDOW : layout colonne, pas de hauteur max ─────────────── */
+
+.lightbox-window {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  backdrop-filter: blur(500px);
+  -webkit-backdrop-filter: blur(500px);
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  max-width: 900px;
+  width: 90%;
+
+  display: flex;
+  flex-direction: column;          /* ← était "row" */
+  gap: 20px;
+
+  /* overflow: hidden retiré → permet à la fenêtre de grandir */
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+  box-shadow:
+    inset 0 0 12px rgba(210, 210, 210, 0.16),
+    0 8px 30px rgba(0, 0, 0, 0.2);
+
+  /* Calé un peu bas pour que le haut soit visible mais que le bas appelle à scroller */
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
+
+/* ─── Sur desktop : les deux colonnes côte à côte dans une ligne ────────── */
+
+@media (min-width: 701px) {
+  .lightbox-top-row {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    width: 100%;
+  }
+
+  .lightbox-left {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .lightbox-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .lightbox-actions {
+    margin-top: auto;
+  }
+}
+
+/* ─── Section commentaires : pleine largeur sous les deux colonnes ───────── */
+
+.lb-comments {
+  width: 100%;
+  margin-top: 0;                   /* le gap du flex parent gère l'espacement */
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
+  padding-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ─── LIGHTBOX OVERLAY ───────────────────────────────────────────────────── */
+
+.lightbox-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(10, 10, 10, 0.64);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;        /* mobile : centré */
+  overflow: hidden;           /* mobile : l'overlay ne scrolle PAS */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s;
+  z-index: 9999;
+}
+
+.lightbox-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Desktop : c'est l'overlay qui scrolle, pas la window */
+@media (min-width: 701px) {
+  .lightbox-overlay {
+    overflow-y: scroll;
+    overflow-x: hidden;
+    align-items: flex-start;
+  }
+
+  .lightbox-window {
+    overflow: visible;          /* ← retire le overflow:hidden qui coupait les commentaires */
+    flex-direction: column;
+    margin-top: 60px;
+    margin-bottom: 60px;
+  }
+}
+
+/* Mobile : c'est la window qui scrolle, pas l'overlay */
+@media (max-width: 700px) {
+  .lightbox-window {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    padding: 10px 15px;
+    gap: 8px;
+    max-height: 100dvh;
+    overflow-y: auto;           /* scroll uniquement ici sur mobile */
+    -webkit-overflow-scrolling: touch;
+    border-radius: 0px;
+    /* pas de margin-top/bottom sur mobile */
+  }
+}
+
+@media (max-width: 700px) {
+  .lightbox-top-row {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .lightbox-left,
+  .lightbox-right {
+    flex: none;
+    width: 100%;
+  }
 }
