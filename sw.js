@@ -1,4 +1,4 @@
-const CACHE_NAME = 'perspikative-v3.1'; // On change de version pour forcer la mise à jour
+const CACHE_NAME = 'perspikative-v3.2'; // On change de version pour forcer la mise à jour
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
