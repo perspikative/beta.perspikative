@@ -58,7 +58,7 @@ permalink: /login
     .logo-wrap {
       position: relative;
       z-index: 1;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
       display: flex;
       justify-content: center;
     }
@@ -160,16 +160,18 @@ permalink: /login
       font-size: 1rem;
       font-weight: 500;
       cursor: pointer;
-      transition: background var(--transition), border-color var(--transition), transform 0.18s;
+      box-shadow:
+        inset 0 0 12px rgba(255, 255, 255, 0.2),
+        0 6px 16px rgba(0, 0, 0, 0.08);
+      transition: background var(--transition), box-shadow var(--transition), transform 0.18s;
     }
 
     .btn-google:hover {
       background: rgba(255,255,255,0.11);
-      border-color: rgba(255,255,255,0.22);
-      transform: translateY(-1px);
+      transform: translateX(2px);
     }
 
-    .btn-google:active { transform: translateY(0); }
+    .btn-google:active { transform: translateX(0); }
 
     .btn-google svg { flex-shrink: 0; }
 
@@ -179,7 +181,8 @@ permalink: /login
       align-items: center;
       gap: 0.75rem;
       margin: 1.4rem 0;
-      color: var(--text-dim);
+      color: #ffffff;
+      opacity: 0.7;
       font-size: 0.75rem;
       letter-spacing: 0.06em;
     }
@@ -187,8 +190,10 @@ permalink: /login
     .sep::before, .sep::after {
       content: '';
       flex: 1;
-      height: 1px;
-      background: var(--glass-bd);
+      height: 2px;
+      border-radius: 6px;
+      background: #ffffff;
+      opacity: 0.4;
     }
 
     /* ─── FORM ─── */
@@ -217,14 +222,19 @@ permalink: /login
       font-family: var(--font);
       font-size: 0.96rem;
       outline: none;
-      transition: border-color var(--transition), box-shadow var(--transition);
+      box-shadow:
+        inset 0 0 8px rgba(255, 255, 255, 0.2),
+        0 6px 16px rgba(0, 0, 0, 0.08);
+      transition: background var(--transition), box-shadow var(--transition);
     }
 
     .field input::placeholder { color: var(--text-dim); }
 
     .field input:focus {
       border-color: var(--teal-1);
-      box-shadow: 0 0 0 3px rgba(0, 200, 150, 0.15);
+      box-shadow:
+        inset 0 0 10px rgba(255, 255, 255, 0.22),
+        0 6px 18px rgba(0, 0, 0, 0.1);
     }
 
     /* password wrapper */
@@ -473,7 +483,7 @@ permalink: /login
         <form id="registerForm" novalidate>
           <div class="field">
             <label for="reg-name">Nom d'utilisateur</label>
-            <input type="text" id="reg-name" name="username" placeholder="tartineske!" autocomplete="username" required />
+            <input type="text" id="reg-name" name="username" placeholder="tartineske" autocomplete="username" required />
           </div>
 
           <div class="field">
