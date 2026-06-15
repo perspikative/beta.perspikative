@@ -1,0 +1,259 @@
+---
+---
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mon compte — Perspikative</title>
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/account.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;700;900&display=swap" rel="stylesheet" />
+</head>
+<body class="account-page">
+
+  <!-- ══════════════════ HEADER ══════════════════ -->
+  <header>
+    <div class="header-inner">
+      <a href="/" class="header-logo">Perspikative</a>
+      <nav class="nav-tabs">
+        <a href="/creations" class="tab">Créations</a>
+        <a href="/illustrations" class="tab">Illustrations</a>
+        <a href="/projets" class="tab">Projets</a>
+        <a href="/rechercher" class="tab">Rechercher</a>
+      </nav>
+      <!-- Bouton déconnexion -->
+      <button class="account-logout-btn" id="logoutBtn" aria-label="Se déconnecter" title="Se déconnecter">
+        <img src="/icons/login.svg" alt="Déconnexion" class="account-logout-icon" />
+      </button>
+    </div>
+  </header>
+
+  <!-- ══════════════════ PAGE PRINCIPALE ══════════════════ -->
+  <main class="account-main">
+
+    <!-- Orbes d'ambiance animés -->
+    <div class="account-orb account-orb--1" aria-hidden="true"></div>
+    <div class="account-orb account-orb--2" aria-hidden="true"></div>
+
+    <!-- Carte profil -->
+    <div class="account-card" id="accountCard">
+
+      <!-- Photo de profil -->
+      <div class="account-pfp-wrap">
+        <img
+          id="accountPfp"
+          class="account-pfp"
+          src="/pics/assets/pfp/1.webp"
+          alt="Photo de profil"
+        />
+        <div class="account-pfp-ring" aria-hidden="true"></div>
+      </div>
+
+      <!-- Pseudo -->
+      <h1 class="account-pseudo" id="accountPseudo">—</h1>
+
+      <!-- Séparateur -->
+      <div class="account-sep" aria-hidden="true"></div>
+
+      <!-- Infos -->
+      <div class="account-info-list">
+        <div class="account-info-row">
+          <img src="/icons/mail.svg" alt="" class="account-info-icon" aria-hidden="true" />
+          <span class="account-info-text" id="accountEmail">—</span>
+        </div>
+        <div class="account-info-row">
+          <img src="/icons/calendar.svg" alt="" class="account-info-icon" aria-hidden="true" />
+          <span class="account-info-text">
+            Membre depuis <strong id="accountSince">—</strong>
+          </span>
+        </div>
+      </div>
+
+      <!-- Bouton supprimer -->
+      <button class="account-delete-btn" id="deleteBtn">
+        Supprimer mon compte
+      </button>
+
+    </div>
+
+  </main>
+
+  <!-- ══════════════════ MODALE DÉCONNEXION ══════════════════ -->
+  <div class="account-modal-overlay" id="logoutOverlay" aria-modal="true" role="dialog" aria-labelledby="logoutTitle">
+    <div class="account-modal" id="logoutModal">
+      <p class="account-modal-text" id="logoutTitle">Es-tu sûr de vouloir te déconnecter&nbsp;?</p>
+      <div class="account-modal-actions">
+        <button class="account-modal-btn account-modal-btn--confirm" id="logoutConfirm">Oui</button>
+        <button class="account-modal-btn account-modal-btn--cancel" id="logoutCancel">Non</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ MODALE SUPPRESSION ══════════════════ -->
+  <div class="account-modal-overlay" id="deleteOverlay" aria-modal="true" role="dialog" aria-labelledby="deleteTitle">
+    <div class="account-modal account-modal--danger">
+      <p class="account-modal-text" id="deleteTitle">Supprimer ton compte&nbsp;?<br/><span class="account-modal-sub">Cette action est irréversible.</span></p>
+      <div class="account-modal-actions">
+        <button class="account-modal-btn account-modal-btn--danger" id="deleteConfirm">Supprimer</button>
+        <button class="account-modal-btn account-modal-btn--cancel" id="deleteCancel">Annuler</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════ TOAST ══════════════════ -->
+  <div class="share-toast" id="accountToast"></div>
+
+  <!-- ══════════════════ FIREBASE ══════════════════ -->
+  <script type="module">
+    import { initializeApp }    from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+    import { getFirestore }     from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signOut,
+      deleteUser
+    } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+    import * as fire from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey:            "AIzaSyBqL2GBNfJalG0eO0C3rB73xajqb0pqFjQ",
+      authDomain:        "perspikative-26800.firebaseapp.com",
+      projectId:         "perspikative-26800",
+      storageBucket:     "perspikative-26800.appspot.com",
+      messagingSenderId: "105073671183",
+      appId:             "1:105073671183:web:d14b5f8ea82dd7a35e0c18"
+    };
+
+    const app  = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db   = getFirestore(app);
+
+    window.__prspkDb   = db;
+    window.__prspkFire = fire;
+
+    // ── Constantes ──────────────────────────────────────────────────────────
+    const PFP_COUNT = 8;
+
+    function getPfpFromUid(uid) {
+      let hash = 0;
+      for (let i = 0; i < uid.length; i++) {
+        hash = (hash * 31 + uid.charCodeAt(i)) & 0xffffffff;
+      }
+      const num = (Math.abs(hash) % PFP_COUNT) + 1;
+      return '/pics/assets/pfp/' + num + '.webp';
+    }
+
+    function formatMemberSince(date) {
+      if (!date) return '—';
+      return date.toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('accountToast');
+      toast.textContent = msg;
+      toast.classList.remove('hidden');
+      toast.classList.add('visible');
+      setTimeout(() => {
+        toast.classList.remove('visible');
+        toast.classList.add('hidden');
+      }, 3000);
+    }
+
+    // ── Auth state ───────────────────────────────────────────────────────────
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        // Pas connecté → redirection vers /login
+        window.location.replace('/login');
+        return;
+      }
+
+      window.__prspkUser = user;
+
+      // Remplir les infos
+      const pfpSrc = user.photoURL || getPfpFromUid(user.uid);
+      document.getElementById('accountPfp').src      = pfpSrc;
+      document.getElementById('accountPseudo').textContent = user.displayName || 'Anonyme';
+      document.getElementById('accountEmail').textContent  = user.email || '—';
+
+      // Date de création du compte Firebase
+      const createdAt = user.metadata?.creationTime
+        ? new Date(user.metadata.creationTime)
+        : null;
+      document.getElementById('accountSince').textContent = formatMemberSince(createdAt);
+
+      // Animation d'entrée
+      requestAnimationFrame(() => {
+        document.getElementById('accountCard').classList.add('account-card--visible');
+      });
+    });
+
+    // ── Modale déconnexion ───────────────────────────────────────────────────
+    const logoutOverlay = document.getElementById('logoutOverlay');
+    const logoutModal   = document.getElementById('logoutModal');
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      openModal(logoutOverlay);
+    });
+
+    document.getElementById('logoutConfirm').addEventListener('click', async () => {
+      closeModal(logoutOverlay);
+      try {
+        await signOut(auth);
+        window.location.replace('/login');
+      } catch (e) {
+        showToast('Erreur lors de la déconnexion 😕');
+      }
+    });
+
+    document.getElementById('logoutCancel').addEventListener('click', () => {
+      closeModal(logoutOverlay);
+    });
+
+    // ── Modale suppression ───────────────────────────────────────────────────
+    const deleteOverlay = document.getElementById('deleteOverlay');
+
+    document.getElementById('deleteBtn').addEventListener('click', () => {
+      openModal(deleteOverlay);
+    });
+
+    document.getElementById('deleteConfirm').addEventListener('click', async () => {
+      closeModal(deleteOverlay);
+      const user = auth.currentUser;
+      if (!user) return;
+      try {
+        await deleteUser(user);
+        window.location.replace('/login');
+      } catch (e) {
+        // L'utilisateur doit peut-être se ré-authentifier
+        showToast('Reconnecte-toi puis réessaie 🔒');
+      }
+    });
+
+    document.getElementById('deleteCancel').addEventListener('click', () => {
+      closeModal(deleteOverlay);
+    });
+
+    // ── Fermer en cliquant sur l'overlay ────────────────────────────────────
+    [logoutOverlay, deleteOverlay].forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeModal(overlay);
+      });
+    });
+
+    // ── Helpers modales ──────────────────────────────────────────────────────
+    function openModal(overlay) {
+      overlay.classList.add('account-modal-overlay--visible');
+    }
+    function closeModal(overlay) {
+      overlay.classList.add('account-modal-overlay--closing');
+      setTimeout(() => {
+        overlay.classList.remove('account-modal-overlay--visible', 'account-modal-overlay--closing');
+      }, 260);
+    }
+
+  </script>
+
+</body>
+</html>
