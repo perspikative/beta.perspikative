@@ -4069,7 +4069,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-height: 280px;
+  max-height: 300px;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
@@ -4235,7 +4235,7 @@ body {
 .lb-comment-guest p {
   font-family: 'Rubik', sans-serif;
   font-weight: 300;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   color: #ffffff;
   opacity: 0.75;
   margin: 0;
@@ -4243,7 +4243,7 @@ body {
 
 .lb-comment-login-btn {
   font-family: 'Rubik', sans-serif;
-  font-size: 0.9rem;
+  font-size: 1rem;
   font-weight: 600;
   color: #ffffff;
   background: rgba(255,255,255,0.10);
@@ -4343,9 +4343,9 @@ body {
 
 @media (max-width: 700px) {
   .lb-comments-list {
-    max-height: 160px;
+    max-height: 320px;
   }
-
+ 
   .lb-comment-guest {
     flex-direction: column;
     align-items: flex-start;
@@ -4607,6 +4607,7 @@ body {
   flex-direction: column;
   gap: 10px;
   box-sizing: border-box;
+  margin-bottom: 10px;
 }
 
 
