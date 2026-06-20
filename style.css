@@ -1237,8 +1237,8 @@ main.creations h2 {
 .lightbox-window {
   background: rgba(255, 255, 255, 0.15); /* fond translucide */
   color: #fff;
-  backdrop-filter: blur(50px);
-  -webkit-backdrop-filter: blur(50px);
+  backdrop-filter: blur(500px);
+  -webkit-backdrop-filter: blur(500px);
   border-radius: 30px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   max-width: 900px;
@@ -4069,7 +4069,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-height: 300px;
+  max-height: 280px;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(255,255,255,0.15) transparent;
@@ -4182,15 +4182,15 @@ body {
 .lb-comments-more {
   align-self: center;
   background: rgba(255,255,255,0.07);
-  color: rgba(255,255,255,0.75);
   border: none;
+  color: rgba(255,255,255,0.8);
   font-family: 'Rubik', sans-serif;
   font-size: 0.94rem;
   font-weight: 500;
   border-radius: 20px;
   padding: 6px 18px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2 ease;
   box-shadow:
     inset 0 0 10px rgba(255, 255, 255, 0.2),
     0 4px 12px rgba(0, 0, 0, 0.1);
@@ -4477,6 +4477,9 @@ body {
 
 
 
+
+
+
 .lightbox-window {
   display: flex;
   flex-wrap: nowrap;
@@ -4486,6 +4489,13 @@ body {
   width: 100%; /* ← prend toute la largeur sous les deux colonnes */
   /* tes autres styles existants... */
 }
+
+
+
+
+
+
+
 
 
 
@@ -4539,12 +4549,17 @@ body {
   display: flex;
   flex-direction: column;          /* ← était "row" */
   gap: 20px;
+
   /* overflow: hidden retiré → permet à la fenêtre de grandir */
   padding: 20px;
   animation: fadeIn 0.3s ease;
   box-shadow:
     inset 0 0 12px rgba(210, 210, 210, 0.16),
     0 8px 30px rgba(0, 0, 0, 0.2);
+
+  /* Calé un peu bas pour que le haut soit visible mais que le bas appelle à scroller */
+  margin-top: 60px;
+  margin-bottom: 60px;
 }
 
 /* ─── Sur desktop : les deux colonnes côte à côte dans une ligne ────────── */
@@ -4587,7 +4602,6 @@ body {
   flex-direction: column;
   gap: 10px;
   box-sizing: border-box;
-  margin-bottom: 16px;
 }
 
 
@@ -4654,8 +4668,7 @@ body {
     overflow-y: auto;           /* scroll uniquement ici sur mobile */
     -webkit-overflow-scrolling: touch;
     border-radius: 0px;
-    margin-top: 0;
-    margin-bottom: 0;
+    /* pas de margin-top/bottom sur mobile */
   }
 }
 
@@ -5134,14 +5147,5 @@ body {
   .account-modal {
     border-radius: 24px;
     padding: 1.6rem 1.4rem 1.3rem;
-  }
-}
-
-
-/* ─── FIX : annule la marge résiduelle sur mobile ───────────────────────── */
-@media (max-width: 700px) {
-  .lightbox-window {
-    margin-top: 0;
-    margin-bottom: 0;
   }
 }
