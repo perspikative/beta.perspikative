@@ -2451,6 +2451,7 @@ ul {
     font-size: 1.9rem;
     margin-bottom: 8px;
     text-align: center;
+    margin-top: 8px;
   }
 
   .mentions-content h2 {
@@ -2462,13 +2463,21 @@ ul {
   .mentions-content h3 {
     font-size: 1.1rem;
   }
-  .mentions-content p,
-  .mentions-content p.system-font {
+  
+  .mentions-content p {
     font-size: 1.08rem;
     line-height: 1.36rem;
     max-width: 600px;
     margin: 0;
     margin-bottom: 3px;
+  }
+
+  .mentions-content p.system-font {
+    font-size: 1.08rem;
+    line-height: 1.36rem;
+    max-width: 600px;
+    margin: 0;
+    margin-bottom: 10px;
   }
 
   .mentions-date {
@@ -2549,19 +2558,16 @@ ul {
 
 .mentions-icon {
   display: none;
-  align-items: center;
-  width: 46px;
-  height: 46px;
-  margin-bottom: 12px;
-  opacity: 0.85;
 }
 
 @media (max-width: 768px) {
   .mentions-icon {
     display: block;
-    width: 44px;
+    width: 51px;
+    height: 51px;
     margin: 0 auto 12px;
     opacity: 0.85;
+    margin-bottom: 0px;
   }
 }
 
