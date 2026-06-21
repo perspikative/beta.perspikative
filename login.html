@@ -7,7 +7,7 @@ permalink: /login
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Connexion — Perspikative</title>
+  <title>Connexion</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
@@ -25,7 +25,7 @@ permalink: /login
       --cyan:      #0af0d0;
       --glass-bg:  rgba(255, 255, 255, 0.04);
       --glass-bd:  rgba(255, 255, 255, 0.10);
-      --glass-shadow: inset 0 0 0 1px rgba(255,255,255,0.08), 0 12px 40px rgba(0,0,0,0.3);
+      --glass-shadow: inset 0 0 0 1px rgba(255,255,255,0.08), 0 12px 40px rgba(0,0,0,0.2);
       --input-bg:  rgba(255, 255, 255, 0.06);
       --input-bd:  rgba(255, 255, 255, 0.12);
       --text:      #e8f5f2;
@@ -64,9 +64,9 @@ permalink: /login
     }
 
     .logo-wrap img {
-      height: 80px;
-      width: auto;
-      filter: brightness(1.1) drop-shadow(0 0 14px rgba(0, 200, 150, 0.4));
+      height: 90px;
+      width: 90px;
+      filter: drop-shadow(0 0 14px rgba(0, 0, 0, 0.06));
     }
 
     /* ─── CARD ─── */
@@ -79,8 +79,8 @@ permalink: /login
       border: none;
       box-shadow: var(--glass-shadow);
       border-radius: var(--radius);
-      backdrop-filter: blur(18px) saturate(120%);
-      -webkit-backdrop-filter: blur(18px) saturate(120%);
+      backdrop-filter: blur(18px) saturate(110%);
+      -webkit-backdrop-filter: blur(18px) saturate(110%);
       overflow: hidden;
     }
 
@@ -88,7 +88,6 @@ permalink: /login
     .tabs {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      border-bottom: 1px solid var(--glass-bd);
     }
 
     .tab-btn {
@@ -96,31 +95,35 @@ permalink: /login
       border: none;
       padding: 1.1rem 0;
       font-family: var(--font);
-      font-size: 0.78rem;
+      font-size: 0.9rem;
       font-weight: 700;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--text-dim);
       cursor: pointer;
       position: relative;
-      transition: color var(--transition);
+      transition: all 0.2 ease;
+      z-index: 2;
+
     }
 
     .tab-btn::after {
       content: '';
       position: absolute;
-      bottom: -1px;
+      bottom: 1px;
       left: 50%;
       transform: translateX(-50%) scaleX(0);
-      width: 60%;
-      height: 2px;
+      width: 90%;
+      height: 30px;
       background: linear-gradient(90deg, var(--teal-1), var(--cyan));
-      border-radius: 2px;
-      transition: transform var(--transition);
+      border-radius: 10px;
+      transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: -1;
     }
 
     .tab-btn.active {
       color: var(--text);
+      transform: var(--transition);
     }
 
     .tab-btn.active::after {
@@ -183,7 +186,7 @@ permalink: /login
       margin: 1.4rem 0;
       color: #ffffff;
       opacity: 0.7;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       letter-spacing: 0.06em;
     }
 
@@ -271,13 +274,14 @@ permalink: /login
     }
 
     .forgot a {
-      font-size: 0.75rem;
-      color: var(--text-dim);
+      font-size: 0.8rem;
+      color: #ffffff;
+      opacity: 0.5;
       text-decoration: none;
-      transition: color 0.2s;
+      transition: all 0.2s ease;
     }
 
-    .forgot a:hover { color: var(--teal-2); }
+    .forgot a:hover { opacity: 0.8; }
 
     /* ─── PRIMARY BUTTON ─── */
     .btn-primary {
@@ -357,7 +361,7 @@ permalink: /login
 
     /* ─── TERMS ─── */
     .terms {
-      font-size: 0.70rem;
+      font-size: 0.8rem;
       color: var(--text-dim);
       text-align: center;
       margin-top: 1.1rem;
@@ -376,23 +380,26 @@ permalink: /login
       position: relative;
       z-index: 1;
       margin-top: 1.6rem;
-      font-size: 0.75rem;
-      color: var(--text-dim);
+      font-size: 0.9rem;
+      color: #ffffff;
+      opacity: 0.8;
       text-decoration: none;
       display: flex;
       align-items: center;
-      gap: 0.4rem;
-      transition: color 0.2s;
+      gap: 0.1rem;
+      transition: all 0.2s ease;
     }
 
-    .back-home:hover { color: var(--teal-2); }
+    .back-home:hover { opacity: 1; }
 
-    .back-home svg { width: 14px; height: 14px; }
+    .back-home img { opacity: 0.8; transition: all 0.2s ease; }
+
+    .back-home img:hover { transform: translateX(-2px); opacity: 1; }
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 480px) {
       .panel { padding: 1.5rem 1.4rem 1.8rem; }
-      .logo-wrap img { height: 42px; }
+      .logo-wrap img { width: 66px; height: 66px; }
     }
   </style>
 </head>
@@ -521,9 +528,7 @@ permalink: /login
   </div><!-- /card -->
 
   <a class="back-home" href="/">
-    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M10 13L5 8l5-5"/>
-    </svg>
+    <img src="/icons/arrow-left-lightbox.svg" alt="" width="20" height="20" />
     Retour à l'accueil
   </a>
 
