@@ -242,17 +242,17 @@ document.addEventListener('DOMContentLoaded', () => {
     return null;
   }
 
-  // ── Transition flou au changement d'image ────────────────────────────────
+  // ── Transition au changement de lightbox ────────────────────────────────
   function switchImage(callback) {
     const win = lightbox.querySelector('.lightbox-window');
-    win.style.transition = 'opacity 0.20s cubic-bezier(0.4, 0, 0.2, 1), transform 0.16s cubic-bezier(0.4, 0, 0.2, 1)';
+    win.style.transition = 'opacity 0.18s cubic-bezier(0.4, 0, 0.2, 1), transform 0.16s cubic-bezier(0.4, 0, 0.2, 1)';
     win.style.opacity    = '0.7';
     win.style.transform  = 'scale(0.97)';
 
     setTimeout(() => {
       callback();
       requestAnimationFrame(() => {
-        win.style.transition = 'opacity 0.28s cubic-bezier(0.22, 1, 0.36, 1), transform 0.28s cubic-bezier(0.22, 1, 0.36, 1)';
+        win.style.transition = 'opacity 0.18s cubic-bezier(0.22, 1, 0.36, 1), transform 0.18s cubic-bezier(0.22, 1, 0.36, 1)';
         win.style.opacity    = '1';
         win.style.transform  = 'scale(1)';
       });
@@ -764,5 +764,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
   }, LAYOUT_DELAY);
 });
+
+
+// ============================= 13. SERVICE WORKER =============================
+
+if ('serviceWorker' in navigator) {
+
+  navigator.serviceWorker.register('/sw.js')
+    .then((registration) => {
+
+      registration.update();
+
+      setInterval(() => {
+        registration.update();
+      }, 60000);
+
+    });
+
+  navigator.serviceWorker.addEventListener(
+    'controllerchange',
+    () => {
+      window.location.reload();
+    }
+  );
+}
 
 // ============================= FIN DU SCRIPT =============================

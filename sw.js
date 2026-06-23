@@ -1,4 +1,4 @@
-const CACHE_NAME = 'perspikative-v2.2';
+const CACHE_NAME = 'perspikative-v3.0';
 
 // Fichiers essentiels
 const PRECACHE_ASSETS = [
@@ -48,129 +48,112 @@ const PRECACHE_ASSETS = [
 ];
 
 
-// INSTALLATION
+// -------------------- INSTALL --------------------
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(async (cache) => {
-
-        // Empêche qu'un seul fichier casse tout le précache
-        await Promise.allSettled(
-          PRECACHE_ASSETS.map(asset => cache.add(asset))
-        );
-
-      })
+    caches.open(CACHE_NAME).then(async (cache) => {
+      await Promise.allSettled(
+        PRECACHE_ASSETS.map((asset) => {
+          return cache.add(asset).catch(() => {});
+        })
+      );
+    })
   );
 
   self.skipWaiting();
 });
 
 
-// ACTIVATION
+// -------------------- ACTIVATE --------------------
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    Promise.all([
+    (async () => {
+      const keys = await caches.keys();
 
-      clients.claim(),
+      await Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
+      );
 
-      caches.keys().then((keys) =>
-        Promise.all(
-          keys.map((key) => {
-            if (key !== CACHE_NAME) {
-              return caches.delete(key);
-            }
-          })
-        )
-      )
-
-    ])
+      await clients.claim();
+    })()
   );
 });
 
 
-// FETCH
+// -------------------- FETCH --------------------
 self.addEventListener('fetch', (event) => {
+  const req = event.request;
 
-  if (event.request.method !== 'GET') {
-    return;
-  }
+  // ⚠️ only GET
+  if (req.method !== 'GET') return;
 
-  const url = new URL(event.request.url);
+  const url = req.url;
 
-  // On ne met pas Firebase/API en cache
+  // ❌ Ignore chrome extensions (TON BUG FIX)
+  if (url.startsWith('chrome-extension://')) return;
+
+  // ❌ Ignore non-http(s)
+  if (!url.startsWith('http')) return;
+
+  const parsedUrl = new URL(url);
+
+  // ❌ Ignore Firebase / externals
   if (
-    url.hostname.includes('firebase') ||
-    url.hostname.includes('googleapis') ||
-    url.hostname.includes('gstatic')
+    parsedUrl.hostname.includes('firebase') ||
+    parsedUrl.hostname.includes('googleapis') ||
+    parsedUrl.hostname.includes('gstatic')
   ) {
     return;
   }
 
-  // Pages HTML → Network First
-  if (event.request.mode === 'navigate') {
-
+  // -------------------- NAVIGATION (pages HTML) --------------------
+  if (req.mode === 'navigate') {
     event.respondWith(
+      fetch(req)
+        .then((res) => {
+          const clone = res.clone();
 
-      fetch(event.request)
-        .then((response) => {
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(req, clone).catch(() => {});
+          });
 
-          const clone = response.clone();
-
-          caches.open(CACHE_NAME)
-            .then(cache => cache.put(event.request, clone));
-
-          return response;
-
+          return res;
         })
         .catch(async () => {
-
-          const cachedPage =
-            await caches.match(event.request);
-
-          if (cachedPage) {
-            return cachedPage;
-          }
-
-          return caches.match('/offline.html');
+          return (await caches.match(req)) || caches.match('/offline.html');
         })
-
     );
 
     return;
   }
 
-  // Images, CSS, JS → Cache First + update silencieuse
+  // -------------------- STATIC FILES (CSS/JS/IMG) --------------------
   event.respondWith(
+    caches.match(req).then((cached) => {
+      const fetchPromise = fetch(req)
+        .then((res) => {
+          if (!res || res.status !== 200) return res;
 
-    caches.match(event.request)
-      .then((cachedResponse) => {
+          const clone = res.clone();
 
-        const networkFetch = fetch(event.request)
-          .then((response) => {
-
-            if (response.status === 200) {
-
-              const clone = response.clone();
-
-              caches.open(CACHE_NAME)
-                .then(cache =>
-                  cache.put(event.request, clone)
-                );
-            }
-
-            return response;
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(req, clone).catch(() => {});
           });
 
-        if (cachedResponse) {
+          return res;
+        })
+        .catch(() => null);
 
-          networkFetch.catch(() => {});
+      if (cached) {
+        fetchPromise?.catch(() => {});
+        return cached;
+      }
 
-          return cachedResponse;
-        }
-
-        return networkFetch;
-      })
-      .catch(() => caches.match('/offline.html'))
-
+      return fetchPromise || caches.match('/offline.html');
+    })
   );
 });
