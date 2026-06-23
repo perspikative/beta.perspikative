@@ -25,18 +25,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 
-// =============================
-// CONFIG FIREBASE (À REMPLACER)
-// =============================
 const firebaseConfig = {
-  apiKey: "AIzaSyA0qLI25TEj7yVyObLjbDSipsFFm8lFZtY",
-  authDomain: "perspikative-26800.firebaseapp.com",
-  databaseURL: "https://perspikative-26800-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "perspikative-26800",
-  storageBucket: "perspikative-26800.firebasestorage.app",
-  messagingSenderId: "520735354440",
-  appId: "1:520735354440:web:3607aac59cf6f30c97727d",
-  measurementId: "G-V3XJ8020SC"
+  apiKey: "AIzaSyBudMYu4rtSL7GrsX3OMtT8klbBX7h4iTE",
+  authDomain: "perspikative-app.firebaseapp.com",
+  projectId: "perspikative-app",
+  storageBucket: "perspikative-app.firebasestorage.app",
+  messagingSenderId: "411164951584",
+  appId: "1:411164951584:web:d340b95c22d95668c86845"
 };
 
 
