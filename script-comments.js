@@ -6,8 +6,10 @@
   'use strict';
 
   // ── Constantes ───────────────────────────────────────────────────────────
-  var COMMENTS_PER_PAGE = 5;
-  var PFP_COUNT         = 8; // nb de photos de profil dans /pics/assets/pfp/
+  var COMMENTS_PER_PAGE  = 5;
+  var PFP_COUNT          = 8;   // nb de photos de profil dans /pics/assets/pfp/
+  var DAILY_LIMIT        = 10;  // max commentaires par fenêtre de 24h
+  var LIMIT_WINDOW_MS    = 24 * 60 * 60 * 1000; // 24h en ms
 
   // ── État local ───────────────────────────────────────────────────────────
   var currentDrawingId  = null;
@@ -164,6 +166,68 @@
   }
 
   // ══════════════════════════════════════════════════════════════════════════
+  // RATE LIMITING — max 10 commentaires par fenêtre de 24h
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // Affiche un message d'erreur sous le textarea, disparaît après 5s
+  function showCommentError(msg) {
+    var errEl = document.getElementById('lb-comment-error');
+    if (!errEl) {
+      errEl    = document.createElement('p');
+      errEl.id = 'lb-comment-error';
+      errEl.className = 'lb-comment-error';
+      var inner = document.querySelector('.lb-comment-input-inner');
+      if (inner) inner.appendChild(errEl);
+    }
+    errEl.textContent = msg;
+    clearTimeout(errEl._t);
+    errEl._t = setTimeout(function () { errEl.textContent = ''; }, 5000);
+  }
+
+  // Vérifie la limite et incrémente le compteur si autorisé.
+  // Retourne une Promise<{ allowed: boolean, hoursLeft?: number }>
+  function checkCommentLimit(uid) {
+    var db   = window.__prspkDb;
+    var fire = window.__prspkFire;
+    if (!db || !fire) return Promise.resolve({ allowed: true });
+
+    var ref = fire.doc(db, 'commentLimits', uid);
+
+    return fire.getDoc(ref).then(function (snap) {
+      var now = Date.now();
+
+      if (!snap.exists()) {
+        // Jamais posté → crée le document avec count = 1
+        return fire.setDoc(ref, { count: 1, windowStart: now })
+          .then(function () { return { allowed: true }; });
+      }
+
+      var data        = snap.data();
+      var windowStart = typeof data.windowStart === 'number'
+        ? data.windowStart
+        : (data.windowStart && data.windowStart.toMillis ? data.windowStart.toMillis() : 0);
+      var elapsed     = now - windowStart;
+
+      // Fenêtre expirée → repart à zéro
+      if (elapsed >= LIMIT_WINDOW_MS) {
+        return fire.setDoc(ref, { count: 1, windowStart: now })
+          .then(function () { return { allowed: true }; });
+      }
+
+      // Limite atteinte
+      if (data.count >= DAILY_LIMIT) {
+        var msLeft    = LIMIT_WINDOW_MS - elapsed;
+        var hoursLeft = Math.ceil(msLeft / (60 * 60 * 1000));
+        return { allowed: false, hoursLeft: hoursLeft };
+      }
+
+      // Sous la limite → incrémente
+      return fire.updateDoc(ref, { count: fire.increment(1) })
+        .then(function () { return { allowed: true }; });
+    });
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
   // ENVOI D'UN COMMENTAIRE
   // ══════════════════════════════════════════════════════════════════════════
 
@@ -176,38 +240,59 @@
     var text = textarea.value.trim();
     if (!text) return;
 
-    sendBtn.disabled = true;
+    sendBtn.disabled  = true;
     textarea.disabled = true;
 
     var colRef = fire.collection(db, 'drawings', currentDrawingId, 'comments');
-    fire.addDoc(colRef, {
-      uid:       user.uid,
-      pseudo:    user.displayName || 'Anonyme',
-      pfp:       user.photoURL || getPfpFromUid(user.uid),
-      text:      text,
-      createdAt: fire.serverTimestamp()
-    }).then(function (docRef) {
-      textarea.value = '';
-      autoResizeTextarea();
 
-      // Ajoute le commentaire localement en tête de liste
-      var newComment = {
-        id:        docRef.id,
+    checkCommentLimit(user.uid).then(function (limit) {
+      if (!limit.allowed) {
+        showCommentError(
+          '🚫 Limite de ' + DAILY_LIMIT + ' commentaires / 24h atteinte. ' +
+          'Réessaie dans ' + limit.hoursLeft + 'h.'
+        );
+        sendBtn.disabled  = false;
+        textarea.disabled = false;
+        textarea.focus();
+        return;
+      }
+
+      fire.addDoc(colRef, {
         uid:       user.uid,
         pseudo:    user.displayName || 'Anonyme',
         pfp:       user.photoURL || getPfpFromUid(user.uid),
         text:      text,
-        createdAt: { toDate: function () { return new Date(); } }
-      };
-      allComments.unshift(newComment);
-      if (displayedCount < allComments.length) displayedCount++;
-      renderComments();
+        createdAt: fire.serverTimestamp()
+      }).then(function (docRef) {
+        textarea.value = '';
+        autoResizeTextarea();
 
-      // Scroll vers le haut de la liste
-      listEl.scrollTop = 0;
+        // Ajoute le commentaire localement en tête de liste
+        var newComment = {
+          id:        docRef.id,
+          uid:       user.uid,
+          pseudo:    user.displayName || 'Anonyme',
+          pfp:       user.photoURL || getPfpFromUid(user.uid),
+          text:      text,
+          createdAt: { toDate: function () { return new Date(); } }
+        };
+        allComments.unshift(newComment);
+        if (displayedCount < allComments.length) displayedCount++;
+        renderComments();
+
+        // Scroll vers le haut de la liste
+        listEl.scrollTop = 0;
+      }).catch(function (err) {
+        console.error('[Comments] Erreur envoi :', err);
+      }).finally(function () {
+        sendBtn.disabled  = false;
+        textarea.disabled = false;
+        textarea.focus();
+      });
+
     }).catch(function (err) {
-      console.error('[Comments] Erreur envoi :', err);
-    }).finally(function () {
+      console.error('[Comments] Erreur vérification limite :', err);
+      // En cas d'échec de la vérification, on laisse passer (fail-open)
       sendBtn.disabled  = false;
       textarea.disabled = false;
       textarea.focus();
