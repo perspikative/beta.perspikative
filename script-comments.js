@@ -182,6 +182,7 @@
     var colRef = fire.collection(db, 'drawings', currentDrawingId, 'comments');
     fire.addDoc(colRef, {
       uid:       user.uid,
+      email:     user.email || null,   // stocké pour modération uniquement, jamais affiché
       pseudo:    user.displayName || 'Anonyme',
       pfp:       user.photoURL || getPfpFromUid(user.uid),
       text:      text,
