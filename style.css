@@ -2620,6 +2620,11 @@ ul {
   background-image: url("/icons/cross.svg");
 }
 
+/* Icône block */
+.line.block::before {
+  background-image: url("/icons/block.svg");
+}
+
 
 
 /* ============================= 16. FOOTER ============================= */
