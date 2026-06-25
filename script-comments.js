@@ -7,7 +7,8 @@
 
   // ── Constantes ───────────────────────────────────────────────────────────
   var COMMENTS_PER_PAGE = 5;
-  var PFP_COUNT         = 8; // nb de photos de profil dans /pics/assets/pfp/
+  var PFP_COUNT         = 8;  // nb de photos de profil dans /pics/assets/pfp/
+  var DAILY_LIMIT       = 10; // commentaires max par utilisateur sur une fenêtre de 24h
 
   // ── État local ───────────────────────────────────────────────────────────
   var currentDrawingId  = null;
@@ -67,6 +68,50 @@
   function isOwn(comment) {
     var user = window.__prspkUser;
     return user && comment.uid && comment.uid === user.uid;
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // RATE LIMITING — 10 commentaires max par 24h par utilisateur
+  // Stocké dans Firestore : commentLimits/{uid} → { count, windowStart }
+  // ══════════════════════════════════════════════════════════════════════════
+
+  /**
+   * Vérifie si l'utilisateur peut encore commenter, puis incrémente le compteur.
+   * Résout avec `true` si l'envoi est autorisé, `false` si la limite est atteinte.
+   */
+  function checkAndIncrementLimit(uid) {
+    var db   = window.__prspkDb;
+    var fire = window.__prspkFire;
+
+    var limitRef = fire.doc(db, 'commentLimits', uid);
+    var now      = Date.now();
+    var window24 = 24 * 60 * 60 * 1000; // 24h en ms
+
+    return fire.getDoc(limitRef).then(function (snap) {
+      if (snap.exists()) {
+        var data        = snap.data();
+        var windowStart = data.windowStart && data.windowStart.toDate
+          ? data.windowStart.toDate().getTime()
+          : (data.windowStart || 0);
+        var count       = data.count || 0;
+
+        // La fenêtre de 24h est encore active
+        if (now - windowStart < window24) {
+          if (count >= DAILY_LIMIT) {
+            return false; // limite atteinte
+          }
+          // Incrémente dans la fenêtre courante
+          return fire.setDoc(limitRef, { count: count + 1, windowStart: data.windowStart }, { merge: true })
+            .then(function () { return true; });
+        }
+      }
+
+      // Pas de doc ou fenêtre expirée → repart à 1
+      return fire.setDoc(limitRef, {
+        count:       1,
+        windowStart: fire.serverTimestamp()
+      }).then(function () { return true; });
+    });
   }
 
   // ══════════════════════════════════════════════════════════════════════════
@@ -176,42 +221,70 @@
     var text = textarea.value.trim();
     if (!text) return;
 
-    sendBtn.disabled = true;
+    sendBtn.disabled  = true;
     textarea.disabled = true;
 
-    var colRef = fire.collection(db, 'drawings', currentDrawingId, 'comments');
-    fire.addDoc(colRef, {
-      uid:       user.uid,
-      email:     user.email || null,   // stocké pour modération uniquement, jamais affiché
-      pseudo:    user.displayName || 'Anonyme',
-      pfp:       user.photoURL || getPfpFromUid(user.uid),
-      text:      text,
-      createdAt: fire.serverTimestamp()
-    }).then(function (docRef) {
-      textarea.value = '';
-      autoResizeTextarea();
+    // ── Vérification de la limite quotidienne avant l'envoi ──────────────
+    checkAndIncrementLimit(user.uid).then(function (allowed) {
+      if (!allowed) {
+        // Limite atteinte : on informe l'utilisateur et on réactive le formulaire
+        var limitMsg = document.getElementById('lb-comment-limit-msg');
+        if (!limitMsg) {
+          limitMsg = document.createElement('p');
+          limitMsg.id        = 'lb-comment-limit-msg';
+          limitMsg.className = 'lb-comment-error';
+          limitMsg.textContent = 'Tu as atteint la limite de ' + DAILY_LIMIT + ' commentaires par jour. Reviens demain ! 😊';
+          inputWrap.insertBefore(limitMsg, sendBtn);
+        }
+        sendBtn.disabled  = false;
+        textarea.disabled = false;
+        return;
+      }
 
-      // Ajoute le commentaire localement en tête de liste
-      var newComment = {
-        id:        docRef.id,
+      // ── Limite OK : on envoie le commentaire ─────────────────────────
+      // Supprime le message d'erreur s'il était affiché
+      var limitMsg = document.getElementById('lb-comment-limit-msg');
+      if (limitMsg) limitMsg.remove();
+
+      var colRef = fire.collection(db, 'drawings', currentDrawingId, 'comments');
+      fire.addDoc(colRef, {
         uid:       user.uid,
+        email:     user.email || null,   // stocké pour modération uniquement, jamais affiché
         pseudo:    user.displayName || 'Anonyme',
         pfp:       user.photoURL || getPfpFromUid(user.uid),
         text:      text,
-        createdAt: { toDate: function () { return new Date(); } }
-      };
-      allComments.unshift(newComment);
-      if (displayedCount < allComments.length) displayedCount++;
-      renderComments();
+        createdAt: fire.serverTimestamp()
+      }).then(function (docRef) {
+        textarea.value = '';
+        autoResizeTextarea();
 
-      // Scroll vers le haut de la liste
-      listEl.scrollTop = 0;
+        // Ajoute le commentaire localement en tête de liste
+        var newComment = {
+          id:        docRef.id,
+          uid:       user.uid,
+          pseudo:    user.displayName || 'Anonyme',
+          pfp:       user.photoURL || getPfpFromUid(user.uid),
+          text:      text,
+          createdAt: { toDate: function () { return new Date(); } }
+        };
+        allComments.unshift(newComment);
+        if (displayedCount < allComments.length) displayedCount++;
+        renderComments();
+
+        // Scroll vers le haut de la liste
+        listEl.scrollTop = 0;
+      }).catch(function (err) {
+        console.error('[Comments] Erreur envoi :', err);
+      }).finally(function () {
+        sendBtn.disabled  = false;
+        textarea.disabled = false;
+        textarea.focus();
+      });
+
     }).catch(function (err) {
-      console.error('[Comments] Erreur envoi :', err);
-    }).finally(function () {
+      console.error('[Comments] Erreur vérification limite :', err);
       sendBtn.disabled  = false;
       textarea.disabled = false;
-      textarea.focus();
     });
   }
 

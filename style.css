@@ -4154,7 +4154,7 @@ body {
   font-family: 'Rubik', sans-serif;
   font-weight: 300;
   font-size: 0.72rem;
-  color: rgba(255,255,255,0.40);
+  color: rgba(255,255,255,0.5);
 }
 
 .lb-comment-text {
@@ -5211,3 +5211,23 @@ body {
 
 
 
+
+
+
+/* ── Barre de commentaire désactivée (limite quotidienne atteinte) ── */
+#lb-comment-textarea:disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.4;
+  resize: none;
+  user-select: none;
+}
+
+#lb-comment-send:disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+#lb-comment-send:disabled .lb-btn-icon {
+  opacity: 0.35;
+}
