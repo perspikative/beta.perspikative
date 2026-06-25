@@ -223,7 +223,9 @@ permalink: /portfolio/projets
     <p>&copy; 2026 Perspikative™. Tous droits réservés.</p>
     <p><a href="/mentions-legales" class="footer-link">Mentions légales</a></p>
     <p><a href="/politique-de-confidentialite" class="footer-link">Politique de confidentialité</a></p>
+    <p><a href="/help-center" class="footer-link">Centre d'aide</a></p>
     <p><a href="/position-ia" class="footer-link">Position sur l'IA</a></p>
+    <p><a href="/brand-guidelines" class="footer-link">Brand guidelines</a></p>
   </footer>
 
   <a href="/rechercher" class="search-float-btn" title="Rechercher">
@@ -247,25 +249,78 @@ permalink: /portfolio/projets
     </div>
     
     <div class="lightbox-window">
-      <div class="lightbox-left">
-        <img id="lightbox-img" src="" alt="">
-      </div>
-      <div class="lightbox-right">
-        <h3 id="lightbox-title"></h3>
-        <p id="lightbox-date" class="lightbox-date"></p>
-        <p id="lightbox-desc"></p>
 
-        <div class="lightbox-actions">
-          <button class="lb-btn lb-like-btn" id="lb-like-btn" aria-label="Liker">
-            <img src="/icons/like.svg" alt="Like" id="lb-like-icon" class="lb-btn-icon">
-          </button>
-          <button class="lb-btn lb-copy-btn" id="lb-copy-btn" aria-label="Copier le lien">
-            <img src="/icons/link.svg" alt="Copier le lien" class="lb-btn-icon">
-          </button>
-          <button class="lb-btn lb-share-btn" id="lb-share-btn" aria-label="Partager">
-            <img src="/icons/share.svg" alt="Partager" class="lb-btn-icon">
-          </button>
+      <div class="lightbox-top-row">
+        <div class="lightbox-left">
+          <img id="lightbox-img" src="" alt="">
         </div>
+        <div class="lightbox-right">
+          <h3 id="lightbox-title"></h3>
+          <p id="lightbox-date" class="lightbox-date"></p>
+          <p id="lightbox-desc"></p>
+
+          <div class="lightbox-actions">
+            <button class="lb-btn lb-like-btn" id="lb-like-btn" aria-label="Liker">
+              <img src="/icons/like.svg" alt="Like" id="lb-like-icon" class="lb-btn-icon">
+            </button>
+            <button class="lb-btn lb-copy-btn" id="lb-copy-btn" aria-label="Copier le lien">
+              <img src="/icons/link.svg" alt="Copier le lien" class="lb-btn-icon">
+            </button>
+            <button class="lb-btn lb-share-btn" id="lb-share-btn" aria-label="Partager">
+              <img src="/icons/share.svg" alt="Partager" class="lb-btn-icon">
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ SECTION COMMENTAIRES ═══ -->
+      <div class="lb-comments" id="lb-comments" data-comment>
+
+        <div class="lb-comments-header">
+          <span class="lb-comments-title">Commentaires</span>
+          <span class="lb-comments-count" id="lb-comments-count"></span>
+        </div>
+
+        <!-- Liste des commentaires -->
+        <div class="lb-comments-list" id="lb-comments-list">
+          <div class="lb-comments-loading" id="lb-comments-loading">
+            <span class="lb-spinner"></span>
+          </div>
+        </div>
+
+        <!-- Bouton "Afficher plus" -->
+        <button class="lb-comments-more" id="lb-comments-more" style="display:none">
+          Afficher plus
+        </button>
+
+        <!-- Barre de saisie -->
+        <div class="lb-comment-form" id="lb-comment-form">
+
+          <!-- État : non connecté -->
+          <div class="lb-comment-guest" id="lb-comment-guest" style="display:none">
+            <p>Connecte-toi pour laisser un commentaire</p>
+            <a href="/login" class="lb-comment-login-btn">Se connecter</a>
+          </div>
+
+          <!-- État : connecté -->
+          <div class="lb-comment-input-wrap" id="lb-comment-input-wrap" style="display:none">
+            <img class="lb-comment-my-pfp" id="lb-comment-my-pfp" src="" alt="Ton avatar">
+            <div class="lb-comment-input-inner">
+              <textarea
+                id="lb-comment-textarea"
+                class="lb-comment-textarea"
+                placeholder="Écris un commentaire…"
+                rows="1"
+                maxlength="500"
+              ></textarea>
+              <button class="lb-comment-send" id="lb-comment-send" aria-label="Envoyer">
+                <img src="/icons/send-active.svg" alt="Envoyer" class="lb-btn-icon">
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- ═══════════════════════════════════════════ -->
+
       </div>
     </div>
   </div>
