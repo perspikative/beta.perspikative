@@ -5,6 +5,7 @@ import {
 
 const auth = getAuth();
 
+const profilePic = document.getElementById("profilePic");
 const displayName = document.getElementById("displayName");
 const email = document.getElementById("email");
 const created = document.getElementById("created");
@@ -18,6 +19,10 @@ onAuthStateChanged(auth, (user)=>{
         return;
 
     }
+
+    // On récupère directement la photo liée au compte (Google ou ton asset local enregistré à la création)
+    // On met la pfp "1.webp" en secours (fallback) uniquement au cas où un vieux compte n'aurait pas de photo.
+    profilePic.src = user.photoURL || "/pics/assets/pfp/1.webp";
 
     displayName.textContent =
         user.displayName || "Aucun";
