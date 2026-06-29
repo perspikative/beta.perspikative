@@ -1,97 +1,1127 @@
----
-permalink: /profile
----
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Perspikative - Profile</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profil — Perspikative</title>
+  <meta name="description" content="Profil artiste sur Perspikative" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700;900&display=swap" rel="stylesheet" />
   <style>
+    /* ═══════════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg-deep:        #061a14;
+      --bg-dark:        #0d1f1c;
+      --bg-card:        rgba(255,255,255,0.04);
+      --bg-card-hover:  rgba(255,255,255,0.07);
+      --glass-border:   rgba(255,255,255,0.10);
+      --glass-inset:    inset 0 1px 0 rgba(255,255,255,0.08);
+      --teal:           #00c896;
+      --teal-bright:    #0af0d0;
+      --teal-dim:       rgba(0,200,150,0.15);
+      --teal-glow:      rgba(0,200,150,0.25);
+      --text-primary:   #e8f5f0;
+      --text-secondary: rgba(232,245,240,0.55);
+      --text-muted:     rgba(232,245,240,0.30);
+      --danger:         #ff4d6a;
+      --danger-dim:     rgba(255,77,106,0.15);
+      --radius-lg:      24px;
+      --radius-md:      16px;
+      --radius-sm:      10px;
+      --blur:           blur(18px);
+    }
+
+    html { scroll-behavior: smooth; }
+
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f0f1a;
-      color: white;
-      display: flex;
-      justify-content: center;
-      padding: 40px;
+      font-family: 'Rubik', sans-serif;
+      background: var(--bg-deep);
+      color: var(--text-primary);
+      min-height: 100dvh;
+      overflow-x: hidden;
     }
 
-    .container {
-      width: 500px;
-      background: rgba(255,255,255,0.06);
-      backdrop-filter: blur(12px);
-      border-radius: 20px;
-      padding: 25px;
+    /* ═══════════════════════════════════════════════
+       AMBIENT ORBS
+    ═══════════════════════════════════════════════ */
+    .ambient-orbs {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
     }
 
-    h1 {
-      margin-bottom: 20px;
-    }
-
-    .avatar {
-      width: 80px;
-      height: 80px;
+    .orb {
+      position: absolute;
       border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 15px;
+      filter: blur(90px);
+      opacity: 0.18;
     }
 
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      margin-bottom: 15px;
-      border-radius: 10px;
-      border: none;
-      outline: none;
+    .orb-1 {
+      width: 480px; height: 480px;
+      background: radial-gradient(circle, #00c896, transparent 70%);
+      top: -120px; left: -80px;
+      animation: drift1 18s ease-in-out infinite;
     }
 
-    button {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 10px;
-      background: #7c5cff;
-      color: white;
+    .orb-2 {
+      width: 360px; height: 360px;
+      background: radial-gradient(circle, #0af0d0, transparent 70%);
+      bottom: 20%; right: -100px;
+      animation: drift2 22s ease-in-out infinite;
+    }
+
+    .orb-3 {
+      width: 280px; height: 280px;
+      background: radial-gradient(circle, #00c896, transparent 70%);
+      top: 60%; left: 30%;
+      animation: drift3 26s ease-in-out infinite;
+      opacity: 0.10;
+    }
+
+    @keyframes drift1 { 0%,100%{ transform:translate(0,0); } 50%{ transform:translate(40px,60px); } }
+    @keyframes drift2 { 0%,100%{ transform:translate(0,0); } 50%{ transform:translate(-50px,-40px); } }
+    @keyframes drift3 { 0%,100%{ transform:translate(0,0); } 50%{ transform:translate(30px,-50px); } }
+
+    /* ═══════════════════════════════════════════════
+       NAV BAR
+    ═══════════════════════════════════════════════ */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 64px;
+      background: rgba(6,26,20,0.70);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .navbar-logo {
+      font-size: 1.2rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--teal), var(--teal-bright));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+      letter-spacing: -0.5px;
+    }
+
+    .navbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav {
+      padding: 8px 18px;
+      border-radius: var(--radius-sm);
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
       cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .info {
-      font-size: 13px;
-      opacity: 0.7;
+    .btn-nav-ghost {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--glass-border);
+    }
+
+    .btn-nav-ghost:hover {
+      color: var(--text-primary);
+      border-color: rgba(255,255,255,0.2);
+      background: var(--bg-card-hover);
+    }
+
+    .btn-nav-primary {
+      background: linear-gradient(135deg, var(--teal), var(--teal-bright));
+      color: #061a14;
+    }
+
+    .btn-nav-primary:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    /* ═══════════════════════════════════════════════
+       PAGE LAYOUT
+    ═══════════════════════════════════════════════ */
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 20px 120px;
+    }
+
+    /* ═══════════════════════════════════════════════
+       STATES: LOADING / ERROR / PRIVATE
+    ═══════════════════════════════════════════════ */
+    .state-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 50vh;
+      gap: 16px;
+      text-align: center;
+    }
+
+    .state-icon {
+      font-size: 3.5rem;
+      line-height: 1;
+    }
+
+    .state-title {
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--text-primary);
+    }
+
+    .state-desc {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      max-width: 360px;
+      line-height: 1.6;
+    }
+
+    .spinner {
+      width: 44px; height: 44px;
+      border: 3px solid var(--glass-border);
+      border-top-color: var(--teal);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ═══════════════════════════════════════════════
+       BANNER COVER
+    ═══════════════════════════════════════════════ */
+    .profile-banner {
+      width: 100%;
+      height: 220px;
+      margin-top: 32px;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(135deg, #0d3329 0%, #061a14 50%, #0a2e28 100%);
+      border: 1px solid var(--glass-border);
+    }
+
+    .profile-banner img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    .banner-edit-btn {
+      position: absolute;
+      bottom: 12px; right: 12px;
+      padding: 8px 16px;
+      background: rgba(6,26,20,0.75);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: none;
+      gap: 6px;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+
+    .banner-edit-btn:hover {
+      background: rgba(6,26,20,0.95);
+      border-color: rgba(255,255,255,0.2);
+    }
+
+    .is-owner .banner-edit-btn { display: flex; }
+
+    /* ═══════════════════════════════════════════════
+       PROFILE HEADER CARD
+    ═══════════════════════════════════════════════ */
+    .profile-header-card {
+      background: var(--bg-card);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-inset), 0 8px 40px rgba(0,0,0,0.4);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px 24px;
+      margin-top: -1px;
+      position: relative;
+    }
+
+    .profile-top-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+    }
+
+    /* ── Avatar ── */
+    .avatar-wrapper {
+      flex-shrink: 0;
+      position: relative;
+      margin-top: -60px;
+    }
+
+    .avatar-ring {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      padding: 3px;
+      background: conic-gradient(var(--teal), var(--teal-bright), var(--teal));
+      animation: rotate-ring 4s linear infinite;
+    }
+
+    @keyframes rotate-ring { to { transform: rotate(360deg); } }
+
+    .avatar-inner {
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      overflow: hidden;
+      background: var(--bg-dark);
+      border: 3px solid var(--bg-deep);
+    }
+
+    .avatar-inner img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-edit-btn {
+      position: absolute;
+      bottom: 2px; right: 2px;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--teal);
+      border: 2px solid var(--bg-deep);
+      color: var(--bg-deep);
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .avatar-edit-btn:hover { filter: brightness(1.15); transform: scale(1.1); }
+    .is-owner .avatar-edit-btn { display: flex; }
+
+    /* ── Identity block ── */
+    .profile-identity {
+      flex: 1;
+      min-width: 0;
+      padding-top: 6px;
+    }
+
+    .profile-displayname {
+      font-size: 1.55rem;
+      font-weight: 900;
+      color: var(--text-primary);
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .profile-displayname[contenteditable="true"] {
+      outline: none;
+      border-bottom: 1.5px dashed var(--teal);
+      padding-bottom: 2px;
+      cursor: text;
+    }
+
+    .profile-username {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--teal);
       margin-bottom: 10px;
+    }
+
+    .profile-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .badge {
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-public {
+      background: var(--teal-dim);
+      color: var(--teal-bright);
+      border: 1px solid rgba(0,200,150,0.3);
+    }
+
+    .badge-private {
+      background: rgba(255,77,106,0.12);
+      color: #ff8099;
+      border: 1px solid rgba(255,77,106,0.25);
+    }
+
+    .badge-joined {
+      background: rgba(255,255,255,0.06);
+      color: var(--text-secondary);
+      border: 1px solid var(--glass-border);
+    }
+
+    /* ── Actions owner ── */
+    .profile-actions-owner {
+      display: none;
+      flex-shrink: 0;
+      flex-direction: column;
+      gap: 8px;
+      padding-top: 6px;
+    }
+
+    .is-owner .profile-actions-owner { display: flex; }
+
+    .btn-action {
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 0.82rem;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .btn-edit-profile {
+      background: var(--teal-dim);
+      color: var(--teal-bright);
+      border: 1px solid rgba(0,200,150,0.3);
+    }
+
+    .btn-edit-profile:hover {
+      background: rgba(0,200,150,0.25);
+    }
+
+    .btn-save-profile {
+      background: linear-gradient(135deg, var(--teal), var(--teal-bright));
+      color: var(--bg-deep);
+      display: none;
+    }
+
+    .btn-save-profile:hover { filter: brightness(1.1); }
+
+    /* ─── Edit mode active ─── */
+    body.edit-mode .btn-edit-profile { display: none; }
+    body.edit-mode .btn-save-profile { display: inline-flex; }
+
+    /* ═══════════════════════════════════════════════
+       BIO SECTION
+    ═══════════════════════════════════════════════ */
+    .profile-bio-section {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--glass-border);
+    }
+
+    .profile-bio {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      min-height: 24px;
+      white-space: pre-wrap;
+    }
+
+    .profile-bio[contenteditable="true"] {
+      outline: none;
+      background: rgba(255,255,255,0.03);
+      border: 1px dashed rgba(0,200,150,0.3);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      cursor: text;
+      color: var(--text-primary);
+    }
+
+    .profile-bio-placeholder {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* ═══════════════════════════════════════════════
+       SOCIAL LINKS
+    ═══════════════════════════════════════════════ */
+    .profile-socials {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--glass-border);
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .social-link:hover {
+      background: var(--teal-dim);
+      color: var(--teal-bright);
+      border-color: rgba(0,200,150,0.3);
+    }
+
+    /* ═══════════════════════════════════════════════
+       SETTINGS PANEL (owner only)
+    ═══════════════════════════════════════════════ */
+    .settings-panel {
+      display: none;
+      background: var(--bg-card);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-inset);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      margin-top: 16px;
+    }
+
+    .is-owner .settings-panel { display: block; }
+    body:not(.edit-mode) .settings-panel { display: none; }
+
+    .settings-section-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 18px;
+    }
+
+    .settings-group {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+
+    .settings-group:last-child { margin-bottom: 0; }
+
+    .field-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      letter-spacing: 0.3px;
+    }
+
+    .field-input {
+      width: 100%;
+      padding: 11px 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-family: 'Rubik', sans-serif;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .field-input:focus {
+      border-color: rgba(0,200,150,0.5);
+      background: rgba(0,200,150,0.04);
+    }
+
+    .field-input::placeholder { color: var(--text-muted); }
+
+    /* Toggle visibilité */
+    .visibility-toggle-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+    }
+
+    .visibility-toggle-info { display: flex; flex-direction: column; gap: 2px; }
+    .visibility-toggle-label { font-size: 0.9rem; font-weight: 700; color: var(--text-primary); }
+    .visibility-toggle-desc { font-size: 0.78rem; color: var(--text-muted); }
+
+    .toggle-switch {
+      position: relative;
+      width: 46px; height: 26px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+    .toggle-slider {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.1);
+      border-radius: 26px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 20px; height: 20px;
+      left: 3px; top: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+
+    .toggle-switch input:checked + .toggle-slider { background: var(--teal); }
+    .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
+
+    /* Danger zone */
+    .danger-zone {
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,77,106,0.15);
+    }
+
+    .danger-zone-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--danger);
+      margin-bottom: 14px;
+    }
+
+    .btn-danger {
+      padding: 10px 20px;
+      border-radius: var(--radius-sm);
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      border: 1px solid rgba(255,77,106,0.3);
+      background: var(--danger-dim);
+      color: var(--danger);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-danger:hover {
+      background: rgba(255,77,106,0.25);
+      border-color: rgba(255,77,106,0.5);
+    }
+
+    /* ═══════════════════════════════════════════════
+       STATS ROW
+    ═══════════════════════════════════════════════ */
+    .profile-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-inset);
+      border-radius: var(--radius-md);
+      padding: 18px 16px;
+      text-align: center;
+      transition: background 0.2s;
+    }
+
+    .stat-card:hover { background: var(--bg-card-hover); }
+
+    .stat-value {
+      font-size: 1.6rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--teal), var(--teal-bright));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* ═══════════════════════════════════════════════
+       MODAL DELETE CONFIRM
+    ═══════════════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(6,26,20,0.80);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal-box {
+      background: #0d1f1c;
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--glass-inset), 0 24px 80px rgba(0,0,0,0.6);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      max-width: 420px;
+      width: 100%;
+    }
+
+    .modal-icon { font-size: 2.5rem; margin-bottom: 16px; line-height: 1; }
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .modal-desc {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .modal-desc strong { color: var(--danger); }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-modal-cancel {
+      flex: 1;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--glass-border);
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+
+    .btn-modal-cancel:hover {
+      color: var(--text-primary);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .btn-modal-delete {
+      flex: 1;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      background: var(--danger);
+      border: none;
+      color: white;
+      transition: all 0.2s;
+    }
+
+    .btn-modal-delete:hover { filter: brightness(1.1); }
+    .btn-modal-delete:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    /* ═══════════════════════════════════════════════
+       TOAST NOTIFICATION
+    ═══════════════════════════════════════════════ */
+    .toast-container {
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      pointer-events: none;
+    }
+
+    .toast {
+      padding: 12px 20px;
+      border-radius: 30px;
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      animation: toast-in 0.3s ease, toast-out 0.3s ease 2.5s forwards;
+      pointer-events: none;
+    }
+
+    .toast-success {
+      background: rgba(0,200,150,0.15);
+      border: 1px solid rgba(0,200,150,0.35);
+      color: var(--teal-bright);
+    }
+
+    .toast-error {
+      background: rgba(255,77,106,0.15);
+      border: 1px solid rgba(255,77,106,0.35);
+      color: #ff8099;
+    }
+
+    @keyframes toast-in  { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes toast-out { from { opacity:1; transform:translateY(0); } to { opacity:0; transform:translateY(-8px); } }
+
+    /* ═══════════════════════════════════════════════
+       BOTTOM NAV (mobile)
+    ═══════════════════════════════════════════════ */
+    .bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      height: 64px;
+      background: rgba(6,26,20,0.85);
+      backdrop-filter: var(--blur);
+      -webkit-backdrop-filter: var(--blur);
+      border-top: 1px solid var(--glass-border);
+      z-index: 100;
+      align-items: center;
+      justify-content: space-around;
+      padding: 0 8px;
+    }
+
+    .bottom-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+    }
+
+    .bottom-nav-item svg { width: 22px; height: 22px; }
+    .bottom-nav-item.active { color: var(--teal); }
+    .bottom-nav-item:hover { color: var(--text-primary); }
+
+    /* ═══════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════ */
+    @media (max-width: 640px) {
+      .navbar { padding: 0 16px; }
+      .page-wrapper { padding: 0 12px 100px; }
+      .bottom-nav { display: flex; }
+
+      .profile-banner { height: 160px; margin-top: 16px; }
+      .profile-header-card { padding: 20px 16px; }
+      .profile-top-row { flex-wrap: wrap; gap: 16px; }
+
+      .avatar-wrapper { margin-top: -50px; }
+      .avatar-ring { width: 82px; height: 82px; }
+
+      .profile-actions-owner {
+        flex-direction: row;
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      .profile-displayname { font-size: 1.25rem; }
+
+      .profile-stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .stat-value { font-size: 1.3rem; }
+
+      .settings-panel { padding: 20px 16px; }
+
+      .modal-box { padding: 28px 20px; }
+      .modal-actions { flex-direction: column; }
+
+      .toast-container { bottom: 80px; width: calc(100% - 32px); }
+      .toast { width: 100%; justify-content: center; }
     }
   </style>
 </head>
-
 <body>
 
-  <div class="container">
-
-    <h1>Mon profil</h1>
-
-    <img id="photo" class="avatar" src="" />
-
-    <div class="info">
-      Photo de profil (non modifiable ici)
-    </div>
-
-    <label>Username</label>
-    <input id="username" />
-
-    <label>Nom d'affichage</label>
-    <input id="displayName" />
-
-    <label>Bio</label>
-    <textarea id="bio"></textarea>
-
-    <button id="saveBtn">Enregistrer</button>
-
+  <!-- Ambient orbs -->
+  <div class="ambient-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
   </div>
 
+  <!-- Navbar -->
+  <nav class="navbar">
+    <a href="/" class="navbar-logo">Perspikative</a>
+    <div class="navbar-actions">
+      <a href="/portfolio/creations" class="btn-nav btn-nav-ghost">Galerie</a>
+      <a href="/login"     class="btn-nav btn-nav-primary" id="nav-auth-btn">Connexion</a>
+    </div>
+  </nav>
+
+  <!-- Page -->
+  <main class="page-wrapper" id="page-wrapper">
+
+    <!-- ── ÉTAT : Chargement ── -->
+    <div class="state-screen" id="state-loading">
+      <div class="spinner"></div>
+      <p class="state-desc">Chargement du profil…</p>
+    </div>
+
+    <!-- ── ÉTAT : Utilisateur introuvable ── -->
+    <div class="state-screen" id="state-not-found" style="display:none">
+      <div class="state-icon">🔍</div>
+      <h1 class="state-title">Profil introuvable</h1>
+      <p class="state-desc">Aucun compte ne correspond à ce nom d'utilisateur sur Perspikative.</p>
+      <a href="/" class="btn-nav btn-nav-primary" style="margin-top:8px">Retour à l'accueil</a>
+    </div>
+
+    <!-- ── ÉTAT : Profil privé ── -->
+    <div class="state-screen" id="state-private" style="display:none">
+      <div class="state-icon">🔒</div>
+      <h1 class="state-title">Profil privé</h1>
+      <p class="state-desc">Cet artiste a choisi de garder son profil privé. Reviens si tu as une invitation !</p>
+    </div>
+
+    <!-- ══════════════════════════════════════════
+         PROFIL (visible une fois chargé)
+    ══════════════════════════════════════════ -->
+    <div id="profile-content" style="display:none">
+
+      <!-- Banner -->
+      <div class="profile-banner" id="profile-banner">
+        <img src="" alt="Bannière" id="banner-img" style="display:none" />
+        <button class="banner-edit-btn" id="btn-edit-banner" type="button">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+          Changer la bannière
+        </button>
+        <!-- Input caché pour upload bannière -->
+        <input type="file" id="input-banner" accept="image/*" style="display:none" />
+      </div>
+
+      <!-- Header card -->
+      <div class="profile-header-card">
+        <div class="profile-top-row">
+
+          <!-- Avatar -->
+          <div class="avatar-wrapper">
+            <div class="avatar-ring">
+              <div class="avatar-inner">
+                <img src="" alt="Avatar" id="avatar-img" />
+              </div>
+            </div>
+            <button class="avatar-edit-btn" id="btn-edit-avatar" type="button" title="Changer l'avatar">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+            <input type="file" id="input-avatar" accept="image/*" style="display:none" />
+          </div>
+
+          <!-- Identity -->
+          <div class="profile-identity">
+            <h1 class="profile-displayname" id="profile-displayname" spellcheck="false"></h1>
+            <p class="profile-username" id="profile-username"></p>
+            <div class="profile-badges" id="profile-badges">
+              <!-- badges injectés dynamiquement -->
+            </div>
+          </div>
+
+          <!-- Owner actions -->
+          <div class="profile-actions-owner">
+            <button class="btn-action btn-edit-profile" id="btn-edit-profile" type="button">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Modifier
+            </button>
+            <button class="btn-action btn-save-profile" id="btn-save-profile" type="button">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Enregistrer
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Bio -->
+        <div class="profile-bio-section">
+          <p class="profile-bio" id="profile-bio" spellcheck="false"></p>
+          <div class="profile-socials" id="profile-socials"></div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="profile-stats" id="profile-stats">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-drawings">–</div>
+          <div class="stat-label">Dessins</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-likes">–</div>
+          <div class="stat-label">Likes reçus</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-comments">–</div>
+          <div class="stat-label">Commentaires</div>
+        </div>
+      </div>
+
+      <!-- Settings panel (owner only, edit mode only) -->
+      <div class="settings-panel" id="settings-panel">
+
+        <p class="settings-section-title">Informations</p>
+
+        <div class="settings-group">
+          <div>
+            <p class="field-label">Nom d'affichage</p>
+            <input type="text" class="field-input" id="field-displayname" placeholder="Ton nom ou pseudo" maxlength="40" />
+          </div>
+          <div>
+            <p class="field-label">Bio</p>
+            <textarea class="field-input" id="field-bio" rows="3" placeholder="Parle-nous de toi…" maxlength="200" style="resize:vertical"></textarea>
+          </div>
+        </div>
+
+        <p class="settings-section-title">Liens sociaux</p>
+
+        <div class="settings-group">
+          <div>
+            <p class="field-label">Instagram</p>
+            <input type="text" class="field-input" id="field-instagram" placeholder="@username" maxlength="60" />
+          </div>
+          <div>
+            <p class="field-label">Twitter / X</p>
+            <input type="text" class="field-input" id="field-twitter" placeholder="@username" maxlength="60" />
+          </div>
+          <div>
+            <p class="field-label">Site web</p>
+            <input type="url" class="field-input" id="field-website" placeholder="https://…" maxlength="120" />
+          </div>
+        </div>
+
+        <p class="settings-section-title">Visibilité</p>
+
+        <div class="settings-group">
+          <div class="visibility-toggle-wrap">
+            <div class="visibility-toggle-info">
+              <span class="visibility-toggle-label">Profil public</span>
+              <span class="visibility-toggle-desc">Visible par tout le monde sur Perspikative</span>
+            </div>
+            <label class="toggle-switch" aria-label="Visibilité du profil">
+              <input type="checkbox" id="toggle-public" checked />
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Danger zone -->
+        <div class="danger-zone">
+          <p class="danger-zone-title">⚠️ Zone de danger</p>
+          <button class="btn-danger" id="btn-delete-account" type="button">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+            Supprimer mon compte
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+    <!-- /profile-content -->
+
+  </main>
+
+  <!-- ── Bottom nav mobile ── -->
+  <nav class="bottom-nav" aria-label="Navigation">
+    <a href="/" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Accueil
+    </a>
+    <a href="/creations" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Galerie
+    </a>
+    <a href="/commu" class="bottom-nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Commu
+    </a>
+    <a href="#" class="bottom-nav-item active" id="nav-profile-mobile">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Profil
+    </a>
+  </nav>
+
+  <!-- ══════════════════════════════════════
+       MODAL SUPPRESSION COMPTE
+  ══════════════════════════════════════ -->
+  <div class="modal-overlay" id="modal-delete" role="dialog" aria-modal="true" aria-labelledby="modal-delete-title">
+    <div class="modal-box">
+      <div class="modal-icon">🗑️</div>
+      <h2 class="modal-title" id="modal-delete-title">Supprimer mon compte</h2>
+      <p class="modal-desc">
+        Cette action est <strong>irréversible</strong>. Ton compte, ta bio, tes informations de profil seront définitivement supprimés. Tes dessins et commentaires existants resteront sur la plateforme.
+      </p>
+      <div class="modal-actions">
+        <button class="btn-modal-cancel" id="btn-modal-cancel" type="button">Annuler</button>
+        <button class="btn-modal-delete" id="btn-modal-confirm-delete" type="button">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Toasts ── -->
+  <div class="toast-container" id="toast-container" aria-live="polite"></div>
+
+  <!-- Scripts Firebase -->
+  <script type="module" src="/firebase-init.js"></script>
   <script type="module" src="/js/profile.js"></script>
 
 </body>
