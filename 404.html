@@ -19,15 +19,7 @@ permalink: /404
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MH68ZWLYM8"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-MH68ZWLYM8');
-</script>
+<script defer src="https://cloud.umami.is/script.js" data-website-id="18d7b0fd-c5fb-4b2e-a43b-10cc734daa8f"></script>
 
 <style>
   @media (pointer: coarse) {
@@ -229,6 +221,14 @@ permalink: /404
     <img src="/icons/pinterest.svg" alt="Pinterest">
   </a>
 </div>
+
+<!-- 404.html -->
+<script>
+  const path = window.location.pathname;
+  if (path.startsWith('/@')) {
+    window.location.replace('/profile.html?u=' + path.slice(2));
+  }
+</script>
 
 <script>
 document.addEventListener("contextmenu", e => e.preventDefault());
