@@ -13,7 +13,9 @@ import {
   addDoc,
   deleteDoc,
   doc,
-  serverTimestamp
+  serverTimestamp,
+  setDoc,       // 🆕 Ajouté pour enregistrer les likes
+  onSnapshot    // 🆕 Ajouté pour synchroniser les likes en temps réel
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 import {
@@ -56,7 +58,9 @@ window.__prspkFire = {
   addDoc,
   deleteDoc,
   doc,
-  serverTimestamp
+  serverTimestamp,
+  setDoc,       // 🆕 Mis à disposition globalement
+  onSnapshot    // 🆕 Mis à disposition globalement
 };
 
 
@@ -65,25 +69,18 @@ window.__prspkFire = {
 // =============================
 const provider = new GoogleAuthProvider();
 
-// login function (si tu veux un bouton)
-window.prspkLogin = function () {
-  signInWithPopup(auth, provider).catch(console.error);
-};
-
-window.prspkLogout = function () {
-  signOut(auth);
-};
-
-
-// =============================
-// USER GLOBAL (ULTRA IMPORTANT)
-// =============================
+// 👤 Écouteur d'état d'authentification pour la synchronisation
 onAuthStateChanged(auth, (user) => {
   window.__prspkUser = user;
-
-  document.dispatchEvent(
-    new CustomEvent("prspk:auth-ready", {
-      detail: { user }
-    })
-  );
+  document.dispatchEvent(new CustomEvent('prspk:auth-ready', {
+    detail: { user }
+  }));
 });
+
+// Export optionnel des fonctions d'auth si tu en as besoin ailleurs
+window.__prspkAuth = {
+  auth,
+  provider,
+  signInWithGoogle: () => signInWithPopup(auth, provider),
+  logout: () => signOut(auth)
+};
