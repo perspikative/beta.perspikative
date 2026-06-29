@@ -22,69 +22,149 @@ permalink: /profile
   <script defer src="https://cloud.umami.is/script.js" data-website-id="18d7b0fd-c5fb-4b2e-a43b-10cc734daa8f"></script>
 
 <style>
-  /* Évite que les paddings déforment la largeur des éléments */
   * {
     box-sizing: border-box;
   }
 
-  /* Centrer la carte proprement sur la page */
-  main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
+  /* Layout libre sans main centré rigide */
+  .profile-page {
+    padding: 50px 140px 230px 140px;
   }
 
-  /* Style pour la nouvelle photo de profil */
+  /* Bloc profil principal — glassmorphism Perspikative */
+  .profile-header {
+    position: relative;
+    background: transparent;
+    border: 3px solid rgba(255, 255, 255, 0.534);
+    border-radius: 25px;
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 18px;
+  }
+
+  /* Halo dégradé derrière la photo */
+  .profile-pic-wrapper {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .profile-pic-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00c896, #0af0d0, #58b3a2);
+    z-index: 0;
+  }
+
   .profile-pic {
-    width: 120px;
-    height: 120px;
+    position: relative;
+    z-index: 1;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
     object-fit: cover;
-    margin-top: 10px;
-    margin-bottom: 25px;
-    border: 4px solid #58b3a2;
-    background: #1f2937;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    display: block;
+    background: #0d1f1c;
   }
 
-  .card {
-    width: 100%;
-    max-width: 500px; /* Devient fluide sur mobile */
-    background: #1f2937;
-    border-radius: 18px;
-    padding: 30px;
-    margin: 0 auto;
+  /* Infos utilisateur */
+  .profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
   }
 
-  .row {
-    margin-bottom: 20px;
-  }
-
-  .row:last-child {
-    margin-bottom: 0;
-  }
-
-  .label {
+  #displayName {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
     color: #ffffff;
-    font-size: 1.1rem;
-    opacity: 0.7;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0;
+    letter-spacing: -0.1;
   }
 
-  .value {
-    margin-top: 5px;
-    font-size: 18px;
-    word-break: break-all; /* Évite que les longs e-mails ou UID cassent le design */
+  #email {
+    font-size: 1.2rem;
+    color: rgba(255, 255, 255, 0.6);
+    word-break: break-all;
+    margin: 0;
+    margin-top: -0.3em;
   }
 
-  /* Media query corrigée et optimisée pour mobile */
-  @media screen and (max-width: 798px) {
-    .card {
-      padding: 20px; /* Un peu plus d'espace pour le contenu sur petit écran */
+  /* Bouton édition — coin supérieur droit */
+  .btn-edit {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(0, 200, 150, 0.25);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+    text-decoration: none;
+  }
+
+  .btn-edit:hover {
+    background: rgba(0, 200, 150, 0.15);
+    border-color: rgba(10, 240, 208, 0.5);
+    transform: scale(1.08);
+  }
+
+  .btn-edit img {
+    width: 30px;
+    height: 30px;
+    opacity: 0.8;
+  }
+
+  /* Mobile */
+  @media screen and (max-width: 520px) {
+    .profile-page {
+      padding: 24px 16px 300px 16px;
     }
+
+    .profile-header {
+      padding: 24px 20px;
+      gap: 16px;
+    }
+
     .profile-pic {
-      width: 100px;
-      height: 100px;
+      width: 67px;
+      height: 67px;
+    }
+
+    #displayName {
+      font-size: 1.3rem;
+    }
+
+    #email {
+      font-size: 0.95rem;
+    }
+
+    .btn-edit {
+      top: 12px;
+      right: 12px;
+      width: 32px;
+      height: 32px;
+    }
+
+    .btn-edit img {
+      width: 20px;
+      height: 20px;
     }
   }
 </style>
@@ -157,31 +237,32 @@ permalink: /profile
 
   <div class="blur-overlay"></div>
 
-  <main>
-    <img id="profilePic" class="profile-pic" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'><rect width='100%25' height='100%25' fill='%231f2937'/></svg>" alt="Photo de profil">
+  <div class="profile-page">
+    <div class="profile-header">
 
-    <div class="card">
-      <div class="row">
-        <div class="label">Nom d'utilisateur</div>
-        <div id="displayName" class="value">Chargement...</div>
+      <!-- Bouton édition -->
+      <button class="btn-edit" title="Modifier le profil" aria-label="Modifier le profil">
+        <img src="/icons/edit.svg" alt="">
+      </button>
+
+      <!-- Photo de profil avec halo dégradé -->
+      <div class="profile-pic-wrapper">
+        <img
+          id="profilePic"
+          class="profile-pic"
+          src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'><rect width='100%25' height='100%25' fill='%230d1f1c'/></svg>"
+          alt="Photo de profil"
+        >
       </div>
 
-      <div class="row">
-        <div class="label">Adresse e-mail</div>
-        <div id="email" class="value">Chargement...</div>
+      <!-- Nom + mail -->
+      <div class="profile-info">
+        <div id="displayName">Chargement…</div>
+        <div id="email">Chargement…</div>
       </div>
 
-      <div class="row">
-        <div class="label">Date d'inscription</div>
-        <div id="created" class="value">Chargement...</div>
-      </div>
-
-      <div class="row">
-        <div class="label">UID</div>
-        <div id="uid" class="value">Chargement...</div>
-      </div>
     </div>
-  </main>
+  </div>
 
   <footer>
     <div class="social-icons">
@@ -214,8 +295,7 @@ permalink: /profile
     <img src="/icons/rechercher.svg" alt="Rechercher">
   </a>
   
-  <script type="module" src="/firebase-init.js"></script>
-  <script type="module" src="/js/profile.js"></script>
+
 
   <script>
     const menuToggle = document.getElementById('menuToggle');
@@ -223,7 +303,10 @@ permalink: /profile
       document.body.classList.toggle('menu-open', e.target.checked);
     });
   </script>
-
+  
+  <script type="module" src="/firebase-init.js"></script>
+  <script type="module" src="/js/profile.js"></script>
+  
   <script src="/script.js"></script>
 
 </body>
