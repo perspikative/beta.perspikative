@@ -268,8 +268,8 @@ document.addEventListener('DOMContentLoaded', () => {
       popup.className = 'login-popup-modal';
       popup.innerHTML = `
         <div class="login-popup-content">
-          <h3>Connexion requise 🔒</h3>
-          <p>Vous devez être connecté pour aimer cette création et l'associer à votre compte.</p>
+          <h3>Connexion requise !</h3>
+          <p>Tu dois être connecté pour aimer ce dessin et l'associer à ton compte.</p>
           <div class="login-popup-buttons">
             <a href="/profile.html" class="popup-btn btn-login">Se connecter</a>
             <button class="popup-btn btn-close" id="close-login-popup">Plus tard</button>
