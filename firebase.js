@@ -8,9 +8,7 @@ import {
   addDoc,
   deleteDoc,
   doc,
-  serverTimestamp,
-  setDoc,       // 🆕 Ajouté pour enregistrer les likes
-  onSnapshot    // 🆕 Ajouté pour synchroniser les likes en temps réel
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
@@ -28,7 +26,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// 🔥 GLOBAL pour ton script comments et tes likes
+// 🔥 GLOBAL pour ton script comments
 window.__prspkDb = db;
 window.__prspkFire = {
   collection,
@@ -38,9 +36,7 @@ window.__prspkFire = {
   addDoc,
   deleteDoc,
   doc,
-  serverTimestamp,
-  setDoc,       // 🆕 Mis à disposition globalement
-  onSnapshot    // 🆕 Mis à disposition globalement
+  serverTimestamp
 };
 
 // 👤 Auth globale

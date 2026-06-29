@@ -153,79 +153,26 @@ document.addEventListener('DOMContentLoaded', () => {
     lbNextBtn.style.opacity = idx >= items.length - 1 ? '0.3' : '1';
   }
 
-  // ── LIKES STORE (Firebase Firestore) ────────────────────────────────────
-  let userLikes = {}; // Cache local synchronisé en temps réel avec Firebase
-  let unsubscribeLikes = null;
-
+  // ── LIKES STORE (localStorage) ──────────────────────────────────────────
   const LikesStore = {
-    hasLiked: function(id) {
-      return !!userLikes[id];
+    _key: 'prspk_likes',
+    _data: function() {
+      try { return JSON.parse(localStorage.getItem(this._key)) || {}; }
+      catch(e) { return {}; }
     },
-    toggle: async function(id) {
-      const user = window.auth ? window.auth.currentUser : null;
-      if (!user) return false;
-
-      const currentStatus = !!userLikes[id];
-      const newStatus = !currentStatus;
-
-      // Mise à jour locale immédiate (Optimistic UI) pour éviter toute latence visuelle
-      userLikes[id] = newStatus;
-
-      try {
-        // Syntaxe modulaire Firebase accessible globalement via window (ou via vos imports)
-        const { doc, setDoc } = window.FirebaseFirestore;
-        const userDocRef = doc(window.db, 'users', user.uid);
-
-        // On fusionne (merge: true) pour cibler uniquement la clé du dessin dans l'objet likedDrawings
-        await setDoc(userDocRef, {
-          likedDrawings: {
-            [id]: newStatus
-          }
-        }, { merge: true });
-
-        return newStatus;
-      } catch (error) {
-        console.error("Erreur lors de la mise à jour du like sur Firestore :", error);
-        userLikes[id] = currentStatus; // Annulation du changement local en cas d'échec
-        return currentStatus;
-      }
+    _save: function(data) {
+      localStorage.setItem(this._key, JSON.stringify(data));
+    },
+    hasLiked: function(id) {
+      return !!this._data()[id];
+    },
+    toggle: function(id) {
+      var data = this._data();
+      data[id] = !data[id];
+      this._save(data);
+      return data[id];
     }
   };
-
-  // ── SYNCHRONISATION EN TEMPS RÉEL DE L'ÉTAT DE CONNEXION ET DES LIKES ─────
-  if (window.auth) {
-    window.auth.onAuthStateChanged((user) => {
-      if (user) {
-        // L'utilisateur est connecté -> On écoute son document Firestore en temps réel
-        const { doc, onSnapshot } = window.FirebaseFirestore;
-        const userDocRef = doc(window.db, 'users', user.uid);
-
-        unsubscribeLikes = onSnapshot(userDocRef, (docSnap) => {
-          if (docSnap.exists() && docSnap.data().likedDrawings) {
-            userLikes = docSnap.data().likedDrawings;
-          } else {
-            userLikes = {};
-          }
-          // Si la lightbox est ouverte sur un dessin, on actualise l'icône de son bouton Like
-          if (lightbox.classList.contains('active') && currentId) {
-            updateLikeUI(currentId);
-          }
-        }, (error) => {
-          console.error("Erreur lors de l'écoute des likes :", error);
-        });
-      } else {
-        // L'utilisateur est déconnecté -> On réinitialise tout
-        userLikes = {};
-        if (unsubscribeLikes) {
-          unsubscribeLikes();
-          unsubscribeLikes = null;
-        }
-        if (lightbox.classList.contains('active') && currentId) {
-          updateLikeUI(currentId);
-        }
-      }
-    });
-  }
 
   // ── UI like ──────────────────────────────────────────────────────────────
   function updateLikeUI(id) {
@@ -257,32 +204,6 @@ document.addEventListener('DOMContentLoaded', () => {
       btn.appendChild(heart);
       heart.addEventListener('animationend', function() { this.remove(); });
     }
-  }
-
-  // ── Fenêtre Pop-up d'invitation à se connecter ───────────────────────────
-  function showLoginPopup() {
-    let popup = document.getElementById('login-popup');
-    if (!popup) {
-      popup = document.createElement('div');
-      popup.id = 'login-popup';
-      popup.className = 'login-popup-modal';
-      popup.innerHTML = `
-        <div class="login-popup-content">
-          <h3>Connexion requise !</h3>
-          <p>Tu dois être connecté pour aimer ce dessin et l'associer à ton compte.</p>
-          <div class="login-popup-buttons">
-            <a href="/profile.html" class="popup-btn btn-login">Se connecter</a>
-            <button class="popup-btn btn-close" id="close-login-popup">Plus tard</button>
-          </div>
-        </div>
-      `;
-      document.body.appendChild(popup);
-
-      // Fermeture au clic sur le bouton de fermeture ou à l'extérieur
-      popup.querySelector('#close-login-popup').addEventListener('click', () => popup.classList.remove('visible'));
-      popup.addEventListener('click', (e) => { if (e.target === popup) popup.classList.remove('visible'); });
-    }
-    popup.classList.add('visible');
   }
 
   // ── Toast partage ────────────────────────────────────────────────────────
@@ -416,18 +337,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Bouton like ──────────────────────────────────────────────────────────
   if (lbLikeBtn) {
-    lbLikeBtn.addEventListener('click', async function() {
+    lbLikeBtn.addEventListener('click', function() {
       if (!currentId) return;
-
-      // 1. On s'assure que l'utilisateur est connecté
-      const currentUser = window.auth ? window.auth.currentUser : null;
-      if (!currentUser) {
-        showLoginPopup(); // Déconnecté -> On affiche la mini-fenêtre pop-up personnalisée
-        return;
-      }
-
-      // 2. Connecté -> On bascule le statut dans Firestore
-      var liked = await LikesStore.toggle(currentId);
+      var liked = LikesStore.toggle(currentId);
       updateLikeUI(currentId);
       animateLike(liked);
     });
