@@ -50,6 +50,26 @@ body {
   color: var(--text);
   cursor: cursor, auto;
   scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: #888888 #f1f1f1;
+}
+
+/* Garde la barre de défilement stable */
+html {
+  scrollbar-gutter: stable;
+}
+
+/* Optimisations indispensables pour Lenis */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
 }
 
 .system-font {
@@ -2103,7 +2123,8 @@ a {
 .art-challenge .logo-section h1 {
   font-family: "Maneola", sans-serif;
   font-weight: 400;
-  font-size: 2.2rem;
+  font-size: 2.4rem;
+  color: white;
 }
 
 .glass {
@@ -2124,16 +2145,17 @@ a {
 }
 
 .logo-animated {
-  width: 300px;
+  width: 380px;
   opacity: 0;
-  transform: translateY(30px);
-  animation: fadeInUp 1.5s forwards; /* forwards pour rester à la fin */
+  margin-bottom: 3rem;
+  transform: translateY(26px);
+  animation: fadeInUp 1.5s forwards cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 @keyframes fadeInUp {
   0% {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(26px);
   }
   100% {
     opacity: 1;
@@ -2147,60 +2169,10 @@ a {
   line-height: 30px;
 }
 
-/* ------ Intro ------ */
-.intro {
-  text-align: center;
-  margin-bottom: 4rem;
-}
-
-.intro p {
-  margin: 0.1rem 0;
-  font-size: 1.05rem;
-}
-
-
-
-/* ------ Thème du moment ------ */
-.section-separator {
-  width: 70%;
-  height: 3px;
-  margin: 0 auto 30px auto;
-  background: rgba(255, 255, 255, 0.25);
-  border-radius: 99px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.2);
-}
-
-/* --- Lien externe --- */
-.art-challenge-more {
-  opacity: 0.85;
-}
-
-.art-challenge-more a {
-  color: inherit;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  transition: opacity 0.2s ease, text-decoration-color 0.2s ease;
-  cursor: pointer;
-}
-
-.art-challenge-more a:hover {
-  opacity: 1;
-  text-decoration-color: currentColor;
-}
-
-.left, .right {
-  flex: 1 1 250px;
-  flex-direction: column;
-  gap: 1rem;
-  text-align: center;
-  margin-bottom: 4rem;
-}
-
-
 .deadline {
   text-align: center;
   font-weight: 500;
+  color: white;
 }
 
 .countdown {
@@ -2219,6 +2191,7 @@ a {
   letter-spacing: 0.5px;     /* joli avec cette police */
   margin-bottom: 5px;        /* espace entre texte et la bulle */
   display: block;
+  color: white;
 }
 
 .count-bubble {
@@ -2230,6 +2203,7 @@ a {
   padding: 0.3rem 0.8rem;
   min-width: 60px;
   text-align: center;
+  color: white;
   font-weight: bold;
   font-size: 2.8rem;
   background-clip: padding-box;
@@ -2307,42 +2281,7 @@ a {
 
 
 
-
-/* ============================= 14. PARAMETRES ============================= */
-
-.settings-note {
-  font-style: italic;
-  font-size: 0.9rem;
-  opacity: 0.8;
-  text-align: center;
-  color: white;
-}
-
-.settings-section {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-  max-width: 500px;
-}
-
-.setting {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 20px;
-}
-
-main.settings-section {
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-top: 50px;
-    padding-bottom: 0px;
-  }
-
-
-
-/* ============================= 15. MENTIONS LEGALES ============================= */
+/* ============================= 15. PAGES LEGALES ============================= */
 
 .mentions-wrapper {
   display: flex;
@@ -5230,4 +5169,728 @@ body {
 
 #lb-comment-send:disabled .lb-btn-icon {
   opacity: 0.35;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* ============================================================
+   art-challenge.css — styles spécifiques à la page ART Challenge
+   Complète style.css (variables, header, footer, etc. déjà définis là-bas)
+   ============================================================ */
+
+/* ── 2. HERO ────────────────────────────────────────────────────────────── */
+
+.ac-hero {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 80px 24px 60px;
+  gap: 0;
+}
+
+/* Pastille "Édition 2026" */
+.ac-edition-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(0, 200, 150, 0.12);
+  border: 1px solid rgba(0, 200, 150, 0.3);
+  border-radius: 50px;
+  padding: 6px 18px;
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #0af0d0;
+  margin-bottom: 32px;
+  animation: fadeInDown 0.8s ease forwards;
+  opacity: 0;
+}
+
+.ac-edition-badge::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #00c896;
+  box-shadow: 0 0 8px #00c896;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.7); }
+}
+
+/* Logo animé */
+.ac-logo {
+  width: 420px;
+  max-width: 88vw;
+  opacity: 0;
+  transform: translateY(30px) scale(0.96);
+  animation: fadeInUp 1.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s forwards;
+  filter: drop-shadow(0 0 26px rgba(0, 0, 0, 0.14));
+  margin-bottom: 28px;
+}
+
+/* Tagline */
+.ac-tagline {
+  font-family: 'Maneola', 'Rubik', sans-serif;
+  font-size: clamp(1.5rem, 4vw, 2.4rem);
+  font-weight: 400;
+  color: white;
+  letter-spacing: 0rem;
+  margin: 0 0 14px;
+  opacity: 0;
+  line-height: 1;
+  animation: fadeInUp 1s ease 0.8s forwards;
+}
+
+/* Sous-titre hero */
+.ac-hero-sub {
+  font-family: 'Rubik', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 480px;
+  line-height: 1.1;
+  margin: 0 0 40px;
+  opacity: 0;
+  animation: fadeInUp 1s ease 1s forwards;
+}
+
+/* CTA Hero */
+.ac-hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-family: 'Rubik', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  padding: 10px 24px;
+  border-radius: 50px;
+  transition: all 0.2s ease forwards;
+  opacity: 0;
+  animation: fadeInUp 1s ease 1.2s forwards;
+  box-shadow: inset 0 0 12px rgba(210, 210, 210, 0.26),
+  0 8px 22px rgba(0, 0, 0, 0.1);
+}
+8
+.ac-hero-cta:hover {
+  transform: translateX(-2px);
+  box-shadow: inset 0 0 12px rgba(210, 210, 210, 0.28),
+  0 8px 22px rgba(0, 0, 0, 0.14);
+}
+
+.ac-hero-cta svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Animations réutilisables */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(26px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+
+/* ── 3. WRAPPER SECTIONS ───────────────────────────────────────────────── */
+
+.ac-content {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* Card glassmorphism générique */
+.ac-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px) saturate(110%);
+  -webkit-backdrop-filter: blur(10px) saturate(110%);
+  border-radius: 25px;
+  padding: 28px 38px;
+  box-shadow: inset 0 0 12px rgba(210, 210, 210, 0.26),
+  0 8px 22px rgba(0, 0, 0, 0.12);
+}
+
+/* Titre de section */
+.ac-section-label {
+  font-family: 'Rubik', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin: 0 0 10px;
+}
+
+.ac-section-title {
+  font-family: 'Rubik', sans-serif;
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 900;
+  color: #fff;
+  margin: 0 0 20px;
+  line-height: 1.2;
+}
+
+.ac-section-body {
+  font-family: 'Rubik', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.1;
+  margin: 0;
+}
+
+
+/* ── 4. COMPTEUR ────────────────────────────────────────────────────────── */
+
+.ac-countdown-wrap {
+  text-align: center;
+}
+
+.ac-deadline-label {
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.5px;
+  margin-bottom: 28px;
+}
+
+.ac-countdown {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ac-count-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.ac-count-bubble {
+  background: rgba(0, 200, 150, 0.06);
+  border-radius: 20px;
+  min-width: 80px;
+  padding: 11px 12px;
+  text-align: center;
+  font-family: 'Rubik', sans-serif;
+  font-size: 2.6rem;
+  font-weight: 900;
+  color: #fff;
+  box-shadow: inset 0 5px 14px rgba(0, 0, 0, 0.16);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.ac-count-label {
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+
+/* ── 5. SECTION "C'EST QUOI ?" ─────────────────────────────────────────── */
+
+.ac-what-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.ac-what-item {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.ac-what-item:hover {
+  background: rgba(255, 255, 255, 0);
+}
+
+.ac-what-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+  height: 40px;
+  width: 40px;
+}
+
+.ac-what-title {
+  font-family: 'Rubik', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.ac-what-desc {
+  font-family: 'Rubik', sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+  line-height: 1.1;
+}
+
+
+/* ── 6. SECTION CONSIGNES ──────────────────────────────────────────────── */
+
+.ac-rules-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ac-rules-list li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.ac-rule-num {
+  flex-shrink: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(0,200,150,0.25), rgba(10,240,208,0.1));
+  border: 1px solid rgba(0, 200, 150, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #0af0d0;
+  margin-top: 2px;
+}
+
+.ac-rule-text {
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.7;
+}
+
+.ac-rule-text strong {
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Thème mis en avant */
+.ac-theme-highlight {
+  margin-top: 28px;
+  background: linear-gradient(135deg, rgba(0,200,150,0.1), rgba(10,240,208,0.06));
+  border: 1px solid rgba(0, 200, 150, 0.25);
+  border-radius: 20px;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ac-theme-eyebrow {
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #00c896;
+}
+
+.ac-theme-name {
+  font-family: 'Maneola', 'Rubik', sans-serif;
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  color: #fff;
+  line-height: 1.1;
+  margin: 4px 0 0;
+}
+
+.ac-theme-hint {
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.5);
+  margin-top: 6px;
+  font-style: italic;
+}
+
+
+/* ── 7. SECTION "COMMENT PARTICIPER" ──────────────────────────────────── */
+
+.ac-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 8px;
+  position: relative;
+}
+
+.ac-steps::before {
+  content: '';
+  position: absolute;
+  left: 19px;
+  top: 28px;
+  bottom: 28px;
+  width: 2px;
+  background: linear-gradient(180deg, #00c896, rgba(10,240,208,0.1));
+  border-radius: 2px;
+}
+
+.ac-step {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 12px 0;
+}
+
+.ac-step-dot {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(0, 200, 150, 0.1);
+  border: 1.5px solid rgba(0, 200, 150, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  position: relative;
+  z-index: 1;
+  background: #061a14;
+  box-shadow: 0 0 4px 0 #061a14;
+}
+
+.ac-step-dot img {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+}
+
+.ac-step-content {
+  padding-top: 8px;
+}
+
+.ac-step-title {
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 4px;
+}
+
+.ac-step-desc {
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.6;
+  margin: 0;
+}
+
+
+/* ── 8. SECTION RÉCOMPENSES ─────────────────────────────────────────────── */
+
+.ac-prizes {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 1fr;
+  gap: 14px;
+  align-items: end;
+  margin-top: 28px;
+}
+
+.ac-prize-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  padding: 24px 20px 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.2s ease;
+}
+
+.ac-prize-card:hover {
+  transform: translateY(-4px);
+}
+
+.ac-prize-card.gold {
+  background: linear-gradient(160deg, rgba(212,175,55,0.12), rgba(255,215,0,0.05));
+  border-color: rgba(212, 175, 55, 0.3);
+  box-shadow: 0 0 30px rgba(212,175,55,0.1);
+}
+
+.ac-prize-card.silver {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(200, 200, 200, 0.2);
+}
+
+.ac-prize-card.bronze {
+  background: linear-gradient(160deg, rgba(165,113,70,0.1), rgba(205,127,50,0.05));
+  border-color: rgba(165, 113, 70, 0.25);
+}
+
+.ac-prize-medal {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.ac-prize-rank {
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+
+.ac-prize-name {
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 4px 0 0;
+}
+
+.ac-prize-desc {
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.45);
+  line-height: 1.5;
+}
+
+
+/* ── 10. SECTION SEPARATOR ─────────────────────────────────────────────── */
+
+.ac-section-separator {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  margin: 0;
+}
+
+
+/* ── 11. RESPONSIVE ─────────────────────────────────────────────────────── */
+
+@media (max-width: 700px) {
+  .ac-logo {
+    width: 250px;
+    margin-bottom: 8px;
+  }
+
+  .ac-card {
+    padding: 28px 22px;
+  }
+
+  .ac-what-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ac-prizes {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .ac-prize-card.gold {
+    order: -1;
+  }
+
+  .ac-hero {
+    padding: 56px 20px 44px;
+  }
+
+  .ac-hashtag-card {
+    padding: 28px 22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ac-count-bubble {
+    min-width: 60px;
+    font-size: 2rem;
+    border-radius: 14px;
+  }
+
+  .ac-steps::before {
+    display: none;
+  }
+
+  .ac-content {
+    gap: 28px;
+    padding-bottom: 60px;
+  }
+}
+
+
+
+
+
+/* ── FENÊTRE POP-UP CONNEXION REQUISE ── */
+.login-popup-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Placé au-dessus de la Lightbox */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.26s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.login-popup-modal.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.login-popup-content {
+  background: #00000094;
+  color: #ffffff;
+  padding: 26px;
+  border-radius: 25px;
+  max-width: 400px;
+  width: 88%;
+  backdrop-filter: blur(2px);
+  text-align: center;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+  transform: scale(0.88);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow:
+    inset 0 0 10px rgba(255 255 255 / 0.24),
+    0 6px 20px rgba(0,0,0,0.2);
+}
+
+.login-popup-modal.visible .login-popup-content {
+  transform: scale(1);
+}
+
+.login-popup-content h3 {
+  margin-top: 0;
+  font-family: 'Maneola';
+  font-size: 2rem;
+  margin-bottom: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.login-popup-content p {
+  font-size: 1rem;
+  line-height: 1;
+  color: #ffffff;
+  margin-bottom: 24px;
+  opacity: 0.7;
+}
+
+.login-popup-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.popup-btn {
+  padding: 11px 22px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.popup-btn:active {
+  transform: scale(0.97);
+}
+
+.btn-login {
+  background: #62A78A;
+  color: #ffffff;
+  text-decoration: none;
+  border-radius: 25px;
+}
+
+.btn-login:hover {
+  background: #0056b3;
+}
+
+.btn-close {
+  background: transparent;
+  color: #ffffff;
+  border-radius: 25px;
+}
+
+/* Compatibilité Mode Sombre via l'attribut data-theme */
+[data-theme="dark"] .login-popup-content {
+  background: #1e1e1e;
+  color: #ffffff;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .login-popup-content p {
+  color: #cccccc;
+}
+
+[data-theme="dark"] .btn-close {
+  background: #2d2d2d;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .btn-close:hover {
+  background: #3d3d3d;
 }
