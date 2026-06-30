@@ -14,10 +14,10 @@ permalink: /art-challenge
   <meta name="keywords" content="art challenge, défi artistique, créativité, art visuel, expérimentation artistique, thème, Perspikative">
   <meta name="robots" content="index, follow">
 
-  <meta property="og:title" content="ART Challenge | Perspikative" />
+  <meta property="og:title" content="ART Challenge" />
   <meta property="og:description" content="✏️ make art. welcome to your world" />
   <meta property="og:image" content="https://perspikative.com/preview.jpg" />
-  <meta property="og:url" content="https://perspikative.com/art-challenge/" />
+  <meta property="og:url" content="https://perspikative.com/art-challenge" />
   <meta property="og:type" content="website" />
 
   <meta name="theme-color" content="#58b3a2" media="(prefers-color-scheme: light)">
@@ -27,14 +27,15 @@ permalink: /art-challenge
   <link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: light)">
 
   <link rel="stylesheet" href="/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
 
   <script defer src="https://cloud.umami.is/script.js" data-website-id="18d7b0fd-c5fb-4b2e-a43b-10cc734daa8f"></script>
 </head>
 
 <body class="art-challenge">
 
+  <!-- ══ NAV MOBILE ══════════════════════════════════════════════════════ -->
   <nav class="mobile-nav">
     <a href="/" class="nav-icon" title="Accueil">
       <img src="/icons/accueil.svg" alt="Accueil">
@@ -53,6 +54,7 @@ permalink: /art-challenge
     </a>
   </nav>
 
+  <!-- ══ HEADER ══════════════════════════════════════════════════════════ -->
   <header>
     <div class="header-content">
       <div class="logo">
@@ -85,144 +87,152 @@ permalink: /art-challenge
 
         <input type="checkbox" id="menuToggle" />
         <label for="menuToggle" class="burger-icon" title="Menu">
-          <img id="menuIcon" src="icons/menu.svg" alt="Menu">
+          <img id="menuIcon" src="/icons/menu.svg" alt="Menu">
         </label>
-      <div class="mobile-menu">
-        <ul>
-          <li><a href="/commu">COMMUNAUTÉ</a></li>
-          <li><a href="/art-challenge">ART CHALLENGE</a></li>
-          <li><a href="/faq">FAQ</a></li>
-        </ul>
+        <div class="mobile-menu">
+          <ul>
+            <li><a href="/commu">COMMUNAUTÉ</a></li>
+            <li><a href="/art-challenge">ART CHALLENGE</a></li>
+            <li><a href="/faq">FAQ</a></li>
+          </ul>
+        </div>
       </div>
     </div>
   </header>
 
   <div class="blur-overlay"></div>
 
-  <main class="art-challenge">
-    <section class="logo-section">
-      <img src="/icons/art-challenge-logo.svg" alt="Art Challenge Logo" class="logo-animated">
-      <h1>MAKE ART. WELCOME TO YOUR WORLD.</h1>
-    </section>
+  <!-- ══ HERO ════════════════════════════════════════════════════════════ -->
+  <section class="ac-hero">
+    <span class="ac-edition-badge">Édition 2026 — Ouvert à tous</span>
+    <img src="/icons/art-challenge-logo.svg" alt="ART Challenge Logo" class="ac-logo">
+    <h1 class="ac-tagline">MAKE ART. WELCOME TO YOUR WORLD.</h1>
+    <p class="ac-hero-sub">
+      Un concours d'art visuel organisé par Perspikative. Dessin, illustration,
+      peinture, design&nbsp;— toutes les formes d'expression sont les bienvenues.
+    </p>
+    <a href="#participer" class="ac-hero-cta">
+      <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 5v14M5 12l7 7 7-7"/>
+      </svg>
+      Je participe
+    </a>
+  </section>
 
-    <section class="intro">
-      <p>Le ART Challenge est un concours organisé par Perspikative</p>
-      <p>À chaque nouvelle édition, un nouveau thème est imposé.</p>
-      <p>Que tu sois dessinateur, graphiste, peintre ou amateur créatif, ce concours est ouvert à tous !</p>
-    </section>
+  <!-- ══ CONTENU PRINCIPAL ════════════════════════════════════════════════ -->
+  <div class="ac-content">
 
-    <section class="art-challenge">
-      <div class="section-separator"></div>
+    <!-- ─ C'EST QUOI ? ───────────────────────────────────────────────────── -->
+    <div class="ac-card">
+      <p class="ac-section-label">À propos</p>
+      <h2 class="ac-section-title">C'est quoi le ART Challenge ?</h2>
+      <div class="ac-sep"></div>
+      <p class="ac-section-body">
+        Le <strong style="color:#ffffff">ART Challenge</strong> est un concours d'art visuel que j'organise
+        une à deux fois par an pour la communauté Perspikative. L'idée, c'est simple&nbsp;:
+        un thème, ta créativité, et une deadline. Tout le monde peut participer,
+        quel que soit ton niveau ou ton médium de prédilection.
+      </p>
 
-      <div class="left">
-        <h2>THÈME DU MOMENT :</h2>
-        <p>Réaliser une œuvre graphique (dessin, peinture, collage, dessin digital, graphisme)</p>
-        <p>Formats acceptés : photo uniquement (JPG, JPEG, PNG, PDF, WEBP, GIF)</p>
-        <p>Thème : aucun (thème libre)</p>
-        <p>Contraintes : aucune</p>
-        <p class="art-challenge-more">
-        Pour plus d'infos, <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" rel="noopener"> cliquez ici</a>
+      <div class="ac-what-grid">
+        <div class="ac-what-item">
+          <img src="/icons/projets.svg" alt="" class="ac-what-icon">
+          <p class="ac-what-title">Ouvert à tous les médiums</p>
+          <p class="ac-what-desc">Dessin numérique ou traditionnel, illustration, aquarelle, collage, typographie — tout est accepté.</p>
+        </div>
+        <div class="ac-what-item">
+          <img src="/icons/communaute.svg" alt="" class="ac-what-icon">
+          <p class="ac-what-title">Ouvert à tous</p>
+          <p class="ac-what-desc">Aucun niveau requis. Que tu dessines depuis 3 semaines ou 10 ans, ta place est ici.</p>
+        </div>
+        <div class="ac-what-item">
+          <img src="/icons/calendar-note-active.svg" alt="" class="ac-what-icon">
+          <p class="ac-what-title">Rythme : 1 à 2 fois par an</p>
+          <p class="ac-what-desc">Chaque édition a son propre thème, ses consignes, et ses récompenses exclusives.</p>
+        </div>
+        <div class="ac-what-item">
+          <img src="/icons/crown.svg" alt="" class="ac-what-icon">
+          <p class="ac-what-title">Mise en avant garantie</p>
+          <p class="ac-what-desc">Les œuvres participantes et les gagnants sont mis en avant sur les réseaux Perspikative.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─ CONSIGNES ──────────────────────────────────────────────────────── -->
+    <div class="ac-card" id="participer">
+      <p class="ac-section-label">Édition 2026</p>
+      <h2 class="ac-section-title">Le thème de cette édition</h2>
+
+      <div class="ac-theme-highlight">
+        <span class="ac-theme-eyebrow">Thème officiel</span>
+        <p class="ac-theme-name">« Eté »</p>
+        <p class="ac-theme-hint">
+          Un espace de transition, un personnage à la croisée des chemins, une réalité qui se dédouble…
+          Interprète-le comme tu le ressens.
         </p>
       </div>
 
-      <div class="right">
-        <p class="deadline">Date limite : 31 juillet 2026, minuit (UTC+2)</p>
-        <div class="countdown">
-          <div class="count-item">
-            <span class="label">Jours</span>
-            <div class="count-bubble" id="days">0</div>
-          </div>
-          <div class="count-item">
-            <span class="label">Heures</span>
-            <div class="count-bubble" id="hours">0</div>
-          </div>
-          <div class="count-item">
-            <span class="label">Minutes</span>
-            <div class="count-bubble" id="minutes">0</div>
-          </div>
-          <div class="count-item">
-            <span class="label">Secondes</span>
-            <div class="count-bubble" id="seconds">0</div>
-          </div>
+      <div class="ac-sep" style="margin-top: 32px;"></div>
+
+      <p class="ac-section-label" style="margin-top: 0;">Consignes</p>
+      <ul class="ac-rules-list" style="margin-top: 14px;">
+        <li>
+          <span class="ac-rule-num">1</span>
+          <span class="ac-rule-text"><strong>Une seule œuvre par participant.</strong> Elle doit être originale et créée spécialement pour cette édition du challenge.</span>
+        </li>
+        <li>
+          <span class="ac-rule-num">2</span>
+          <span class="ac-rule-text"><strong>Tous les médiums sont acceptés</strong> : numérique, traditionnel, mixte. Le format est libre (portrait, paysage, carré).</span>
+        </li>
+        <li>
+          <span class="ac-rule-num">3</span>
+          <span class="ac-rule-text"><strong>Publie ton œuvre sur Instagram</strong> avec le hashtag <strong>#ARTChallengePrspk</strong> et tague le compte <strong>@perspikative</strong>.</span>
+        </li>
+        <li>
+          <span class="ac-rule-num">4</span>
+          <span class="ac-rule-text"><strong>Ton compte doit être public</strong> au moment de la soumission pour que ton œuvre soit visible et prise en compte.</span>
+        </li>
+        <li>
+          <span class="ac-rule-num">5</span>
+          <span class="ac-rule-text"><strong>Date limite : 31 juillet 2026 à minuit (UTC+2).</strong> Les soumissions après cette date ne seront pas acceptées.</span>
+        </li>
+        <li>
+          <span class="ac-rule-num">6</span>
+          <span class="ac-rule-text">Les résultats seront annoncés <strong>durant la première semaine d'août 2026</strong> sur Instagram et sur le site Perspikative.</span>
+        </li>
+      </ul>
+
+      <p class="ac-deadline-label">Date limite de participation — 1er août 2026, minuit (UTC+2)</p>
+      <div class="ac-countdown">
+        <div class="ac-count-item">
+          <div class="ac-count-bubble" id="days">0</div>
+          <span class="ac-count-label">Jours</span>
         </div>
-      <div class="section-separator"></div>
-    </section>
-    
-    <section class="art-gallery">
-      <h2 class="art-gallery-title">GALERIE DES GAGNANTS</h2>
-      <p class="art-gallery-subtitle">
-        Les réalisations des participants des éditions précédentes
-      </p>
-
-      <div class="art-gallery-wrapper">
-        <button class="gallery-arrow left" aria-label="Précédent">‹</button>
-
-        <div class="art-gallery-track">
-          <a href="https://www.instagram.com/supernovaaa_art_" target="_blank" class="art-card">
-            <img src="/pics/art-challenge/art1.webp" alt="Dessin participant 1">
-          </a>
-          <a href="https://whatsapp.com/channel/0029Vb00P4d2ZjClbiv40f18" target="_blank" class="art-card">
-            <img src="/pics/art-challenge/art2.webp" alt="Dessin participant 2">
-          </a>
-          <a href="https://m.youtube.com/channel/UCCOgAVlXygNrYJith1yb-Hw" target="_blank" class="art-card">
-            <img src="/pics/art-challenge/art3.webp" alt="Dessin participant 3">
-          </a>
-          <a href="https://instagram.com/participant4" target="_blank" class="art-card">
-            <img src="/portfolio/creations/38.webp" alt="Dessin participant 4">
-          </a>
-          <a href="https://instagram.com/participant5" target="_blank" class="art-card">
-            <img src="/portfolio/creations/37.webp" alt="Dessin participant 5">
-          </a>
+        <div class="ac-count-item">
+          <div class="ac-count-bubble" id="hours">0</div>
+          <span class="ac-count-label">Heures</span>
         </div>
-
-        <button class="gallery-arrow right" aria-label="Suivant">›</button>
+        <div class="ac-count-item">
+          <div class="ac-count-bubble" id="minutes">0</div>
+          <span class="ac-count-label">Minutes</span>
+        </div>
+        <div class="ac-count-item">
+          <div class="ac-count-bubble" id="seconds">0</div>
+          <span class="ac-count-label">Secondes</span>
         </div>
       </div>
-    </section>
+    </div>
 
-<script>
-function updateCountdown() {
-  const deadline = new Date("July 31, 2026 00:00:00").getTime();
-  const now = new Date().getTime();
-  const distance = deadline - now;
+  </div>
+  <!-- /.ac-content -->
 
-  const days = Math.max(Math.floor(distance / (1000*60*60*24)), 0);
-  const hours = Math.max(Math.floor((distance % (1000*60*60*24)) / (1000*60*60)), 0);
-  const minutes = Math.max(Math.floor((distance % (1000*60*60)) / (1000*60)), 0);
-  const seconds = Math.max(Math.floor((distance % (1000*60)) / 1000), 0);
-
-  document.getElementById("days").innerText = days;
-  document.getElementById("hours").innerText = hours;
-  document.getElementById("minutes").innerText = minutes;
-  document.getElementById("seconds").innerText = seconds;
-}
-
-setInterval(updateCountdown, 1000);
-updateCountdown();
-</script>
-
-<script>
-  const track = document.querySelector('.art-gallery-track');
-  const leftBtn = document.querySelector('.gallery-arrow.left');
-  const rightBtn = document.querySelector('.gallery-arrow.right');
-
-  leftBtn.addEventListener('click', () => {
-    track.scrollBy({ left: -track.clientWidth, behavior: 'smooth' });
-  });
-
-  rightBtn.addEventListener('click', () => {
-    track.scrollBy({ left: track.clientWidth, behavior: 'smooth' });
-  });
-</script>
-
-  </main>
-
+  <!-- ══ FOOTER ══════════════════════════════════════════════════════════ -->
   <footer>
     <div class="social-icons">
       <a href="https://linktr.ee/perspikative" target="_blank" aria-label="Linktree">
         <img src="/icons/linktree.svg" alt="Linktree">
       </a>
-     <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" aria-label="Chaîne WhatsApp">
+      <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" aria-label="Chaîne WhatsApp">
         <img src="/icons/whatsapp-channel.svg" alt="Chaîne WhatsApp">
       </a>
       <a href="https://www.instagram.com/perspikative" target="_blank" aria-label="Instagram">
@@ -248,7 +258,24 @@ updateCountdown();
     <img src="/icons/rechercher.svg" alt="Rechercher">
   </a>
 
+  <!-- ══ SCRIPTS ══════════════════════════════════════════════════════════ -->
   <script>
+    // Compte à rebours
+    function updateCountdown() {
+      const deadline = new Date("2026-07-31T22:00:00Z").getTime();
+      const now = Date.now();
+      const dist = deadline - now;
+
+      const clamp = (n) => Math.max(n, 0);
+      document.getElementById("days").textContent    = clamp(Math.floor(dist / 864e5));
+      document.getElementById("hours").textContent   = clamp(Math.floor((dist % 864e5) / 36e5));
+      document.getElementById("minutes").textContent = clamp(Math.floor((dist % 36e5) / 6e4));
+      document.getElementById("seconds").textContent = clamp(Math.floor((dist % 6e4) / 1e3));
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    // Menu burger
     const menuToggle = document.getElementById('menuToggle');
     menuToggle.addEventListener('change', (e) => {
       document.body.classList.toggle('menu-open', e.target.checked);
