@@ -140,6 +140,7 @@ permalink: /profile
     .profile-header {
       padding: 24px 20px;
       gap: 16px;
+      border: rgba(255, 255, 255, 0);
     }
 
     .profile-pic {
@@ -165,6 +166,12 @@ permalink: /profile
     .btn-edit img {
       width: 20px;
       height: 20px;
+    }
+  }
+
+  @media screen and (max-width: 1000px) {
+    .profile-page {
+      padding: 24px 16px 260px 16px;
     }
   }
 </style>
@@ -304,8 +311,7 @@ permalink: /profile
     });
   </script>
   
-  <script type="module" src="/firebase-init.js"></script>
-  <script type="module" src="/js/profile.js"></script>
+
   
   <script src="/script.js"></script>
 
