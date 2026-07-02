@@ -62,7 +62,7 @@ Viewing client-side code through your browser does **not** grant permission to c
 
 ## 4. Fair Use
 
-Let's keep Perspikative a safe placePlease use Perspikative responsibly.
+Please use Perspikative responsibly.
 
 Do not:
 
@@ -73,21 +73,20 @@ Do not:
 
 ---
 
-## 6. Enforcement
+## 5. Enforcement
 
 Failure to follow this Code of Conduct may result in:
 
 - Removal of content
-- Temporary suspension
+- Temporary suspension of the website and/or this repository
 - Permanent account termination
 - Legal action where applicable
 
 ---
 
-## 7. Updates
+## 6. Updates
 
 This Code of Conduct may be modified at any time.
-
 Continued use of Perspikative after changes are published constitutes acceptance of the updated version.
 
 ---
