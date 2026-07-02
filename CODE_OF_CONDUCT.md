@@ -1,5 +1,3 @@
-# Contributor Covenant Code of Conduct
-
 # Code of Conduct
 
 _Last updated: July 2, 2026_
@@ -7,14 +5,13 @@ _Last updated: July 2, 2026_
 ## Welcome
 
 Welcome to **Perspikative**.
-
-Perspikative is an independent creative platform dedicated to sharing artwork, creativity, and inspiration. By accessing or using this website, you agree to respect the following rules.
+Perspikative is an independent creative platform dedicated to sharing artwork, articles and more. By accessing or using this website, you agree to respect the following rules.
 
 ---
 
 ## 1. Respect Others
 
-Everyone deserves to feel welcome.
+Perspikative has a system of comments for its artworks. Let's keep Perspikative a safe place, everyone deserves to feel welcome and respected :
 
 - Be respectful and courteous.
 - No harassment, discrimination, hate speech, threats, or bullying.
@@ -23,19 +20,7 @@ Everyone deserves to feel welcome.
 
 ---
 
-## 2. Original Content
-
-Users are expected to share only content they own or have permission to publish.
-
-You may not:
-
-- Claim someone else's work as your own.
-- Upload copyrighted material without authorization.
-- Impersonate another person.
-
----
-
-## 3. Platform Security
+## 2. Platform Security
 
 To protect Perspikative and its users, you must not:
 
@@ -47,38 +32,37 @@ To protect Perspikative and its users, you must not:
 
 ---
 
-## 4. Intellectual Property
+## 3. Intellectual Property
 
-All original content available on Perspikative—including but not limited to:
+All original content available on Perspikative — including but not limited to:
 
 - Source code
 - Website design
-- User interface
+- Drawings
 - Graphics
-- Icons
 - Animations
 - Branding
 - Logos
 - Original assets
 
-is protected by copyright and applicable intellectual property laws.
-
+are protected by copyright and applicable intellectual property laws.
 Unless you have **prior written permission** from the owner of Perspikative, you may **not**:
 
 - Copy any part of the source code.
 - Modify or redistribute the code.
 - Reuse the website's design or interface.
-- Create derivative works based on Perspikative.
+- Create derivative works based on Perspikative (unless it's a fan art and you mention Prspikative).
 - Remove copyright notices.
 - Reproduce any original visual or technical assets.
+- Use original assets and drawings for your business.
 
 Viewing client-side code through your browser does **not** grant permission to copy, reuse, modify, or redistribute it.
 
 ---
 
-## 5. Fair Use
+## 4. Fair Use
 
-Please use Perspikative responsibly.
+Let's keep Perspikative a safe placePlease use Perspikative responsibly.
 
 Do not:
 
