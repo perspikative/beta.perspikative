@@ -13,6 +13,8 @@ Older versions may no longer receive security fixes.
 | Latest   | ✅ Yes |
 | Older releases | ❌ No |
 
+Please note that this repository is the beta version of this repository and may contain mistakes and experimentaions.
+
 ---
 
 ## Reporting a Vulnerability
