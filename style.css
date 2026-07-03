@@ -3659,25 +3659,26 @@ body {
   width: 44px;
   height: 44px;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  transition: all 0.16s ease;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   background: rgba(0, 0, 0, 0.05);
   box-shadow:
     inset 0 0 9px rgba(255, 255, 255, 0.2),
-    0 4px 12px rgba(0, 0, 0, 0.14);
+    0 4px 12px rgba(0, 0, 0, 0.12);
+  will-change: transform, box-shadow;
 }
 
 .lb-btn:hover {
   transform: translateY(-1px);
   box-shadow:
     inset 0 0 10px rgba(255, 255, 255, 0.25),
-    0 6px 15px rgba(0, 0, 0, 0.15);
+    0 5px 15px rgba(0, 0, 0, 0.14);
 }
 
 .lb-btn-icon {
-  width: 23px;
-  height: 23px;
+  width: 24px;
+  height: 24px;
   display: block;
   pointer-events: none;
 }
@@ -4215,11 +4216,11 @@ body {
   font-size: 1rem;
   font-weight: 600;
   color: #ffffff;
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.04);
   border-radius: 20px;
   padding: 6px 16px;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all 0.16s ease;
   white-space: nowrap;
   box-shadow:
     inset 0 0 10px rgba(255, 255, 255, 0.2),
@@ -4227,7 +4228,7 @@ body {
 }
 
 .lb-comment-login-btn:hover {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.08);
   transform: translateY(-1px);
 }
 
