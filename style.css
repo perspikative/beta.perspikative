@@ -3863,7 +3863,10 @@ body {
 }
 
 .lightbox-arrow:disabled {
-  filter: opacity(0);
+  opacity: 1;
+  cursor: default;
+  pointer-events: none;
+  transform: translateX(0%) translateY(-50%) scale(1);
 }
 
 .lightbox-arrow img {
@@ -3908,6 +3911,7 @@ body {
   .lightbox-arrow:disabled {
     cursor: default;
     pointer-events: none;
+    transform: none;
   }
 
   .lightbox-arrow:hover {
