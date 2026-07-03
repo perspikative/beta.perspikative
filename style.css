@@ -3992,24 +3992,43 @@ body {
   opacity: 0.7;
 }
 
-/* ── Spinner de chargement ──────────────────────────────────────────────── */
+/* ── Spinner Premium (Zéro artefact, Bouts ronds & Inertie parfaite) ── */
 
 .lb-comments-loading {
   display: flex;
   justify-content: center;
-  padding: 16px 0;
+  align-items: center;
+  padding: 24px 0;
 }
 
 .lb-spinner {
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  border-top-color: rgba(255, 255, 255, 0.7);
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  animation: lb-spin 0.7s linear infinite;
+  --thickness: 4.6px; 
+  background: conic-gradient(from 0deg, transparent 26%, rgba(255, 255, 255, 1) 100%);
+  /* Masque optimisé avec anti-aliasing pour un cercle intérieur parfait */
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--thickness)), #000 calc(100% - var(--thickness) + 0.5px));
+          mask: radial-gradient(farthest-side, transparent calc(100% - var(--thickness)), #000 calc(100% - var(--thickness) + 0.5px));
+  position: relative;
+  will-change: transform;
+  animation: lb-spin 0.7s cubic-bezier(0.5, 0.12, 0.46, 0.8) infinite;
+}
+
+/* Bout arrondi parfaitement aligné */
+.lb-spinner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: calc(50% - var(--thickness) / 2);
+  width: var(--thickness);
+  height: var(--thickness);
+  background: #ffffff;
+  border-radius: 50%;
 }
 
 @keyframes lb-spin {
+  from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
@@ -4646,474 +4665,6 @@ body {
     width: 100%;
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* ============================= ACCOUNT.CSS ============================= */
-/* Page profil Perspikative — /account                                    */
-/* Suit le design system : glassmorphism, teal/cyan, Rubik, dark bg      */
-/* ======================================================================= */
-
-/* ── Fond de page ────────────────────────────────────────────────────── */
-
-.account-page {
-  background: linear-gradient(145deg, #0d1f1c 0%, #061a14 60%, #091c19 100%);
-  min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* ── Header ajustements ─────────────────────────────────────────────── */
-
-.header-inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-}
-
-.header-logo {
-  font-family: 'Rubik', sans-serif;
-  font-weight: 900;
-  font-size: 1.5rem;
-  color: #fff;
-  text-decoration: none;
-  letter-spacing: 0.5px;
-}
-
-/* ── Bouton déconnexion (header haut droite) ────────────────────────── */
-
-.account-logout-btn {
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.22s ease, transform 0.18s ease, box-shadow 0.22s ease;
-  box-shadow:
-    inset 0 0 10px rgba(255, 255, 255, 0.12),
-    0 4px 14px rgba(0, 0, 0, 0.25);
-  flex-shrink: 0;
-}
-
-.account-logout-btn:hover {
-  background: rgba(255, 255, 255, 0.16);
-  transform: scale(1.06);
-  box-shadow:
-    inset 0 0 14px rgba(255, 255, 255, 0.2),
-    0 6px 20px rgba(0, 0, 0, 0.3);
-}
-
-.account-logout-btn:active {
-  transform: scale(0.96);
-}
-
-.account-logout-icon {
-  width: 20px;
-  height: 20px;
-  filter: brightness(0) invert(1);
-  opacity: 0.85;
-}
-
-/* ── Orbes d'ambiance ───────────────────────────────────────────────── */
-
-.account-main {
-  position: relative;
-  min-height: calc(100vh - 80px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem 1.2rem 4rem;
-}
-
-.account-orb {
-  position: fixed;
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 0;
-  filter: blur(80px);
-  opacity: 0.18;
-}
-
-.account-orb--1 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, #3dcfb0, #2ca877);
-  top: -80px;
-  right: -100px;
-  animation: orbFloat1 9s ease-in-out infinite alternate;
-}
-
-.account-orb--2 {
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, #4aa9a1, #1a8c72);
-  bottom: 40px;
-  left: -80px;
-  animation: orbFloat2 12s ease-in-out infinite alternate;
-}
-
-@keyframes orbFloat1 {
-  from { transform: translate(0, 0) scale(1); }
-  to   { transform: translate(-20px, 30px) scale(1.08); }
-}
-
-@keyframes orbFloat2 {
-  from { transform: translate(0, 0) scale(1); }
-  to   { transform: translate(25px, -20px) scale(1.05); }
-}
-
-/* ── Carte profil ───────────────────────────────────────────────────── */
-
-.account-card {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  max-width: 400px;
-  background: rgba(255, 255, 255, 0.06);
-  backdrop-filter: blur(28px) saturate(160%);
-  -webkit-backdrop-filter: blur(28px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: 32px;
-  padding: 2.8rem 2.2rem 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0;
-  box-shadow:
-    inset 0 0 20px rgba(255, 255, 255, 0.07),
-    0 20px 60px rgba(0, 0, 0, 0.45),
-    0 4px 16px rgba(61, 207, 176, 0.08);
-
-  /* Entrée animée */
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.account-card--visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ── Photo de profil ────────────────────────────────────────────────── */
-
-.account-pfp-wrap {
-  position: relative;
-  margin-bottom: 1.4rem;
-}
-
-.account-pfp {
-  width: 110px;
-  height: 110px;
-  border-radius: 50%;
-  object-fit: cover;
-  display: block;
-  position: relative;
-  z-index: 1;
-  border: 2.5px solid rgba(255, 255, 255, 0.18);
-  box-shadow:
-    0 0 0 5px rgba(61, 207, 176, 0.12),
-    0 10px 32px rgba(0, 0, 0, 0.45);
-}
-
-/* Halo teal animé derrière la photo */
-.account-pfp-ring {
-  position: absolute;
-  inset: -8px;
-  border-radius: 50%;
-  background: conic-gradient(
-    from 0deg,
-    rgba(61, 207, 176, 0.55),
-    rgba(44, 168, 119, 0.25),
-    rgba(74, 169, 161, 0.55),
-    rgba(61, 207, 176, 0.55)
-  );
-  animation: ringRotate 4s linear infinite;
-  filter: blur(4px);
-  z-index: 0;
-}
-
-@keyframes ringRotate {
-  to { transform: rotate(360deg); }
-}
-
-/* ── Pseudo ─────────────────────────────────────────────────────────── */
-
-.account-pseudo {
-  font-family: 'Rubik', sans-serif;
-  font-weight: 900;
-  font-size: 1.65rem;
-  color: #fff;
-  margin: 0 0 0.2rem;
-  text-align: center;
-  letter-spacing: 0.3px;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.35);
-  /* Gradient clip text comme auth page */
-  background: linear-gradient(135deg, #ffffff 40%, #7eecd8 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ── Séparateur ─────────────────────────────────────────────────────── */
-
-.account-sep {
-  width: 48px;
-  height: 2.5px;
-  background: linear-gradient(90deg, #3dcfb0, #2ca877);
-  border-radius: 99px;
-  margin: 1rem 0 1.3rem;
-  opacity: 0.7;
-}
-
-/* ── Liste d'infos ──────────────────────────────────────────────────── */
-
-.account-info-list {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
-  margin-bottom: 2rem;
-}
-
-.account-info-row {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.09);
-  border-radius: 16px;
-  padding: 0.75rem 1.1rem;
-  box-shadow:
-    inset 0 0 10px rgba(255, 255, 255, 0.06),
-    0 3px 10px rgba(0, 0, 0, 0.2);
-}
-
-.account-info-icon {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  filter: brightness(0) invert(1);
-  opacity: 0.5;
-}
-
-.account-info-text {
-  font-family: 'Rubik', sans-serif;
-  font-weight: 300;
-  font-size: 0.92rem;
-  color: rgba(255, 255, 255, 0.78);
-  line-height: 1.3;
-}
-
-.account-info-text strong {
-  font-weight: 600;
-  color: #fff;
-}
-
-/* ── Bouton supprimer le compte ─────────────────────────────────────── */
-
-.account-delete-btn {
-  margin-top: 0.4rem;
-  font-family: 'Rubik', sans-serif;
-  font-size: 0.82rem;
-  font-weight: 400;
-  color: rgba(255, 100, 100, 0.6);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 6px 12px;
-  border-radius: 12px;
-  transition: color 0.2s ease, background 0.2s ease;
-  letter-spacing: 0.2px;
-}
-
-.account-delete-btn:hover {
-  color: rgba(255, 100, 100, 0.9);
-  background: rgba(255, 80, 80, 0.08);
-}
-
-/* ══════════════════════════════════════════════════════════════════════ */
-/* MODALES                                                                */
-/* ══════════════════════════════════════════════════════════════════════ */
-
-.account-modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.2rem;
-  background: rgba(0, 0, 0, 0);
-  backdrop-filter: blur(0px);
-  -webkit-backdrop-filter: blur(0px);
-  pointer-events: none;
-  transition: background 0.26s ease, backdrop-filter 0.26s ease;
-}
-
-.account-modal-overlay--visible {
-  background: rgba(0, 0, 0, 0.52);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  pointer-events: all;
-}
-
-.account-modal-overlay--visible .account-modal {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-}
-
-.account-modal-overlay--closing .account-modal {
-  opacity: 0;
-  transform: translateY(12px) scale(0.96);
-}
-
-.account-modal {
-  background: rgba(18, 28, 26, 0.88);
-  backdrop-filter: blur(30px) saturate(180%);
-  -webkit-backdrop-filter: blur(30px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.13);
-  border-radius: 28px;
-  padding: 2rem 1.8rem 1.6rem;
-  max-width: 320px;
-  width: 100%;
-  box-shadow:
-    inset 0 0 16px rgba(255, 255, 255, 0.06),
-    0 24px 60px rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  transform: translateY(18px) scale(0.96);
-  transition: opacity 0.26s cubic-bezier(0.22, 1, 0.36, 1),
-              transform 0.26s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.account-modal-text {
-  font-family: 'Rubik', sans-serif;
-  font-weight: 700;
-  font-size: 1.05rem;
-  color: #fff;
-  text-align: center;
-  margin: 0 0 1.4rem;
-  line-height: 1.45;
-}
-
-.account-modal-sub {
-  font-size: 0.82rem;
-  font-weight: 300;
-  color: rgba(255, 255, 255, 0.5);
-  display: block;
-  margin-top: 0.35rem;
-}
-
-.account-modal-actions {
-  display: flex;
-  gap: 0.75rem;
-  justify-content: center;
-}
-
-.account-modal-btn {
-  font-family: 'Rubik', sans-serif;
-  font-size: 0.92rem;
-  font-weight: 700;
-  border: none;
-  border-radius: 50px;
-  padding: 0.6rem 1.6rem;
-  cursor: pointer;
-  transition: transform 0.16s ease, box-shadow 0.2s ease, background 0.2s ease;
-}
-
-.account-modal-btn:hover {
-  transform: translateY(-1px);
-}
-
-.account-modal-btn:active {
-  transform: scale(0.96);
-}
-
-/* Oui (confirmer déconnexion) */
-.account-modal-btn--confirm {
-  background: linear-gradient(135deg, #3dcfb0, #2ca877);
-  color: #fff;
-  box-shadow: 0 4px 16px rgba(61, 207, 176, 0.35);
-}
-
-.account-modal-btn--confirm:hover {
-  box-shadow: 0 6px 22px rgba(61, 207, 176, 0.5);
-}
-
-/* Non / Annuler */
-.account-modal-btn--cancel {
-  background: rgba(255, 255, 255, 0.09);
-  color: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.08);
-}
-
-.account-modal-btn--cancel:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-}
-
-/* Supprimer (danger) */
-.account-modal-btn--danger {
-  background: linear-gradient(135deg, #e05555, #c03030);
-  color: #fff;
-  box-shadow: 0 4px 16px rgba(200, 50, 50, 0.35);
-}
-
-.account-modal-btn--danger:hover {
-  box-shadow: 0 6px 22px rgba(200, 50, 50, 0.5);
-}
-
-/* ══════════════════════════════════════════════════════════════════════ */
-/* MOBILE                                                                 */
-/* ══════════════════════════════════════════════════════════════════════ */
-
-@media (max-width: 480px) {
-  .account-card {
-    padding: 2.2rem 1.5rem 1.6rem;
-    border-radius: 28px;
-  }
-
-  .account-pfp {
-    width: 92px;
-    height: 92px;
-  }
-
-  .account-pseudo {
-    font-size: 1.4rem;
-  }
-
-  .account-modal {
-    border-radius: 24px;
-    padding: 1.6rem 1.4rem 1.3rem;
-  }
-}
-
-
-
-
 
 
 
@@ -5839,7 +5390,7 @@ body {
   color: #fff;
 }
 
-.visibility-content p{
+.visibility-content p {
   margin: 0;
   color: rgba(255,255,255,.72);
   font-size: 14px;
