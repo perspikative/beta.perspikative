@@ -421,6 +421,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
   const mobileNav = document.querySelector('.mobile-nav');
+  const navBlurGradient = document.querySelector('.nav-blur-gradient');
   
   // Vérifier si la barre de navigation mobile existe (seulement sur mobile)
   if (!mobileNav) return;
@@ -429,7 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
   let ticking = false;
   const scrollThreshold = 5; // Tolérance très petite pour détecter le bas exact
   
-  // Fonction pour gérer le masquage/affichage de la barre
+  // Fonction pour gérer le masquage/affichage de la barre (et du flou, en synchro)
   const handleScroll = () => {
     if (ticking) return;
     
@@ -440,13 +441,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const documentHeight = document.documentElement.scrollHeight;
       const distanceFromBottom = documentHeight - (scrollTop + windowHeight);
       
-      // Masquer la barre uniquement quand on arrive tout en bas du footer
+      // Masquer la barre + le flou uniquement quand on arrive tout en bas du footer
       if (distanceFromBottom <= scrollThreshold) {
         mobileNav.classList.add('hide');
+        if (navBlurGradient) navBlurGradient.classList.add('hide');
       } 
-      // Afficher la barre quand on remonte et qu'on n'est plus tout en bas
+      // Afficher la barre + le flou quand on remonte et qu'on n'est plus tout en bas
       else {
         mobileNav.classList.remove('hide');
+        if (navBlurGradient) navBlurGradient.classList.remove('hide');
       }
       
       lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;

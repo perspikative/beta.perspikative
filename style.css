@@ -5429,11 +5429,13 @@ body {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 0; /* juste au-dessus de la mobile-nav */
-  height: 140px;
+  bottom: 0;
+  height: 130px;
   pointer-events: none;
+  z-index: 999; /* juste sous .mobile-nav (z-index: 1000) */
   transform: rotate(180deg);
-  z-index: 998; /* sous la mobile-nav (mets sa valeur au-dessus, ex: 999) */
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .nav-blur-layer {
@@ -5443,8 +5445,6 @@ body {
   backdrop-filter: blur(var(--blur));
 }
 
-/* Chaque couche : flou croissant + bande masquée qui se chevauche
-   avec la suivante -> effet de dégradé de flou fluide */
 .nav-blur-layer--1 {
   --blur: 0.5px;
   -webkit-mask-image: linear-gradient(to top, transparent 0%, #000 12.5%, #000 25%, transparent 37.5%);
@@ -5475,10 +5475,40 @@ body {
   mask-image: linear-gradient(to top, transparent 50%, #000 62.5%, #000 100%);
 }
 
-/* Affiché uniquement sur mobile, comme ta mobile-nav */
+
+
+
+
+
+.nav-blur-layer {
+  position: absolute;
+  inset: 0;
+  -webkit-backdrop-filter: blur(var(--blur));
+  backdrop-filter: blur(var(--blur));
+  opacity: 1;
+  transition: opacity 0.4s ease;
+}
+
+/* Stagger : chaque couche apparaît un peu après la précédente */
+.nav-blur-layer--1 { transition-delay: 0s; }
+.nav-blur-layer--2 { transition-delay: 0.05s; }
+.nav-blur-layer--3 { transition-delay: 0.1s; }
+.nav-blur-layer--4 { transition-delay: 0.15s; }
+.nav-blur-layer--5 { transition-delay: 0.2s; }
+
 @media (max-width: 768px) {
   .nav-blur-gradient {
     display: block;
   }
-}
 
+  .nav-blur-gradient.hide {
+    transform: rotate(180deg) translateY(-100%);
+    opacity: 0;
+  }
+
+  /* Quand caché, toutes les couches à 0 sans délai (pour partir vite) */
+  .nav-blur-gradient.hide .nav-blur-layer {
+    opacity: 0;
+    transition-delay: 0s;
+  }
+}
