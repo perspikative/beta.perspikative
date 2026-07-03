@@ -417,7 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// ============================= 3. BARRE DE NAVIGATION MOBILE - MASQUAGE AU SCROLL =============================
+// ============================= 3. BARRE DE NAVIGATION MOBILE - RÉTRÉCISSEMENT EN BAS DE PAGE =============================
 
 document.addEventListener('DOMContentLoaded', () => {
   const mobileNav = document.querySelector('.mobile-nav');
@@ -426,11 +426,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // Vérifier si la barre de navigation mobile existe (seulement sur mobile)
   if (!mobileNav) return;
   
-  let lastScrollTop = 0;
   let ticking = false;
   const scrollThreshold = 5; // Tolérance très petite pour détecter le bas exact
   
-  // Fonction pour gérer le masquage/affichage de la barre (et du flou, en synchro)
+  // Fonction pour gérer le rétrécissement de la barre + la descente du flou
   const handleScroll = () => {
     if (ticking) return;
     
@@ -441,18 +440,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const documentHeight = document.documentElement.scrollHeight;
       const distanceFromBottom = documentHeight - (scrollTop + windowHeight);
       
-      // Masquer la barre + le flou uniquement quand on arrive tout en bas du footer
+      // Tout en bas du footer : la barre rétrécit, le flou descend
       if (distanceFromBottom <= scrollThreshold) {
-        mobileNav.classList.add('hide');
-        if (navBlurGradient) navBlurGradient.classList.add('hide');
+        mobileNav.classList.add('at-bottom');
+        if (navBlurGradient) navBlurGradient.classList.add('at-bottom');
       } 
-      // Afficher la barre + le flou quand on remonte et qu'on n'est plus tout en bas
+      // Ailleurs : la barre retrouve sa taille normale, le flou remonte
       else {
-        mobileNav.classList.remove('hide');
-        if (navBlurGradient) navBlurGradient.classList.remove('hide');
+        mobileNav.classList.remove('at-bottom');
+        if (navBlurGradient) navBlurGradient.classList.remove('at-bottom');
       }
       
-      lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
       ticking = false;
     });
   };
