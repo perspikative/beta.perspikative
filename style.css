@@ -516,7 +516,7 @@ body.menu-open .blur-overlay {
     width: 32px;
     height: 32px;
     object-fit: contain;
-    opacity: 0.8;
+    opacity: 0.74;
     transition: transform 0.2s ease, opacity 0.2s ease, filter 0.3s ease;
   }
 
