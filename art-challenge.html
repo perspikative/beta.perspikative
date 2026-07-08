@@ -343,6 +343,115 @@ permalink: /art-challenge
     }
 
     /* ================================================
+       SECTION — COMPTE À REBOURS
+    ================================================ */
+    .countdown-section {
+      background: linear-gradient(160deg, rgba(0,200,150,0.06), rgba(10,240,208,0.04));
+      border-top: 1px solid rgba(0,200,150,0.12);
+      border-bottom: 1px solid rgba(0,200,150,0.12);
+    }
+
+    .countdown-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 48px;
+    }
+
+    .countdown-text-block {
+      max-width: 540px;
+    }
+
+    .countdown-text-block p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-top: 12px;
+    }
+
+    .countdown-deadline {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent-1);
+      margin-top: 10px;
+      letter-spacing: 1px;
+    }
+
+    .countdown-blocks {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .countdown-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .countdown-num {
+      width: 110px;
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 24px;
+      font-size: 3rem;
+      font-weight: 900;
+      color: #fff;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow:
+        inset 0 0 18px rgba(0,200,150,0.12),
+        0 8px 28px rgba(0,0,0,0.3);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .countdown-num::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(0,200,150,0.1), transparent 60%);
+      pointer-events: none;
+    }
+
+    .countdown-num.pulse {
+      animation: numPulse 0.3s ease-out;
+    }
+
+    @keyframes numPulse {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    .countdown-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+
+    /* Fin de concours */
+    .countdown-ended {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--accent-2);
+      display: none;
+    }
+
+    @media (max-width: 500px) {
+      .countdown-num { width: 78px; height: 78px; font-size: 2.2rem; border-radius: 18px; }
+      .countdown-blocks { gap: 12px; }
+    }
+
+    /* ================================================
        SECTION — CONSIGNES
     ================================================ */
     .rules-section { background: transparent; }
@@ -1192,6 +1301,57 @@ permalink: /art-challenge
 
   <script>
     /* ====================================================
+       ⚙️ CONFIGURATION — MODIFIE ICI
+    ==================================================== */
+    const DEADLINE = new Date('2026-08-01T00:00:00'); // 🖊 Date limite de rendu
+
+    /* ====================================================
+       COMPTE À REBOURS
+    ==================================================== */
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function updateCountdown() {
+      const now  = new Date();
+      const diff = DEADLINE - now;
+
+      // Afficher la date limite formatée
+      document.getElementById('deadline-text').textContent =
+        'Date limite : ' + DEADLINE.toLocaleDateString('fr-FR', {
+          weekday: 'long', day: 'numeric', month: 'long', year: 'numeric',
+          hour: '2-digit', minute: '2-digit'
+        });
+
+      if (diff <= 0) {
+        document.getElementById('countdown-blocks').style.display  = 'none';
+        document.getElementById('countdown-ended').style.display   = 'block';
+        return;
+      }
+
+      const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours   = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      function setVal(id, val) {
+        const el = document.getElementById(id);
+        if (el.textContent !== String(val)) {
+          el.classList.remove('pulse');
+          void el.offsetWidth; // reflow
+          el.classList.add('pulse');
+        }
+        el.textContent = pad(val);
+      }
+
+      setVal('cd-days',    days);
+      setVal('cd-hours',   hours);
+      setVal('cd-minutes', minutes);
+      setVal('cd-seconds', seconds);
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    /* ====================================================
        ONGLETS GALERIE
     ==================================================== */
     document.querySelectorAll('.edition-tab').forEach(tab => {
@@ -1240,6 +1400,7 @@ permalink: /art-challenge
     document.getElementById('ac-lb-close').addEventListener('click', acCloseLightbox);
     lb.addEventListener('click', e => { if (e.target === lb) acCloseLightbox(); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') acCloseLightbox(); });
+
     /* ====================================================
        FOOTER : ANNÉE DYNAMIQUE
     ==================================================== */
