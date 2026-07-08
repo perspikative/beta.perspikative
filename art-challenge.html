@@ -10,15 +10,7 @@ permalink: /art-challenge
 
   <title>ART Challenge</title>
 
-  <meta name="description" content="Le ART Challenge est un concours d'art visuel organisé par Perspikative et ouvert à tous. Participe et exprime ta créativité autour de thèmes variés !" />
-  <meta name="keywords" content="art challenge, défi artistique, créativité, art visuel, expérimentation artistique, thème, Perspikative">
-  <meta name="robots" content="index, follow">
-
-  <meta property="og:title" content="ART Challenge" />
-  <meta property="og:description" content="✏️ make art. welcome to your world" />
-  <meta property="og:image" content="https://perspikative.com/preview.jpg" />
-  <meta property="og:url" content="https://perspikative.com/art-challenge" />
-  <meta property="og:type" content="website" />
+  <meta name="robots" content="noindex, follow">
 
   <meta name="theme-color" content="#58b3a2" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#344f4a" media="(prefers-color-scheme: dark)">
@@ -27,15 +19,732 @@ permalink: /art-challenge
   <link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: light)">
 
   <link rel="stylesheet" href="/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
 
   <script defer src="https://cloud.umami.is/script.js" data-website-id="18d7b0fd-c5fb-4b2e-a43b-10cc734daa8f"></script>
+
+  <style>
+    /* ================================================
+       VARIABLES & RESET
+    ================================================ */
+    :root {
+      --bg-dark:       #061a14;
+      --bg-mid:        #0d1f1c;
+      --accent-1:      #00c896;
+      --accent-2:      #0af0d0;
+      --accent-3:      #3dcfb0;
+      --accent-4:      #2ca877;
+      --glass-bg:      rgba(255, 255, 255, 0.08);
+      --glass-border:  rgba(255, 255, 255, 0.13);
+      --glass-inset:   inset 0 0 14px rgba(255, 255, 255, 0.10);
+      --shadow:        0 8px 32px rgba(0, 0, 0, 0.35);
+      --text:          #ffffff;
+      --text-muted:    rgba(255, 255, 255, 0.65);
+      --radius-card:   28px;
+      --radius-pill:   50px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Rubik', Arial, sans-serif;
+      font-weight: 300;
+      background: linear-gradient(160deg, #061a14 0%, #0d2b22 40%, #092520 70%, #061a14 100%);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ================================================
+       LAYOUT WRAPPER
+    ================================================ */
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ================================================
+       HERO
+    ================================================ */
+    .hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+      overflow: hidden;
+    }
+
+    /* Grille décorative en fond */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,200,150,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,150,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+    }
+
+    /* Halo central */
+    .hero-glow {
+      position: absolute;
+      width: 700px;
+      height: 700px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,200,150,0.14) 0%, transparent 68%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent-1);
+      margin-bottom: 22px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.1s ease-out forwards;
+    }
+
+    /* Logo placeholder — remplacer src par ton logo */
+    .hero-logo {
+      width: clamp(220px, 45vw, 500px);
+      height: auto;
+      margin: 0 auto 32px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.25s ease-out forwards;
+      /* Placeholder stylé si pas encore de logo */
+      filter: drop-shadow(0 0 30px rgba(0, 200, 150, 0.4));
+    }
+
+    /* Quand le logo n'est pas encore chargé, on affiche un titre de remplacement */
+    .hero-logo-fallback {
+      font-size: clamp(2.8rem, 9vw, 7rem);
+      font-weight: 900;
+      letter-spacing: -2px;
+      line-height: 0.95;
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.25s ease-out forwards;
+      background: linear-gradient(135deg, #fff 20%, var(--accent-2) 60%, var(--accent-1) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 24px rgba(10, 240, 208, 0.3));
+    }
+
+    .hero-logo-fallback span {
+      display: block;
+      font-size: 0.35em;
+      font-weight: 300;
+      letter-spacing: 10px;
+      text-transform: uppercase;
+      -webkit-text-fill-color: rgba(255,255,255,0.5);
+      margin-top: 6px;
+    }
+
+    .hero-tagline {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      font-weight: 300;
+      color: rgba(255,255,255,0.75);
+      max-width: 560px;
+      line-height: 1.65;
+      margin: 0 auto 40px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.4s ease-out forwards;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.55s ease-out forwards;
+    }
+
+    .btn-primary {
+      padding: 14px 32px;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      color: #061a14;
+      font-weight: 900;
+      font-size: 1rem;
+      letter-spacing: 0.3px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 6px 24px rgba(0,200,150,0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0,200,150,0.55);
+    }
+
+    .btn-secondary {
+      padding: 13px 30px;
+      border-radius: var(--radius-pill);
+      background: var(--glass-bg);
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      border: 1px solid var(--glass-border);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(8px);
+      box-shadow: var(--glass-inset);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255,255,255,0.14);
+      transform: translateY(-2px);
+    }
+
+    /* Scroll indicator */
+    .hero-scroll {
+      position: absolute;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.45;
+      animation: fadeUp 1s 1.2s ease-out forwards;
+    }
+
+    .hero-scroll span {
+      font-size: 0.7rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .hero-scroll svg {
+      width: 20px; height: 20px;
+      stroke: white; stroke-width: 2;
+      fill: none;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(6px); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ================================================
+       SECTIONS COMMUNES
+    ================================================ */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 90px 24px;
+    }
+
+    .section-inner {
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent-1);
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      background: linear-gradient(120deg, #ffffff 30%, var(--accent-2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-divider {
+      width: 56px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+      border-radius: 99px;
+      margin-bottom: 36px;
+      opacity: 0.8;
+    }
+
+    /* Glass card générique */
+    .glass-card {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-card);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: var(--glass-inset), var(--shadow);
+    }
+
+    /* ================================================
+       SECTION — C'EST QUOI ?
+    ================================================ */
+    .about-section { background: transparent; }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 12px;
+    }
+
+    .about-card {
+      padding: 32px 28px;
+      border-radius: var(--radius-card);
+    }
+
+    .about-card-icon {
+      font-size: 2.2rem;
+      margin-bottom: 14px;
+    }
+
+    .about-card h3 {
+      font-weight: 700;
+      font-size: 1.15rem;
+      margin-bottom: 10px;
+      color: #fff;
+    }
+
+    .about-card p {
+      font-size: 0.97rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    .about-intro {
+      font-size: 1.1rem;
+      line-height: 1.75;
+      color: rgba(255,255,255,0.8);
+      max-width: 680px;
+      margin-bottom: 36px;
+    }
+
+    @media (max-width: 680px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ================================================
+       SECTION — CONSIGNES
+    ================================================ */
+    .rules-section { background: transparent; }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 12px;
+    }
+
+    .rule-card {
+      padding: 28px 22px;
+      border-radius: var(--radius-card);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .rule-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--glass-inset), 0 16px 48px rgba(0,0,0,0.4);
+    }
+
+    .rule-number {
+      font-size: 2.4rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+      margin-bottom: 10px;
+    }
+
+    .rule-card h3 {
+      font-weight: 700;
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+      color: #fff;
+    }
+
+    .rule-card p {
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: var(--text-muted);
+    }
+
+    .rules-note {
+      margin-top: 28px;
+      padding: 20px 24px;
+      border-radius: 18px;
+      background: rgba(0,200,150,0.07);
+      border: 1px solid rgba(0,200,150,0.2);
+      font-size: 0.93rem;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.65;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .rules-note svg {
+      width: 20px; height: 20px;
+      stroke: var(--accent-1);
+      stroke-width: 2;
+      fill: none;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    @media (max-width: 900px) {
+      .rules-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 580px) {
+      .rules-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ================================================
+       SECTION — GALERIE GAGNANTS
+    ================================================ */
+    .gallery-section {
+      background: linear-gradient(160deg, rgba(0,200,150,0.04), rgba(10,240,208,0.02));
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* Onglets */
+    .edition-tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+
+    .edition-tab {
+      padding: 9px 22px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      color: rgba(255,255,255,0.6);
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.22s ease;
+      box-shadow: inset 0 0 6px rgba(255,255,255,0.06);
+    }
+
+    .edition-tab:hover {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+
+    .edition-tab.active {
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-4));
+      color: #061a14;
+      border-color: transparent;
+      box-shadow: 0 4px 16px rgba(0,200,150,0.4);
+    }
+
+    /* Panneaux */
+    .edition-panel { display: none; }
+    .edition-panel.active { display: block; }
+
+    .edition-meta {
+      margin-bottom: 28px;
+    }
+
+    .edition-meta h3 {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .edition-meta p {
+      font-size: 0.93rem;
+      color: var(--text-muted);
+    }
+
+    /* Grille photos */
+    .winners-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .winner-card {
+      border-radius: 22px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      aspect-ratio: 3/4;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .winner-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 48px rgba(0,0,0,0.45);
+    }
+
+    .winner-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease, filter 0.3s ease;
+    }
+
+    .winner-card:hover img {
+      transform: scale(1.05);
+      filter: brightness(0.8);
+    }
+
+    /* Overlay info */
+    .winner-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(6,26,20,0.9) 0%, rgba(6,26,20,0.3) 45%, transparent 75%);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 18px 16px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .winner-card:hover .winner-overlay { opacity: 1; }
+
+    .winner-rank {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-4));
+      color: #061a14;
+      font-weight: 900;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 99px;
+    }
+
+    .winner-name {
+      font-weight: 700;
+      font-size: 1rem;
+      color: #fff;
+      margin-bottom: 2px;
+    }
+
+    .winner-title {
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.6);
+    }
+
+    /* Placeholder pour futures éditions */
+    .placeholder-card {
+      border-radius: 22px;
+      border: 2px dashed rgba(255,255,255,0.1);
+      aspect-ratio: 3/4;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: rgba(255,255,255,0.25);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .placeholder-card svg {
+      width: 32px; height: 32px;
+      stroke: rgba(255,255,255,0.18);
+      stroke-width: 1.5;
+      fill: none;
+    }
+
+    @media (max-width: 720px) {
+      .winners-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    }
+
+    @media (max-width: 420px) {
+      .winners-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ================================================
+       LIGHTBOX GALERIE
+    ================================================ */
+    .ac-lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(6, 26, 20, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .ac-lightbox-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .ac-lightbox-inner {
+      max-width: 700px;
+      width: 100%;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+      transform: scale(0.96) translateY(12px);
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .ac-lightbox-overlay.open .ac-lightbox-inner {
+      transform: scale(1) translateY(0);
+    }
+
+    .ac-lightbox-img {
+      width: 100%;
+      max-height: 70vh;
+      object-fit: contain;
+      background: rgba(0,0,0,0.3);
+    }
+
+    .ac-lightbox-info {
+      padding: 20px 24px;
+    }
+
+    .ac-lightbox-rank-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--accent-1), var(--accent-4));
+      color: #061a14;
+      font-weight: 900;
+      font-size: 0.72rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 99px;
+      margin-bottom: 10px;
+    }
+
+    .ac-lightbox-name {
+      font-weight: 900;
+      font-size: 1.3rem;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .ac-lightbox-artwork-title {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+    }
+
+    .ac-lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .ac-lightbox-close:hover { background: rgba(255,255,255,0.2); }
+
+    .ac-lightbox-close svg {
+      width: 18px; height: 18px;
+      stroke: white;
+      stroke-width: 2.5;
+      fill: none;
+    }
+
+    /* ================================================
+       SECTION — REJOINS LE CHALLENGE
+    ================================================ */
+    .join-section { background: transparent; }
+
+    .join-card {
+      padding: 64px 48px;
+      border-radius: var(--radius-card);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .join-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0,200,150,0.08), rgba(10,240,208,0.05));
+      pointer-events: none;
+    }
+
+    .join-card h2 {
+      font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+      font-weight: 900;
+      margin-bottom: 16px;
+      background: linear-gradient(120deg, #fff 20%, var(--accent-2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .join-card p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin: 0 auto 36px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 600px) {
+      .join-card { padding: 44px 24px; }
+    }
+  </style>
 </head>
 
-<body class="art-challenge">
+<body class="mentions-body">
 
-  <!-- ══ NAV MOBILE ══════════════════════════════════════════════════════ -->
   <nav class="mobile-nav">
     <a href="/" class="nav-icon" title="Accueil">
       <img src="/icons/accueil.svg" alt="Accueil">
@@ -94,158 +803,391 @@ permalink: /art-challenge
 
         <input type="checkbox" id="menuToggle" />
         <label for="menuToggle" class="burger-icon" title="Menu">
-          <img id="menuIcon" src="/icons/menu.svg" alt="Menu">
+          <img id="menuIcon" src="icons/menu.svg" alt="Menu">
         </label>
-        <div class="mobile-menu">
-          <ul>
-            <li><a href="/commu">COMMUNAUTÉ</a></li>
-            <li><a href="/art-challenge">ART CHALLENGE</a></li>
-            <li><a href="/faq">FAQ</a></li>
-          </ul>
-        </div>
+      <div class="mobile-menu">
+        <ul>
+          <li><a href="/commu">COMMUNAUTÉ</a></li>
+          <li><a href="/art-challenge">ART CHALLENGE</a></li>
+          <li><a href="/faq">FAQ</a></li>
+        </ul>
       </div>
     </div>
   </header>
 
   <div class="blur-overlay"></div>
 
-  <!-- ══ HERO ════════════════════════════════════════════════════════════ -->
-  <section class="ac-hero">
-    <span class="ac-edition-badge">Édition 2026 — Ouvert à tous</span>
-    <img src="/icons/art-challenge-logo.svg" alt="ART Challenge Logo" class="ac-logo">
-    <h1 class="ac-tagline">MAKE ART. WELCOME TO YOUR WORLD.</h1>
-    <p class="ac-hero-sub">
-      Un concours d'art visuel organisé par Perspikative. Dessin, illustration,
-      peinture, design&nbsp;— toutes les formes d'expression sont les bienvenues.
-    </p>
-    <a href="#participer" class="ac-hero-cta">
-      <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 5v14M5 12l7 7 7-7"/>
-      </svg>
-      Je participe
-    </a>
-  </section>
+  <!-- ===================== PAGE ===================== -->
+  <div class="page-wrapper">
 
-  <!-- ══ CONTENU PRINCIPAL ════════════════════════════════════════════════ -->
-  <div class="ac-content">
+    <!-- =========== HERO =========== -->
+    <section class="hero" aria-label="Hero ART Challenge">
+      <div class="hero-glow" aria-hidden="true"></div>
 
-    <!-- ─ C'EST QUOI ? ───────────────────────────────────────────────────── -->
-    <div class="ac-card">
-      <p class="ac-section-label">À propos</p>
-      <h2 class="ac-section-title">C'est quoi le ART Challenge ?</h2>
-      <div class="ac-sep"></div>
-      <p class="ac-section-body">
-        Le <strong style="color:#ffffff">ART Challenge</strong> est un concours d'art visuel que j'organise
-        une à deux fois par an pour la communauté Perspikative. L'idée, c'est simple&nbsp;:
-        un thème, ta créativité, et une deadline. Tout le monde peut participer,
-        quel que soit ton niveau ou ton médium de prédilection.
+      <p class="hero-eyebrow">Perspikative présente</p>
+
+      <!--
+        Si tu as ton logo : remplace le bloc hero-logo-fallback par :
+        <img src="images/logo-art-challenge.png" alt="ART Challenge" class="hero-logo" />
+      -->
+      <div class="hero-logo-fallback" aria-label="ART Challenge">
+        ART<br>Challenge
+        <span>by Perspikative</span>
+      </div>
+
+      <p class="hero-tagline">
+        Un concours d'art visuel organisé pour la communauté Perspikative —
+        dessin, illustration, création numérique. À toi de jouer.
       </p>
 
-      <div class="ac-what-grid">
-        <div class="ac-what-item">
-          <img src="/icons/projets.svg" alt="" class="ac-what-icon">
-          <p class="ac-what-title">Ouvert à tous les médiums</p>
-          <p class="ac-what-desc">Dessin numérique ou traditionnel, illustration, aquarelle, collage, typographie — tout est accepté.</p>
+      <div class="hero-cta">
+        <a href="#consignes" class="btn-primary">Voir les consignes</a>
+        <a href="#galerie"   class="btn-secondary">Galerie des gagnants</a>
+      </div>
+
+      <div class="hero-scroll" aria-hidden="true">
+        <span>Découvrir</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </section>
+
+    <!-- =========== C'EST QUOI ? =========== -->
+    <section class="about-section" id="about">
+      <div class="section-inner">
+
+        <div class="reveal">
+          <p class="section-label">Le principe</p>
+          <h2 class="section-title">C'est quoi le ART Challenge ?</h2>
+          <div class="section-divider"></div>
+          <p class="about-intro">
+            Le ART Challenge, c'est mon rendez-vous créatif avec vous. 1 à 2 fois par an, je lance un thème,
+            vous sortez vos crayons, tablettes ou pinceaux — et la communauté vote pour ses œuvres préférées.
+            Simple, ouvert à tous, 100 % passion.
+          </p>
         </div>
-        <div class="ac-what-item">
-          <img src="/icons/communaute.svg" alt="" class="ac-what-icon">
-          <p class="ac-what-title">Ouvert à tous</p>
-          <p class="ac-what-desc">Aucun niveau requis. Que tu dessines depuis 3 semaines ou 10 ans, ta place est ici.</p>
+
+        <div class="about-grid reveal">
+
+          <div class="about-card glass-card">
+            <div class="about-card-icon">🎨</div>
+            <h3>Ouvert à tous</h3>
+            <p>Débutant·e ou confirmé·e, tous les styles et médiums sont les bienvenus. L'essentiel, c'est de participer et de s'amuser.</p>
+          </div>
+
+          <div class="about-card glass-card">
+            <div class="about-card-icon">🏆</div>
+            <h3>Un thème unique</h3>
+            <p>Chaque édition tourne autour d'un thème surprise dévoilé au lancement. Une contrainte créative qui pousse à se dépasser.</p>
+          </div>
+
+          <div class="about-card glass-card">
+            <div class="about-card-icon">🗳️</div>
+            <h3>Vote communautaire</h3>
+            <p>C'est la communauté Perspikative qui choisit ses coups de cœur. Les gagnants sont mis à l'honneur sur ce site.</p>
+          </div>
+
+          <div class="about-card glass-card">
+            <div class="about-card-icon">✨</div>
+            <h3>Mise en valeur</h3>
+            <p>Ton œuvre dans la galerie officielle, partagée sur les réseaux, et conservée dans les archives Perspikative pour toujours.</p>
+          </div>
+
         </div>
-        <div class="ac-what-item">
-          <img src="/icons/calendar-note-active.svg" alt="" class="ac-what-icon">
-          <p class="ac-what-title">Rythme : 1 à 2 fois par an</p>
-          <p class="ac-what-desc">Chaque édition a son propre thème, ses consignes, et ses récompenses exclusives.</p>
+      </div>
+    </section>
+
+    <!-- =========== COMPTE À REBOURS =========== -->
+    <section class="countdown-section" id="countdown">
+      <div class="section-inner">
+        <div class="countdown-wrapper">
+
+          <div class="countdown-text-block reveal">
+            <p class="section-label">Édition en cours</p>
+            <h2 class="section-title">Il te reste combien de temps ?</h2>
+            <div class="section-divider" style="margin: 0 auto 20px;"></div>
+            <p>La date limite approche. Ne procrastine pas trop — l'inspiration, ça vient souvent à la dernière minute, mais rendre sa copie en retard, ça n'arrive qu'aux autres.</p>
+            <p class="countdown-deadline" id="deadline-text">Date limite : —</p>
+          </div>
+
+          <div class="reveal">
+            <div class="countdown-blocks" id="countdown-blocks">
+              <div class="countdown-item">
+                <div class="countdown-num" id="cd-days">--</div>
+                <span class="countdown-label">Jours</span>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-num" id="cd-hours">--</div>
+                <span class="countdown-label">Heures</span>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-num" id="cd-minutes">--</div>
+                <span class="countdown-label">Minutes</span>
+              </div>
+              <div class="countdown-item">
+                <div class="countdown-num" id="cd-seconds">--</div>
+                <span class="countdown-label">Secondes</span>
+              </div>
+            </div>
+            <p class="countdown-ended" id="countdown-ended">
+              ✦ Les soumissions sont closes — rendez-vous à la prochaine édition !
+            </p>
+          </div>
+
         </div>
-        <div class="ac-what-item">
-          <img src="/icons/crown.svg" alt="" class="ac-what-icon">
-          <p class="ac-what-title">Mise en avant garantie</p>
-          <p class="ac-what-desc">Les œuvres participantes et les gagnants sont mis en avant sur les réseaux Perspikative.</p>
+      </div>
+    </section>
+
+    <!-- =========== CONSIGNES =========== -->
+    <section class="rules-section" id="consignes">
+      <div class="section-inner">
+
+        <div class="reveal">
+          <p class="section-label">Édition actuelle</p>
+          <h2 class="section-title">Les consignes</h2>
+          <div class="section-divider"></div>
         </div>
+
+        <div class="rules-grid reveal">
+
+          <div class="rule-card glass-card">
+            <div class="rule-number">01</div>
+            <h3>Le thème</h3>
+            <p>
+              <!-- 🖊 MODIFIE ICI le thème de l'édition -->
+              <strong style="color:#fff;">« Lumières nocturnes »</strong> — Illustre ce que la nuit révèle :
+              villes illuminées, ciel étoilé, ambiances sombres et contrastées. À toi d'interpréter.
+            </p>
+          </div>
+
+          <div class="rule-card glass-card">
+            <div class="rule-number">02</div>
+            <h3>Médiums acceptés</h3>
+            <p>
+              Dessin traditionnel, illustration numérique, peinture, collage, photo retouchée…
+              Tout ce qui est une œuvre visuelle personnelle et originale est accepté.
+            </p>
+          </div>
+
+          <div class="rule-card glass-card">
+            <div class="rule-number">03</div>
+            <h3>Format de rendu</h3>
+            <p>
+              Une image en bonne résolution (min. 1080px), format JPG ou PNG. Ton pseudo
+              et le titre de ton œuvre doivent accompagner l'envoi.
+            </p>
+          </div>
+
+          <div class="rule-card glass-card">
+            <div class="rule-number">04</div>
+            <h3>Comment participer</h3>
+            <p>
+              Envoie ta création par DM sur Instagram <strong style="color:#fff;">@perspikative</strong>
+              ou via le formulaire WhatsApp communautaire. Une participation par personne.
+            </p>
+          </div>
+
+          <div class="rule-card glass-card">
+            <div class="rule-number">05</div>
+            <h3>Critères d'évaluation</h3>
+            <p>
+              Originalité, respect du thème, qualité visuelle et rendu général.
+              Le vote communautaire est souverain — pas de jury fermé.
+            </p>
+          </div>
+
+          <div class="rule-card glass-card">
+            <div class="rule-number">06</div>
+            <h3>Récompenses</h3>
+            <p>
+              Les 3 premières œuvres sont intégrées à la galerie officielle Perspikative
+              et mises en avant sur les réseaux. La gloire éternelle, comme on dit.
+            </p>
+          </div>
+
+        </div>
+
+        <div class="rules-note reveal">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span>
+            En participant, tu acceptes que ton œuvre soit publiée sur le site et les réseaux Perspikative,
+            avec mention de ton pseudo. Ton œuvre reste la tienne — Perspikative ne revendique aucun droit de propriété.
+          </span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========== GALERIE GAGNANTS =========== -->
+    <section class="gallery-section" id="galerie">
+      <div class="section-inner">
+
+        <div class="reveal">
+          <p class="section-label">Archives</p>
+          <h2 class="section-title">Galerie des gagnants</h2>
+          <div class="section-divider"></div>
+        </div>
+
+        <!-- Onglets éditions -->
+        <div class="edition-tabs reveal" role="tablist" aria-label="Éditions du ART Challenge">
+          <button class="edition-tab active" role="tab" aria-selected="true"  data-panel="ed1">Édition 1</button>
+          <button class="edition-tab"        role="tab" aria-selected="false" data-panel="ed2">Édition 2</button>
+          <button class="edition-tab"        role="tab" aria-selected="false" data-panel="ed3">Édition 3 (à venir)</button>
+        </div>
+
+        <!-- ── Édition 1 ── -->
+        <div class="edition-panel active" id="ed1" role="tabpanel">
+          <div class="edition-meta">
+            <h3>Édition 1 · « Thème exemple »</h3>
+            <!-- 🖊 MODIFIE le thème et la date -->
+            <p>Thème : <strong style="color:var(--accent-1);">À compléter</strong> · Date : À compléter · Participants : --</p>
+          </div>
+          <div class="winners-grid">
+
+            <!--
+              🖊 REMPLACE les src par tes vraies images de gagnants.
+              Structure : winner-rank (1er, 2e, 3e), winner-name, winner-title.
+            -->
+
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/art1.webp','1er Prix','Pseudo du gagnant','Titre de l\'œuvre')">
+              <img src="/pics/art-challenge/art1.webp" alt="1er prix édition 1" loading="lazy" />
+              <div class="winner-overlay">
+                <p class="winner-name">Pseudo du gagnant</p>
+                <p class="winner-title">Titre de l'œuvre</p>
+              </div>
+              <span class="winner-rank">🥇 1er Prix</span>
+            </div>
+
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/art2.webp','2e Prix','Pseudo du gagnant','Titre de l\'œuvre')">
+              <img src="/pics/art-challenge/art2.webp" alt="2e prix édition 1" loading="lazy" />
+              <div class="winner-overlay">
+                <p class="winner-name">Pseudo du gagnant</p>
+                <p class="winner-title">Titre de l'œuvre</p>
+              </div>
+              <span class="winner-rank">🥈 2e Prix</span>
+            </div>
+
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/art3.webp','3e Prix','Pseudo du gagnant','Titre de l\'œuvre')">
+              <img src="/pics/art-challenge/art3.webp" alt="3e prix édition 1" loading="lazy" />
+              <div class="winner-overlay">
+                <p class="winner-name">Pseudo du gagnant</p>
+                <p class="winner-title">Titre de l'œuvre</p>
+              </div>
+              <span class="winner-rank">🥉 3e Prix</span>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ── Édition 2 ── -->
+        <div class="edition-panel" id="ed2" role="tabpanel">
+          <div class="edition-meta">
+            <h3>Édition 2 · « Thème exemple »</h3>
+            <p>Thème : <strong style="color:var(--accent-1);">À compléter</strong> · Date : À compléter · Participants : --</p>
+          </div>
+          <div class="winners-grid">
+            <div class="winner-card glass-card" onclick="acOpenLightbox('images/winner-ed2-1.jpg','1er Prix','Pseudo du gagnant','Titre de l\'œuvre')">
+              <img src="images/winner-ed2-1.jpg" alt="1er prix édition 2" loading="lazy" />
+              <div class="winner-overlay">
+                <p class="winner-name">Pseudo du gagnant</p>
+                <p class="winner-title">Titre de l'œuvre</p>
+              </div>
+              <span class="winner-rank">🥇 1er Prix</span>
+            </div>
+            <div class="winner-card glass-card" onclick="acOpenLightbox('images/winner-ed2-2.jpg','2e Prix','Pseudo du gagnant','Titre de l\'œuvre')">
+              <img src="images/winner-ed2-2.jpg" alt="2e prix édition 2" loading="lazy" />
+              <div class="winner-overlay">
+                <p class="winner-name">Pseudo du gagnant</p>
+                <p class="winner-title">Titre de l'œuvre</p>
+              </div>
+              <span class="winner-rank">🥈 2e Prix</span>
+            </div>
+            <div class="winner-card glass-card" onclick="acOpenLightbox('images/winner-ed2-3.jpg','3e Prix','Pseudo du gagnant','Titre de l\'œuvre')">
+              <img src="images/winner-ed2-3.jpg" alt="3e prix édition 2" loading="lazy" />
+              <div class="winner-overlay">
+                <p class="winner-name">Pseudo du gagnant</p>
+                <p class="winner-title">Titre de l'œuvre</p>
+              </div>
+              <span class="winner-rank">🥉 3e Prix</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Édition 3 (placeholder) ── -->
+        <div class="edition-panel" id="ed3" role="tabpanel">
+          <div class="edition-meta">
+            <h3>Édition 3 · En cours 👀</h3>
+            <p>Cette édition est en cours. Les gagnants seront affichés ici après la clôture des votes.</p>
+          </div>
+          <div class="winners-grid">
+            <div class="placeholder-card">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Bientôt
+            </div>
+            <div class="placeholder-card">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Bientôt
+            </div>
+            <div class="placeholder-card">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Bientôt
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========== REJOINS =========== -->
+    <section class="join-section" id="participer">
+      <div class="section-inner">
+        <div class="join-card glass-card reveal">
+          <h2>Prêt·e à relever le défi ?</h2>
+          <p>
+            La prochaine édition approche. Rejoins la communauté Perspikative
+            pour ne pas rater l'annonce du thème et les inscriptions.
+          </p>
+          <div class="hero-cta" style="opacity:1; animation:none;">
+            <!-- 🖊 Remplace les liens par les tiens -->
+            <a href="https://chat.whatsapp.com/TON_LIEN" target="_blank" rel="noopener" class="btn-primary">Rejoindre la communauté</a>
+            <a href="https://instagram.com/perspikative"  target="_blank" rel="noopener" class="btn-secondary">Instagram</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /.page-wrapper -->
+
+  <!-- ===================== LIGHTBOX ===================== -->
+  <div class="ac-lightbox-overlay" id="ac-lightbox" role="dialog" aria-modal="true" aria-label="Aperçu de l'œuvre">
+    <div class="ac-lightbox-inner">
+      <img class="ac-lightbox-img" id="ac-lb-img" src="" alt="" />
+      <div class="ac-lightbox-info">
+        <span class="ac-lightbox-rank-badge" id="ac-lb-rank"></span>
+        <p class="ac-lightbox-name"         id="ac-lb-name"></p>
+        <p class="ac-lightbox-artwork-title" id="ac-lb-title"></p>
       </div>
     </div>
-
-    <!-- ─ CONSIGNES ──────────────────────────────────────────────────────── -->
-    <div class="ac-card" id="participer">
-      <p class="ac-section-label">Édition 2026</p>
-      <h2 class="ac-section-title">Le thème de cette édition</h2>
-
-      <div class="ac-theme-highlight">
-        <span class="ac-theme-eyebrow">Thème officiel</span>
-        <p class="ac-theme-name">Thème libre</p>
-        <p class="ac-theme-hint">
-          Un espace de transition, un personnage à la croisée des chemins, une réalité qui se dédouble…
-          Interprète-le comme tu le ressens.
-        </p>
-      </div>
-
-      <div class="ac-sep" style="margin-top: 32px;"></div>
-
-      <p class="ac-section-label" style="margin-top: 0;">Consignes</p>
-      <ul class="ac-rules-list" style="margin-top: 14px;">
-        <li>
-          <span class="ac-rule-num">1</span>
-          <span class="ac-rule-text"><strong>Une seule œuvre par participant.</strong> Elle doit être originale et créée spécialement pour cette édition du challenge.</span>
-        </li>
-        <li>
-          <span class="ac-rule-num">2</span>
-          <span class="ac-rule-text"><strong>Tous les médiums sont acceptés</strong> : numérique, traditionnel, mixte. Le format est libre (portrait, paysage, carré).</span>
-        </li>
-        <li>
-          <span class="ac-rule-num">3</span>
-          <span class="ac-rule-text"><strong>Publie ton œuvre sur Instagram</strong> avec le hashtag <strong>#ARTChallengePrspk</strong> et tague le compte <strong>@perspikative</strong>.</span>
-        </li>
-        <li>
-          <span class="ac-rule-num">4</span>
-          <span class="ac-rule-text"><strong>Ton compte doit être public</strong> au moment de la soumission pour que ton œuvre soit visible et prise en compte.</span>
-        </li>
-        <li>
-          <span class="ac-rule-num">5</span>
-          <span class="ac-rule-text"><strong>Date limite : 31 juillet 2026 à minuit (UTC+2).</strong> Les soumissions après cette date ne seront pas acceptées.</span>
-        </li>
-        <li>
-          <span class="ac-rule-num">6</span>
-          <span class="ac-rule-text">Les résultats seront annoncés <strong>durant la première semaine d'août 2026</strong> sur Instagram et sur le site Perspikative.</span>
-        </li>
-      </ul>
-
-      <p class="ac-deadline-label">Date limite de participation — 1er août 2026, minuit (UTC+2)</p>
-      <div class="ac-countdown">
-        <div class="ac-count-item">
-          <div class="ac-count-bubble" id="days">0</div>
-          <span class="ac-count-label">Jours</span>
-        </div>
-        <div class="ac-count-item">
-          <div class="ac-count-bubble" id="hours">0</div>
-          <span class="ac-count-label">Heures</span>
-        </div>
-        <div class="ac-count-item">
-          <div class="ac-count-bubble" id="minutes">0</div>
-          <span class="ac-count-label">Minutes</span>
-        </div>
-        <div class="ac-count-item">
-          <div class="ac-count-bubble" id="seconds">0</div>
-          <span class="ac-count-label">Secondes</span>
-        </div>
-      </div>
-    </div>
-
+    <button class="ac-lightbox-close" id="ac-lb-close" aria-label="Fermer">
+      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
   </div>
-  <!-- /.ac-content -->
 
-  <!-- ══ FOOTER ══════════════════════════════════════════════════════════ -->
   <footer>
     <div class="social-icons">
       <a href="https://linktr.ee/perspikative" target="_blank" aria-label="Linktree">
         <img src="/icons/linktree.svg" alt="Linktree">
       </a>
-      <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" aria-label="Chaîne WhatsApp">
+     <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" aria-label="Chaîne WhatsApp">
         <img src="/icons/whatsapp-channel.svg" alt="Chaîne WhatsApp">
       </a>
       <a href="https://www.instagram.com/perspikative" target="_blank" aria-label="Instagram">
         <img src="/icons/instagram.svg" alt="Instagram">
       </a>
-      <a href="https://youtube.com/@perspikative" target="_blank" aria-label="YouTube">
+      <a href="https://youtube.com/@perspikative"target="_blank" aria-label="YouTube">
         <img src="/icons/youtube.svg" alt="YouTube">
       </a>
       <a href="https://www.pinterest.com/perspikative" target="_blank" aria-label="Pinterest">
@@ -253,36 +1195,70 @@ permalink: /art-challenge
       </a>
     </div>
 
-    <p>&copy; 2026 Perspikative™. Tous droits réservés.</p>
+    <p class="footer-copy">&copy; <span id="year"></span> Perspikative™. Tous droits réservés</p>
     <p><a href="/mentions-legales" class="footer-link">Mentions légales</a></p>
     <p><a href="/politique-de-confidentialite" class="footer-link">Politique de confidentialité</a></p>
     <p><a href="/help-center" class="footer-link">Centre d'aide</a></p>
     <p><a href="/position-ia" class="footer-link">Position sur l'IA</a></p>
-    <p><a href="/brand-guidelines" class="footer-link">Brand guidelines</a></p>
   </footer>
 
-  <a href="/rechercher" class="search-float-btn" title="Rechercher">
-    <img src="/icons/rechercher.svg" alt="Rechercher">
-  </a>
-
-  <!-- ══ SCRIPTS ══════════════════════════════════════════════════════════ -->
   <script>
-    // Compte à rebours
-    function updateCountdown() {
-      const deadline = new Date("2026-07-31T22:00:00Z").getTime();
-      const now = Date.now();
-      const dist = deadline - now;
+    /* ====================================================
+       ONGLETS GALERIE
+    ==================================================== */
+    document.querySelectorAll('.edition-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        // Tabs
+        document.querySelectorAll('.edition-tab').forEach(t => {
+          t.classList.remove('active');
+          t.setAttribute('aria-selected', 'false');
+        });
+        tab.classList.add('active');
+        tab.setAttribute('aria-selected', 'true');
 
-      const clamp = (n) => Math.max(n, 0);
-      document.getElementById("days").textContent    = clamp(Math.floor(dist / 864e5));
-      document.getElementById("hours").textContent   = clamp(Math.floor((dist % 864e5) / 36e5));
-      document.getElementById("minutes").textContent = clamp(Math.floor((dist % 36e5) / 6e4));
-      document.getElementById("seconds").textContent = clamp(Math.floor((dist % 6e4) / 1e3));
+        // Panels
+        const target = tab.dataset.panel;
+        document.querySelectorAll('.edition-panel').forEach(p => p.classList.remove('active'));
+        document.getElementById(target).classList.add('active');
+      });
+    });
+
+    /* ====================================================
+       LIGHTBOX
+    ==================================================== */
+    const lb      = document.getElementById('ac-lightbox');
+    const lbImg   = document.getElementById('ac-lb-img');
+    const lbRank  = document.getElementById('ac-lb-rank');
+    const lbName  = document.getElementById('ac-lb-name');
+    const lbTitle = document.getElementById('ac-lb-title');
+
+    function acOpenLightbox(src, rank, name, title) {
+      lbImg.src       = src;
+      lbImg.alt       = name + ' — ' + title;
+      lbRank.textContent  = rank;
+      lbName.textContent  = name;
+      lbTitle.textContent = title;
+      lb.classList.add('open');
+      document.body.style.overflow = 'hidden';
     }
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
 
-    // Menu burger
+    function acCloseLightbox() {
+      lb.classList.remove('open');
+      document.body.style.overflow = '';
+      // Petit délai avant de vider l'image (évite le flash)
+      setTimeout(() => { lbImg.src = ''; }, 300);
+    }
+
+    document.getElementById('ac-lb-close').addEventListener('click', acCloseLightbox);
+    lb.addEventListener('click', e => { if (e.target === lb) acCloseLightbox(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') acCloseLightbox(); });
+    /* ====================================================
+       FOOTER : ANNÉE DYNAMIQUE
+    ==================================================== */
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
     const menuToggle = document.getElementById('menuToggle');
     menuToggle.addEventListener('change', (e) => {
       document.body.classList.toggle('menu-open', e.target.checked);

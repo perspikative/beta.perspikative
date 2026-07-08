@@ -285,10 +285,7 @@ permalink: /rechercher
       "capybara": { img: "/pics/easter-eggs/capybara.webp" },
       "for sure": { img: "/pics/easter-eggs/for-sure.webp" },
       "...": { text: "... K?" },
-      "pride": { text: "Bon Pride Month !" },
-      "lgbt": { text: "Bon Pride Month !" },
-      "lgbtqia": { text: "Bon Pride Month !" },
-      "cherche": { text: "Tu cherches la recherche dans la recherche ?" },
+      "recherche": { text: "Tu cherches la recherche dans la recherche ?" },
       "/rainbow": { 
         text: "C'est la fête des couleurs !", 
         action: () => {
@@ -535,7 +532,7 @@ permalink: /rechercher
       resultsContainer.innerHTML = '';
       const cleanQuery = normalizeText(query);
       
-      const searchTerms = cleanQuery.split(/\s+/).filter(t => t.length >= 2);
+      const searchTerms = cleanQuery.split(/\s+/).filter(t => t.length >= 1);
 
       // --- UN SEUL BLOC EASTER EGGS ---
       for (let key in easterEggs) {
@@ -558,45 +555,97 @@ permalink: /rechercher
 
       if (searchTerms.length === 0) return;
 
-      let scoredResults = siteContent.map(item => {
-        let score = 0;
-        let matchedTermsCount = 0;
-        const cleanTitle = normalizeText(item.title);
-        const titleWords = cleanTitle.split(/\s+/);
-        const tags = item.tags.split(/\s+/).map(t => normalizeText(t));
+      // Tolérance de faute autorisée en fonction de la longueur du mot recherché.
+      // Plus le mot est court, moins on tolère d'écart (évite les faux positifs sur des mots courts ou du bruit).
+      function maxFuzzyDistance(len) {
+        if (len <= 2) return 0;   // pas de flou du tout sur 1-2 caractères
+        if (len <= 4) return 1;
+        if (len <= 7) return 2;
+        return Math.floor(len / 4);
+      }
 
-        searchTerms.forEach(term => {
-          let hasMatch = false;
+      // Score de correspondance d'UN terme recherché contre UN item.
+      // Renvoie 0 si aucune correspondance (le terme est alors considéré comme non trouvé).
+      function scoreTermAgainstItem(term, titleNorm, titleWords, tagsNorm, categoryNorm) {
+        const len = term.length;
 
-          // 1. Check Titre
-          if (cleanTitle.includes(term)) {
-            score += 50;
-            hasMatch = true;
-          } else {
-            // Flou sur le titre
-            titleWords.forEach(w => {
-              if (levenshtein(w, term) <= 1) { score += 20; hasMatch = true; }
-            });
-          }
+        // 1. Le titre commence exactement par le terme (le plus pertinent)
+        if (titleNorm.startsWith(term)) return 100;
 
-          // 2. Check Tags
-          tags.forEach(tag => {
-            if (tag.includes(term)) { score += 20; hasMatch = true; }
-          });
+        // 2. Un mot du titre commence par le terme
+        if (titleWords.some(w => w.startsWith(term))) return 80;
 
-          if (hasMatch) matchedTermsCount++;
-        });
-
-        if (matchedTermsCount === searchTerms.length && searchTerms.length > 1) {
-          score += 100;
+        // Pour les recherches d'1 seul caractère, on s'arrête volontairement là (préfixes uniquement),
+        // pour éviter de remonter n'importe quel résultat contenant juste cette lettre.
+        if (len === 1) {
+          if (tagsNorm.some(t => t.startsWith(term))) return 40;
+          if (categoryNorm.startsWith(term)) return 20;
+          return 0;
         }
 
-        return { ...item, score };
+        // 3. Le titre contient le terme (au milieu d'un mot)
+        if (titleNorm.includes(term)) return 60;
+
+        // 4. Un tag commence par le terme
+        if (tagsNorm.some(t => t.startsWith(term))) return 45;
+
+        // 5. Un tag contient le terme
+        if (tagsNorm.some(t => t.includes(term))) return 30;
+
+        // 6. La catégorie commence par le terme
+        if (categoryNorm.startsWith(term)) return 20;
+
+        // 7. Tolérance aux fautes de frappe (flou), seulement pour des mots de taille comparable
+        if (len >= 3) {
+          const maxDist = maxFuzzyDistance(len);
+          const candidates = titleWords.concat(tagsNorm);
+          const hasCloseMatch = candidates.some(w =>
+            w.length > 0 &&
+            Math.abs(w.length - len) <= maxDist &&
+            levenshtein(w, term) <= maxDist
+          );
+          if (hasCloseMatch) return 15;
+        }
+
+        return 0;
+      }
+
+      let scoredResults = siteContent.map(item => {
+        const titleNorm = normalizeText(item.title);
+        const titleWords = titleNorm.split(/\s+/);
+        const tagsNorm = item.tags.split(/\s+/).map(t => normalizeText(t));
+        const categoryNorm = normalizeText(item.category);
+
+        let totalScore = 0;
+        let matchedTermsCount = 0;
+
+        searchTerms.forEach(term => {
+          const termScore = scoreTermAgainstItem(term, titleNorm, titleWords, tagsNorm, categoryNorm);
+          if (termScore > 0) matchedTermsCount++;
+          totalScore += termScore;
+        });
+
+        // Exigence stricte : TOUS les mots tapés doivent trouver une correspondance.
+        // Ça évite qu'un mot très commun ("the", "de", "la"...) fasse remonter des résultats
+        // qui ne matchent pas vraiment le reste de la recherche.
+        const isValidMatch = matchedTermsCount === searchTerms.length;
+        if (!isValidMatch) return { ...item, score: 0 };
+
+        // Bonus si tous les mots d'une recherche multi-mots ont matché (cohérence globale)
+        if (searchTerms.length > 1) totalScore += 50;
+
+        // Bonus supplémentaire si le titre commence par la phrase exacte tapée
+        if (titleNorm.startsWith(cleanQuery)) totalScore += 40;
+
+        return { ...item, score: totalScore };
       });
 
       const filteredResults = scoredResults
         .filter(item => item.score > 0)
-        .sort((a, b) => b.score - a.score);
+        .sort((a, b) => {
+          if (b.score !== a.score) return b.score - a.score;
+          return a.title.localeCompare(b.title, 'fr'); // égalité de score : ordre alphabétique
+        });
 
       if (filteredResults.length === 0) {
         resultsContainer.innerHTML = `<div class="no-results-container"><div class="no-results-text">Aucun résultat pour "${rawValue}"</div></div>`;
