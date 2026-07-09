@@ -37,8 +37,8 @@ permalink: /art-challenge
       --accent-4:      #2ca877;
       --glass-bg:      rgba(255, 255, 255, 0.08);
       --glass-border:  rgba(255, 255, 255, 0.13);
-      --glass-inset:   inset 0 0 14px rgba(255, 255, 255, 0.10);
-      --shadow:        0 8px 32px rgba(0, 0, 0, 0.35);
+      --glass-inset:   inset 0 0 14px rgba(255, 255, 255, 0.2);
+      --shadow:        0 8px 28px rgba(0, 0, 0, 0.1);
       --text:          #ffffff;
       --text-muted:    rgba(255, 255, 255, 0.65);
       --radius-card:   28px;
@@ -61,90 +61,6 @@ permalink: /art-challenge
     /* ================================================
        HERO
     ================================================ */
-    .hero {
-      position: relative;
-      min-height: 92vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 80px 24px 60px;
-      overflow: hidden;
-    }
-
-    /* Grille décorative en fond */
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(rgba(0,200,150,0.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,200,150,0.06) 1px, transparent 1px);
-      background-size: 60px 60px;
-      pointer-events: none;
-    }
-
-    /* Halo central */
-    .hero-glow {
-      position: absolute;
-      width: 700px;
-      height: 700px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(0,200,150,0.14) 0%, transparent 68%);
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-    }
-
-    .hero-eyebrow {
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--accent-1);
-      margin-bottom: 22px;
-      opacity: 0;
-      animation: fadeUp 0.7s 0.1s ease-out forwards;
-    }
-
-    /* Logo placeholder — remplacer src par ton logo */
-    .hero-logo {
-      width: clamp(220px, 45vw, 500px);
-      height: auto;
-      margin: 0 auto 32px;
-      opacity: 0;
-      animation: fadeUp 0.9s 0.25s ease-out forwards;
-      /* Placeholder stylé si pas encore de logo */
-      filter: drop-shadow(0 0 30px rgba(0, 200, 150, 0.4));
-    }
-
-    /* Quand le logo n'est pas encore chargé, on affiche un titre de remplacement */
-    .hero-logo-fallback {
-      font-size: clamp(2.8rem, 9vw, 7rem);
-      font-weight: 900;
-      letter-spacing: -2px;
-      line-height: 0.95;
-      margin-bottom: 32px;
-      opacity: 0;
-      animation: fadeUp 0.9s 0.25s ease-out forwards;
-      background: linear-gradient(135deg, #fff 20%, var(--accent-2) 60%, var(--accent-1) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      filter: drop-shadow(0 0 24px rgba(10, 240, 208, 0.3));
-    }
-
-    .hero-logo-fallback span {
-      display: block;
-      font-size: 0.35em;
-      font-weight: 300;
-      letter-spacing: 10px;
-      text-transform: uppercase;
-      -webkit-text-fill-color: rgba(255,255,255,0.5);
-      margin-top: 6px;
-    }
 
     .hero-tagline {
       font-size: clamp(1rem, 2.5vw, 1.3rem);
@@ -204,38 +120,6 @@ permalink: /art-challenge
       transform: translateY(-2px);
     }
 
-    /* Scroll indicator */
-    .hero-scroll {
-      position: absolute;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      opacity: 0.45;
-      animation: fadeUp 1s 1.2s ease-out forwards;
-    }
-
-    .hero-scroll span {
-      font-size: 0.7rem;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      font-weight: 700;
-    }
-
-    .hero-scroll svg {
-      width: 20px; height: 20px;
-      stroke: white; stroke-width: 2;
-      fill: none;
-      animation: bounce 2s ease-in-out infinite;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(6px); }
-    }
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(18px); }
@@ -266,14 +150,13 @@ permalink: /art-challenge
     }
 
     .section-title {
-      font-size: clamp(2rem, 5vw, 3rem);
+      font-size: clamp(2.4rem, 5.2vw, 3.2rem);
       font-weight: 900;
-      line-height: 1.1;
-      margin-bottom: 20px;
-      background: linear-gradient(120deg, #ffffff 30%, var(--accent-2) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+      line-height: 0.9;
+      margin-bottom: 10px;
+      color: #ffffff;
       background-clip: text;
+      letter-spacing: -0.5px;
     }
 
     .section-divider {
@@ -288,7 +171,7 @@ permalink: /art-challenge
     /* Glass card générique */
     .glass-card {
       background: var(--glass-bg);
-      border: 1px solid var(--glass-border);
+      border: none;
       border-radius: var(--radius-card);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
@@ -308,7 +191,7 @@ permalink: /art-challenge
     }
 
     .about-card {
-      padding: 32px 28px;
+      padding: 28px 22px;
       border-radius: var(--radius-card);
     }
 
@@ -332,7 +215,7 @@ permalink: /art-challenge
 
     .about-intro {
       font-size: 1.1rem;
-      line-height: 1.75;
+      line-height: 1.2;
       color: rgba(255,255,255,0.8);
       max-width: 680px;
       margin-bottom: 36px;
@@ -345,12 +228,6 @@ permalink: /art-challenge
     /* ================================================
        SECTION — COMPTE À REBOURS
     ================================================ */
-    .countdown-section {
-      background: linear-gradient(160deg, rgba(0,200,150,0.06), rgba(10,240,208,0.04));
-      border-top: 1px solid rgba(0,200,150,0.12);
-      border-bottom: 1px solid rgba(0,200,150,0.12);
-    }
-
     .countdown-wrapper {
       display: flex;
       flex-direction: column;
@@ -394,7 +271,7 @@ permalink: /art-challenge
 
     .countdown-num {
       width: 110px;
-      height: 110px;
+      height: 80px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -403,10 +280,7 @@ permalink: /art-challenge
       font-weight: 900;
       color: #fff;
       background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      box-shadow:
-        inset 0 0 18px rgba(0,200,150,0.12),
-        0 8px 28px rgba(0,0,0,0.3);
+      box-shadow: inset 0 5px 14px rgba(0, 0, 0, 0.16);
       position: relative;
       overflow: hidden;
       transition: transform 0.3s ease;
@@ -532,11 +406,6 @@ permalink: /art-challenge
     /* ================================================
        SECTION — GALERIE GAGNANTS
     ================================================ */
-    .gallery-section {
-      background: linear-gradient(160deg, rgba(0,200,150,0.04), rgba(10,240,208,0.02));
-      border-top: 1px solid rgba(255,255,255,0.06);
-    }
-
     /* Onglets */
     .edition-tabs {
       display: flex;
@@ -916,36 +785,22 @@ permalink: /art-challenge
 
   <!-- ===================== PAGE ===================== -->
   <div class="page-wrapper">
-
-    <!-- =========== HERO =========== -->
-    <section class="hero" aria-label="Hero ART Challenge">
-      <div class="hero-glow" aria-hidden="true"></div>
-
-      <p class="hero-eyebrow">Perspikative présente</p>
-
-      <!--
-        Si tu as ton logo : remplace le bloc hero-logo-fallback par :
-        <img src="images/logo-art-challenge.png" alt="ART Challenge" class="hero-logo" />
-      -->
-      <div class="hero-logo-fallback" aria-label="ART Challenge">
-        ART<br>Challenge
-        <span>by Perspikative</span>
-      </div>
-
-      <p class="hero-tagline">
-        Un concours d'art visuel organisé pour la communauté Perspikative —
-        dessin, illustration, création numérique. À toi de jouer.
+    
+    <!-- ══ HERO ════════════════════════════════════════════════════════════ -->
+    <section class="ac-hero">
+      <span class="ac-edition-badge">Édition 2026 — Ouvert à tous</span>
+      <img src="/icons/art-challenge-logo.svg" alt="ART Challenge Logo" class="ac-logo">
+      <h1 class="ac-tagline">MAKE ART. WELCOME TO YOUR WORLD.</h1>
+      <p class="ac-hero-sub">
+        Un concours d'art visuel organisé par Perspikative. Dessin, illustration,
+        peinture, design&nbsp;— toutes les formes d'expression sont les bienvenues.
       </p>
-
-      <div class="hero-cta">
-        <a href="#consignes" class="btn-primary">Voir les consignes</a>
-        <a href="#galerie"   class="btn-secondary">Galerie des gagnants</a>
-      </div>
-
-      <div class="hero-scroll" aria-hidden="true">
-        <span>Découvrir</span>
-        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
+      <a href="#participer" class="ac-hero-cta">
+        <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="4.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 5v14M5 12l7 7 7-7"/>
+        </svg>
+        Je participe
+      </a>
     </section>
 
     <!-- =========== C'EST QUOI ? =========== -->
@@ -1152,7 +1007,7 @@ permalink: /art-challenge
             <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/art1.webp','1er Prix','Pseudo du gagnant','Titre de l\'œuvre')">
               <img src="/pics/art-challenge/art1.webp" alt="1er prix édition 1" loading="lazy" />
               <div class="winner-overlay">
-                <p class="winner-name">Pseudo du gagnant</p>
+                <p class="winner-name">Nova</p>
                 <p class="winner-title">Titre de l'œuvre</p>
               </div>
               <span class="winner-rank">🥇 1er Prix</span>
@@ -1161,7 +1016,7 @@ permalink: /art-challenge
             <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/art2.webp','2e Prix','Pseudo du gagnant','Titre de l\'œuvre')">
               <img src="/pics/art-challenge/art2.webp" alt="2e prix édition 1" loading="lazy" />
               <div class="winner-overlay">
-                <p class="winner-name">Pseudo du gagnant</p>
+                <p class="winner-name">froggy_queer_artist</p>
                 <p class="winner-title">Titre de l'œuvre</p>
               </div>
               <span class="winner-rank">🥈 2e Prix</span>
@@ -1170,7 +1025,7 @@ permalink: /art-challenge
             <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/art3.webp','3e Prix','Pseudo du gagnant','Titre de l\'œuvre')">
               <img src="/pics/art-challenge/art3.webp" alt="3e prix édition 1" loading="lazy" />
               <div class="winner-overlay">
-                <p class="winner-name">Pseudo du gagnant</p>
+                <p class="winner-name">Cinammon</p>
                 <p class="winner-title">Titre de l'œuvre</p>
               </div>
               <span class="winner-rank">🥉 3e Prix</span>
