@@ -289,23 +289,16 @@ permalink: /art-challenge
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 24px;
-      font-size: 3.1rem;
+      border-radius: 25px;
+      font-size: 3.24rem;
       font-weight: 900;
+      letter-spacing: -0.02em;
       color: #fff;
       background: rgba(255,255,255,0.06);
       box-shadow: inset 0 5px 14px rgba(0, 0, 0, 0.16);
       position: relative;
       overflow: hidden;
       transition: transform 0.3s ease;
-    }
-
-    .countdown-num::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(160deg, rgba(0,200,150,0.1), transparent 60%);
-      pointer-events: none;
     }
 
     .countdown-num.pulse {
@@ -484,7 +477,7 @@ permalink: /art-challenge
     }
 
     .winner-card {
-      border-radius: 22px;
+      border-radius: 25px;
       overflow: hidden;
       position: relative;
       cursor: pointer;
@@ -552,24 +545,17 @@ permalink: /art-challenge
 
     /* Placeholder pour futures éditions */
     .placeholder-card {
-      border-radius: 22px;
-      border: 2px dashed rgba(255,255,255,0.1);
+      border-radius: 25px;
+      border: 2.6px dashed rgba(255,255,255,0.14);
       aspect-ratio: 3/4;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
       color: rgba(255,255,255,0.25);
-      font-size: 0.85rem;
+      font-size: 1rem;
       font-weight: 700;
-    }
-
-    .placeholder-card svg {
-      width: 32px; height: 32px;
-      stroke: rgba(255,255,255,0.18);
-      stroke-width: 1.5;
-      fill: none;
     }
 
     @media (max-width: 720px) {
@@ -587,7 +573,7 @@ permalink: /art-challenge
       position: fixed;
       inset: 0;
       z-index: 10000;
-      background: rgba(6, 26, 20, 0.88);
+      background: rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       display: flex;
@@ -606,12 +592,11 @@ permalink: /art-challenge
 
     .ac-lightbox-inner {
       max-width: 700px;
-      width: 100%;
+      width: auto;
       border-radius: var(--radius-card);
       overflow: hidden;
       background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.12);
-      box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.4), inset 0 0 12px rgba(255, 255, 255, 0.16), 0 20px 48px rgba(0,0,0,0.45);
       transform: scale(0.96) translateY(12px);
       transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     }
@@ -658,21 +643,15 @@ permalink: /art-challenge
 
     .ac-lightbox-close {
       position: absolute;
-      top: 20px;
+      top: 25px;
       right: 20px;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.15);
+      background: none;
+      border: none;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: background 0.2s ease;
     }
-
-    .ac-lightbox-close:hover { background: rgba(255,255,255,0.2); }
 
     .ac-lightbox-close svg {
       width: 18px; height: 18px;
@@ -1114,7 +1093,7 @@ permalink: /art-challenge
           </div>
           <div class="winners-grid">
             <div class="placeholder-card">
-              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <img src="/icons/portfolio.svg" height="40" width="40" opacity="0.4" alt="" class="placeholder-icon">
               Bientôt
             </div>
             <div class="placeholder-card">
@@ -1142,7 +1121,7 @@ permalink: /art-challenge
           </p>
           <div class="hero-cta" style="opacity:1; animation:none;">
             <!-- 🖊 Remplace les liens par les tiens -->
-            <a href="https://chat.whatsapp.com/TON_LIEN" target="_blank" rel="noopener" class="btn-primary">Rejoindre la communauté</a>
+            <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" rel="noopener" class="btn-primary">Rejoindre la communauté</a>
             <a href="https://instagram.com/perspikative"  target="_blank" rel="noopener" class="btn-secondary">Instagram</a>
           </div>
         </div>
@@ -1162,7 +1141,7 @@ permalink: /art-challenge
       </div>
     </div>
     <button class="ac-lightbox-close" id="ac-lb-close" aria-label="Fermer">
-      <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <img src="/icons/fermer.svg" alt="Fermer" height="28" width="28">
     </button>
   </div>
 
