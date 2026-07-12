@@ -5483,7 +5483,7 @@ body {
 }
 
 .nav-blur-layer--5 {
-  --blur: 14px;
+  --blur: 12px;
   -webkit-mask-image: linear-gradient(to top, transparent 50%, #000 62.5%, #000 100%);
   mask-image: linear-gradient(to top, transparent 50%, #000 62.5%, #000 100%);
 }

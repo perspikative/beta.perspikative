@@ -21,7 +21,7 @@ permalink: /art-challenge
   <link rel="stylesheet" href="/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
-
+  <script defer src="/nav-liquid-glass.js"></script>
   <script defer src="https://cloud.umami.is/script.js" data-website-id="18d7b0fd-c5fb-4b2e-a43b-10cc734daa8f"></script>
 
   <style>
@@ -132,7 +132,7 @@ permalink: /art-challenge
     section {
       position: relative;
       z-index: 1;
-      padding: 90px 24px;
+      padding: 70px 24px;
     }
 
     .section-inner {
@@ -232,6 +232,26 @@ permalink: /art-challenge
       gap: 48px;
     }
 
+    /* Desktop : texte à gauche, compte à rebours à droite, jamais de retour à la ligne */
+    @media (min-width: 681px) {
+      .countdown-wrapper {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        text-align: left;
+        gap: 32px;
+        flex-wrap: nowrap;
+      }
+
+      .countdown-text-block {
+        flex: 1 1 auto;
+        min-width: 0;
+      }
+
+      .countdown-wrapper > .reveal {
+        flex: 0 0 auto;
+      }
+    }
 
     .countdown-text-block p {
       font-size: 1.05rem;
@@ -251,7 +271,7 @@ permalink: /art-challenge
     .countdown-blocks {
       display: flex;
       gap: 20px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
       justify-content: center;
     }
 
@@ -260,6 +280,7 @@ permalink: /art-challenge
       flex-direction: column;
       align-items: center;
       gap: 8px;
+      flex: 0 0 auto;
     }
 
     .countdown-num {
@@ -316,6 +337,12 @@ permalink: /art-challenge
     @media (max-width: 500px) {
       .countdown-num { width: 78px; height: 78px; font-size: 2.2rem; border-radius: 18px; }
       .countdown-blocks { gap: 12px; }
+    }
+
+    @media (max-width: 400px) {
+      .countdown-num { width: 62px; height: 66px; font-size: 1.7rem; border-radius: 14px; }
+      .countdown-blocks { gap: 8px; }
+      .countdown-label { font-size: 0.6rem; letter-spacing: 1.5px; }
     }
 
     /* ================================================

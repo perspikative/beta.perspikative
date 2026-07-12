@@ -27,7 +27,7 @@
 
   const FILTER_ID = 'nav-glass-refraction';
   const BEZEL = 13;      // largeur (px) de la zone de déformation depuis le bord — volontairement fine
-  const MAX_SHIFT = 36;  // déplacement max des pixels au bord, en px — le vrai "bombé" du verre
+  const MAX_SHIFT = 26;  // déplacement max des pixels au bord, en px — le vrai "bombé" du verre
 
   let svg, feImage, feDisplacementMap, filterEl, canvas, ctx;
   let currentWidth = 0;
@@ -152,7 +152,7 @@
 
     buildDisplacementMap(w, h);
 
-    const value = `url(#${FILTER_ID}) blur(2px) contrast(1) saturate(1.18)`;
+    const value = `url(#${FILTER_ID}) blur(2px) contrast(1.01) saturate(1.18)`;
     nav.style.backdropFilter = value;
     nav.style.webkitBackdropFilter = value;
   }
