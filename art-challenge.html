@@ -237,9 +237,9 @@ permalink: /art-challenge
       .countdown-wrapper {
         flex-direction: row;
         align-items: center;
-        justify-content: space-between;
+        justify-content: center;
         text-align: left;
-        gap: 32px;
+        gap: 50px;
         flex-wrap: nowrap;
       }
 
@@ -254,9 +254,9 @@ permalink: /art-challenge
     }
 
     .countdown-text-block p {
-      font-size: 1.05rem;
+      font-size: 1.1rem;
       color: var(--text-muted);
-      line-height: 1.7;
+      line-height: 1.6;
       margin-top: 12px;
     }
 
@@ -290,7 +290,7 @@ permalink: /art-challenge
       align-items: center;
       justify-content: center;
       border-radius: 24px;
-      font-size: 3rem;
+      font-size: 3.1rem;
       font-weight: 900;
       color: #fff;
       background: rgba(255,255,255,0.06);
@@ -319,11 +319,11 @@ permalink: /art-challenge
     }
 
     .countdown-label {
-      font-size: 0.72rem;
+      font-size: 0.74rem;
       font-weight: 700;
       letter-spacing: 3px;
       text-transform: uppercase;
-      color: rgba(255,255,255,0.45);
+      color: rgba(255,255,255,0.5);
     }
 
     /* Fin de concours */
@@ -340,9 +340,9 @@ permalink: /art-challenge
     }
 
     @media (max-width: 400px) {
-      .countdown-num { width: 62px; height: 66px; font-size: 1.7rem; border-radius: 14px; }
-      .countdown-blocks { gap: 8px; }
-      .countdown-label { font-size: 0.6rem; letter-spacing: 1.5px; }
+      .countdown-num { width: 72px; height: 72px; padding: 0; font-size: 2.1rem; border-radius: 18px; }
+      .countdown-blocks { gap: 10px; }
+      .countdown-label { font-size: 0.7rem; letter-spacing: 1px; }
     }
 
     /* ================================================
@@ -957,8 +957,8 @@ permalink: /art-challenge
         <div class="countdown-wrapper">
 
           <div class="countdown-text-block reveal">
-            <h2 class="section-title">Il te reste combien de temps ?</h2>
-            <p>La date limite approche. Ne procrastine pas trop — l'inspiration, ça vient souvent à la dernière minute, mais rendre sa copie en retard, ça n'arrive qu'aux autres.</p>
+            <h2 class="section-title">Il te reste<br>combien<br>de temps ?</h2>
+            <p>Tu as encore du temps, mais ne procrastine pas trop !</p>
             <p class="countdown-deadline" id="deadline-text">Date limite : —</p>
           </div>
 
@@ -1000,9 +1000,10 @@ permalink: /art-challenge
 
         <!-- Onglets éditions -->
         <div class="edition-tabs reveal" role="tablist" aria-label="Éditions du ART Challenge">
-          <button class="edition-tab active" role="tab" aria-selected="true"  data-panel="ed1">Édition 1</button>
-          <button class="edition-tab"        role="tab" aria-selected="false" data-panel="ed2">Édition 2</button>
-          <button class="edition-tab"        role="tab" aria-selected="false" data-panel="ed3">Édition 3 (à venir)</button>
+          <button class="edition-tab active" role="tab" aria-selected="true"  data-panel="ed1">1ère édition</button>
+          <button class="edition-tab"        role="tab" aria-selected="false" data-panel="ed2">2ème édition</button>
+          <button class="edition-tab"        role="tab" aria-selected="false" data-panel="ed3">3ème édition</button>
+          <button class="edition-tab"        role="tab" aria-selected="false" data-panel="ed4">4ème édition (à venir)</button>
         </div>
 
         <!-- ── Édition 1 ── -->
@@ -1087,6 +1088,28 @@ permalink: /art-challenge
         <div class="edition-panel" id="ed3" role="tabpanel">
           <div class="edition-meta">
             <h3>Édition 3 · En cours 👀</h3>
+            <p>Cette édition est en cours. Les gagnants seront affichés ici après la clôture des votes.</p>
+          </div>
+          <div class="winners-grid">
+            <div class="placeholder-card">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Bientôt
+            </div>
+            <div class="placeholder-card">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Bientôt
+            </div>
+            <div class="placeholder-card">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Bientôt
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Édition 4 (placeholder) ── -->
+        <div class="edition-panel" id="ed4" role="tabpanel">
+          <div class="edition-meta">
+            <h3>4ème édition  · En cours </h3>
             <p>Cette édition est en cours. Les gagnants seront affichés ici après la clôture des votes.</p>
           </div>
           <div class="winners-grid">
