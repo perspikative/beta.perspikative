@@ -22,7 +22,7 @@ permalink: /rechercher
 
   <link rel="stylesheet" href="/style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
-
+  <script defer src="/nav-liquid-glass.js"></script>
   <script defer src="https://cloud.umami.is/script.js" data-website-id="18d7b0fd-c5fb-4b2e-a43b-10cc734daa8f"></script>
   
   <style>
@@ -264,6 +264,10 @@ permalink: /rechercher
       "merde": { text: "Et merde alors" },
       "perspikative": { img: "/logo.svg", text: "T'y es déjà canaille" },
       "bonjour": { text: "Heyy!" },
+      "coucou": { text: "Coucou toi" },
+      "cv": { text: "Je vais bien, merci :)" },
+      "cv?": { text: "Je vais bien, merci :)" },
+      "cv ?": { text: "Je vais bien, merci :)" },
       "secret": { text: "Perspikative regorge de secrets..." },
       "tout": { text: "Ta recherche est un peu vaste, non ?" },
       "hack": { text: "Bien essayé, farfadet." },
@@ -273,11 +277,11 @@ permalink: /rechercher
       "perdu": { text: "Tu vas t'en sortir :)" },
       "help": { text: "Besoin d'aide ? Tu n'es pas seul. Parle à une personne de confiance." },
       "aide": { text: "Besoin d'aide ? Tu n'es pas seul. Parle à une personne de confiance." },
-      "fuck": { text: "Hep hep hep pas de grossiereté ici" },
-      "tg": { text: "Hep hep hep pas de grossiereté ici" },
-      "putain": { text: "Hep hep hep pas de grossiereté ici" },
-      "ptn": { text: "Hep hep hep pas de grossiereté ici" },
-      "ta gueule": { text: "Hep hep hep pas de grossiereté ici" },
+      "fuck": { text: "Hep hep hep, pas de grossiereté ici" },
+      "tg": { text: "Hep hep hep, pas de grossiereté ici" },
+      "putain": { text: "Hep hep hep, pas de grossiereté ici" },
+      "ptn": { text: "Hep hep hep, pas de grossiereté ici" },
+      "ta gueule": { text: "Hep hep hep, pas de grossiereté ici" },
       "donald trump": { img: "/pics/easter-eggs/trump.webp" },
       "trump": { img: "/pics/easter-eggs/trump.webp" },
       "ice out": { img: "/pics/easter-eggs/ice-out.webp" },
@@ -286,8 +290,9 @@ permalink: /rechercher
       "for sure": { img: "/pics/easter-eggs/for-sure.webp" },
       "...": { text: "... K?" },
       "recherche": { text: "Tu cherches la recherche dans la recherche ?" },
+      "tartineske": { text: "C'est bien moi, on m'appelle?" },
       "/rainbow": { 
-        text: "C'est la fête des couleurs !", 
+        text: "C'est la fête écoutez", 
         action: () => {
           document.body.style.animation = "rainbow-bg 5s infinite";
           const style = document.createElement('style');
@@ -296,7 +301,7 @@ permalink: /rechercher
         }
       },
       "/draw": {
-            text: "À toi de dessiner !",
+            text: "À toi de dessiner!",
             action: () => {
                   if (document.getElementById('doodle-svg')) return;
                   const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -344,7 +349,7 @@ permalink: /rechercher
             }
       },
       "/reset": { 
-        text: "Retour à la normale...", 
+        text: "Retour à la normale :)", 
         action: () => {
             document.body.style.filter = "";
             document.body.style.animation = "";
