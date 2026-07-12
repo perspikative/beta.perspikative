@@ -199,6 +199,21 @@ permalink: /art-challenge
       font-size: 2.2rem;
       margin-bottom: 14px;
     }
+    
+    .about-card-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 12px; /* ajuste selon l'espacement que tu avais avec l'emoji */
+    }
+
+    .about-icon-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
 
     .about-card h3 {
       font-weight: 700;
@@ -803,7 +818,6 @@ permalink: /art-challenge
       </a>
     </section>
 
-    <!-- =========== C'EST QUOI ? =========== -->
     <section class="about-section" id="about">
       <div class="section-inner">
 
@@ -821,25 +835,33 @@ permalink: /art-challenge
         <div class="about-grid reveal">
 
           <div class="about-card glass-card">
-            <div class="about-card-icon">🎨</div>
+            <div class="about-card-icon">
+              <img src="/icons/projets.svg" alt="" class="about-icon-img">
+            </div>
             <h3>Ouvert à tous</h3>
             <p>Débutant·e ou confirmé·e, tous les styles et médiums sont les bienvenus. L'essentiel, c'est de participer et de s'amuser.</p>
           </div>
 
           <div class="about-card glass-card">
-            <div class="about-card-icon">🏆</div>
+            <div class="about-card-icon">
+              <img src="/icons/art-challenge.svg" alt="" class="about-icon-img">
+            </div>
             <h3>Un thème unique</h3>
             <p>Chaque édition tourne autour d'un thème surprise dévoilé au lancement. Une contrainte créative qui pousse à se dépasser.</p>
           </div>
 
           <div class="about-card glass-card">
-            <div class="about-card-icon">🗳️</div>
+            <div class="about-card-icon">
+              <img src="/icons/vote.svg" alt="" class="about-icon-img">
+            </div>
             <h3>Vote communautaire</h3>
             <p>C'est la communauté Perspikative qui choisit ses coups de cœur. Les gagnants sont mis à l'honneur sur ce site.</p>
           </div>
 
           <div class="about-card glass-card">
-            <div class="about-card-icon">✨</div>
+            <div class="about-card-icon">
+              <img src="/icons/bookmark-star.svg" alt="" class="about-icon-img">
+            </div>
             <h3>Mise en valeur</h3>
             <p>Ton œuvre dans la galerie officielle, partagée sur les réseaux, et conservée dans les archives Perspikative pour toujours.</p>
           </div>
@@ -906,7 +928,7 @@ permalink: /art-challenge
             <h3>Le thème</h3>
             <p>
               <!-- 🖊 MODIFIE ICI le thème de l'édition -->
-              <strong style="color:#fff;">« Lumières nocturnes »</strong> — Illustre ce que la nuit révèle :
+              <strong style="color:#ffffff;">« Lumières nocturnes »</strong> — Illustre ce que la nuit révèle :
               villes illuminées, ciel étoilé, ambiances sombres et contrastées. À toi d'interpréter.
             </p>
           </div>
@@ -933,7 +955,7 @@ permalink: /art-challenge
             <div class="rule-number">04</div>
             <h3>Comment participer</h3>
             <p>
-              Envoie ta création par DM sur Instagram <strong style="color:#fff;">@perspikative</strong>
+              Envoie ta création par DM sur Instagram <strong style="color:#ffffff;">@perspikative</strong>
               ou via le formulaire WhatsApp communautaire. Une participation par personne.
             </p>
           </div>
