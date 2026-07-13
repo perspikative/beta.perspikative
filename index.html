@@ -51,13 +51,13 @@ permalink: /
   <script defer src="https://cloud.umami.is/script.js" data-website-id="18d7b0fd-c5fb-4b2e-a43b-10cc734daa8f"></script>
 </head>
 
-<body class="home">
+<body class="home is-loading">
 
   <!-- ===== SITE LOADER ===== -->
   <div id="site-loader">
     <div class="loader-content">
       <img src="/logo.svg" alt="Perspikative" class="loader-logo">
-      <div class="loader-bar"></div>
+      <div class="loader-spinner"></div>
     </div>
     <div class="loader-footer">by Tartineske</div>
   </div>
@@ -243,12 +243,11 @@ permalink: /
 
   <!-- Loader JS -->
   <script>
-    window.addEventListener("load", () => {
+    setTimeout(() => {
       const loader = document.getElementById("site-loader");
-      setTimeout(() => {
-        loader.classList.add("hide");
-      }, 700);
-    });
+      loader.classList.add("hide");
+      document.body.classList.remove("is-loading");
+    }, 4000);
   </script>
   
   <script>

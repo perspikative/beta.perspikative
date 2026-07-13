@@ -199,15 +199,13 @@ header h1 {
 }
 
 .nav-tabs .tab {
-  padding: 7.5px 15.5px;
+  padding: 8.6px 15.5px;
   border-radius: 25px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(5px) saturate(180%);
-  -webkit-backdrop-filter: blur(5px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
   font-weight: 700;
-  transition: all 0.23s ease;
+  transition: all 0.2s ease;
   text-decoration: none;
   box-shadow:
     0 6px 14px rgba(0, 0, 0, 0.05),
@@ -230,7 +228,7 @@ header h1 {
   color: #ffffff;
   box-shadow: none;
   transform: translateY(0px);
-  border-color: none;
+  border: 1.4px solid rgba(255, 255, 255, 0.1);
 }
 
 .nav-right {
@@ -3084,9 +3082,9 @@ html[data-theme="dark"] {
 /* conteneur fixe pour l'icône */
 .nav-tabs .tab-icon {
   display: inline-block;
-  width: 23px;   /* largeur fixe du conteneur */
-  height: 23px;  /* hauteur fixe du conteneur */
-  transform: scale(1.22); /* agrandit sans affecter le gap */
+  width: 23px;
+  height: 23px;
+  transform: scale(1.22);
 }
 
 
@@ -3161,6 +3159,12 @@ html[data-theme="dark"] {
 
 /* =============================== PERSPIKATIVE — SITE LOADER =============================== */
 
+body.is-loading {
+  overflow: hidden;
+  height: 100%;
+  touch-action: none;
+}
+
 #site-loader {
   position: fixed;
   inset: 0;
@@ -3195,18 +3199,30 @@ html[data-theme="dark"] {
   width: 115px;
 }
 
-.loader-bar {
-  width: 160px;
-  height: 4px;
-  border-radius: 99px;
-  background: linear-gradient(
-    90deg,
-    rgba(255,255,255,0.15),
-    rgba(255,255,255,0.9),
-    rgba(255,255,255,0.15)
-  );
-  background-size: 200% 100%;
-  animation: loaderBar 1.4s linear infinite;
+.loader-spinner {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  --thickness: 4.6px;
+  background: conic-gradient(from 0deg, transparent 26%, rgba(255, 255, 255, 1) 100%);
+  /* Masque optimisé avec anti-aliasing pour un cercle intérieur parfait */
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--thickness)), #000 calc(100% - var(--thickness) + 0.5px));
+          mask: radial-gradient(farthest-side, transparent calc(100% - var(--thickness)), #000 calc(100% - var(--thickness) + 0.5px));
+  position: relative;
+  will-change: transform;
+  animation: lb-spin 0.7s cubic-bezier(0.5, 0.12, 0.46, 0.8) infinite;
+}
+
+/* Bout arrondi parfaitement aligné */
+.loader-spinner::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: calc(50% - var(--thickness) / 2);
+  width: var(--thickness);
+  height: var(--thickness);
+  background: #ffffff;
+  border-radius: 50%;
 }
 
 .loader-footer {
@@ -3232,10 +3248,7 @@ html[data-theme="dark"] {
   }
 }
 
-@keyframes loaderBar {
-  0% { background-position: 0% 0; }
-  100% { background-position: 200% 0; }
-}
+/* Note : @keyframes lb-spin est déjà défini plus bas (section commentaires lightbox) et réutilisé ici */
 
 /* Mobile */
 
@@ -3244,8 +3257,9 @@ html[data-theme="dark"] {
     width: 90px;
   }
 
-  .loader-bar {
-    width: 130px;
+  .loader-spinner {
+    width: 26px;
+    height: 26px;
   }
 }
 
