@@ -1390,7 +1390,7 @@ main.creations h2 {
   }
 
   .lightbox-right p {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
   }
 
   .lightbox-close {
@@ -4011,9 +4011,9 @@ body {
 .lb-comments-title {
   font-family: 'Rubik', sans-serif;
   font-weight: 700;
-  font-size: 1.08rem;
+  font-size: 1.2rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.06em;
   color: #ffffff;
   opacity: 0.7;
 }
@@ -4214,17 +4214,15 @@ body {
 .lb-comments-empty {
   font-family: 'Rubik', sans-serif;
   font-weight: 300;
-  font-size: 0.84rem;
+  font-size: 0.95rem;
   color: rgba(255,255,255,0.35);
   text-align: center;
   padding: 10px 0 4px;
 }
 
 /* ── Zone de saisie ─────────────────────────────────────────────────────── */
-
 .lb-comment-form {
-  border-top: 1px solid rgba(255,255,255,0.07);
-  padding-top: 10px;
+  padding: 16px;
 }
 
 .lb-comment-guest {
@@ -4349,7 +4347,22 @@ body {
   .lb-comments-list {
     max-height: 320px;
   }
+
+  .lb-comment-form {
+    padding: 0;
+    margin-top: 14px;
+    margin-bottom: 18px;
+  }
+
+  .lb-comment-guest p {
+    align-self: center;
+    margin-top: 12px;
+  }
   
+  .lb-comment-login-btn {
+    align-self: center;
+  }
+
   .lb-comment-input-inner {
     width: 100%;
   }
@@ -4608,14 +4621,13 @@ body {
 
 .lb-comments {
   width: 100%;
-  margin-top: 0;                   /* le gap du flex parent gère l'espacement */
-  border-top: 1px solid rgba(255, 255, 255, 0.10);
+  margin-top: 2px;
+  border-top: 3px solid rgba(255, 255, 255, 0.1);
   padding-top: 14px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   box-sizing: border-box;
-  margin-bottom: 16px;
 }
 
 
