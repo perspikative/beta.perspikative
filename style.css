@@ -1116,66 +1116,59 @@ main.creations h2 {
 
 
 
-/* --------- Layout responsive --------- */
+/* --------- Grille dynamique Masonry --------- */
+/* 🆕 Remplace l'ancien système .layout-3colonnes / .layout-2colonnes à colonnes
+   fixes et pré-calculées à la main. Une seule grille désormais : le nombre de
+   colonnes est piloté ici, en CSS, via .grid-sizer / .grid-item, et Masonry.js
+   (voir script.js) recale dynamiquement la position de chaque vignette. */
 
-.layout-3colonnes {
-  display: flex !important;
+.creations-grid {
+  position: relative;
+  margin: 2rem 0;
 }
-.layout-2colonnes {
-  display: none !important;
+
+.grid-sizer,
+.grid-item {
+  width: 33.333%; /* 3 colonnes par défaut (desktop) */
+  box-sizing: border-box;
+}
+
+.grid-item {
+  padding: 8px; /* espace entre vignettes (8px + 8px = 1rem, comme avant) */
 }
 
 @media (max-width: 1024px) {
-  .layout-3colonnes {
-    display: none !important;
-  }
-  .layout-2colonnes {
-    display: flex !important;
+  .grid-sizer,
+  .grid-item {
+    width: 50%; /* 2 colonnes */
   }
 }
 
 @media (max-width: 300px) {
-  .layout-2colonnes {
-    flex-direction: column;
+  .grid-sizer,
+  .grid-item {
+    width: 100%; /* 1 colonne */
   }
-  .layout-2colonnes .col {
-    width: 100%;
-  }
-}
-
-
-
-/* ===================== VERSION MOBILE LÉGÈRE ===================== */
-@media (max-width: 300px) { /* plus réaliste pour mobile */
-  /* Layout principal */
-  .layout-3colonnes {
-    display: none !important;
-    margin: none !important;
-  }
-  .layout-2colonnes {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0.5rem !important; /* espace réduit entre les colonnes */
-    margin: none !important;
-  }
-
-  /* Colonnes */
-  .layout-2colonnes .col {
-    width: 100% !important;
-    gap: 0.5rem !important;
-    margin: none !important;
-  }
-
-  /* Images */
-  .layout img {
-    width: 100% !important;
-    height: auto !important;
-    border-radius: 6px !important;
-    object-fit: cover !important;
-    margin: none !important;
+  .grid-item {
+    padding: 4px 0; /* espace réduit, comme l'ancien gap: 0.5rem mobile */
   }
 }
 
+/* Images */
+.creations-grid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  object-fit: cover;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  cursor: pointer;
+}
+
+/* Effet au survol */
+.creations-grid img:hover {
+  box-shadow: 0 10px 16px rgba(0,0,0,0.25);
+}
 
 @media (max-width: 480px) {
   main {
@@ -1188,55 +1181,17 @@ main.creations h2 {
     padding-right: 0rem !important;
   }
 
-  .layout-2colonnes {
-    gap: 0.5rem !important;
-  }
-
-  .layout-2colonnes img {
+  .creations-grid img {
     border-radius: 6px !important;
   }
 }
 
 @media (max-width: 480px) {
   main.creations,
-  main.creations .layout-2colonnes,
-  main.creations .layout-3colonnes {
+  main.creations .creations-grid {
     padding-left: 8px !important;
     padding-right: 8px !important;
   }
-}
-
-
-
-/* --------- Layout style --------- */
-
-.layout {
-  display: flex;
-  gap: 1rem; /* espace entre colonnes */
-  margin: 2rem 0;
-}
-
-/* Chaque colonne */
-.layout .col {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem; /* espace entre images */
-  flex: 1;
-}
-
-/* Images */
-.layout img {
-  width: 100%; /* s'adapte à la colonne */
-  height: auto;
-  border-radius: 12px;
-  object-fit: cover;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  cursor: pointer;
-}
-
-/* Effet au survol */
-.layout img:hover {
-  box-shadow: 0 10px 16px rgba(0,0,0,0.25);
 }
 
 

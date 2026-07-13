@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Index de navigation : trié par numéro de fichier (1.webp → 45.webp) ──
   function getNavItems() {
-    const items = Array.from(document.querySelectorAll('.layout-3colonnes .prspk-thumb'));
+    const items = Array.from(document.querySelectorAll('.creations-grid .prspk-thumb'));
     return items.sort((a, b) => {
       const numA = parseInt(a.getAttribute('src').match(/(\d+)\.webp/)?.[1] ?? '0', 10);
       const numB = parseInt(b.getAttribute('src').match(/(\d+)\.webp/)?.[1] ?? '0', 10);
@@ -220,26 +220,11 @@ document.addEventListener('DOMContentLoaded', () => {
     setTimeout(function() { toast.classList.remove('visible'); }, 2500);
   }
 
-  // ── Résolution de la source : image desktop correspondante ───────────────
+  // ── Résolution de la source ────────────────────────────────────────────
+  // 🆕 Une seule grille désormais : chaque image porte déjà toutes ses
+  // métadonnées, plus besoin d'aller chercher une version "desktop" ailleurs.
   function resolveSource(img) {
-    if (img.dataset.title) return img;
-
-    if (img.id) {
-      var desktop = document.querySelector(
-        '.layout-3colonnes .prspk-thumb#' + CSS.escape(img.id)
-      );
-      if (desktop) return desktop;
-    }
-
-    var srcPath = img.getAttribute('src');
-    if (srcPath) {
-      var match = document.querySelector(
-        '.layout-3colonnes .prspk-thumb[src="' + srcPath + '"]'
-      );
-      if (match) return match;
-    }
-
-    return null;
+    return img.dataset.title ? img : null;
   }
 
   // ── Transition au changement de lightbox ────────────────────────────────
@@ -317,9 +302,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Écoute les clics sur toutes les images des deux layouts
+  // Écoute les clics sur toutes les images de la grille
   document.querySelectorAll(
-    '.layout-3colonnes img, .layout-2colonnes img'
+    '.creations-grid .prspk-thumb'
   ).forEach(function(img) {
     img.addEventListener('click', function() {
       openLightbox(img);
@@ -330,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
   var hash = window.location.hash.substring(1);
   if (hash) {
     var targetImg = document.querySelector(
-      '.layout-3colonnes .prspk-thumb#' + CSS.escape(hash)
+      '.creations-grid .prspk-thumb#' + CSS.escape(hash)
     );
     if (targetImg) openLightbox(targetImg);
   }
@@ -413,6 +398,55 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.key === 'ArrowLeft')   navigateLightbox(-1);
     if (e.key === 'ArrowRight')  navigateLightbox(1);
   });
+});
+
+
+
+// ============================= 2 BIS. GRILLE DYNAMIQUE MASONRY (CRÉATIONS) =============================
+// 🆕 Remplace l'ancien système de colonnes fixes (.layout-3colonnes / .layout-2colonnes).
+// Une seule grille (.creations-grid), qui se recale automatiquement selon la largeur
+// d'écran (le nombre de colonnes est piloté en CSS via .grid-sizer). Masonry ne fait
+// que positionner les .grid-item ; il ne touche jamais aux <img> ni à leurs data-*,
+// donc la lightbox (section 2 ci-dessus) continue de fonctionner à l'identique.
+
+document.addEventListener('DOMContentLoaded', () => {
+  const grid = document.querySelector('.creations-grid');
+  if (!grid || typeof Masonry === 'undefined') return;
+
+  const msnry = new Masonry(grid, {
+    itemSelector: '.grid-item',
+    columnWidth: '.grid-sizer',
+    percentPosition: true
+  });
+
+  // Recalcule le agencement au fur et à mesure que les images se chargent,
+  // pour éviter que des vignettes ne se chevauchent le temps du chargement.
+  if (typeof imagesLoaded !== 'undefined') {
+    imagesLoaded(grid).on('progress', () => msnry.layout());
+  }
+
+  // Recalcule au redimensionnement (changement de colonnes via les media queries)
+  let resizeTimeout;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => msnry.layout(), 150);
+  });
+
+  // ── Filtre par couleur (prêt pour plus tard) ──────────────────────────────
+  // Chaque <img> porte désormais un data-colors="orange,bleu,..." extrait
+  // automatiquement de sa description. Exemple d'utilisation future :
+  //   filterCreationsByColor('bleu');   // n'affiche que les dessins "bleu"
+  //   filterCreationsByColor(null);     // réaffiche tout
+  window.filterCreationsByColor = function(color) {
+    const items = grid.querySelectorAll('.grid-item');
+    items.forEach(item => {
+      const img = item.querySelector('.prspk-thumb');
+      const colors = (img && img.dataset.colors) || '';
+      const match = !color || colors.split(',').includes(color.toLowerCase());
+      item.style.display = match ? '' : 'none';
+    });
+    msnry.layout();
+  };
 });
 
 
@@ -707,7 +741,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ============================= 12. ANIMATION FONDU AU SCROLL - GRILLE MASONRY =============================
 
 document.addEventListener('DOMContentLoaded', () => {
-  const imgs = document.querySelectorAll('.layout-3colonnes img');
+  const imgs = document.querySelectorAll('.creations-grid .prspk-thumb');
   if (!imgs.length) return;
 
   const isMobile = window.matchMedia('(max-width: 768px)').matches;
