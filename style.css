@@ -337,6 +337,7 @@ header h1 {
   width: 32px;
   height: 32px;
   object-fit: contain;
+  cursor: pointer;
 }
 
 /* Menu mobile */
@@ -1103,7 +1104,7 @@ body.home {
 
 
 
-/* ============================= 8. CREATIONS ============================= */
+/* ============================= MASONRY (CRÉATIONS) ============================= */
 
 main.creations h2 {
   font-weight: 700;
@@ -1114,13 +1115,12 @@ main.creations h2 {
   text-align: center;
 }
 
-
-
-/* --------- Grille dynamique Masonry --------- */
-/* 🆕 Remplace l'ancien système .layout-3colonnes / .layout-2colonnes à colonnes
-   fixes et pré-calculées à la main. Une seule grille désormais : le nombre de
-   colonnes est piloté ici, en CSS, via .grid-sizer / .grid-item, et Masonry.js
-   (voir script.js) recale dynamiquement la position de chaque vignette. */
+main.creations {
+  width: auto;
+  max-width: none;
+  margin-left: 10%;
+  margin-right: 10%;
+}
 
 .creations-grid {
   position: relative;
@@ -1134,7 +1134,7 @@ main.creations h2 {
 }
 
 .grid-item {
-  padding: 8px; /* espace entre vignettes (8px + 8px = 1rem, comme avant) */
+  padding: 6px; /* espace entre vignettes (8px + 8px = 1rem, comme avant) */
 }
 
 @media (max-width: 1024px) {
@@ -1170,27 +1170,24 @@ main.creations h2 {
   box-shadow: 0 10px 16px rgba(0,0,0,0.25);
 }
 
-@media (max-width: 480px) {
-  main {
-    padding-left: 50px !important;
-    padding-right: 50px !important;
-  }
-
-  .creations {
-    padding-left: 0rem !important;
-    padding-right: 0rem !important;
-  }
-
-  .creations-grid img {
-    border-radius: 6px !important;
+@media (max-width: 900px) {
+  main.creations {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 10px 16px 10px 16px;
   }
 }
 
+/* --------- Mobile --------- */
 @media (max-width: 480px) {
-  main.creations,
-  main.creations .creations-grid {
-    padding-left: 8px !important;
-    padding-right: 8px !important;
+  main.creations {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 10px 10px 10px 10px;
+  }
+
+  .creations-grid img {
+    border-radius: 8px !important;
   }
 }
 
@@ -2220,10 +2217,6 @@ a {
 
 /* ------ Responsive ------ */
 @media (max-width: 768px) {
-  main {
-    padding: 1rem;
-  }
-
   .logo-animated {
     width: 200px;
   }
@@ -3290,60 +3283,7 @@ body.is-loading {
 
 
 
-/* ============================= 8. CREATIONS ============================= */
-
-main.creations h2 {…}
-
-/* --------- MASONRY RESPONSIVE UNIQUE --------- */
-
-.masonry {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 colonnes sur desktop */
-  gap: 1.2rem;
-  margin: 2rem 0;
-  padding: 0 1rem;
-}
-
-.masonry img {
-  width: 100%;
-  height: auto;
-  aspect-ratio: auto;
-  border-radius: 12px;
-  object-fit: cover;
-  cursor: pointer;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-  display: block;
-}
-
-.masonry img:hover {
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  transform: scale(1.02);
-}
-
-/* Tablet : 2 colonnes */
-@media (max-width: 1024px) {
-  .masonry {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-}
-
-/* Mobile : 2 colonnes également */
-@media (max-width: 768px) {
-  .masonry {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.8rem;
-  }
-}
-
-
-
-
-
-
-
-
-
+/* ============================= 8. RECHERCHER ============================= */
 
 
 /* Container pour centrer le message et le bouton */
