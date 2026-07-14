@@ -105,7 +105,38 @@ permalink: /portfolio/creations
   <div class="blur-overlay"></div>
   
   <main class="creations">
-    <h2>CRÉATIONS</h2>
+    <div class="creations-toolbar">
+      <h2>CRÉATIONS</h2>
+
+      <div class="color-filter" id="color-filter">
+        <button
+          type="button"
+          class="filter-btn"
+          id="filter-btn"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="filter-panel"
+        >
+          <img src="/icons/filter-list.svg" alt="" class="filter-btn-icon">
+          <span class="filter-btn-label">Filtrer</span>
+        </button>
+
+        <div class="filter-panel" id="filter-panel" role="menu" aria-hidden="true">
+          <div class="filter-panel-arrow" aria-hidden="true"></div>
+
+          <div class="filter-panel-inner">
+            <div class="filter-panel-header">
+              <button type="button" class="filter-panel-reset" id="filter-panel-reset" aria-label="Réinitialiser les filtres" title="Réinitialiser">
+                <img src="/icons/refresh.svg" alt="" class="filter-panel-reset-icon">
+              </button>
+            </div>
+
+            <!-- Pastilles générées dynamiquement depuis les data-colors de chaque dessin -->
+            <div class="filter-swatches" id="filter-swatches"></div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <section class="creations-grid" id="creations-grid">
       <div class="grid-sizer"></div>
@@ -1025,6 +1056,12 @@ permalink: /portfolio/creations
         />
       </div>
     </section>
+
+    <!-- Affiché quand aucun dessin ne correspond à la combinaison de couleurs sélectionnée -->
+    <div class="filter-empty-state" id="filter-empty-state" hidden>
+      <img src="/icons/rechercher.svg" alt="" class="filter-empty-icon">
+      <p>Aucun résultat pour cette combinaison de couleurs</p>
+    </div>
   </main>
 
   <footer>
