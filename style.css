@@ -1303,11 +1303,21 @@ main.creations {
   align-items: center;
   justify-content: center;
   z-index: 10002;
+  /* 🔧 Désormais hors de .lightbox-overlay : on gère nous-mêmes la visibilité,
+     calquée sur l'état .active de #lightbox (auparavant héritée de l'overlay). */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s;
+}
+
+#lightbox.active ~ .lightbox-close {
+  opacity: 1;
+  visibility: visible;
 }
 
 .lightbox-close img {
-  width: 29px;
-  height: 29px;
+  width: 32px;
+  height: 32px;
   display: block;
 }
 
@@ -3752,7 +3762,7 @@ body {
 
 /* Conteneur des deux flèches */
 .lightbox-nav-arrows {
-  display: contents; /* Les flèches s'affichent en tant qu'éléments indépendants */
+  display: contents;
 }
 
 /* Flèche générique */
@@ -3775,7 +3785,17 @@ body {
     0 4px 16px rgba(0, 0, 0, 0.28);
   cursor: pointer;
   z-index: 10001;
-  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.2s ease;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+}
+
+#lightbox.active ~ .lightbox-nav-arrows .lightbox-arrow {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
 }
 
 .lightbox-arrow:hover {
@@ -3791,6 +3811,7 @@ body {
   cursor: default;
   pointer-events: none;
   transform: translateX(0%) translateY(-50%) scale(1);
+  transition: 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .lightbox-arrow img {
@@ -3809,7 +3830,6 @@ body {
   right: 24px;
 }
 
-/* ── Mobile (≤700px) : 2 boutons ronds côte à côte en haut à gauche ── */
 @media (max-width: 700px) {
   .lightbox-nav-arrows {
     display: flex;
@@ -3821,7 +3841,7 @@ body {
   }
 
   .lightbox-arrow {
-    position: static;         /* Annule le fixed hérité */
+    position: static;
     top: auto;
     transform: none;
     width: 42px;
@@ -4117,7 +4137,7 @@ body {
 
 /* ── Zone de saisie ─────────────────────────────────────────────────────── */
 .lb-comment-form {
-  padding: 16px;
+  padding: 10px;
 }
 
 .lb-comment-guest {
