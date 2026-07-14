@@ -5686,3 +5686,245 @@ body {
     flex-wrap: wrap;
   }
 }
+
+
+
+
+
+
+
+
+
+
+/* ============================= FILTRE PAR COULEUR (CRÉATIONS) ============================= */
+
+/* --------- Barre titre + bouton filtrer --------- */
+.creations-toolbar {
+  position: relative;
+  margin-bottom: 35px;
+}
+
+/* --------- Bouton "Filtrer" --------- */
+.color-filter {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  z-index: 30;
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.15),
+    inset 0 0 10px rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-family: 'Rubik', sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.15s ease;
+}
+
+.filter-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+.filter-btn:active {
+  transform: scale(0.96);
+}
+
+.filter-btn-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.filter-btn-label {
+  white-space: nowrap;
+}
+
+/* État "ouvert" : léger relief neutre, sans accent coloré */
+.color-filter.is-open .filter-btn {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* --------- Panneau déroulant : noir, flouté, compact --------- */
+.filter-panel {
+  position: absolute;
+  top: calc(100% + 14px);
+  right: 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px) scale(0.96);
+  transform-origin: top right;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 30;
+}
+
+.color-filter.is-open .filter-panel {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+/* Petit triangle qui pointe vers le bouton Filtrer */
+.filter-panel-arrow {
+  position: absolute;
+  top: -6px;
+  right: 22px;
+  width: 14px;
+  height: 14px;
+  background: rgba(12, 12, 14, 0.92);
+  border-left: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px 0 0 0;
+  transform: rotate(45deg);
+}
+
+.filter-panel-inner {
+  position: relative;
+  width: 200px;
+  padding: 12px;
+  background: rgba(12, 12, 14, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 18px;
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  box-shadow:
+    0 16px 34px rgba(0, 0, 0, 0.45),
+    inset 0 0 12px rgba(255, 255, 255, 0.06);
+}
+
+.filter-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.filter-panel-reset {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.35s ease;
+}
+
+.filter-panel-reset:hover {
+  background: rgba(255, 255, 255, 0.16);
+  transform: rotate(-90deg);
+}
+
+.filter-panel-reset-icon {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+/* --------- Pastilles de couleurs (sans nom, juste la teinte) --------- */
+.filter-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.filter-swatches::-webkit-scrollbar {
+  width: 5px;
+}
+
+.filter-swatches::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.filter-chip {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.filter-chip:hover {
+  transform: scale(1.12);
+}
+
+.filter-chip-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--chip-color, #999);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.filter-chip.is-active .filter-chip-dot {
+  transform: scale(0.88);
+  box-shadow:
+    0 0 0 2px rgba(12, 12, 14, 0.92),
+    0 0 0 4px rgba(255, 255, 255, 0.85);
+}
+
+/* --------- Dessin masqué par le filtre --------- */
+.grid-item.is-hidden {
+  display: none;
+}
+
+/* --------- État "aucun résultat" --------- */
+.filter-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.filter-empty-icon {
+  width: 40px;
+  height: 40px;
+  opacity: 0.45;
+}
+
+.filter-empty-state p {
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* --------- Responsive --------- */
+@media (max-width: 480px) {
+  .filter-btn-label {
+    display: none;
+  }
+
+  .filter-btn {
+    padding: 10px 12px;
+  }
+}

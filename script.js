@@ -432,21 +432,221 @@ document.addEventListener('DOMContentLoaded', () => {
     resizeTimeout = setTimeout(() => msnry.layout(), 150);
   });
 
-  // ── Filtre par couleur (prêt pour plus tard) ──────────────────────────────
-  // Chaque <img> porte désormais un data-colors="orange,bleu,..." extrait
-  // automatiquement de sa description. Exemple d'utilisation future :
-  //   filterCreationsByColor('bleu');   // n'affiche que les dessins "bleu"
-  //   filterCreationsByColor(null);     // réaffiche tout
-  window.filterCreationsByColor = function(color) {
-    const items = grid.querySelectorAll('.grid-item');
-    items.forEach(item => {
+  // ── Filtre par couleur ───────────────────────────────────────────────────
+  // Chaque <img> porte un data-colors="orange,bleu,..." (une couleur ou plus).
+  // Le panneau de filtre est généré dynamiquement à partir des couleurs
+  // réellement présentes dans la grille : ajouter/modifier un data-colors
+  // sur un dessin suffit, aucune autre modification n'est nécessaire.
+
+  const filterBtn       = document.getElementById('filter-btn');
+  const colorFilter     = document.getElementById('color-filter');
+  const filterPanel     = document.getElementById('filter-panel');
+  const filterSwatches  = document.getElementById('filter-swatches');
+  const filterResetBtn  = document.getElementById('filter-panel-reset');
+  const mainCreations   = document.querySelector('main.creations');
+  const emptyState      = document.getElementById('filter-empty-state');
+
+  if (filterBtn && colorFilter && filterPanel && filterSwatches) {
+
+    // Alias : formes fautives/plurielles qui désignent en réalité la même couleur
+    const COLOR_ALIASES = {
+      'bleus': 'bleu',
+      'jaunes': 'jaune',
+      'verts': 'vert'
+    };
+
+    // Teintes de référence (utilisées pour dessiner les pastilles)
+    const COLOR_HEX = {
+      'bleu': '#4C8DFF',
+      'vert': '#4CAF6D',
+      'jaune': '#F2C94C',
+      'rouge': '#E15554',
+      'orange': '#F2994A',
+      'rose': '#F2A6C9',
+      'brun': '#8B5E3C',
+      'marron': '#6F4423',
+      'violet': '#9B6BD9',
+      'mauve': '#C9A0DC',
+      'gris': '#A0A6AD',
+      'beige': '#D9C6A5',
+      'noir': '#2B2B2E',
+      'blanc': '#F5F5F0',
+      'argenté': '#C7CDD1',
+      'magenta': '#D6249F',
+      'doré': '#D4AF37',
+      'bordeau': '#6E1E3A',
+      'bordeaux': '#6E1E3A',
+      'turquoise': '#2DD4BF',
+      'cyan': '#22D3EE',
+      'indigo': '#4F46E5',
+      'corail': '#FF6F61',
+      'saumon': '#FA8072',
+      'kaki': '#8A8F5C',
+      'olive': '#6B6B1F',
+      'marine': '#1E2A5E',
+      'azur': '#3EA8E0',
+      'émeraude': '#0EA678',
+      'ivoire': '#F0EAD6',
+      'lavande': '#B19CD9'
+    };
+
+    // Couleur de secours déterministe (hash) pour toute future couleur
+    // ajoutée dans les data-colors mais absente du dictionnaire ci-dessus.
+    function fallbackHue(str) {
+      let hash = 0;
+      for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      return Math.abs(hash) % 360;
+    }
+
+    function normalizeColor(raw) {
+      const key = raw.trim().toLowerCase();
+      return COLOR_ALIASES[key] || key;
+    }
+
+    function hexForColor(key) {
+      return COLOR_HEX[key] || `hsl(${fallbackHue(key)}, 55%, 60%)`;
+    }
+
+    function labelForColor(key) {
+      return key.charAt(0).toUpperCase() + key.slice(1);
+    }
+
+    // Renvoie les couleurs normalisées d'un .grid-item
+    function getItemColors(item) {
       const img = item.querySelector('.prspk-thumb');
-      const colors = (img && img.dataset.colors) || '';
-      const match = !color || colors.split(',').includes(color.toLowerCase());
-      item.style.display = match ? '' : 'none';
+      const raw = (img && img.dataset.colors) || '';
+      return raw.split(',').map(normalizeColor).filter(Boolean);
+    }
+
+    // ── Génère la liste des pastilles à partir des dessins réellement présents ──
+    // Pas de nom affiché : chaque pastille porte juste sa teinte, avec le nom
+    // de la couleur en info-bulle (title / aria-label) pour rester accessible.
+    function buildSwatches() {
+      const freq = new Map(); // couleur normalisée -> nombre de dessins
+
+      grid.querySelectorAll('.grid-item').forEach(item => {
+        getItemColors(item).forEach(color => {
+          freq.set(color, (freq.get(color) || 0) + 1);
+        });
+      });
+
+      const sorted = Array.from(freq.keys()).sort((a, b) => freq.get(b) - freq.get(a));
+
+      filterSwatches.innerHTML = '';
+      sorted.forEach(color => {
+        const label = labelForColor(color);
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'filter-chip';
+        chip.dataset.color = color;
+        chip.title = label;
+        chip.setAttribute('aria-label', label);
+        chip.setAttribute('aria-pressed', 'false');
+        chip.style.setProperty('--chip-color', hexForColor(color));
+        chip.innerHTML = '<span class="filter-chip-dot"></span>';
+        filterSwatches.appendChild(chip);
+      });
+    }
+
+    buildSwatches();
+
+    // ── État de sélection + application du filtre ──────────────────────────
+    // Logique "ET inclusif" : un dessin reste visible s'il possède TOUTES
+    // les couleurs sélectionnées (il peut en avoir d'autres en plus).
+    const selectedColors = new Set();
+
+    function applyFilter() {
+      let visibleCount = 0;
+
+      grid.querySelectorAll('.grid-item').forEach(item => {
+        const itemColors = getItemColors(item);
+        const visible = selectedColors.size === 0 ||
+          Array.from(selectedColors).every(color => itemColors.includes(color));
+        item.classList.toggle('is-hidden', !visible);
+        if (visible) visibleCount++;
+      });
+
+      if (mainCreations) {
+        mainCreations.classList.toggle('filter-active', selectedColors.size > 0);
+      }
+
+      const noResults = selectedColors.size > 0 && visibleCount === 0;
+      if (emptyState) emptyState.hidden = !noResults;
+      grid.style.display = noResults ? 'none' : '';
+
+      msnry.layout();
+    }
+
+    filterSwatches.addEventListener('click', (e) => {
+      const chip = e.target.closest('.filter-chip');
+      if (!chip) return;
+
+      const color = chip.dataset.color;
+      if (selectedColors.has(color)) {
+        selectedColors.delete(color);
+        chip.classList.remove('is-active');
+        chip.setAttribute('aria-pressed', 'false');
+      } else {
+        selectedColors.add(color);
+        chip.classList.add('is-active');
+        chip.setAttribute('aria-pressed', 'true');
+      }
+      applyFilter();
     });
-    msnry.layout();
-  };
+
+    if (filterResetBtn) {
+      filterResetBtn.addEventListener('click', () => {
+        selectedColors.clear();
+        filterSwatches.querySelectorAll('.filter-chip.is-active').forEach(chip => {
+          chip.classList.remove('is-active');
+          chip.setAttribute('aria-pressed', 'false');
+        });
+        applyFilter();
+      });
+    }
+
+    // ── Ouverture / fermeture du panneau ────────────────────────────────────
+    function closeFilterPanel() {
+      colorFilter.classList.remove('is-open');
+      filterBtn.setAttribute('aria-expanded', 'false');
+      filterPanel.setAttribute('aria-hidden', 'true');
+    }
+
+    function openFilterPanel() {
+      colorFilter.classList.add('is-open');
+      filterBtn.setAttribute('aria-expanded', 'true');
+      filterPanel.setAttribute('aria-hidden', 'false');
+    }
+
+    filterBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      colorFilter.classList.contains('is-open') ? closeFilterPanel() : openFilterPanel();
+    });
+
+    filterPanel.addEventListener('click', (e) => e.stopPropagation());
+
+    document.addEventListener('click', (e) => {
+      if (!colorFilter.contains(e.target)) closeFilterPanel();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeFilterPanel();
+    });
+
+    // Utilitaire conservé pour un usage éventuel en console
+    window.filterCreationsByColor = function(color) {
+      selectedColors.clear();
+      if (color) selectedColors.add(normalizeColor(color));
+      filterSwatches.querySelectorAll('.filter-chip').forEach(chip => {
+        const active = selectedColors.has(chip.dataset.color);
+        chip.classList.toggle('is-active', active);
+        chip.setAttribute('aria-pressed', active ? 'true' : 'false');
+      });
+      applyFilter();
+    };
+  }
 });
 
 
