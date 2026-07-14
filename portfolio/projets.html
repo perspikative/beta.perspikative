@@ -105,10 +105,12 @@ permalink: /portfolio/projets
   <div class="blur-overlay"></div>
 
   <main class="creations">
-    <h2>PROJETS</h2>
+    <h2>CRÉATIONS</h2>
 
-    <section class="layout layout-3colonnes">
-      <div class="col">
+    <section class="creations-grid" id="creations-grid">
+      <div class="grid-sizer"></div>
+
+      <div class="grid-item">
         <img
           id="im-the-orange-of-ur-blue"
           class="prspk-thumb"
@@ -126,7 +128,7 @@ permalink: /portfolio/projets
         />
       </div>
 
-      <div class="col">
+      <div class="grid-item">
         <img
           id="art-tower"
           class="prspk-thumb"
@@ -144,7 +146,7 @@ permalink: /portfolio/projets
         />
       </div>
 
-      <div class="col">
+      <div class="grid-item">
         <img
           id="perspika-city"
           class="prspk-thumb"
@@ -159,56 +161,7 @@ permalink: /portfolio/projets
                      💭 <strong>Imagination :</strong> 80% réfléchie • 15% improvisée • 5% d'Internet<br>"
         />
       </div>
-    </section>
 
-    <section class="layout layout-2colonnes">
-      <div class="col">
-        <img
-          class="prspk-thumb"
-          src="projets/art-tower.webp"
-          alt="ART Tower"
-          data-page="/portfolio/projets/art-tower"
-          data-title="ART TOWER"
-          data-date="30/11/25"
-          data-desc="🎨 <strong>Teintes :</strong> Orange, beige, jaune, bleu, vert, rouge, rose, mauve, brun et violet<br>
-                     ⌛️ <strong>Temps de travail :</strong> +24h<br>
-                     ❇️ <strong>Particularités :</strong> Perspective plate, mais profondeur de part les ombrages, vie du dessin<br>
-                     💭 <strong>Imagination :</strong> 60% improvisée • 40% réfléchie<br>
-                     💬 <strong>Commentaires :</strong><br>
-                     ART Tower. Attendue et préparée depuis bien longtemps. Explorez la créativité à travers chaque étage de notre tour artistique. Chaque trait est une montée vers l’inspiration… Rejoignez nous dans cette ascension vers l'art sous toutes ses formes! 🎨🙌"
-        />
-      </div>
-
-      <div class="col">
-        <img
-          id="im-the-orange-of-ur-blue"
-          class="prspk-thumb"
-          src="projets/im-the-orange-of-ur-blue.webp"
-          alt="i'm the orange of ur blue"
-          data-page="/portfolio/projets/im-the-orange-of-ur-blue"
-          data-title="I'M THE ORANGE OF UR BLUE"
-          data-date="14/04/26"
-          data-desc="🎨 <strong>Teintes :</strong> Bleu, orange, jaune et beige<br>
-                     ⌛️ <strong>Temps de travail :</strong> 3h30<br>
-                     ❇️ <strong>Particularités :</strong> Dessin réalisé en collaboration ; peut être admiré sous tous les angles<br>
-                     💭 <strong>Imagination :</strong> 90% improvisée • 10% d'Internet<br>
-                     💬 <strong>Commentaires :</strong><br>
-                     2 artistes, 2 couleurs ; 1 dessin. C'est ainsi qu'est né ce dessin, réalisé en plusieurs fois, sur plusieurs mois. Le concept ? Dessiner chacun de notre côté avec une même couleur, et changer de sens à chaque fois qu'on change de musique. C'était bien fun. J'étais orange, elle était bleu 🧡🩵<br><br>En collaboration avec @supernovaaa_art_"
-        />
-
-        <img
-          class="prspk-thumb"
-          src="projets/perspika-city.webp"
-          alt="Perspika City"
-          data-page="/portfolio/projets/perspika-city"
-          data-title="PERSPIKA CITY"
-          data-date="30/11/25"
-          data-desc="🎨 <strong>Teintes :</strong> Rouge, vert, brun, jaune, bleu, rose, orange, mauve, violet et beige<br>
-                     ⌛️ <strong>Temps de travail :</strong> Bien longtemps<br>
-                     ❇️ <strong>Particularités :</strong> Perspective isométrique, première création exclusive de la chaîne<br>
-                     💭 <strong>Imagination :</strong> 80% réfléchie • 15% improvisée • 5% d'Internet<br>"
-        />
-      </div>
     </section>
   </main>
 
@@ -243,22 +196,8 @@ permalink: /portfolio/projets
     <img src="/icons/rechercher.svg" alt="Rechercher">
   </a>
 
-  <!-- LIGHTBOX STRUCTURE -->
+  <!------ LIGHTBOX STRUCTURE ------>
   <div class="lightbox-overlay" id="lightbox">
-    <button class="lightbox-close" id="lightbox-close">
-      <img src="/icons/fermer.svg" alt="Fermer">
-    </button>
-
-        <!-- Flèches de navigation (desktop : latérales / mobile : bloc en haut à gauche) -->
-    <div class="lightbox-nav-arrows">
-      <button class="lightbox-arrow lightbox-arrow-prev" id="lb-prev" aria-label="Précédent">
-        <img src="/icons/arrow-left-lightbox.svg" alt="Précédent">
-      </button>
-      <button class="lightbox-arrow lightbox-arrow-next" id="lb-next" aria-label="Suivant">
-        <img src="/icons/arrow-right-lightbox.svg" alt="Suivant">
-      </button>
-    </div>
-    
     <div class="lightbox-window">
 
       <div class="lightbox-top-row">
@@ -335,6 +274,20 @@ permalink: /portfolio/projets
       </div>
     </div>
   </div>
+  
+  <button class="lightbox-close" id="lightbox-close">
+    <img src="/icons/fermer.svg" alt="Fermer">
+  </button>
+
+  <!-- Flèches de navigation (desktop : latérales / mobile : bloc en haut à gauche) -->
+  <div class="lightbox-nav-arrows">
+    <button class="lightbox-arrow lightbox-arrow-prev" id="lb-prev" aria-label="Précédent">
+      <img src="/icons/arrow-left-lightbox.svg" alt="Précédent">
+    </button>
+    <button class="lightbox-arrow lightbox-arrow-next" id="lb-next" aria-label="Suivant">
+      <img src="/icons/arrow-right-lightbox.svg" alt="Suivant">
+    </button>
+  </div>
 
   <script>
     const menuToggle = document.getElementById('menuToggle');
@@ -343,6 +296,8 @@ permalink: /portfolio/projets
     });
   </script>
 
+  <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+  <script src="https://unpkg.com/imagesloaded@5/imagesloaded.pkgd.min.js"></script>
   <script src="/script.js"></script>
 </body>
 </html>
