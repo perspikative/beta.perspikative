@@ -5436,3 +5436,253 @@ body {
     display: block;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/* ============================= CONTENEUR AUTONOME (SANS MAIN) ============================= */
+
+.changelog-container {
+  flex: 1;
+  max-width: 1100px;
+  width: calc(100% - 40px);
+  margin: 30px auto 40px auto;
+  padding: 35px 40px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  box-shadow:
+    inset 0 0 14px rgba(255, 255, 255, 0.15),
+    0 4px 20px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+.changelog-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.changelog-title {
+  font-family: 'Maneola', 'Rubik', sans-serif;
+  font-size: 2.5rem;
+  margin: 0 0 10px 0;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.changelog-subtitle {
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0 auto;
+  max-width: 650px;
+  line-height: 1.5;
+}
+
+/* ============================= TIMELINE & ALIGNEMENT PARFAIT ============================= */
+
+.timeline {
+  position: relative;
+  padding-left: 50px; /* Espace réservé pour la ligne et les ronds */
+  margin-top: 20px;
+}
+
+/* Le trait vertical */
+.timeline::before {
+  content: '';
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 18px; /* Axe X de référence */
+  width: 3px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 2px;
+  transform: translateX(-50%); /* Centrage horizontal de l'axe */
+  z-index: 0;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 35px;
+}
+
+.timeline-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Le rond (dot) - Alignement exact sur l'axe X (left: 18px) */
+.timeline-dot {
+  position: absolute;
+  left: 18px; /* MÊME AXE X QUE LA LIGNE */
+  top: 18px;  /* Alignement avec le header du badge */
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid #2CA877;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transform: translateX(-50%); /* Centrage horizontal parfait */
+  z-index: 2;
+  transition: all 0.25s ease;
+}
+
+/* Version majeure ou active */
+.timeline-item.active .timeline-dot,
+.timeline-item.major .timeline-dot {
+  background: #2CA877;
+  border-color: #ffffff;
+  width: 18px;
+  height: 18px;
+  top: 16px;
+  transform: translateX(-50%); /* Repose exactement sur le centre */
+  box-shadow: 0 0 14px rgba(44, 168, 119, 0.6);
+}
+
+/* ============================= CARTES & DÉTAILS ============================= */
+
+.timeline-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 18px;
+  padding: 22px 26px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow:
+    inset 0 0 10px rgba(255, 255, 255, 0.1),
+    0 6px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.25s ease, background 0.25s ease;
+}
+
+.timeline-card:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.version-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.version-badge {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 4px 14px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #fff;
+}
+
+.version-badge.major-badge {
+  background: #2CA877;
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.version-date {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 400;
+}
+
+.version-title {
+  font-size: 1.4rem;
+  margin: 6px 0 10px 0;
+  color: #ffffff;
+}
+
+.version-desc {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.5;
+  margin-bottom: 15px;
+}
+
+.changes-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.changes-list li {
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tag-feat { background: rgba(74, 169, 161, 0.35); border: 1px solid #4AA9A1; color: #fff; }
+.tag-improve { background: rgba(255, 193, 7, 0.25); border: 1px solid #ffc107; color: #fff; }
+.tag-fix { background: rgba(235, 87, 87, 0.25); border: 1px solid #eb5757; color: #fff; }
+
+/* ============================= ADAPTATION MOBILE ============================= */
+
+@media (max-width: 768px) {
+  .changelog-container {
+    width: calc(100% - 24px);
+    margin: 15px auto;
+    padding: 25px 18px 120px 18px; /* 120px en bas pour ne pas être masqué par la barre nav mobile */
+    border-radius: 16px;
+  }
+
+  .changelog-title {
+    font-size: 1.8rem;
+  }
+
+  .timeline {
+    padding-left: 32px; /* Réduction du décalage sur mobile */
+  }
+
+  .timeline::before {
+    left: 12px; /* Nouvel axe X mobile */
+  }
+
+  .timeline-dot {
+    left: 12px; /* Exactement le même axe X mobile */
+    top: 16px;
+  }
+
+  .timeline-item.active .timeline-dot,
+  .timeline-item.major .timeline-dot {
+    top: 14px;
+  }
+
+  .timeline-card {
+    padding: 16px;
+  }
+
+  .version-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .changes-list li {
+    flex-wrap: wrap;
+  }
+}
