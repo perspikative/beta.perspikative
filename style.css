@@ -5897,9 +5897,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   padding: 60px 20px;
   text-align: center;
+}
+
+.filter-empty-state[hidden] {
+  display: none;
 }
 
 .filter-empty-icon {
@@ -5911,8 +5915,9 @@ body {
 .filter-empty-state p {
   color: rgba(255, 255, 255, 0.6);
   font-family: 'Rubik', sans-serif;
-  font-size: 0.95rem;
+  font-size: 1rem;
   margin: 0;
+  max-width: 280px;
 }
 
 /* --------- Responsive --------- */
