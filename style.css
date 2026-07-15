@@ -5708,7 +5708,7 @@ body {
 .color-filter {
   position: absolute;
   top: 50%;
-  right: 0;
+  right: 2%;
   transform: translateY(-50%);
   z-index: 30;
 }
@@ -5721,8 +5721,6 @@ body {
   border: none;
   border-radius: 30px;
   background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(12px);
   box-shadow:
     0 6px 20px rgba(0, 0, 0, 0.15),
     inset 0 0 10px rgba(255, 255, 255, 0.15);
@@ -5755,8 +5753,7 @@ body {
 
 /* État "ouvert" : léger relief neutre, sans accent coloré */
 .color-filter.is-open .filter-btn {
-  background: rgba(255, 255, 255, 0.18);
-  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* --------- Panneau déroulant : noir, flouté, compact --------- */
@@ -5797,13 +5794,13 @@ body {
   width: 200px;
   padding: 12px;
   background: rgba(12, 12, 14, 0.92);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 18px;
+  border: none;
+  border-radius: 25px;
   backdrop-filter: blur(22px) saturate(140%);
   -webkit-backdrop-filter: blur(22px) saturate(140%);
   box-shadow:
-    0 16px 34px rgba(0, 0, 0, 0.45),
-    inset 0 0 12px rgba(255, 255, 255, 0.06);
+    0 16px 34px rgba(0, 0, 0, 0.4),
+    inset 0 0 12px rgba(255, 255, 255, 0.12);
 }
 
 .filter-panel-header {
@@ -5842,7 +5839,7 @@ body {
 .filter-swatches {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
   max-height: 220px;
   overflow-y: auto;
 }
@@ -5871,7 +5868,7 @@ body {
 }
 
 .filter-chip:hover {
-  transform: scale(1.12);
+  transform: translateY(-1px);
 }
 
 .filter-chip-dot {
@@ -5925,6 +5922,6 @@ body {
   }
 
   .filter-btn {
-    padding: 10px 12px;
+    padding: 10px 10px;
   }
 }
