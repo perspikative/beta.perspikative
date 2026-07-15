@@ -286,7 +286,7 @@ header h1 {
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     color: white;
-    border-radius: 0 0 22px 22px;
+    border-radius: 0 0 20px 20px;
     border: 1px solid rgba(255 255 255 / 0.15);
     position: sticky;
     top: 0;
@@ -550,7 +550,7 @@ main {
   max-width: 1100px;
   margin: 20px auto 30px auto;
   background: rgba(255 255 255 / 0.12);
-  border-radius: 25px;
+  border-radius: 20px;
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border: 1px solid rgba(255 255 255 / 0.1);
@@ -1116,6 +1116,7 @@ main.creations h2 {
 }
 
 main.creations {
+  position: relative; /* ancre de positionnement pour #filter-panel (voir plus bas) */
   width: auto;
   max-width: none;
   margin-left: 10%;
@@ -2542,9 +2543,9 @@ footer {
   text-align: center;
   padding: 15px;
   padding-top: 0px;
-  font-size: 0.96rem;
-  border-radius: 25px 25px 0 0;
-  border: none;
+  font-size: 0.95rem;
+  border-radius: 20px 20px 0 0;
+  border: 1px solid rgba(255 255 255 / 0.1);
   font-family: "Rubik", Arial, sans-serif;
   font-weight: 500;
   box-shadow:
@@ -5710,7 +5711,9 @@ body {
   top: 50%;
   right: 2%;
   transform: translateY(-50%);
-  z-index: 30;
+  /* Pas de z-index ici : le bouton ne chevauche jamais la grille visuellement,
+     et un z-index créerait un contexte d'empilement qui piégerait le flou
+     du panneau (voir la note sur #filter-panel plus bas). */
 }
 
 .filter-btn {
@@ -5752,45 +5755,30 @@ body {
 }
 
 /* État "ouvert" : léger relief neutre, sans accent coloré */
-.color-filter.is-open .filter-btn {
+.filter-btn.is-open {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* --------- Panneau déroulant : noir, flouté, compact --------- */
+/*
+ * --------- Panneau déroulant : noir, flouté, compact ---------
+ * Important : ce panneau n'est PAS placé dans le HTML à l'intérieur de
+ * .color-filter/.filter-btn. Il vit à la fin de <main class="creations">,
+ * après la grille. Pourquoi : .color-filter a position:absolute (et avant,
+ * z-index), et ce panneau a lui-même un transform (pour l'animation) — un
+ * élément avec transform/opacity/position+z-index crée son propre "contexte
+ * d'empilement". Le backdrop-filter (flou) d'un élement ne peut flouter que
+ * ce qui est peint DANS le contexte d'empilement de son ancêtre le plus proche
+ * qui en crée un. Imbriqué dans le bouton, le panneau n'avait donc presque
+ * rien à flouter (juste sa propre flèche) : d'où le fond sombre plat, sans
+ * flou, qu'on voyait. En le sortant comme dernier enfant de main.creations
+ * (qui n'a qu'un position:relative, sans z-index — ça ne crée pas de contexte
+ * d'empilement), le panneau retrouve tout le reste de la page comme
+ * "arrière-plan" à flouter, y compris les dessins de la grille.
+ * Sa position visuelle (juste sous le bouton) est calculée en JS.
+ */
 .filter-panel {
   position: absolute;
-  top: calc(100% + 14px);
-  right: 0;
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(-6px) scale(0.96);
-  transform-origin: top right;
-  transition: opacity 0.2s ease, transform 0.2s ease;
-  z-index: 30;
-}
-
-.color-filter.is-open .filter-panel {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0) scale(1);
-}
-
-/* Petit triangle qui pointe vers le bouton Filtrer */
-.filter-panel-arrow {
-  position: absolute;
-  top: -6px;
-  right: 22px;
-  width: 14px;
-  height: 14px;
-  background: rgba(12, 12, 14, 0.92);
-  border-left: 1px solid rgba(255, 255, 255, 0.14);
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 3px 0 0 0;
-  transform: rotate(45deg);
-}
-
-.filter-panel-inner {
-  position: relative;
+  /* top / right fixés dynamiquement par script.js, alignés sur le bouton */
   width: 200px;
   padding: 12px;
   background: rgba(12, 12, 14, 0.92);
@@ -5801,6 +5789,34 @@ body {
   box-shadow:
     0 16px 34px rgba(0, 0, 0, 0.4),
     inset 0 0 12px rgba(255, 255, 255, 0.12);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px) scale(0.96);
+  transform-origin: top right;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.filter-panel.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+/* Petit triangle qui pointe vers le bouton Filtrer (même flou que le panneau) */
+.filter-panel::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 22px;
+  width: 14px;
+  height: 14px;
+  background: rgba(12, 12, 14, 0.92);
+  border-left: 1px solid rgba(255, 255, 255, 0.14);
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 3px 0 0 0;
+  transform: rotate(45deg);
+  backdrop-filter: blur(22px) saturate(140%);
+  -webkit-backdrop-filter: blur(22px) saturate(140%);
 }
 
 .filter-panel-header {
@@ -5897,11 +5913,12 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   padding: 60px 20px;
   text-align: center;
 }
 
+/* L'attribut [hidden] doit rester prioritaire sur le display:flex ci-dessus */
 .filter-empty-state[hidden] {
   display: none;
 }
@@ -5915,24 +5932,17 @@ body {
 .filter-empty-state p {
   color: rgba(255, 255, 255, 0.6);
   font-family: 'Rubik', sans-serif;
-  font-size: 1rem;
+  font-size: 0.95rem;
   margin: 0;
-  max-width: 280px;
 }
 
 /* --------- Responsive --------- */
-@media (max-width: 700px) {
+@media (max-width: 480px) {
   .filter-btn-label {
     display: none;
   }
-  
-  .filter-btn-icon {
-    width: 30px;
-    height: 30px;
-    display: block;
-  }
 
   .filter-btn {
-    padding: 6px 6px;
+    padding: 10px 10px;
   }
 }
