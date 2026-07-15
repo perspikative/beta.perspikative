@@ -286,7 +286,7 @@ header h1 {
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     color: white;
-    border-radius: 0 0 20px 20px;
+    border-radius: 0 0 22px 22px;
     border: 1px solid rgba(255 255 255 / 0.15);
     position: sticky;
     top: 0;
@@ -550,7 +550,7 @@ main {
   max-width: 1100px;
   margin: 20px auto 30px auto;
   background: rgba(255 255 255 / 0.12);
-  border-radius: 20px;
+  border-radius: 25px;
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border: 1px solid rgba(255 255 255 / 0.1);
@@ -2542,9 +2542,9 @@ footer {
   text-align: center;
   padding: 15px;
   padding-top: 0px;
-  font-size: 0.95rem;
-  border-radius: 20px 20px 0 0;
-  border: 1px solid rgba(255 255 255 / 0.1);
+  font-size: 0.96rem;
+  border-radius: 25px 25px 0 0;
+  border: none;
   font-family: "Rubik", Arial, sans-serif;
   font-weight: 500;
   box-shadow:
@@ -5921,12 +5921,18 @@ body {
 }
 
 /* --------- Responsive --------- */
-@media (max-width: 480px) {
+@media (max-width: 700px) {
   .filter-btn-label {
     display: none;
   }
+  
+  .filter-btn-icon {
+    width: 30px;
+    height: 30px;
+    display: block;
+  }
 
   .filter-btn {
-    padding: 10px 10px;
+    padding: 6px 6px;
   }
 }
