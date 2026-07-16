@@ -730,12 +730,7 @@ document.addEventListener("contextmenu", e => e.preventDefault());
 
 
 
-// ============================= 5. OUVRIR LES HASHS DE LA RECHERCHE POUR LES LIGHTBOXS =============================
-// → Intégré directement dans la section 2 (fonction openLightbox + résolution via hash au chargement)
-
-
-
-// ============================= 6. GESTION DU MODE SOMBRE =============================
+// ============================= 5. GESTION DU MODE SOMBRE =============================
 
 document.addEventListener("DOMContentLoaded", () => {
   const root = document.documentElement;
@@ -765,7 +760,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-// ============================= 7. FAQ DÉROULANTE =============================
+// ============================= 6. FAQ DÉROULANTE =============================
 
 document.addEventListener('DOMContentLoaded', () => {
   const faqQuestions = document.querySelectorAll('.faq-question');
@@ -800,7 +795,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// ============================= 8. LOADER PERSPIKATIVE =============================
+// ============================= 7. LOADER PERSPIKATIVE =============================
 
 document.addEventListener("DOMContentLoaded", () => {
   const loader = document.getElementById("site-loader");
@@ -818,7 +813,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-// ============================= 9. BOUTON FLOTTANT DE RECHERCHE - MASQUAGE AU SCROLL =============================
+// ============================= 8. BOUTON FLOTTANT DE RECHERCHE - MASQUAGE AU SCROLL =============================
 
 document.addEventListener('DOMContentLoaded', () => {
   const searchBtn = document.querySelector('.search-float-btn');
@@ -864,7 +859,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// ============================= 10. ANIMATION D'APPARITION DU FOOTER =============================
+// ============================= 9. ANIMATION D'APPARITION DU FOOTER =============================
 
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -879,7 +874,7 @@ observer.observe(document.querySelector('footer'));
 
 
 
-// ============================= 11. PARALLAX SUR LES IMAGES DE L'ACCUEIL =============================
+// ============================= 10. PARALLAX SUR LES IMAGES DE L'ACCUEIL =============================
 // Intensités calées sur les vrais z-index CSS :
 //   z-index 20  (pos-8)  → bouge le plus   (devant)
 //   z-index 14  (pos-2)  → …
