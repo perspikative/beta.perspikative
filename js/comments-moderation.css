@@ -1,0 +1,149 @@
+/* ============================================================================
+   COMMENTS-MODERATION.CSS
+   Styles additionnels pour le système de restrictions des commentaires.
+   À ajouter à la suite de style.css (ou à importer séparément).
+   ============================================================================ */
+
+/* ── Message d'erreur du formulaire ─────────────────────────────────────── */
+.lb-comment-error {
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: #ffb4b4;
+  background: rgba(255, 60, 60, 0.12);
+  border: 1px solid rgba(255, 90, 90, 0.25);
+  border-radius: 12px;
+  padding: 7px 12px;
+  margin-bottom: 8px;
+  display: none;
+}
+
+/* ── Ligne d'actions sous un commentaire (supprimer / signaler) ─────────── */
+.lb-comment-actions-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 4px;
+}
+
+.lb-comment-report {
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 20px;
+  transition: color 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+}
+
+.lb-comment-report:hover {
+  color: #ff8282;
+  background: rgba(255, 80, 80, 0.14);
+  border-color: rgba(255, 90, 90, 0.35);
+}
+
+.lb-comment-report.is-reported,
+.lb-comment-report:disabled {
+  color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ── Commentaire masqué en attente de modération ────────────────────────── */
+.lb-comment-body.lb-comment-hidden {
+  opacity: 0.55;
+  border: 1px dashed rgba(255, 255, 255, 0.18);
+}
+
+.lb-comment-body.lb-comment-hidden .lb-comment-text em {
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.88rem;
+}
+
+/* ── Boîte de dialogue de signalement ───────────────────────────────────── */
+.lb-report-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10050;
+  animation: fadeIn 0.2s ease;
+}
+
+.lb-report-dialog {
+  background: rgba(20, 22, 30, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 22px;
+  padding: 24px;
+  width: 90%;
+  max-width: 340px;
+  box-shadow:
+    inset 0 0 12px rgba(255, 255, 255, 0.08),
+    0 12px 40px rgba(0, 0, 0, 0.4);
+  color: #fff;
+  font-family: 'Rubik', sans-serif;
+}
+
+.lb-report-dialog h4 {
+  margin: 0 0 6px;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.lb-report-dialog-sub {
+  margin: 0 0 16px;
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.3;
+}
+
+.lb-report-reasons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.lb-report-reason-btn {
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 10px 14px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.16s ease;
+}
+
+.lb-report-reason-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.lb-report-cancel {
+  width: 100%;
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.lb-report-cancel:hover {
+  color: #fff;
+}
