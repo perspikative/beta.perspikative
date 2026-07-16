@@ -1,6 +1,4 @@
-// =============================
-// FIREBASE INIT - PERSPIKATIVE
-// =============================
+// ============================= FIREBASE INIT - PERSPIKATIVE =============================
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 
@@ -75,9 +73,7 @@ window.prspkLogout = function () {
 };
 
 
-// =============================
-// USER GLOBAL (ULTRA IMPORTANT)
-// =============================
+// ============================= USER GLOBAL (ULTRA IMPORTANT) =============================
 onAuthStateChanged(auth, (user) => {
   window.__prspkUser = user;
 
@@ -87,3 +83,6 @@ onAuthStateChanged(auth, (user) => {
     })
   );
 });
+
+// ============================= EXPORTS =============================
+export { auth, db };

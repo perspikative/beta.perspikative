@@ -607,28 +607,53 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    // ── Positionnement du panneau (calculé, pas en CSS) ─────────────────────
+    // #filter-panel vit désormais en fin de <main class="creations"> (voir
+    // creations.html), et non plus imbriqué dans le bouton, pour que son
+    // backdrop-filter puisse réellement flouter les dessins derrière lui.
+    // On calcule donc sa position à l'écran par rapport au bouton, en JS.
+    function positionFilterPanel() {
+      const btnRect  = filterBtn.getBoundingClientRect();
+      const mainRect = mainCreations.getBoundingClientRect();
+
+      // Distance entre le bord droit du bouton et le bord droit de main.creations
+      const rightOffset = mainRect.right - btnRect.right;
+      // Distance entre le bas du bouton et le haut de main.creations, + un petit espace
+      const topOffset = (btnRect.bottom - mainRect.top) + 14;
+
+      filterPanel.style.top = topOffset + 'px';
+      filterPanel.style.right = rightOffset + 'px';
+    }
+
     // ── Ouverture / fermeture du panneau ────────────────────────────────────
     function closeFilterPanel() {
-      colorFilter.classList.remove('is-open');
+      filterBtn.classList.remove('is-open');
+      filterPanel.classList.remove('is-open');
       filterBtn.setAttribute('aria-expanded', 'false');
       filterPanel.setAttribute('aria-hidden', 'true');
+      window.removeEventListener('resize', positionFilterPanel);
     }
 
     function openFilterPanel() {
-      colorFilter.classList.add('is-open');
+      positionFilterPanel();
+      filterBtn.classList.add('is-open');
+      filterPanel.classList.add('is-open');
       filterBtn.setAttribute('aria-expanded', 'true');
       filterPanel.setAttribute('aria-hidden', 'false');
+      window.addEventListener('resize', positionFilterPanel);
     }
 
     filterBtn.addEventListener('click', (e) => {
       e.stopPropagation();
-      colorFilter.classList.contains('is-open') ? closeFilterPanel() : openFilterPanel();
+      filterPanel.classList.contains('is-open') ? closeFilterPanel() : openFilterPanel();
     });
 
     filterPanel.addEventListener('click', (e) => e.stopPropagation());
 
     document.addEventListener('click', (e) => {
-      if (!colorFilter.contains(e.target)) closeFilterPanel();
+      if (!filterBtn.contains(e.target) && !filterPanel.contains(e.target)) {
+        closeFilterPanel();
+      }
     });
 
     document.addEventListener('keydown', (e) => {
