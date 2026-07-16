@@ -111,22 +111,21 @@ permalink: /art-challenge
     }
 
     .btn-secondary {
-      padding: 13px 30px;
+      padding: 12px 20px;
       border-radius: var(--radius-pill);
       background: var(--glass-bg);
       color: white;
       font-weight: 700;
       font-size: 1rem;
-      border: 1px solid var(--glass-border);
+      border: none;
       cursor: pointer;
-      transition: all 0.2s ease;
-      backdrop-filter: blur(8px);
+      transition: all 0.15s ease;
       box-shadow: var(--glass-inset);
     }
 
     .btn-secondary:hover {
-      background: rgba(255,255,255,0.14);
-      transform: translateY(-2px);
+      background: rgba(255,255,255,0.12);
+      transform: translateY(-1px);
     }
 
 
@@ -160,7 +159,7 @@ permalink: /art-challenge
 
     /* Glass card générique */
     .glass-card {
-      background: var(--glass-bg);
+      background: rgba(255, 255, 255, 0.08);
       border: none;
       border-radius: var(--radius-card);
       backdrop-filter: blur(16px);
@@ -394,15 +393,16 @@ permalink: /art-challenge
     .rules-note {
       margin-top: 28px;
       padding: 20px 24px;
-      border-radius: 18px;
-      background: rgba(0,200,150,0.07);
-      border: 1px solid rgba(0,200,150,0.2);
-      font-size: 0.93rem;
-      color: rgba(255,255,255,0.75);
-      line-height: 1.65;
+      border-radius: 25px;
+      background: rgba(250, 250, 250, 0.08);
+      border: none;
+      font-size: 1rem;
+      color: rgba(255,255,255,0.7);
+      line-height: 1.2;
       display: flex;
       align-items: flex-start;
       gap: 12px;
+      box-shadow: inset 0 0 14px rgba(255, 255, 255, 0.2), var(--shadow);
     }
 
     .rules-note svg {
@@ -436,14 +436,14 @@ permalink: /art-challenge
     .edition-tab {
       padding: 9px 22px;
       border-radius: var(--radius-pill);
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.05);
+      border: none;
+      background: rgba(255,255,255,0.08);
       color: rgba(255,255,255,0.6);
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 1rem;
       cursor: pointer;
       transition: all 0.22s ease;
-      box-shadow: inset 0 0 6px rgba(255,255,255,0.06);
+      box-shadow: inset 0 0 8px rgba(255,255,255,0.12);
     }
 
     .edition-tab:hover {
@@ -672,22 +672,12 @@ permalink: /art-challenge
     /* ================================================
        SECTION — REJOINS LE CHALLENGE
     ================================================ */
-    .join-section { background: transparent; }
-
     .join-card {
-      padding: 64px 48px;
+      padding: 50px 30px;
       border-radius: var(--radius-card);
       text-align: center;
       position: relative;
       overflow: hidden;
-    }
-
-    .join-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(0,200,150,0.08), rgba(10,240,208,0.05));
-      pointer-events: none;
     }
 
     .join-card h2 {
@@ -698,14 +688,15 @@ permalink: /art-challenge
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      line-height: 1.2;
     }
 
     .join-card p {
-      font-size: 1.05rem;
+      font-size: 1.06rem;
       color: var(--text-muted);
       max-width: 480px;
       margin: 0 auto 36px;
-      line-height: 1.7;
+      line-height: 1.3;
     }
 
     @media (max-width: 600px) {
@@ -871,9 +862,7 @@ permalink: /art-challenge
             <div class="rule-number">01</div>
             <h3>Le thème</h3>
             <p>
-              <!-- 🖊 MODIFIE ICI le thème de l'édition -->
-              <strong style="color:#ffffff;">« Lumières nocturnes »</strong> — Illustre ce que la nuit révèle :
-              villes illuminées, ciel étoilé, ambiances sombres et contrastées. À toi d'interpréter.
+              <strong style="color:#ffffff;">Thème libre</strong> — Crée ce que tu veux ! Ton oeuvre graphique peut représenter n'importe quel sujet ou concept.
             </p>
           </div>
 
@@ -881,7 +870,7 @@ permalink: /art-challenge
             <div class="rule-number">02</div>
             <h3>Médiums acceptés</h3>
             <p>
-              Dessin traditionnel, illustration numérique, peinture, collage, photo retouchée…
+              Presque tout ! Dessin traditionnel, dessin digital, peinture, collage, graphisme…
               Tout ce qui est une œuvre visuelle personnelle et originale est accepté.
             </p>
           </div>
@@ -898,28 +887,19 @@ permalink: /art-challenge
           <div class="rule-card glass-card">
             <div class="rule-number">04</div>
             <h3>Comment participer</h3>
-            <p>
-              Envoie ta création par DM sur Instagram <strong style="color:#ffffff;">@perspikative</strong>
-              ou via le formulaire WhatsApp communautaire. Une participation par personne.
-            </p>
+            <p>Remplis <a href="https://tr.ee/UZMQBSivyl" target="_blank" class="host-link"><strong>ce formulaire</strong></a> pour t'inscrire. Je te contacterai ensuite pour récupérer ton œuvre.</p>
           </div>
 
           <div class="rule-card glass-card">
             <div class="rule-number">05</div>
             <h3>Critères d'évaluation</h3>
-            <p>
-              Originalité, respect du thème, qualité visuelle et rendu général.
-              Le vote communautaire est souverain — pas de jury fermé.
-            </p>
+            <p>C'est la communauté qui va voter ! Le respect du thème est primordial, mais l'originalité, la créativité et la qualité font la différence. Un jury spécial fera valider vos oeuvres.</p>
           </div>
 
           <div class="rule-card glass-card">
             <div class="rule-number">06</div>
             <h3>Récompenses</h3>
-            <p>
-              Les 3 premières œuvres sont intégrées à la galerie officielle Perspikative
-              et mises en avant sur les réseaux. La gloire éternelle, comme on dit.
-            </p>
+            <p>Les 3 gagnants sont affichés dans la galerie ART Challenge, mis en avant sur les réseaux, repartent avec un certificat et bien plus encore !</p>
           </div>
 
         </div>
@@ -997,7 +977,7 @@ permalink: /art-challenge
         <!-- ── Édition 1 ── -->
         <div class="edition-panel active" id="ed1" role="tabpanel">
           <div class="edition-meta">
-            <h3>Édition 1 · « Thème exemple »</h3>
+            <h3>1ère édition · Thème libre</h3>
             <!-- 🖊 MODIFIE le thème et la date -->
             <p>Thème : <strong style="color:var(--accent-1);">À compléter</strong> · Date : À compléter · Participants : --</p>
           </div>
@@ -1041,7 +1021,7 @@ permalink: /art-challenge
         <!-- ── Édition 2 ── -->
         <div class="edition-panel" id="ed2" role="tabpanel">
           <div class="edition-meta">
-            <h3>Édition 2 · « Thème exemple »</h3>
+            <h3>2ème édition · Thème libre</h3>
             <p>Thème : <strong style="color:var(--accent-1);">À compléter</strong> · Date : À compléter · Participants : --</p>
           </div>
           <div class="winners-grid">
@@ -1075,20 +1055,20 @@ permalink: /art-challenge
         <!-- ── Édition 3 (placeholder) ── -->
         <div class="edition-panel" id="ed3" role="tabpanel">
           <div class="edition-meta">
-            <h3>Édition 3 · En cours 👀</h3>
+            <h3>3ème édition · Thème libre</h3>
             <p>Cette édition est en cours. Les gagnants seront affichés ici après la clôture des votes.</p>
           </div>
           <div class="winners-grid">
             <div class="placeholder-card">
-              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <img src="/icons/portfolio.svg" height="40" width="40" opacity="0.4" alt="" class="placeholder-icon">
               Bientôt
             </div>
             <div class="placeholder-card">
-              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <img src="/icons/portfolio.svg" height="40" width="40" opacity="0.4" alt="" class="placeholder-icon">
               Bientôt
             </div>
             <div class="placeholder-card">
-              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <img src="/icons/portfolio.svg" height="40" width="40" opacity="0.4" alt="" class="placeholder-icon">
               Bientôt
             </div>
           </div>
@@ -1106,11 +1086,11 @@ permalink: /art-challenge
               Bientôt
             </div>
             <div class="placeholder-card">
-              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <img src="/icons/portfolio.svg" height="40" width="40" opacity="0.4" alt="" class="placeholder-icon">
               Bientôt
             </div>
             <div class="placeholder-card">
-              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              <img src="/icons/portfolio.svg" height="40" width="40" opacity="0.4" alt="" class="placeholder-icon">
               Bientôt
             </div>
           </div>
@@ -1181,10 +1161,7 @@ permalink: /art-challenge
   </footer>
 
   <script>
-    /* ====================================================
-       ⚙️ CONFIGURATION — MODIFIE ICI
-    ==================================================== */
-    const DEADLINE = new Date('2026-08-10T00:00:00'); // 🖊 Date limite de rendu
+    const DEADLINE = new Date('2026-08-10T00:00:00'); // Date limite de rendu
 
     /* ====================================================
        COMPTE À REBOURS
