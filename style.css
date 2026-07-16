@@ -5744,6 +5744,10 @@ body {
   transform: scale(0.96);
 }
 
+.nav-tabs .tab:active {
+  transform: scale(0.96);
+}
+
 .filter-btn-icon {
   width: 24px;
   height: 24px;
@@ -5784,8 +5788,8 @@ body {
   background: rgba(12, 12, 14, 0.92);
   border: none;
   border-radius: 25px;
-  backdrop-filter: blur(22px) saturate(140%);
-  -webkit-backdrop-filter: blur(22px) saturate(140%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   box-shadow:
     0 16px 34px rgba(0, 0, 0, 0.4),
     inset 0 0 12px rgba(255, 255, 255, 0.12);
@@ -5855,7 +5859,7 @@ body {
 .filter-swatches {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 5px;
   max-height: 220px;
   overflow-y: auto;
 }
@@ -5893,14 +5897,14 @@ body {
   border-radius: 50%;
   background: var(--chip-color, #999);
   border: 1px solid rgba(255, 255, 255, 0.35);
-  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  transition: all 0.1s ease;
 }
 
 .filter-chip.is-active .filter-chip-dot {
   transform: scale(0.88);
   box-shadow:
-    0 0 0 2px rgba(12, 12, 14, 0.92),
-    0 0 0 4px rgba(255, 255, 255, 0.85);
+    0 0 0 1.8px rgba(12, 12, 14, 0.9),
+    0 0 0 4px rgba(255, 255, 255, 1);
 }
 
 /* --------- Dessin masqué par le filtre --------- */
@@ -5941,8 +5945,13 @@ body {
   .filter-btn-label {
     display: none;
   }
+  
+  .filter-btn-icon {
+    width: 30px;
+    height: 30px;
+  }
 
   .filter-btn {
-    padding: 10px 10px;
+    padding: 4px 4px;
   }
 }
