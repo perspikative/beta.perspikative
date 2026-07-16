@@ -24,9 +24,9 @@ permalink: /portfolio/creations
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
   
-  <script type="module" src="/firebase.js"></script>
-  <script defer src="/script-comments.js"></script>
-  <script defer src="/nav-liquid-glass.js"></script>
+  <script type="module" src="/js/firebase.js"></script>
+  <script defer src="/js/script-comments.js"></script>
+  <script defer src="/js/nav-liquid-glass.js"></script>
   <script defer src="https://cloud.umami.is/script.js" data-website-id="18d7b0fd-c5fb-4b2e-a43b-10cc734daa8f"></script>
 </head>
 
@@ -1048,15 +1048,6 @@ permalink: /portfolio/creations
       <p>Aucun résultat pour cette combinaison de couleurs</p>
     </div>
 
-    <!--
-      Panneau du filtre : placé ICI (après la grille), et non dans .color-filter,
-      volontairement. S'il restait niché dans le bouton (position:absolute + z-index),
-      son backdrop-filter (flou) resterait "piégé" dans ce contexte d'empilement et ne
-      floutterait jamais les dessins réels situés derrière lui — juste un fond sombre plat.
-      Positionné ici en fin de <main>, sans z-index ni transform sur un ancêtre commun,
-      le flou peut correctement capter tout ce qui est peint derrière lui.
-      Sa position visuelle (sous le bouton) est calculée en JS (script.js).
-    -->
     <div class="filter-panel" id="filter-panel" role="menu" aria-hidden="true">
       <div class="filter-panel-header">
         <button type="button" class="filter-panel-reset" id="filter-panel-reset" aria-label="Réinitialiser les filtres" title="Réinitialiser">
