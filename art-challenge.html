@@ -423,6 +423,131 @@ permalink: /art-challenge
     }
 
     /* ================================================
+       SECTION — RÉCOMPENSES
+    ================================================ */
+    .rewards-section { background: transparent; }
+
+    .rewards-intro {
+      font-size: 1.1rem;
+      line-height: 1.4;
+      color: var(--text-muted);
+      max-width: 640px;
+      margin-top: 12px;
+      margin-bottom: 32px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* Wrapper : porte le glass-card + gère le scroll horizontal mobile */
+    .rewards-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 8px;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+    }
+
+    .rewards-table-wrap::-webkit-scrollbar { height: 6px; }
+    .rewards-table-wrap::-webkit-scrollbar-thumb {
+      background: var(--accent-1);
+      border-radius: 10px;
+    }
+
+    .rewards-table {
+      width: 100%;
+      min-width: 560px;
+      border-collapse: separate;
+      border-spacing: 3.6px;
+    }
+
+    .rewards-table th,
+    .rewards-table td {
+      text-align: center;
+      padding: 16px 12px;
+      vertical-align: middle;
+    }
+
+    /* Colonne des libellés alignée à gauche */
+    .rewards-table thead th.rewards-th-label,
+    .rewards-table tbody th[scope="row"] {
+      text-align: center;
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #ffffff;
+      line-height: 1.25;
+      padding-left: 20px;
+      max-width: 260px;
+    }
+
+    .rewards-table thead th.rewards-th-label { width: 34%; }
+
+    .rewards-rank {
+      display: inline-block;
+      font-size: 1rem;
+      font-weight: 900;
+      line-height: 1.2;
+      color: #ffffff;
+      letter-spacing: 0.2px;
+    }
+
+    .rewards-table thead th {
+      padding-top: 10px;
+      padding-bottom: 16px;
+    }
+
+    /* Alternance de lignes façon glass */
+    .rewards-table tbody tr:nth-child(odd) {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .rewards-table tbody tr {
+      transition: background 0.15s ease;
+    }
+
+    .rewards-table tbody tr:hover {
+      background: rgba(250, 250, 250, 0.1);
+    }
+
+    .rewards-table tbody th[scope="row"] {
+      border-radius: 20px 0 0 20px;
+    }
+
+    .rewards-table tbody tr td:last-child {
+      border-radius: 0 20px 20px 0;
+    }
+
+    .rewards-icon {
+      width: 30px;
+      height: 30px;
+      margin: 0 auto;
+      display: inline-block;
+    }
+
+    .rewards-icon-yes { filter: drop-shadow(0 0 6px rgba(250, 250, 250, 0.3)); }
+    .rewards-icon-no  { opacity: 0.4; }
+
+    @media (max-width: 640px) {
+      .rewards-table { min-width: 480px; }
+      .rewards-table th,
+      .rewards-table td { padding: 14px 10px; }
+      .rewards-table thead th.rewards-th-label,
+      .rewards-table tbody th[scope="row"] {
+        font-size: 0.88rem;
+        padding-left: 14px;
+      }
+      .rewards-rank { font-size: 0.85rem; }
+      .rewards-icon { width: 19px; height: 19px; }
+    }
+
+    /* ================================================
        SECTION — GALERIE GAGNANTS
     ================================================ */
     /* Onglets */
@@ -955,6 +1080,102 @@ permalink: /art-challenge
           </div>
 
         </div>
+      </div>
+    </section>
+
+    <!-- =========== RÉCOMPENSES =========== -->
+    <section class="rewards-section" id="recompenses">
+      <div class="section-inner">
+
+        <div class="reveal">
+          <h2 class="section-title">Les récompenses</h2>
+          <p class="rewards-intro">
+            Pas de cash, mais du concret pour ta carrière créative : visibilité, reconnaissance
+            et des occasions en plus de bosser avec moi. Voici ce que chaque place rapporte :
+          </p>
+        </div>
+
+        <div class="rewards-table-wrap reveal glass-card">
+          <table class="rewards-table">
+            <thead>
+              <tr>
+                <th class="rewards-th-label" scope="col"><span class="sr-only">Récompenses</span></th>
+                <th scope="col">
+                  <span class="rewards-rank rewards-rank-1">🥇<br>1er</span>
+                </th>
+                <th scope="col">
+                  <span class="rewards-rank rewards-rank-2">🥈<br>2ème</span>
+                </th>
+                <th scope="col">
+                  <span class="rewards-rank rewards-rank-3">🥉<br>3ème</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Œuvre dans la galerie ART Challenge</th>
+                <td><img src="/icons/check.svg" alt="Oui" class="rewards-icon rewards-icon-yes"></td>
+                <td><img src="/icons/check.svg" alt="Oui" class="rewards-icon rewards-icon-yes"></td>
+                <td><img src="/icons/check.svg" alt="Oui" class="rewards-icon rewards-icon-yes"></td>
+              </tr>
+              <tr>
+                <th scope="row">Mise en avant sur les réseaux Perspikative</th>
+                <td><img src="/icons/check.svg" alt="Oui" class="rewards-icon rewards-icon-yes"></td>
+                <td><img src="/icons/check.svg" alt="Oui" class="rewards-icon rewards-icon-yes"></td>
+                <td><img src="/icons/check.svg" alt="Oui" class="rewards-icon rewards-icon-yes"></td>
+              </tr>
+              <tr>
+                <th scope="row">Certificat de participation</th>
+                <td><img src="/icons/check.svg" alt="Oui" class="rewards-icon rewards-icon-yes"></td>
+                <td><img src="/icons/check.svg" alt="Oui" class="rewards-icon rewards-icon-yes"></td>
+                <td><img src="/icons/check.svg" alt="Oui" class="rewards-icon rewards-icon-yes"></td>
+              </tr>
+              <tr>
+                <th scope="row">Badge "Gagnant·e" sur ton profil Perspikative</th>
+                <td><img src="/icons/check.svg" alt="Oui" class="rewards-icon rewards-icon-yes"></td>
+                <td><img src="/icons/check.svg" alt="Oui" class="rewards-icon rewards-icon-yes"></td>
+                <td><img src="/icons/fermer.svg" alt="Non" class="rewards-icon rewards-icon-no"></td>
+              </tr>
+              <tr>
+                <th scope="row">Story dédiée à ton œuvre</th>
+                <td><img src="/icons/check.svg" alt="Oui" class="rewards-icon rewards-icon-yes"></td>
+                <td><img src="/icons/check.svg" alt="Oui" class="rewards-icon rewards-icon-yes"></td>
+                <td><img src="/icons/fermer.svg" alt="Non" class="rewards-icon rewards-icon-no"></td>
+              </tr>
+              <tr>
+                <th scope="row">Place réservée dans le Beta Program</th>
+                <td><img src="/icons/check.svg" alt="Oui" class="rewards-icon rewards-icon-yes"></td>
+                <td><img src="/icons/fermer.svg" alt="Non" class="rewards-icon rewards-icon-no"></td>
+                <td><img src="/icons/fermer.svg" alt="Non" class="rewards-icon rewards-icon-no"></td>
+              </tr>
+              <tr>
+                <th scope="row">Session de collab / feedback perso avec moi</th>
+                <td><img src="/icons/check.svg" alt="Oui" class="rewards-icon rewards-icon-yes"></td>
+                <td><img src="/icons/fermer.svg" alt="Non" class="rewards-icon rewards-icon-no"></td>
+                <td><img src="/icons/fermer.svg" alt="Non" class="rewards-icon rewards-icon-no"></td>
+              </tr>
+              <tr>
+                <th scope="row">Récompense surprise variable 🎁</th>
+                <td><img src="/icons/check.svg" alt="Oui" class="rewards-icon rewards-icon-yes"></td>
+                <td><img src="/icons/check.svg" alt="Oui" class="rewards-icon rewards-icon-yes"></td>
+                <td><img src="/icons/fermer.svg" alt="Non" class="rewards-icon rewards-icon-no"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="rules-note reveal">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <span>
+            Aucune récompense payante ne peut être offerte. Le ART Challenge est avant tout une vitrine pour ta créativité.
+            Le contenu des récompenses surprises peut varier d'une édition à l'autre.
+          </span>
+        </div>
+
       </div>
     </section>
 
