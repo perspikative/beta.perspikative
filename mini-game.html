@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perspikative — Portfolio Spatial</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@300;900&display=swap" rel="stylesheet" />
+  <style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: #020510;
+      font-family: 'Rubik', sans-serif;
+      color: #e0f0ff;
+      user-select: none;
+      touch-action: none;
+    }
+
+    /* ── Canvas étoiles ── */
+    #starfield {
+      position: fixed; inset: 0; z-index: 0;
+      pointer-events: none;
+    }
+
+    /* ── Nebula ── */
+    .nebula {
+      position: fixed; inset: 0; z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 30%,  rgba(0,180,255,.06) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 60% at 80% 70%,  rgba(120,0,255,.07) 0%, transparent 70%),
+        radial-gradient(ellipse 80% 30% at 50% 50%,  rgba(0,255,200,.03) 0%, transparent 80%);
+    }
+
+    /* ── Viewport 3D ── */
+    #viewport {
+      position: fixed; inset: 0; z-index: 2;
+      perspective: 800px;
+      perspective-origin: 50% 50%;
+      overflow: hidden;
+      cursor: grab;
+    }
+    #viewport.dragging { cursor: grabbing; }
+
+    /* ── Monde 3D ── */
+    #world {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 0; height: 0;
+      transform-style: preserve-3d;
+    }
+
+    /* ── Étoiles 3D (points dans le monde) ── */
+    .star3d {
+      position: absolute;
+      border-radius: 50%;
+      background: #fff;
+      transform-style: preserve-3d;
+      pointer-events: none;
+    }
+
+    /* ── Image card ── */
+    .card {
+      position: absolute;
+      width: clamp(90px, 14vw, 190px);
+      transform-style: preserve-3d;
+      cursor: pointer;
+      top: 0; left: 0;
+      /* On laisse le JavaScript appliquer la position de l'anneau en translate3d ici */
+    }
+
+    .card img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 10px;
+      border: 1px solid rgba(0,200,255,.22);
+      box-shadow:
+        0 0 24px rgba(0,150,255,.12),
+        0 8px 32px rgba(0,0,0,.55);
+      transition: border-color .3s, box-shadow .3s, filter .3s;
+      will-change: transform, filter;
+      
+      /* C'est l'image interne qui va flotter, sans casser la position 3D de la carte parent ! */
+      animation: floatAnimation 4s ease-in-out infinite alternate;
+    }
+    
+    .card:hover img {
+      border-color: rgba(0,220,255,.65);
+      box-shadow:
+        0 0 36px rgba(0,200,255,.45),
+        0 8px 32px rgba(0,0,0,.6);
+      filter: brightness(1.15);
+    }
+
+    /* ── Nouvelle animation de flottement fluide ── */
+    @keyframes floatAnimation {
+      from { transform: translateY(0px) rotate(0deg); }
+      to   { transform: translateY(-10px) rotate(1.5deg); }
+    }
+
+    /* ── Lightbox ── */
+    #lightbox {
+      position: fixed; inset: 0; z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,5,20,.88);
+      backdrop-filter: blur(18px);
+      cursor: pointer;
+    }
+    #lightbox.open { display: flex; }
+
+    #lightbox img {
+      max-width: 90vw; max-height: 88vh;
+      border-radius: 14px;
+      box-shadow: 0 0 70px rgba(0,180,255,.3);
+      border: 1px solid rgba(0,200,255,.25);
+      cursor: default;
+      animation: lbIn .28s ease;
+    }
+    @keyframes lbIn {
+      from { opacity:0; transform:scale(.93); }
+      to   { opacity:1; transform:scale(1); }
+    }
+    .lb-close {
+      position: absolute; top: 18px; right: 22px;
+      font-size: 2rem; color: rgba(0,200,255,.75);
+      cursor: pointer; line-height:1;
+      transition: color .2s;
+    }
+    .lb-close:hover { color:#fff; }
+
+    /* ── Titre ── */
+    #title {
+      position: fixed; top: 28px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 50; text-align: center;
+      pointer-events: none;
+    }
+    #title h1 {
+      font-size: clamp(1rem, 3.5vw, 1.9rem);
+      font-weight: 900; letter-spacing: .2em;
+      text-transform: uppercase;
+      background: linear-gradient(90deg, #00c8ff, #a78bfa, #00ffc8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 0 12px rgba(0,180,255,.4));
+    }
+    #title p {
+      margin-top: 4px;
+      font-size: .65rem; font-weight: 300;
+      letter-spacing: .25em; text-transform: uppercase;
+      color: rgba(0,200,255,.4);
+    }
+
+    /* ── Hint bas ── */
+    #hint {
+      position: fixed; bottom: 22px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 50;
+      font-size: .68rem; font-weight: 300;
+      letter-spacing: .1em;
+      color: rgba(0,200,255,.4);
+      white-space: nowrap;
+      pointer-events: none;
+      transition: opacity 1s;
+    }
+    #hint.hidden { opacity: 0; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .card img { animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<div class="nebula"></div>
+
+<div id="title">
+  <h1>Perspikative</h1>
+  <p>Portfolio spatial</p>
+</div>
+
+<div id="viewport">
+  <div id="world">
+    <!-- Les étoiles 3D et les cartes sont injectées par JS -->
+  </div>
+</div>
+
+<div id="lightbox">
+  <span class="lb-close">✕</span>
+  <img src="" alt="" />
+</div>
+
+<div id="hint">✦ Glisse pour explorer l'espace ✦</div>
+
+<script>
+/* ══════════════════════════════════════════════════
+   CONFIG — Paramètres globaux
+══════════════════════════════════════════════════ */
+const CONFIG = {
+  /* Rayon de l'anneau en px (CSS 3D) */
+  ringRadius:     520,
+  /* Variation de hauteur max des cartes (±px) */
+  heightVariance: 90,
+  /* Vitesse de rotation auto (degrés par frame) */
+  autoRotSpeed:   0.055,
+  /* Sensibilité du drag */
+  dragSensX:      0.28,
+  dragSensY:      0.18,
+  /* Inertie (lerp) */
+  lerp:           0.072,
+  /* Inclinaison X de départ */
+  startTiltX:     15,
+};
+
+/* ══════════════════════════════════════════════════
+   STARFIELD CANVAS 2D (fond plat scintillant)
+══════════════════════════════════════════════════ */
+(function () {
+  const canvas = document.getElementById('starfield');
+  const ctx    = canvas.getContext('2d');
+  let W, H, stars;
+
+  function resize() {
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+    buildStars();
+  }
+
+  function buildStars() {
+    stars = Array.from({ length: 280 }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: Math.random() * 1.3 + 0.2,
+      a: Math.random(),
+      da: (Math.random() - .5) * .007,
+      color: Math.random() < .12 ? '#b8e0ff' : Math.random() < .08 ? '#ffe8a0' : '#fff'
+    }));
+  }
+
+  const shooters = [];
+  function maybeShooter() {
+    if (Math.random() < .003) shooters.push({
+      x: Math.random() * W, y: Math.random() * H * .5,
+      len: Math.random() * 100 + 40,
+      vx: (Math.random() * 4 + 2) * (Math.random() < .5 ? 1 : -1),
+      vy: Math.random() * 2.5 + .8, a: 1
+    });
+  }
+
+  function drawFrame() {
+    ctx.clearRect(0, 0, W, H);
+    stars.forEach(s => {
+      s.a += s.da;
+      if (s.a < 0 || s.a > 1) { s.da *= -1; s.a = Math.max(0, Math.min(1, s.a)); }
+      ctx.globalAlpha = s.a * .85;
+      ctx.fillStyle = s.color;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+
+    maybeShooter();
+    for (let i = shooters.length - 1; i >= 0; i--) {
+      const sh = shooters[i];
+      ctx.globalAlpha = sh.a * .8;
+      const g = ctx.createLinearGradient(sh.x, sh.y, sh.x - sh.vx * sh.len / 4, sh.y - sh.vy * sh.len / 4);
+      g.addColorStop(0, '#fff'); g.addColorStop(1, 'transparent');
+      ctx.strokeStyle = g; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(sh.x, sh.y);
+      ctx.lineTo(sh.x - sh.vx * sh.len / 4, sh.y - sh.vy * sh.len / 4);
+      ctx.stroke();
+      sh.x += sh.vx; sh.y += sh.vy; sh.a -= .016;
+      if (sh.a <= 0) shooters.splice(i, 1);
+    }
+    ctx.globalAlpha = 1;
+    requestAnimationFrame(drawFrame);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  drawFrame();
+})();
+
+
+/* ══════════════════════════════════════════════════
+   IMAGES — liste complète
+══════════════════════════════════════════════════ */
+const IMAGES = [
+  { src: '/portfolio/creations/44.webp', alt: 'Création 44' },
+  { src: '/portfolio/creations/43.webp', alt: 'Création 43' },
+  { src: '/portfolio/creations/42.webp', alt: 'Création 42' },
+  { src: '/portfolio/creations/41.webp', alt: 'Création 41' },
+  { src: '/portfolio/creations/40.webp', alt: 'Création 40' },
+  { src: '/portfolio/creations/39.webp', alt: 'Création 39' },
+  { src: '/portfolio/creations/38.webp', alt: 'Création 38' },
+  { src: '/portfolio/creations/37.webp', alt: 'Création 37' },
+  { src: '/portfolio/creations/36.webp', alt: 'Création 36' },
+  { src: '/portfolio/creations/35.webp', alt: 'Création 35' },
+  { src: '/portfolio/creations/34.webp', alt: 'Création 34' },
+  { src: '/portfolio/creations/33.webp', alt: 'Création 33' },
+  { src: '/portfolio/creations/32.webp', alt: 'Création 32' },
+  { src: '/portfolio/creations/31.webp', alt: 'Création 31' },
+  { src: '/portfolio/creations/30.webp', alt: 'Création 30' },
+  { src: '/portfolio/creations/29.webp', alt: 'Création 29' },
+  { src: '/portfolio/creations/28.webp', alt: 'Création 28' },
+  { src: '/portfolio/creations/27.webp', alt: 'Création 27' },
+  { src: '/portfolio/creations/26.webp', alt: 'Création 26' },
+  { src: '/portfolio/creations/25.webp', alt: 'Création 25' },
+  { src: '/portfolio/creations/24.webp', alt: 'Création 24' },
+  { src: '/portfolio/creations/23.webp', alt: 'Création 23' },
+  { src: '/portfolio/creations/22.webp', alt: 'Création 22' },
+  { src: '/portfolio/creations/21.webp', alt: 'Création 21' },
+  { src: '/portfolio/creations/20.webp', alt: 'Création 20' },
+  { src: '/portfolio/creations/19.webp', alt: 'Création 19' },
+  { src: '/portfolio/creations/18.webp', alt: 'Création 18' },
+  { src: '/portfolio/creations/17.webp', alt: 'Création 17' },
+  { src: '/portfolio/creations/16.webp', alt: 'Création 16' },
+  { src: '/portfolio/creations/15.webp', alt: 'Création 15' },
+  { src: '/portfolio/creations/14.webp', alt: 'Création 14' },
+  { src: '/portfolio/creations/13.webp', alt: 'Création 13' },
+  { src: '/portfolio/creations/12.webp', alt: 'Création 12' },
+  { src: '/portfolio/creations/11.webp', alt: 'Création 11' },
+  { src: '/portfolio/creations/10.webp', alt: 'Création 10' },
+  { src: '/portfolio/creations/9.webp',  alt: 'Création 9'  },
+  { src: '/portfolio/creations/8.webp',  alt: 'Création 8'  },
+  { src: '/portfolio/creations/7.webp',  alt: 'Création 7'  },
+  { src: '/portfolio/creations/6.webp',  alt: 'Création 6'  },
+  { src: '/portfolio/creations/5.webp',  alt: 'Création 5'  },
+  { src: '/portfolio/creations/4.webp',  alt: 'Création 4'  },
+  { src: '/portfolio/creations/3.webp',  alt: 'Création 3'  },
+  { src: '/portfolio/creations/2.webp',  alt: 'Création 2'  },
+  { src: '/portfolio/creations/1.webp',  alt: 'Création 1'  },
+];
+
+
+/* ══════════════════════════════════════════════════
+   MONDE 3D — anneau + rotation caméra
+══════════════════════════════════════════════════ */
+(function () {
+  const world    = document.getElementById('world');
+  const viewport = document.getElementById('viewport');
+  const lb       = document.getElementById('lightbox');
+  const lbImg    = lb.querySelector('img');
+  const lbClose  = lb.querySelector('.lb-close');
+  const hint     = document.getElementById('hint');
+
+  /* ── Rotation courante et cible ── */
+  let rotX = CONFIG.startTiltX, rotY = 0;
+  let tgtX = CONFIG.startTiltX, tgtY = 0;
+
+  /* ── Drag state ── */
+  let dragging = false;
+  let lastX = 0, lastY = 0;
+  let velX = 0, velY = 0;
+  let autoOn = true;
+  let autoTimer = null;
+
+  /* ── Construire les cartes ── */
+  const n = IMAGES.length;
+  IMAGES.forEach((data, i) => {
+    const angle  = (i / n) * Math.PI * 2;
+
+    /* hauteur légèrement variée — pattern pseudo-aléatoire stable */
+    const seed   = Math.sin(i * 94.74 + 33.1);
+    const height = (seed * .5 + .5 - .5) * 2 * CONFIG.heightVariance;  // ±heightVariance
+
+    const x = Math.cos(angle) * CONFIG.ringRadius;
+    const z = Math.sin(angle) * CONFIG.ringRadius;
+    const y = height;
+
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const img = document.createElement('img');
+    img.src    = data.src;
+    img.alt    = data.alt;
+    img.loading = 'lazy';
+
+    /* On désynchronise subtilement la vitesse et le départ du flottement CSS */
+    img.style.animationDelay = `${(i * 0.23).toFixed(2)}s`;
+    img.style.animationDuration = `${(3.5 + (i % 4) * 0.6).toFixed(2)}s`;
+
+    card.appendChild(img);
+
+    /* Position 3D pure sur l'anneau (gérée proprement en JS sans conflit CSS) */
+    card.style.transform = `translate(-50%, -50%) translate3d(${x}px, ${y}px, ${z}px)`;
+
+    card.addEventListener('click', (e) => {
+      e.stopPropagation();
+      lbImg.src = data.src;
+      lbImg.alt = data.alt;
+      lb.classList.add('open');
+    });
+
+    world.appendChild(card);
+  });
+
+  /* ── Lightbox ── */
+  lb.addEventListener('click',   () => lb.classList.remove('open'));
+  lbClose.addEventListener('click', e => { e.stopPropagation(); lb.classList.remove('open'); });
+  lbImg.addEventListener('click',   e => e.stopPropagation());
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('open'); });
+
+  /* ── Pointer events (drag) ── */
+  viewport.addEventListener('pointerdown', e => {
+    if (lb.classList.contains('open')) return;
+    dragging = true;
+    viewport.classList.add('dragging');
+    viewport.setPointerCapture(e.pointerId);
+    lastX = e.clientX;
+    lastY = e.clientY;
+    velX = velY = 0;
+    autoOn = false;
+    clearTimeout(autoTimer);
+    hint.classList.add('hidden');
+  });
+
+  viewport.addEventListener('pointermove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
+    tgtY += dx * CONFIG.dragSensX;
+    tgtX -= dy * CONFIG.dragSensY;
+    /* Limiter l'inclinaison verticale pour rester naturel */
+    tgtX = Math.max(-55, Math.min(55, tgtX));
+    velX = dy;
+    velY = dx;
+    lastX = e.clientX;
+    lastY = e.clientY;
+  });
+
+  const onUp = () => {
+    if (!dragging) return;
+    dragging = false;
+    viewport.classList.remove('dragging');
+    /* Reprendre la rotation auto après 1.5s */
+    autoTimer = setTimeout(() => { autoOn = true; }, 1500);
+  };
+  viewport.addEventListener('pointerup',     onUp);
+  viewport.addEventListener('pointercancel', onUp);
+
+  /* ── Cacher le hint après interaction ── */
+  setTimeout(() => hint.classList.add('hidden'), 4000);
+
+  /* ── Boucle d'animation ── */
+  function tick() {
+    if (autoOn) tgtY += CONFIG.autoRotSpeed;
+
+    rotX += (tgtX - rotX) * CONFIG.lerp;
+    rotY += (tgtY - rotY) * CONFIG.lerp;
+
+    world.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+
+    requestAnimationFrame(tick);
+  }
+  tick();
+
+})();
+</script>
+</body>
+</html>
