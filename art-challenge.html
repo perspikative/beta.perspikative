@@ -799,34 +799,113 @@ permalink: /art-challenge
        SECTION — REJOINS LE CHALLENGE
     ================================================ */
     .join-card {
-      padding: 50px 30px;
+      padding: 60px 50px;
       border-radius: var(--radius-card);
-      text-align: center;
       position: relative;
       overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+      box-shadow: var(--glass-inset), var(--shadow), 0 0 40px rgba(0, 200, 150, 0.03);
+      transition: all 0.3s ease;
+    }
+
+    .join-card:hover {
+      box-shadow: var(--glass-inset), 0 20px 50px rgba(0, 0, 0, 0.1);
+    }
+
+    .join-content {
+      flex: 1;
+      max-width: 560px;
+      text-align: left;
     }
 
     .join-card h2 {
-      font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+      font-size: clamp(2rem, 4.5vw, 2.8rem);
       font-weight: 900;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
       background: linear-gradient(120deg, #ffffff 40%, var(--accent-2) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      line-height: 1.2;
+      line-height: 1;
     }
 
-    .join-card p {
-      font-size: 1.06rem;
+    .join-content p {
+      font-size: 1.08rem;
       color: var(--text-muted);
-      max-width: 480px;
-      margin: 0 auto 36px;
+      margin-bottom: 32px;
       line-height: 1.3;
     }
 
+    /* Reset et alignement des boutons à gauche sur desktop */
+    .join-content .hero-cta {
+      justify-content: flex-start;
+      opacity: 1;
+      animation: none;
+    }
+
+    /* Conteneur de la mascotte + animation de flottaison */
+    .join-mascot {
+      flex: 0 0 200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: mascotFloat 4s ease-in-out infinite;
+    }
+
+    .mascot-img {
+      width: 100%;
+      height: auto;
+      max-height: 220px;
+      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.1));
+    }
+
+    /* Animation créative pour donner de la vie au chat */
+    @keyframes mascotFloat {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+      }
+      50% {
+        transform: translateY(-4px) rotate(1deg);
+      }
+    }
+
+    /* Responsive adaptatif */
+    @media (max-width: 850px) {
+      .join-card {
+        flex-direction: column-reverse; /* Met le chat au-dessus du texte sur mobile */
+        text-align: center;
+        padding: 50px 30px;
+        gap: 30px;
+      }
+      .hero-cta {
+        gap: 8px;
+      }
+
+      .join-content {
+        text-align: center;
+        max-width: 100%;
+      }
+
+      .join-content .hero-cta {
+        justify-content: center;
+      }
+
+      .join-mascot {
+        flex: 0 0 auto;
+        width: 150px;
+      }
+    }
+
     @media (max-width: 600px) {
-      .join-card { padding: 44px 24px; }
+      .join-card {
+        padding: 40px 24px;
+      }
+      .join-mascot {
+        width: 120px;
+      }
     }
   </style>
 </head>
@@ -1190,60 +1269,38 @@ permalink: /art-challenge
 
         <!-- Onglets éditions -->
         <div class="edition-tabs reveal" role="tablist" aria-label="Éditions du ART Challenge">
-          <button class="edition-tab active" role="tab" aria-selected="true"  data-panel="ed1">1ère édition</button>
-          <button class="edition-tab"        role="tab" aria-selected="false" data-panel="ed2">2ème édition</button>
-          <button class="edition-tab"        role="tab" aria-selected="false" data-panel="ed3">3ème édition</button>
-          <button class="edition-tab"        role="tab" aria-selected="false" data-panel="ed4">4ème édition (à venir)</button>
+          <button class="edition-tab active" role="tab" aria-selected="true"  data-panel="ed1">4ème édition</button>
+          <button class="edition-tab"        role="tab" aria-selected="false" data-panel="ed2">3ème édition</button>
+          <button class="edition-tab"        role="tab" aria-selected="false" data-panel="ed3">2ème édition</button>
+          <button class="edition-tab"        role="tab" aria-selected="false" data-panel="ed4">1ère édition</button>
         </div>
 
-        <!-- ── Édition 1 ── -->
-        <div class="edition-panel active" id="ed1" role="tabpanel">
+        <!-- ── Édition 4 (placeholder) ── -->
+        <div class="edition-panel active" id="ed4" role="tabpanel">
           <div class="edition-meta">
-            <h3>1ère édition · Thème libre</h3>
-            <!-- 🖊 MODIFIE le thème et la date -->
-            <p>Thème : <strong style="color:var(--accent-1);">À compléter</strong> · Date : À compléter · Participants : --</p>
+            <h3>4ème édition  · En cours </h3>
+            <p>Cette édition est en cours. Les gagnants seront affichés ici après la clôture des votes.</p>
           </div>
           <div class="winners-grid">
-
-            <!--
-              🖊 REMPLACE les src par tes vraies images de gagnants.
-              Structure : winner-rank (1er, 2e, 3e), winner-name, winner-title.
-            -->
-
-            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/art1.webp','1er Prix','Pseudo du gagnant','Titre de l\'œuvre')">
-              <img src="/pics/art-challenge/art1.webp" alt="1er prix édition 1" loading="lazy" />
-              <div class="winner-overlay">
-                <p class="winner-name">Nova</p>
-                <p class="winner-title">Titre de l'œuvre</p>
-              </div>
-              <span class="winner-rank">🥇 1er Prix</span>
+            <div class="placeholder-card">
+              <img src="/icons/portfolio.svg" height="40" width="40" opacity="0.4" alt="" class="placeholder-icon">
+              Bientôt
             </div>
-
-            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/art2.webp','2e Prix','Pseudo du gagnant','Titre de l\'œuvre')">
-              <img src="/pics/art-challenge/art2.webp" alt="2e prix édition 1" loading="lazy" />
-              <div class="winner-overlay">
-                <p class="winner-name">froggy_queer_artist</p>
-                <p class="winner-title">Titre de l'œuvre</p>
-              </div>
-              <span class="winner-rank">🥈 2e Prix</span>
+            <div class="placeholder-card">
+              <img src="/icons/portfolio.svg" height="40" width="40" opacity="0.4" alt="" class="placeholder-icon">
+              Bientôt
             </div>
-
-            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/art3.webp','3e Prix','Pseudo du gagnant','Titre de l\'œuvre')">
-              <img src="/pics/art-challenge/art3.webp" alt="3e prix édition 1" loading="lazy" />
-              <div class="winner-overlay">
-                <p class="winner-name">Cinammon</p>
-                <p class="winner-title">Titre de l'œuvre</p>
-              </div>
-              <span class="winner-rank">🥉 3e Prix</span>
+            <div class="placeholder-card">
+              <img src="/icons/portfolio.svg" height="40" width="40" opacity="0.4" alt="" class="placeholder-icon">
+              Bientôt
             </div>
-
           </div>
         </div>
 
-        <!-- ── Édition 2 ── -->
-        <div class="edition-panel" id="ed2" role="tabpanel">
+        <!-- ── Édition 3 ── -->
+        <div class="edition-panel" id="ed3" role="tabpanel">
           <div class="edition-meta">
-            <h3>2ème édition · Thème libre</h3>
+            <h3>3ème édition · Thème libre</h3>
             <p>Thème : <strong style="color:var(--accent-1);">À compléter</strong> · Date : À compléter · Participants : --</p>
           </div>
           <div class="winners-grid">
@@ -1274,32 +1331,48 @@ permalink: /art-challenge
           </div>
         </div>
 
-        <!-- ── Édition 3 (placeholder) ── -->
-        <div class="edition-panel" id="ed3" role="tabpanel">
+        <!-- ── Édition 2 ── -->
+        <div class="edition-panel" id="ed2" role="tabpanel">
           <div class="edition-meta">
-            <h3>3ème édition · Thème libre</h3>
-            <p>Cette édition est en cours. Les gagnants seront affichés ici après la clôture des votes.</p>
+            <h3>2ème édition · Thème libre</h3>
+            <p><strong style="color:var(--accent-1);">Thème libre</strong> · Date : 2025</p>
           </div>
           <div class="winners-grid">
-            <div class="placeholder-card">
-              <img src="/icons/portfolio.svg" height="40" width="40" opacity="0.4" alt="" class="placeholder-icon">
-              Bientôt
+
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/art1.webp','1er Prix','Nova','Dessin traditionnel')">
+              <img src="/pics/art-challenge/art1.webp" alt="1er prix édition 1" loading="lazy" />
+              <div class="winner-overlay">
+                <p class="winner-name">Nova</p>
+                <p class="winner-title">Dessin traditionnel</p>
+              </div>
+              <span class="winner-rank">🥇 1er Prix</span>
             </div>
-            <div class="placeholder-card">
-              <img src="/icons/portfolio.svg" height="40" width="40" opacity="0.4" alt="" class="placeholder-icon">
-              Bientôt
+
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/art2.webp','2e Prix','froggy_queer_artist','Dessin traditionnel')">
+              <img src="/pics/art-challenge/art2.webp" alt="2e prix édition 1" loading="lazy" />
+              <div class="winner-overlay">
+                <p class="winner-name">froggy_queer_artist</p>
+                <p class="winner-title">Dessin traditionnel</p>
+              </div>
+              <span class="winner-rank">🥈 2e Prix</span>
             </div>
-            <div class="placeholder-card">
-              <img src="/icons/portfolio.svg" height="40" width="40" opacity="0.4" alt="" class="placeholder-icon">
-              Bientôt
+
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/art3.webp','3e Prix','Cinammon','Dessin traditionnel')">
+              <img src="/pics/art-challenge/art3.webp" alt="3e prix édition 1" loading="lazy" />
+              <div class="winner-overlay">
+                <p class="winner-name">Cinammon</p>
+                <p class="winner-title">Dessin traditionnel</p>
+              </div>
+              <span class="winner-rank">🥉 3e Prix</span>
             </div>
+
           </div>
         </div>
 
-        <!-- ── Édition 4 (placeholder) ── -->
-        <div class="edition-panel" id="ed4" role="tabpanel">
+        <!-- ── Édition 1 (placeholder) ── -->
+        <div class="edition-panel" id="ed1" role="tabpanel">
           <div class="edition-meta">
-            <h3>4ème édition  · En cours </h3>
+            <h3>1ère édition · Thème libre</h3>
             <p>Cette édition est en cours. Les gagnants seront affichés ici après la clôture des votes.</p>
           </div>
           <div class="winners-grid">
@@ -1325,13 +1398,19 @@ permalink: /art-challenge
     <section class="join-section" id="participer">
       <div class="section-inner">
         <div class="join-card glass-card reveal">
-          <h2>Prêt·e à relever le défi ?</h2>
-          <p>La prochaine édition est là, n'attends plus ! Rejoins la communauté Perspikative pour ne pas rater l'annonce du thème et les inscriptions.</p>
-          <div class="hero-cta" style="opacity:1; animation:none;">
-            <!-- 🖊 Remplace les liens par les tiens -->
-            <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" rel="noopener" class="btn-primary">Voir sur WhatsApp</a>
-            <a href="https://instagram.com/perspikative"  target="_blank" rel="noopener" class="btn-secondary">Instagram</a>
+          
+          <div class="join-content">
+            <h2>Prêt·e à relever le défi ?</h2>
+            <p>La prochaine édition n'attend que toi ! Rejoins la communauté Perspikative pour ne pas rater l'annonce du thème et les inscriptions.</p>
+            <div class="hero-cta">
+              <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" rel="noopener" class="btn-primary">Voir sur WhatsApp</a>
+              <a href="https://instagram.com/perspikative"  target="_blank" rel="noopener" class="btn-secondary">Instagram</a>
+            </div>
           </div>
+          <div class="join-mascot">
+            <img src="/pics/cat/cat-art-challenge.svg" alt="Mascotte Perspikative" class="mascot-img">
+          </div>
+
         </div>
       </div>
     </section>
