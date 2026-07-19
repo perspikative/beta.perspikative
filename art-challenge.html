@@ -621,8 +621,8 @@ permalink: /art-challenge
     }
 
     .winner-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 20px 48px rgba(0,0,0,0.45);
+      transform: translateY(-3px);
+      box-shadow: 0 20px 48px rgba(0,0,0,0.3);
     }
 
     .winner-card img {
@@ -633,7 +633,7 @@ permalink: /art-challenge
     }
 
     .winner-card:hover img {
-      transform: scale(1.05);
+      transform: scale(1.03);
       filter: brightness(0.8);
     }
 
@@ -641,13 +641,15 @@ permalink: /art-challenge
     .winner-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(6,26,20,0.9) 0%, rgba(6,26,20,0.3) 45%, transparent 75%);
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0,0,0,0.3) 45%, transparent 75%);
       display: flex;
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
       flex-direction: column;
       justify-content: flex-end;
       padding: 18px 16px;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity 0.24s ease;
     }
 
     .winner-card:hover .winner-overlay { opacity: 1; }
@@ -668,13 +670,13 @@ permalink: /art-challenge
 
     .winner-name {
       font-weight: 700;
-      font-size: 1rem;
+      font-size: 1.2rem;
       color: #fff;
-      margin-bottom: 2px;
+      margin-bottom: 0;
     }
 
     .winner-title {
-      font-size: 0.82rem;
+      font-size: 0.95rem;
       color: rgba(255,255,255,0.6);
     }
 
@@ -1306,24 +1308,24 @@ permalink: /art-challenge
             <p>Thème : <strong style="color:var(--accent-1);">À compléter</strong> · Date : À compléter · Participants : --</p>
           </div>
           <div class="winners-grid">
-            <div class="winner-card glass-card" onclick="acOpenLightbox('images/winner-ed2-1.jpg','1er Prix','Pseudo du gagnant','Titre de l\'œuvre')">
-              <img src="images/winner-ed2-1.jpg" alt="1er prix édition 2" loading="lazy" />
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/ed3-1.webp','1er Prix','Pseudo du gagnant','Titre de l\'œuvre')">
+              <img src="/pics/art-challenge/ed3-1.webp" alt="1er prix édition 3" loading="lazy" />
               <div class="winner-overlay">
-                <p class="winner-name">Pseudo du gagnant</p>
-                <p class="winner-title">Titre de l'œuvre</p>
+                <p class="winner-name">Malo</p>
+                <p class="winner-title">Dessin traditionnel</p>
               </div>
               <span class="winner-rank">🥇 1er Prix</span>
             </div>
-            <div class="winner-card glass-card" onclick="acOpenLightbox('images/winner-ed2-2.jpg','2e Prix','Pseudo du gagnant','Titre de l\'œuvre')">
-              <img src="images/winner-ed2-2.jpg" alt="2e prix édition 2" loading="lazy" />
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/ed3-2.webp','2e Prix','Luffy','Dessin traditionnel')">
+              <img src="/pics/art-challenge/ed3-2.webp" alt="2e prix édition 3" loading="lazy" />
               <div class="winner-overlay">
-                <p class="winner-name">Pseudo du gagnant</p>
-                <p class="winner-title">Titre de l'œuvre</p>
+                <p class="winner-name">Luffy</p>
+                <p class="winner-title">Dessin traditionnel</p>
               </div>
               <span class="winner-rank">🥈 2e Prix</span>
             </div>
-            <div class="winner-card glass-card" onclick="acOpenLightbox('images/winner-ed2-3.jpg','3e Prix','Pseudo du gagnant','Titre de l\'œuvre')">
-              <img src="images/winner-ed2-3.jpg" alt="3e prix édition 2" loading="lazy" />
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/ed3-3.webp','3e Prix','Pseudo du gagnant','Titre de l\'œuvre')">
+              <img src="/pics/art-challenge/ed3-3.webp" alt="3e prix édition 3" loading="lazy" />
               <div class="winner-overlay">
                 <p class="winner-name">Pseudo du gagnant</p>
                 <p class="winner-title">Titre de l'œuvre</p>
@@ -1341,17 +1343,17 @@ permalink: /art-challenge
           </div>
           <div class="winners-grid">
 
-            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/art1.webp','1er Prix','Nova','Dessin traditionnel')">
-              <img src="/pics/art-challenge/art1.webp" alt="1er prix édition 1" loading="lazy" />
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/ed2-1.webp','1er Prix','Nøva','Dessin traditionnel')">
+              <img src="/pics/art-challenge/ed2-1.webp" alt="1er prix édition 2" loading="lazy" />
               <div class="winner-overlay">
-                <p class="winner-name">Nova</p>
+                <p class="winner-name">Nøva</p>
                 <p class="winner-title">Dessin traditionnel</p>
               </div>
               <span class="winner-rank">🥇 1er Prix</span>
             </div>
 
-            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/art2.webp','2e Prix','froggy_queer_artist','Dessin traditionnel')">
-              <img src="/pics/art-challenge/art2.webp" alt="2e prix édition 1" loading="lazy" />
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/ed2-2.webp','2e Prix','froggy_queer_artist','Dessin traditionnel')">
+              <img src="/pics/art-challenge/ed2-2.webp" alt="2e prix édition 2" loading="lazy" />
               <div class="winner-overlay">
                 <p class="winner-name">froggy_queer_artist</p>
                 <p class="winner-title">Dessin traditionnel</p>
@@ -1359,8 +1361,8 @@ permalink: /art-challenge
               <span class="winner-rank">🥈 2e Prix</span>
             </div>
 
-            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/art3.webp','3e Prix','Cinammon','Dessin traditionnel')">
-              <img src="/pics/art-challenge/art3.webp" alt="3e prix édition 1" loading="lazy" />
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/ed2-3.webp','3e Prix','Cinammon','Dessin traditionnel')">
+              <img src="/pics/art-challenge/ed2-3.webp" alt="3e prix édition 2" loading="lazy" />
               <div class="winner-overlay">
                 <p class="winner-name">Cinammon</p>
                 <p class="winner-title">Dessin traditionnel</p>
