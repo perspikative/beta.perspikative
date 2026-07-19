@@ -8,7 +8,6 @@
   // ── Constantes ───────────────────────────────────────────────────────────
   var COMMENTS_PER_PAGE = 5;
   var PFP_COUNT         = 8;  // nb de photos de profil dans /pics/assets/pfp/
-  var DAILY_LIMIT       = 10; // commentaires max par utilisateur sur une fenêtre de 24h
 
   // ── État local ───────────────────────────────────────────────────────────
   var currentDrawingId  = null;
@@ -68,50 +67,6 @@
   function isOwn(comment) {
     var user = window.__prspkUser;
     return user && comment.uid && comment.uid === user.uid;
-  }
-
-  // ══════════════════════════════════════════════════════════════════════════
-  // RATE LIMITING — 10 commentaires max par 24h par utilisateur
-  // Stocké dans Firestore : commentLimits/{uid} → { count, windowStart }
-  // ══════════════════════════════════════════════════════════════════════════
-
-  /**
-   * Vérifie si l'utilisateur peut encore commenter, puis incrémente le compteur.
-   * Résout avec `true` si l'envoi est autorisé, `false` si la limite est atteinte.
-   */
-  function checkAndIncrementLimit(uid) {
-    var db   = window.__prspkDb;
-    var fire = window.__prspkFire;
-
-    var limitRef = fire.doc(db, 'commentLimits', uid);
-    var now      = Date.now();
-    var window24 = 24 * 60 * 60 * 1000; // 24h en ms
-
-    return fire.getDoc(limitRef).then(function (snap) {
-      if (snap.exists()) {
-        var data        = snap.data();
-        var windowStart = data.windowStart && data.windowStart.toDate
-          ? data.windowStart.toDate().getTime()
-          : (data.windowStart || 0);
-        var count       = data.count || 0;
-
-        // La fenêtre de 24h est encore active
-        if (now - windowStart < window24) {
-          if (count >= DAILY_LIMIT) {
-            return false; // limite atteinte
-          }
-          // Incrémente dans la fenêtre courante
-          return fire.setDoc(limitRef, { count: count + 1, windowStart: data.windowStart }, { merge: true })
-            .then(function () { return true; });
-        }
-      }
-
-      // Pas de doc ou fenêtre expirée → repart à 1
-      return fire.setDoc(limitRef, {
-        count:       1,
-        windowStart: fire.serverTimestamp()
-      }).then(function () { return true; });
-    });
   }
 
   // ══════════════════════════════════════════════════════════════════════════
