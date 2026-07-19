@@ -5982,7 +5982,7 @@ body {
   background: none;
   border: none;
   cursor: pointer;
-  opacity: 0.45;
+  opacity: 0.6;
   transition: opacity 0.18s ease;
   padding: 2px;
   display: flex;
@@ -5999,8 +5999,8 @@ body {
 }
 
 .lb-comment-report img {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
 }
 
 /* Quand un commentaire est à soi, le bouton supprimer occupe déjà le coin :
@@ -6025,9 +6025,9 @@ body {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: rgba(10, 10, 10, 0.68);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -6046,19 +6046,20 @@ body {
 
 .report-window {
   position: relative;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.1);
   color: #fff;
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
   border-radius: 26px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: none;
   max-width: 420px;
   width: 100%;
   max-height: 80vh;
   overflow-y: auto;
-  padding: 28px 24px 22px;
+  padding: 14px 20px 16px 20px;
   box-sizing: border-box;
   animation: fadeIn 0.25s ease;
+  transition: all 0.25s ease;
   box-shadow:
     inset 0 0 12px rgba(210, 210, 210, 0.16),
     0 8px 30px rgba(0, 0, 0, 0.3);
@@ -6066,9 +6067,9 @@ body {
 
 .report-close {
   position: absolute;
-  top: 14px;
+  top: 16px;
   right: 14px;
-  background: rgba(255, 255, 255, 0.08);
+  background: transparent;
   border: none;
   border-radius: 50%;
   width: 32px;
@@ -6081,20 +6082,20 @@ body {
 }
 
 .report-close:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: none;
 }
 
 .report-close img {
-  width: 16px;
-  height: 16px;
+  width: 28px;
+  height: 28px;
 }
 
 .report-title {
   font-family: 'Rubik', sans-serif;
   font-weight: 700;
-  font-size: 1.3rem;
+  font-size: 1.4rem;
   color: #fff;
-  margin: 0 30px 4px 0;
+  margin: 0;
 }
 
 .report-subtitle {
@@ -6122,7 +6123,7 @@ body {
 .report-category-title {
   font-family: 'Rubik', sans-serif;
   font-weight: 700;
-  font-size: 0.98rem;
+  font-size: 1.1rem;
   color: #ffffff;
   margin: 0;
 }
@@ -6136,11 +6137,11 @@ body {
 .report-subcategory-btn {
   font-family: 'Rubik', sans-serif;
   font-weight: 400;
-  font-size: 0.86rem;
-  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.96rem;
+  color: rgba(255, 255, 255, 0.8);
   background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
+  border: none;
+  border-radius: 25px;
   padding: 7px 14px;
   cursor: pointer;
   transition: all 0.16s ease;
@@ -6152,7 +6153,7 @@ body {
 .report-subcategory-btn:hover {
   background: rgba(255, 80, 80, 0.18);
   border-color: rgba(255, 80, 80, 0.3);
-  color: #fff;
+  color: #ffffff;
   transform: translateY(-1px);
 }
 
@@ -6165,7 +6166,7 @@ body {
 .report-confirm {
   font-family: 'Rubik', sans-serif;
   font-weight: 500;
-  font-size: 0.92rem;
+  font-size: 0.96rem;
   color: #7CE0B0;
   text-align: center;
   margin: 18px 0 0;
@@ -6185,16 +6186,15 @@ body {
 
 @media (max-width: 480px) {
   .report-window {
-    padding: 24px 18px 18px;
-    border-radius: 20px;
+    padding: 14px 20px 16px 20px;
   }
 
   .report-title {
-    font-size: 1.15rem;
+    font-size: 1.2rem;
   }
 
   .report-subcategory-btn {
-    font-size: 0.84rem;
+    font-size: 1rem;
     padding: 6px 12px;
   }
 }
