@@ -375,8 +375,8 @@ header h1 {
   background: transparent;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease;
-  z-index: 900; /* en dessous du menu, au-dessus du contenu */
+  transition: opacity 0.28s ease;
+  z-index: 900;
 }
 
 body.menu-open main,
