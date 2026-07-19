@@ -179,67 +179,43 @@
     sendBtn.disabled  = true;
     textarea.disabled = true;
 
-    // ── Vérification de la limite quotidienne avant l'envoi ──────────────
-    checkAndIncrementLimit(user.uid).then(function (allowed) {
-      if (!allowed) {
-        // Limite atteinte : on informe l'utilisateur et on réactive le formulaire
-        var limitMsg = document.getElementById('lb-comment-limit-msg');
-        if (!limitMsg) {
-          limitMsg = document.createElement('p');
-          limitMsg.id        = 'lb-comment-limit-msg';
-          limitMsg.className = 'lb-comment-error';
-          limitMsg.textContent = 'Tu as atteint la limite de ' + DAILY_LIMIT + ' commentaires par jour. Reviens demain !';
-          inputWrap.insertBefore(limitMsg, sendBtn);
-        }
-        sendBtn.disabled  = false;
-        textarea.disabled = false;
-        return;
-      }
+    // Supprime le message d'erreur s'il était affiché (ancien système de limite)
+    var limitMsg = document.getElementById('lb-comment-limit-msg');
+    if (limitMsg) limitMsg.remove();
 
-      // ── Limite OK : on envoie le commentaire ─────────────────────────
-      // Supprime le message d'erreur s'il était affiché
-      var limitMsg = document.getElementById('lb-comment-limit-msg');
-      if (limitMsg) limitMsg.remove();
+    var colRef = fire.collection(db, 'drawings', currentDrawingId, 'comments');
+    fire.addDoc(colRef, {
+      uid:       user.uid,
+      email:     user.email || null,   // stocké pour modération uniquement, jamais affiché
+      pseudo:    user.displayName || 'Anonyme',
+      pfp:       user.photoURL || getPfpFromUid(user.uid),
+      text:      text,
+      createdAt: fire.serverTimestamp()
+    }).then(function (docRef) {
+      textarea.value = '';
+      autoResizeTextarea();
 
-      var colRef = fire.collection(db, 'drawings', currentDrawingId, 'comments');
-      fire.addDoc(colRef, {
+      // Ajoute le commentaire localement en tête de liste
+      var newComment = {
+        id:        docRef.id,
         uid:       user.uid,
-        email:     user.email || null,   // stocké pour modération uniquement, jamais affiché
         pseudo:    user.displayName || 'Anonyme',
         pfp:       user.photoURL || getPfpFromUid(user.uid),
         text:      text,
-        createdAt: fire.serverTimestamp()
-      }).then(function (docRef) {
-        textarea.value = '';
-        autoResizeTextarea();
+        createdAt: { toDate: function () { return new Date(); } }
+      };
+      allComments.unshift(newComment);
+      if (displayedCount < allComments.length) displayedCount++;
+      renderComments();
 
-        // Ajoute le commentaire localement en tête de liste
-        var newComment = {
-          id:        docRef.id,
-          uid:       user.uid,
-          pseudo:    user.displayName || 'Anonyme',
-          pfp:       user.photoURL || getPfpFromUid(user.uid),
-          text:      text,
-          createdAt: { toDate: function () { return new Date(); } }
-        };
-        allComments.unshift(newComment);
-        if (displayedCount < allComments.length) displayedCount++;
-        renderComments();
-
-        // Scroll vers le haut de la liste
-        listEl.scrollTop = 0;
-      }).catch(function (err) {
-        console.error('[Comments] Erreur envoi :', err);
-      }).finally(function () {
-        sendBtn.disabled  = false;
-        textarea.disabled = false;
-        textarea.focus();
-      });
-
+      // Scroll vers le haut de la liste
+      listEl.scrollTop = 0;
     }).catch(function (err) {
-      console.error('[Comments] Erreur vérification limite :', err);
+      console.error('[Comments] Erreur envoi :', err);
+    }).finally(function () {
       sendBtn.disabled  = false;
       textarea.disabled = false;
+      textarea.focus();
     });
   }
 
