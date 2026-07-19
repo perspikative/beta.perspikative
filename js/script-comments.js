@@ -9,10 +9,52 @@
   var COMMENTS_PER_PAGE = 5;
   var PFP_COUNT         = 8;  // nb de photos de profil dans /pics/assets/pfp/
 
+  // Catégories de signalement : chaque catégorie a un id, un label, et des
+  // sous-catégories (id + label). Modifie cette liste si tu veux ajouter/
+  // retirer des raisons de signalement, tout le reste s'adapte tout seul.
+  var REPORT_CATEGORIES = [
+    {
+      id: 'harcelement',
+      label: 'Harcèlement',
+      subcategories: [
+        { id: 'insultes', label: 'Insultes' },
+        { id: 'menaces', label: 'Menaces' },
+        { id: 'moqueries', label: 'Moqueries répétées' }
+      ]
+    },
+    {
+      id: 'contenu-explicite',
+      label: 'Contenu explicite',
+      subcategories: [
+        { id: 'pornographie', label: 'Contenu pornographique' },
+        { id: 'violence', label: 'Violence graphique' }
+      ]
+    },
+    {
+      id: 'spam',
+      label: 'Spam / Publicité',
+      subcategories: [
+        { id: 'lien-suspect', label: 'Lien suspect' },
+        { id: 'contenu-commercial', label: 'Contenu commercial' }
+      ]
+    },
+    {
+      id: 'autre',
+      label: 'Autre',
+      subcategories: [
+        { id: 'hors-sujet', label: 'Hors-sujet' },
+        { id: 'autre-raison', label: 'Autre raison' }
+      ]
+    }
+  ];
+
   // ── État local ───────────────────────────────────────────────────────────
   var currentDrawingId  = null;
   var allComments       = [];       // tous les commentaires chargés
   var displayedCount    = 0;        // combien sont actuellement affichés
+  var reportTargetId    = null;     // id du commentaire en cours de signalement
+  var reportTargetAuthorUid = null; // uid de l'auteur du commentaire signalé
+  var reportTargetText  = null;     // texte du commentaire signalé (snapshot)
 
   // ── Refs DOM ─────────────────────────────────────────────────────────────
   var listEl      = document.getElementById('lb-comments-list');
@@ -23,6 +65,12 @@
   var myPfpEl     = document.getElementById('lb-comment-my-pfp');
   var textarea    = document.getElementById('lb-comment-textarea');
   var sendBtn     = document.getElementById('lb-comment-send');
+
+  // Refs du panneau de signalement (voir markup ajouté dans creations.html)
+  var reportOverlay   = document.getElementById('report-overlay');
+  var reportListEl    = document.getElementById('report-category-list');
+  var reportCloseBtn  = document.getElementById('report-close');
+  var reportConfirmEl = document.getElementById('report-confirm');
 
   if (!listEl) return; // la lightbox commentaires n'est pas sur cette page
 
@@ -88,11 +136,14 @@
           '<span class="lb-comment-time">' + formatRelativeTime(comment.createdAt) + '</span>' +
         '</div>' +
         '<div class="lb-comment-text">' + escapeHtml(comment.text) + '</div>' +
+        '<button class="lb-comment-report" aria-label="Signaler" title="Signaler">' +
+          '<img src="/icons/report.svg" alt="" aria-hidden="true">' +
+        '</button>' +
         (isOwn(comment)
           ? '<button class="lb-comment-delete" aria-label="Supprimer" title="Supprimer">' +
               '<img src="/icons/lightbox-trash.svg" alt="" aria-hidden="true">' +
             '</button>'
-          : '')
+          : '') +
       '</div>';
 
     // Listener suppression
@@ -103,6 +154,14 @@
           deleteComment(comment.id, item);
         });
       }
+    }
+
+    // Listener signalement (dispo pour tout le monde, connecté ou non)
+    var reportBtn = item.querySelector('.lb-comment-report');
+    if (reportBtn) {
+      reportBtn.addEventListener('click', function () {
+        openReportPanel(comment);
+      });
     }
 
     return item;
@@ -246,6 +305,102 @@
   }
 
   // ══════════════════════════════════════════════════════════════════════════
+  // SIGNALEMENT D'UN COMMENTAIRE
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // Construit dynamiquement les catégories + sous-catégories dans le panneau
+  function buildReportCategories() {
+    if (!reportListEl) return;
+    reportListEl.innerHTML = '';
+
+    REPORT_CATEGORIES.forEach(function (cat) {
+      var block = document.createElement('div');
+      block.className = 'report-category-block';
+
+      var title = document.createElement('p');
+      title.className = 'report-category-title';
+      title.textContent = cat.label;
+      block.appendChild(title);
+
+      var subWrap = document.createElement('div');
+      subWrap.className = 'report-subcategory-row';
+
+      cat.subcategories.forEach(function (sub) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'report-subcategory-btn';
+        btn.textContent = sub.label;
+        btn.dataset.category    = cat.id;
+        btn.dataset.subcategory = sub.id;
+        btn.addEventListener('click', function () {
+          submitReport(cat.id, sub.id);
+        });
+        subWrap.appendChild(btn);
+      });
+
+      block.appendChild(subWrap);
+      reportListEl.appendChild(block);
+    });
+  }
+
+  function openReportPanel(comment) {
+    if (!reportOverlay) return;
+
+    reportTargetId         = comment.id;
+    reportTargetAuthorUid  = comment.uid || null;
+    reportTargetText       = comment.text || '';
+
+    // Reset de l'état visuel (au cas où un précédent signalement était affiché)
+    reportOverlay.classList.remove('report-submitted');
+    if (reportConfirmEl) reportConfirmEl.textContent = '';
+
+    reportOverlay.classList.add('active');
+  }
+
+  function closeReportPanel() {
+    if (!reportOverlay) return;
+    reportOverlay.classList.remove('active');
+    reportTargetId        = null;
+    reportTargetAuthorUid = null;
+    reportTargetText      = null;
+  }
+
+  function submitReport(categoryId, subcategoryId) {
+    var db   = window.__prspkDb;
+    var fire = window.__prspkFire;
+    if (!db || !fire || !currentDrawingId || !reportTargetId) return;
+
+    var user = window.__prspkUser;
+
+    var colRef = fire.collection(
+      db, 'drawings', currentDrawingId, 'comments', reportTargetId, 'reports'
+    );
+
+    fire.addDoc(colRef, {
+      reporterUid:      user ? user.uid : null,
+      category:         categoryId,
+      subcategory:       subcategoryId,
+      commentAuthorUid: reportTargetAuthorUid,
+      commentText:      reportTargetText,
+      createdAt:        fire.serverTimestamp()
+    }).then(function () {
+      // Petit message de confirmation, puis fermeture auto du panneau
+      reportOverlay.classList.add('report-submitted');
+      if (reportConfirmEl) {
+        reportConfirmEl.textContent = 'Merci, ce commentaire a été signalé.';
+      }
+      setTimeout(function () {
+        closeReportPanel();
+      }, 1400);
+    }).catch(function (err) {
+      console.error('[Report] Erreur envoi signalement :', err);
+      if (reportConfirmEl) {
+        reportConfirmEl.textContent = 'Une erreur est survenue, réessaie.';
+      }
+    });
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
   // PHOTO DE PROFIL PAR DÉFAUT (déterministe selon uid)
   // ══════════════════════════════════════════════════════════════════════════
 
@@ -325,6 +480,24 @@
     });
     textarea.addEventListener('input', autoResizeTextarea);
   }
+
+  // Panneau de signalement : fermeture (croix + clic sur le fond)
+  if (reportCloseBtn) {
+    reportCloseBtn.addEventListener('click', closeReportPanel);
+  }
+  if (reportOverlay) {
+    reportOverlay.addEventListener('click', function (e) {
+      if (e.target === reportOverlay) closeReportPanel();
+    });
+  }
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && reportOverlay && reportOverlay.classList.contains('active')) {
+      closeReportPanel();
+    }
+  });
+
+  // Construction initiale des catégories de signalement
+  buildReportCategories();
 
   // Synchronisation si auth change après le chargement de la page
   document.addEventListener('prspk:auth-ready', function (e) {
