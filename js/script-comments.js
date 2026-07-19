@@ -137,7 +137,7 @@
         '</div>' +
         '<div class="lb-comment-text">' + escapeHtml(comment.text) + '</div>' +
         '<button class="lb-comment-report" aria-label="Signaler" title="Signaler">' +
-          '<img src="/icons/report.svg" alt="" aria-hidden="true">' +
+          '<img src="/icons/report-active.svg" alt="" aria-hidden="true">' +
         '</button>' +
         (isOwn(comment)
           ? '<button class="lb-comment-delete" aria-label="Supprimer" title="Supprimer">' +
