@@ -55,6 +55,7 @@
   var reportTargetId    = null;     // id du commentaire en cours de signalement
   var reportTargetAuthorUid = null; // uid de l'auteur du commentaire signalé
   var reportTargetText  = null;     // texte du commentaire signalé (snapshot)
+  var reportedThisSession = {};     // cache local { commentId: true } pour ne pas re-checker Firestore sans arrêt
 
   // ── Refs DOM ─────────────────────────────────────────────────────────────
   var listEl      = document.getElementById('lb-comments-list');
@@ -136,9 +137,11 @@
           '<span class="lb-comment-time">' + formatRelativeTime(comment.createdAt) + '</span>' +
         '</div>' +
         '<div class="lb-comment-text">' + escapeHtml(comment.text) + '</div>' +
-        '<button class="lb-comment-report" aria-label="Signaler" title="Signaler">' +
-          '<img src="/icons/report-active.svg" alt="" aria-hidden="true">' +
-        '</button>' +
+        (isOwn(comment)
+          ? ''
+          : '<button class="lb-comment-report" aria-label="Signaler" title="Signaler">' +
+              '<img src="/icons/report.svg" alt="" aria-hidden="true">' +
+            '</button>') +
         (isOwn(comment)
           ? '<button class="lb-comment-delete" aria-label="Supprimer" title="Supprimer">' +
               '<img src="/icons/lightbox-trash.svg" alt="" aria-hidden="true">' +
@@ -156,7 +159,7 @@
       }
     }
 
-    // Listener signalement (dispo pour tout le monde, connecté ou non)
+    // Listener signalement (dispo pour tout le monde SAUF l'auteur du commentaire)
     var reportBtn = item.querySelector('.lb-comment-report');
     if (reportBtn) {
       reportBtn.addEventListener('click', function () {
@@ -308,6 +311,90 @@
   // SIGNALEMENT D'UN COMMENTAIRE
   // ══════════════════════════════════════════════════════════════════════════
 
+  // ── Identifiant anonyme (pour les visiteurs non connectés) ──────────────
+  // Stocké en localStorage, généré une seule fois par navigateur. Sert à
+  // fabriquer un ID de document stable pour empêcher le double signalement
+  // depuis le même appareil/navigateur (ce n'est pas infaillible : ça saute
+  // si la personne vide son cache ou change de navigateur, mais c'est le
+  // seul repère possible sans compte).
+  var ANON_ID_KEY = 'prspk_anon_id';
+
+  function getAnonId() {
+    try {
+      var id = localStorage.getItem(ANON_ID_KEY);
+      if (!id) {
+        id = 'anon_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 10);
+        localStorage.setItem(ANON_ID_KEY, id);
+      }
+      return id;
+    } catch (e) {
+      // localStorage indisponible (navigation privée stricte, etc.) :
+      // on retombe sur un id de session (pas persistant, mais ça n'empêche
+      // pas Firestore de fonctionner, juste la persistance du "déjà signalé")
+      return 'anon_session_fallback';
+    }
+  }
+
+  // ── Petit cache local des signalements déjà faits par CE navigateur ─────
+  // (uniquement pour les non-connectés, pour éviter même de rouvrir la
+  // lightbox inutilement — Firestore reste la source de vérité finale)
+  var REPORTED_LOCAL_KEY = 'prspk_reported_comments';
+
+  function getLocallyReportedIds() {
+    try {
+      var raw = localStorage.getItem(REPORTED_LOCAL_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function markLocallyReported(commentId) {
+    try {
+      var map = getLocallyReportedIds();
+      map[commentId] = true;
+      localStorage.setItem(REPORTED_LOCAL_KEY, JSON.stringify(map));
+    } catch (e) {
+      // silencieux : au pire, pas de mémoire locale, Firestore protège quand même
+    }
+  }
+
+  // ── ID de document déterministe pour le signalement ──────────────────────
+  // Connecté  → l'UID de l'utilisateur (1 signalement par personne et par
+  //             commentaire, garanti par Firestore)
+  // Non connecté → l'ID anonyme du navigateur
+  function getReportDocId() {
+    var user = window.__prspkUser;
+    return user ? user.uid : getAnonId();
+  }
+
+  // Vérifie si CE commentaire a déjà été signalé par CETTE personne
+  // (regarde d'abord le cache local rapide, sinon interroge Firestore)
+  function hasAlreadyReported(commentId) {
+    if (reportedThisSession[commentId]) return Promise.resolve(true);
+
+    var user = window.__prspkUser;
+    if (!user) {
+      // Non connecté : le localStorage fait foi côté client
+      var localMap = getLocallyReportedIds();
+      return Promise.resolve(!!localMap[commentId]);
+    }
+
+    // Connecté : on vérifie réellement sur Firestore (fiable, multi-appareil)
+    var db   = window.__prspkDb;
+    var fire = window.__prspkFire;
+    if (!db || !fire || !currentDrawingId) return Promise.resolve(false);
+
+    var docRef = fire.doc(
+      db, 'drawings', currentDrawingId, 'comments', commentId, 'reports', getReportDocId()
+    );
+    return fire.getDoc(docRef).then(function (snap) {
+      return snap.exists();
+    }).catch(function () {
+      return false;
+    });
+  }
+
   // Construit dynamiquement les catégories + sous-catégories dans le panneau
   function buildReportCategories() {
     if (!reportListEl) return;
@@ -351,15 +438,38 @@
     reportTargetText       = comment.text || '';
 
     // Reset de l'état visuel (au cas où un précédent signalement était affiché)
-    reportOverlay.classList.remove('report-submitted');
+    reportOverlay.classList.remove('report-submitted', 'report-already-done');
     if (reportConfirmEl) reportConfirmEl.textContent = '';
 
     reportOverlay.classList.add('active');
+
+    // On vérifie si cette personne a déjà signalé ce commentaire avant
+    // d'afficher les catégories. Pendant la vérification, on affiche un
+    // court message d'attente pour éviter tout clic sur un choix pas encore
+    // validé comme disponible.
+    if (reportConfirmEl) reportConfirmEl.textContent = 'Vérification…';
+    if (reportListEl) reportListEl.style.opacity = '0.35';
+
+    hasAlreadyReported(comment.id).then(function (already) {
+      // Le panneau a pu être fermé entre-temps, ou un autre commentaire ouvert
+      if (reportTargetId !== comment.id) return;
+
+      if (reportListEl) reportListEl.style.opacity = '';
+
+      if (already) {
+        reportOverlay.classList.add('report-already-done');
+        if (reportConfirmEl) {
+          reportConfirmEl.textContent = 'Tu as déjà signalé ce commentaire.';
+        }
+      } else {
+        if (reportConfirmEl) reportConfirmEl.textContent = '';
+      }
+    });
   }
 
   function closeReportPanel() {
     if (!reportOverlay) return;
-    reportOverlay.classList.remove('active');
+    reportOverlay.classList.remove('active', 'report-submitted', 'report-already-done');
     reportTargetId        = null;
     reportTargetAuthorUid = null;
     reportTargetText      = null;
@@ -370,13 +480,22 @@
     var fire = window.__prspkFire;
     if (!db || !fire || !currentDrawingId || !reportTargetId) return;
 
-    var user = window.__prspkUser;
+    // Sécurité supplémentaire : si le panneau affiche déjà "déjà signalé",
+    // on bloque l'envoi même si le clic passe entre les mailles du filet
+    if (reportOverlay.classList.contains('report-already-done')) return;
 
-    var colRef = fire.collection(
-      db, 'drawings', currentDrawingId, 'comments', reportTargetId, 'reports'
+    var user        = window.__prspkUser;
+    var targetId    = reportTargetId;
+    var reportDocId = getReportDocId();
+
+    // ID de document déterministe : Firestore refusera la création si un
+    // document avec ce même ID existe déjà pour ce commentaire (voir règles
+    // Firestore : allow create nécessite que le document n'existe pas encore)
+    var docRef = fire.doc(
+      db, 'drawings', currentDrawingId, 'comments', targetId, 'reports', reportDocId
     );
 
-    fire.addDoc(colRef, {
+    fire.setDoc(docRef, {
       reporterUid:      user ? user.uid : null,
       category:         categoryId,
       subcategory:       subcategoryId,
@@ -384,6 +503,10 @@
       commentText:      reportTargetText,
       createdAt:        fire.serverTimestamp()
     }).then(function () {
+      // Mémorisation locale pour ne plus jamais re-proposer ce commentaire
+      reportedThisSession[targetId] = true;
+      if (!user) markLocallyReported(targetId);
+
       // Petit message de confirmation, puis fermeture auto du panneau
       reportOverlay.classList.add('report-submitted');
       if (reportConfirmEl) {
@@ -394,8 +517,13 @@
       }, 1400);
     }).catch(function (err) {
       console.error('[Report] Erreur envoi signalement :', err);
+      // Si Firestore a refusé parce que le document existe déjà (double clic
+      // rapide, ou signalement fait entre-temps depuis un autre onglet), on
+      // l'indique clairement plutôt que d'afficher une erreur générique
+      reportedThisSession[targetId] = true;
+      if (!user) markLocallyReported(targetId);
       if (reportConfirmEl) {
-        reportConfirmEl.textContent = 'Une erreur est survenue, réessaie.';
+        reportConfirmEl.textContent = 'Tu as déjà signalé ce commentaire.';
       }
     });
   }

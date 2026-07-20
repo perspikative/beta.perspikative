@@ -11,6 +11,8 @@ import {
   addDoc,
   deleteDoc,
   doc,
+  setDoc,
+  getDoc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -54,6 +56,8 @@ window.__prspkFire = {
   addDoc,
   deleteDoc,
   doc,
+  setDoc,
+  getDoc,
   serverTimestamp
 };
 
