@@ -144,7 +144,7 @@ permalink: /art-challenge
     }
 
     .section-inner {
-      max-width: 1060px;
+      max-width: 1000px;
       margin: 0 auto;
     }
 
@@ -659,13 +659,14 @@ permalink: /art-challenge
       top: 12px;
       left: 12px;
       background: linear-gradient(135deg, var(--accent-1), var(--accent-4));
-      color: #061a14;
+      color: #ffffff;
       font-weight: 900;
-      font-size: 0.75rem;
+      font-size: 0.8rem;
       letter-spacing: 2px;
       text-transform: uppercase;
       padding: 5px 12px;
-      border-radius: 99px;
+      border-radius: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), inset 0 0 8px rgba(255, 255, 255, 0.25);
     }
 
     .winner-name {
@@ -689,10 +690,17 @@ permalink: /art-challenge
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      color: rgba(255,255,255,0.25);
+      gap: 2px;
+      color: rgba(255,255,255,0.5);
       font-size: 1rem;
+      letter-spacing: 0.5px;
       font-weight: 700;
+    }
+    
+    .placeholder-card img {
+      width: 42px;
+      height: 42px;
+      opacity: 0.5;
     }
 
     @media (max-width: 720px) {
@@ -756,14 +764,14 @@ permalink: /art-challenge
     .ac-lightbox-rank-badge {
       display: inline-block;
       background: linear-gradient(135deg, var(--accent-1), var(--accent-4));
-      color: #061a14;
+      color: #ffffff;
       font-weight: 900;
-      font-size: 0.72rem;
+      font-size: 0.8rem;
       letter-spacing: 2px;
       text-transform: uppercase;
-      padding: 4px 12px;
-      border-radius: 99px;
-      margin-bottom: 10px;
+      padding: 5px 12px;
+      border-radius: 30px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), inset 0 0 8px rgba(255, 255, 255, 0.25);
     }
 
     .ac-lightbox-name {
@@ -809,10 +817,9 @@ permalink: /art-challenge
       align-items: center;
       justify-content: space-between;
       gap: 30px;
-      max-width: 940px;
       align-items: center;
       box-shadow: var(--glass-inset), var(--shadow), 0 0 40px rgba(0, 200, 150, 0.03);
-      transition: all 0.3s ease;
+      transition: all 0.24s ease;
     }
 
     .join-card:hover {
@@ -1279,7 +1286,7 @@ permalink: /art-challenge
           <button class="edition-tab"        role="tab" aria-selected="false" data-panel="ed1">1ère édition</button>
         </div>
 
-        <!-- ── Édition 4 (placeholder) ── -->
+        <!-- ── Édition 4 ── -->
         <div class="edition-panel active" id="ed4" role="tabpanel">
           <div class="edition-meta">
             <h3>4ème édition  · En cours </h3>
@@ -1305,7 +1312,7 @@ permalink: /art-challenge
         <div class="edition-panel" id="ed3" role="tabpanel">
           <div class="edition-meta">
             <h3>3ème édition · Thème libre</h3>
-            <p>Thème : <strong style="color:var(--accent-1);">À compléter</strong> · Date : À compléter · Participants : --</p>
+            <p><strong style="color:var(--accent-1);">Thème libre</strong> · Date : À compléter · Participants : --</p>
           </div>
           <div class="winners-grid">
             <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/ed3-1.webp','1er Prix','Pseudo du gagnant','Titre de l\'œuvre')">
@@ -1338,8 +1345,8 @@ permalink: /art-challenge
         <!-- ── Édition 2 ── -->
         <div class="edition-panel" id="ed2" role="tabpanel">
           <div class="edition-meta">
-            <h3>2ème édition · Thème libre</h3>
-            <p><strong style="color:var(--accent-1);">Thème libre</strong> · Date : 2025</p>
+            <h3>2ème édition · Thème "Fantastique"</h3>
+            <p><strong style="color:var(--accent-1);">Thème libre</strong> · Hiver 2025</p>
           </div>
           <div class="winners-grid">
 
@@ -1373,25 +1380,41 @@ permalink: /art-challenge
           </div>
         </div>
 
-        <!-- ── Édition 1 (placeholder) ── -->
+        <!-- ── Édition 1 ── -->
         <div class="edition-panel" id="ed1" role="tabpanel">
           <div class="edition-meta">
             <h3>1ère édition · Thème libre</h3>
-            <p>Cette édition est en cours. Les gagnants seront affichés ici après la clôture des votes.</p>
+            <p><strong style="color:var(--accent-1);">Hiver 2024</strong></p>
           </div>
           <div class="winners-grid">
-            <div class="placeholder-card">
-              <img src="/icons/portfolio.svg" height="40" width="40" opacity="0.4" alt="" class="placeholder-icon">
-              Bientôt
+
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/ed1-1.webp','1er Prix','Nøva','Dessin traditionnel')">
+              <img src="/pics/art-challenge/ed1-1.webp" alt="1er prix édition 1" loading="lazy" />
+              <div class="winner-overlay">
+                <p class="winner-name">Nøva</p>
+                <p class="winner-title">Dessin traditionnel</p>
+              </div>
+              <span class="winner-rank">🥇 1er Prix</span>
             </div>
-            <div class="placeholder-card">
-              <img src="/icons/portfolio.svg" height="40" width="40" opacity="0.4" alt="" class="placeholder-icon">
-              Bientôt
+
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/ed1-2.webp','2e Prix','froggy_queer_artist','Dessin traditionnel')">
+              <img src="/pics/art-challenge/ed1-2.webp" alt="2e prix édition 1" loading="lazy" />
+              <div class="winner-overlay">
+                <p class="winner-name">Emma-Sophie</p>
+                <p class="winner-title">Peinture</p>
+              </div>
+              <span class="winner-rank">🥈 2e Prix</span>
             </div>
-            <div class="placeholder-card">
-              <img src="/icons/portfolio.svg" height="40" width="40" opacity="0.4" alt="" class="placeholder-icon">
-              Bientôt
+
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/ed1-3.webp','3e Prix','Cinammon','Dessin traditionnel')">
+              <img src="/pics/art-challenge/ed1-3.webp" alt="3e prix édition 1" loading="lazy" />
+              <div class="winner-overlay">
+                <p class="winner-name">Hasan</p>
+                <p class="winner-title">Dessin traditionnel</p>
+              </div>
+              <span class="winner-rank">🥉 3e Prix</span>
             </div>
+
           </div>
         </div>
 
@@ -1404,7 +1427,7 @@ permalink: /art-challenge
         <div class="join-card glass-card reveal">
           
           <div class="join-content">
-            <h2>Prêt·e à relever le défi ?</h2>
+            <h2>T'es arrivé·e jusqu'ici ?</h2>
             <p>La prochaine édition n'attend que toi ! Rejoins la communauté Perspikative pour ne pas rater l'annonce du thème et les inscriptions.</p>
             <div class="hero-cta">
               <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" rel="noopener" class="btn-primary">Voir sur WhatsApp</a>
