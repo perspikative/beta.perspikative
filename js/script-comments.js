@@ -8,6 +8,7 @@
   // ── Constantes ───────────────────────────────────────────────────────────
   var COMMENTS_PER_PAGE = 5;
   var PFP_COUNT         = 8;  // nb de photos de profil dans /pics/assets/pfp/
+  var MAX_COMMENTS_PER_USER_PER_DRAWING = 5; // limite anti-spam par personne et par dessin
 
   // Catégories de signalement : chaque catégorie a un id, un label, et des
   // sous-catégories (id + label). Modifie cette liste si tu veux ajouter/
@@ -118,6 +119,13 @@
     return user && comment.uid && comment.uid === user.uid;
   }
 
+  // ── Détermine si un commentaire doit être affiché masqué ─────────────────
+  // Le texte réel n'est JAMAIS modifié en base : seul l'affichage change.
+  // Par défaut (absence du champ, anciens commentaires), on considère visible.
+  function isHidden(comment) {
+    return comment.status === 'hidden';
+  }
+
   // ══════════════════════════════════════════════════════════════════════════
   // RENDU D'UN COMMENTAIRE
   // ══════════════════════════════════════════════════════════════════════════
@@ -128,6 +136,11 @@
     item.dataset.id   = comment.id;
 
     var pfpSrc = comment.pfp || '/pics/assets/pfp/1.webp';
+    var hidden = isHidden(comment);
+
+    var textHtml = hidden
+      ? '<em>Commentaire masqué</em>'
+      : escapeHtml(comment.text);
 
     item.innerHTML =
       '<img class="lb-comment-pfp" src="' + escapeHtml(pfpSrc) + '" alt="avatar">' +
@@ -136,7 +149,7 @@
           '<span class="lb-comment-pseudo">' + escapeHtml(comment.pseudo || 'Anonyme') + '</span>' +
           '<span class="lb-comment-time">' + formatRelativeTime(comment.createdAt) + '</span>' +
         '</div>' +
-        '<div class="lb-comment-text">' + escapeHtml(comment.text) + '</div>' +
+        '<div class="lb-comment-text">' + textHtml + '</div>' +
         (isOwn(comment)
           ? ''
           : '<button class="lb-comment-report" aria-label="Signaler" title="Signaler">' +
@@ -160,11 +173,17 @@
     }
 
     // Listener signalement (dispo pour tout le monde SAUF l'auteur du commentaire)
+    // Un commentaire déjà masqué automatiquement n'a pas besoin d'être signalé
+    // en plus : on n'affiche donc pas le bouton dans ce cas.
     var reportBtn = item.querySelector('.lb-comment-report');
     if (reportBtn) {
-      reportBtn.addEventListener('click', function () {
-        openReportPanel(comment);
-      });
+      if (hidden) {
+        reportBtn.remove();
+      } else {
+        reportBtn.addEventListener('click', function () {
+          openReportPanel(comment);
+        });
+      }
     }
 
     return item;
@@ -219,10 +238,61 @@
         allComments.push(Object.assign({ id: docSnap.id }, docSnap.data()));
       });
       renderComments();
+      updateSendAvailability();
     }).catch(function (err) {
       console.error('[Comments] Erreur chargement :', err);
       listEl.innerHTML = '<p class="lb-comments-empty">Impossible de charger les commentaires</p>';
     });
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
+  // LIMITE DE COMMENTAIRES PAR UTILISATEUR ET PAR DESSIN
+  // ══════════════════════════════════════════════════════════════════════════
+
+  // Compte combien de commentaires l'utilisateur connecté a déjà postés sur
+  // CE dessin (basé sur allComments, déjà chargé depuis Firestore pour ce
+  // dessin). On compte tous les statuts (visible ou hidden) : un commentaire
+  // masqué automatiquement compte quand même dans le quota de la personne.
+  function countOwnComments() {
+    var user = window.__prspkUser;
+    if (!user) return 0;
+    return allComments.reduce(function (acc, c) {
+      return acc + (c.uid === user.uid ? 1 : 0);
+    }, 0);
+  }
+
+  function hasReachedCommentLimit() {
+    return countOwnComments() >= MAX_COMMENTS_PER_USER_PER_DRAWING;
+  }
+
+  // Met à jour l'état du champ de saisie (désactivé + message si limite atteinte)
+  function updateSendAvailability() {
+    if (!textarea || !sendBtn) return;
+
+    var user = window.__prspkUser;
+    if (!user) return; // l'état invité est déjà géré par updateFormState
+
+    var reached = hasReachedCommentLimit();
+
+    textarea.disabled = reached;
+    sendBtn.disabled   = reached;
+
+    var limitMsg = document.getElementById('lb-comment-limit-msg');
+
+    if (reached) {
+      textarea.placeholder = 'Limite de ' + MAX_COMMENTS_PER_USER_PER_DRAWING + ' commentaires atteinte pour ce dessin';
+      if (!limitMsg && inputWrap) {
+        limitMsg = document.createElement('p');
+        limitMsg.id = 'lb-comment-limit-msg';
+        limitMsg.className = 'lb-comments-empty';
+        limitMsg.style.margin = '6px 0 0';
+        limitMsg.textContent = 'Tu as atteint la limite de ' + MAX_COMMENTS_PER_USER_PER_DRAWING + ' commentaires sur ce dessin.';
+        inputWrap.parentNode.insertBefore(limitMsg, inputWrap.nextSibling);
+      }
+    } else {
+      textarea.placeholder = 'Écris un commentaire…';
+      if (limitMsg) limitMsg.remove();
+    }
   }
 
   // ══════════════════════════════════════════════════════════════════════════
@@ -235,6 +305,13 @@
     var user = window.__prspkUser;
     if (!db || !fire || !user || !currentDrawingId) return;
 
+    // Vérification de la limite juste avant l'envoi (sécurité en plus du
+    // désactivage visuel du champ, au cas où l'état serait périmé)
+    if (hasReachedCommentLimit()) {
+      updateSendAvailability();
+      return;
+    }
+
     var text = textarea.value.trim();
     if (!text) return;
 
@@ -245,6 +322,13 @@
     var limitMsg = document.getElementById('lb-comment-limit-msg');
     if (limitMsg) limitMsg.remove();
 
+    // ── Modération automatique ──────────────────────────────────────────
+    // Le texte réel est TOUJOURS stocké intact dans Firestore : seul le
+    // champ "status" change l'affichage côté client (voir isHidden()).
+    var moderation = (window.PrspkModeration && window.PrspkModeration.check)
+      ? window.PrspkModeration.check(text)
+      : { flagged: false, status: 'visible' };
+
     var colRef = fire.collection(db, 'drawings', currentDrawingId, 'comments');
     fire.addDoc(colRef, {
       uid:       user.uid,
@@ -252,6 +336,7 @@
       pseudo:    user.displayName || 'Anonyme',
       pfp:       user.photoURL || getPfpFromUid(user.uid),
       text:      text,
+      status:    moderation.status, // "visible" ou "hidden" — modifiable ensuite depuis Firestore
       createdAt: fire.serverTimestamp()
     }).then(function (docRef) {
       textarea.value = '';
@@ -264,20 +349,24 @@
         pseudo:    user.displayName || 'Anonyme',
         pfp:       user.photoURL || getPfpFromUid(user.uid),
         text:      text,
+        status:    moderation.status,
         createdAt: { toDate: function () { return new Date(); } }
       };
       allComments.unshift(newComment);
       if (displayedCount < allComments.length) displayedCount++;
       renderComments();
+      updateSendAvailability();
 
       // Scroll vers le haut de la liste
       listEl.scrollTop = 0;
     }).catch(function (err) {
       console.error('[Comments] Erreur envoi :', err);
     }).finally(function () {
-      sendBtn.disabled  = false;
-      textarea.disabled = false;
-      textarea.focus();
+      if (!hasReachedCommentLimit()) {
+        sendBtn.disabled  = false;
+        textarea.disabled = false;
+        textarea.focus();
+      }
     });
   }
 
@@ -300,6 +389,7 @@
       allComments = allComments.filter(function (c) { return c.id !== commentId; });
       displayedCount = Math.max(COMMENTS_PER_PAGE, Math.min(displayedCount, allComments.length));
       renderComments();
+      updateSendAvailability();
     }).catch(function (err) {
       console.error('[Comments] Erreur suppression :', err);
       itemEl.style.opacity   = '1';
@@ -555,9 +645,14 @@
       if (myPfpEl) {
         myPfpEl.src = user.photoURL || getPfpFromUid(user.uid);
       }
+
+      updateSendAvailability();
     } else {
       guestEl.style.display   = 'flex';
       inputWrap.style.display = 'none';
+
+      var limitMsg = document.getElementById('lb-comment-limit-msg');
+      if (limitMsg) limitMsg.remove();
     }
   }
 
