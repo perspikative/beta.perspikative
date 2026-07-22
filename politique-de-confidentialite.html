@@ -24,6 +24,90 @@ permalink: /politique-de-confidentialite
   
   <script defer src="/js/nav-liquid-glass.js"></script>
   <script defer src="https://cloud.umami.is/script.js" data-website-id="18d7b0fd-c5fb-4b2e-a43b-10cc734daa8f"></script>
+
+  <style>
+    :root {
+      --pc-accent-1: #00c896;
+      --pc-glass-bg: rgba(255, 255, 255, 0.08);
+      --pc-glass-inset: inset 0 0 14px rgba(255, 255, 255, 0.2);
+      --pc-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+      --pc-text-muted: rgba(255, 255, 255, 0.7);
+      --pc-radius-card: 25px;
+    }
+
+    /* Wrapper glass, gère aussi le scroll horizontal sur mobile */
+    .tiers-table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 24px 0;
+      padding: 12px;
+      border-radius: var(--pc-radius-card);
+      background: var(--pc-glass-bg);
+      box-shadow: var(--pc-glass-inset), var(--pc-shadow);
+    }
+
+    .tiers-table-wrap::-webkit-scrollbar { height: 6px; }
+    .tiers-table-wrap::-webkit-scrollbar-thumb {
+      background: var(--pc-accent-1);
+      border-radius: 10px;
+    }
+
+    .tiers-table {
+      width: 100%;
+      min-width: 460px;
+      border-collapse: separate;
+      border-spacing: 3.6px;
+      font-family: 'Rubik', sans-serif;
+    }
+
+    .tiers-table thead th {
+      text-align: left;
+      padding: 10px 20px 12px;
+      font-weight: 700;
+      font-size: 1.12rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: rgba(250, 250, 250, 1);
+    }
+
+    .tiers-table tbody tr {
+      background: rgba(255, 255, 255, 0.04);
+      transition: background 0.15s ease;
+    }
+
+    .tiers-table tbody tr:hover {
+      background: rgba(250, 250, 250, 0.1);
+    }
+
+    .tiers-table tbody td {
+      padding: 16px 20px;
+      font-size: 1.1rem;
+      line-height: 1.3;
+      color: var(--pc-text-muted);
+      vertical-align: middle;
+    }
+
+    .tiers-table tbody td:first-child {
+      font-weight: 700;
+      color: #ffffff;
+      border-radius: 20px 0 0 20px;
+      white-space: nowrap;
+    }
+
+    .tiers-table tbody td:last-child {
+      border-radius: 0 20px 20px 0;
+    }
+
+    @media (max-width: 900px) {
+      .tiers-table { min-width: 70px; }
+      .tiers-table thead th { font-size: 1rem; padding: 8px 14px 12px; }
+      .tiers-table tbody td { padding: 8px 12px; font-size: 1rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .tiers-table tbody tr { transition: none; }
+    }
+  </style>
 </head>
 
 <body class="mentions-body">
@@ -179,7 +263,42 @@ permalink: /politique-de-confidentialite
       
       <h2>5. SERVICES TIERS</h2>
 
-      <p>Le site utilise certains services externes pour l'affichage de contenus, notamment <a href="https://www.youtube.com" target="_blank" class="host-link"><strong>YouTube</strong></a> pour l'intégration de vidéos. Ce service utilise sa propre <a href="https://www.youtube.com/howyoutubeworks/privacy/" target="_blank" class="host-link">politique de confidentialité</a>, et vous l'acceptez en regardant les vidéos.</p>
+      <p>Le site fait appel à plusieurs services externes pour fonctionner :</p>
+
+      <div class="tiers-table-wrap">
+        <table class="tiers-table">
+          <thead>
+            <tr>
+              <th scope="col">Service</th>
+              <th scope="col">Utilisation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Firebase (Google)</td>
+              <td>Comptes utilisateurs, authentification et base de données</td>
+            </tr>
+            <tr>
+              <td>GitHub Pages</td>
+              <td>Hébergement du site</td>
+            </tr>
+            <tr>
+              <td>Hostinger</td>
+              <td>Gestion du nom de domaine et des e-mails</td>
+            </tr>
+            <tr>
+              <td>Umami Analytics</td>
+              <td>Statistiques de fréquentation anonymes, sans cookies</td>
+            </tr>
+            <tr>
+              <td>YouTube (Google)</td>
+              <td>Intégration de vidéos</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>YouTube applique sa propre <a href="https://www.youtube.com/howyoutubeworks/privacy/" target="_blank" class="host-link">politique de confidentialité</a>, que vous acceptez en lisant les vidéos.</p>
 
       <h2>6. VOS DROITS</h2>
 
