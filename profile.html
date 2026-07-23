@@ -88,26 +88,29 @@ permalink: /profile
     height: 46px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.07);
-    border: 1px solid rgba(0, 200, 150, 0.25);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+    transition: all 0.2s ease;
     z-index: 2;
+    box-shadow:
+      inset 0 0 16px rgba(255, 255, 255, 0.12),
+      0 6px 20px rgba(0, 0, 0, 0.1);
   }
 
   .btn-edit:hover {
-    background: rgba(0, 200, 150, 0.15);
-    border-color: rgba(10, 240, 208, 0.5);
-    transform: scale(1.08);
+    background: rgba(255, 255, 255, 0.07);
+    transform: translateY(-1px);
+    box-shadow:
+      inset 0 0 16px rgba(255, 255, 255, 0.16),
+      0 8px 24px rgba(0, 0, 0, 0.16);
   }
 
   .btn-edit img {
-    width: 24px;
-    height: 24px;
+    width: 30px;
+    height: 30px;
     opacity: 0.85;
   }
 
@@ -137,7 +140,7 @@ permalink: /profile
     border-radius: 50%;
     object-fit: cover;
     display: block;
-    background: #0d1f1c;
+    background: #000000;
   }
 
   /* Nom + bio */
@@ -167,16 +170,16 @@ permalink: /profile
   .profile-bio-block {
     margin-top: 20px;
     padding-top: 18px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 2.6px solid rgba(255, 255, 255, 0.1);
   }
 
   .profile-bio-label {
     font-family: 'Rubik', sans-serif;
-    font-size: 0.72rem;
+    font-size: 1.05rem;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    color: rgba(0, 240, 208, 0.75);
+    color: #ffffff;
     margin: 0 0 8px;
   }
 
@@ -206,11 +209,13 @@ permalink: /profile
     align-items: center;
     gap: 8px;
     align-self: flex-start;
-    background: rgba(0, 200, 150, 0.1);
-    border: 1px solid rgba(0, 200, 150, 0.28);
-    border-radius: 50px;
+    background: rgba(250, 250, 250, 0.05);
+    border-radius: 25px;
     padding: 8px 16px;
     margin-top: 18px;
+    box-shadow:
+      inset 0 0 16px rgba(255, 255, 255, 0.16),
+      0 8px 24px rgba(0, 0, 0, 0.16);
   }
 
   .profile-since::before {
@@ -297,7 +302,7 @@ permalink: /profile
     color: rgba(255, 255, 255, 0.55);
     font-family: 'Rubik', sans-serif;
     font-weight: 600;
-    font-size: 0.98rem;
+    font-size: 1.05rem;
     padding: 12px 16px 16px;
     cursor: pointer;
     white-space: nowrap;
@@ -317,7 +322,7 @@ permalink: /profile
     left: 16px;
     right: 16px;
     bottom: 0;
-    height: 2.5px;
+    height: 2.6px;
     border-radius: 3px 3px 0 0;
     background: transparent;
     transition: background 0.2s ease;
@@ -386,11 +391,11 @@ permalink: /profile
 
   .tab-placeholder p {
     font-family: 'Rubik', sans-serif;
-    font-size: 0.92rem;
+    font-size: 0.96rem;
     font-weight: 300;
     max-width: 320px;
     margin: 0;
-    line-height: 1.4;
+    line-height: 1.2;
   }
 
   @media (max-width: 900px) {
