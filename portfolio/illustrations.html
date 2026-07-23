@@ -25,6 +25,7 @@ permalink: /portfolio/illustrations
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
   
   <script type="module" src="/js/firebase.js"></script>
+  <script defer src="/js/moderation.js"></script>
   <script defer src="/js/script-comments.js"></script>
   <script defer src="/js/nav-liquid-glass.js"></script>
   <script defer src="https://cloud.umami.is/script.js" data-website-id="18d7b0fd-c5fb-4b2e-a43b-10cc734daa8f"></script>
@@ -105,7 +106,23 @@ permalink: /portfolio/illustrations
   <div class="blur-overlay"></div>
 
   <main class="creations">
-    <h2>ILLUSTRATIONS</h2>
+    <div class="creations-toolbar">
+      <h2>CRÉATIONS</h2>
+
+      <div class="color-filter" id="color-filter">
+        <button
+          type="button"
+          class="filter-btn"
+          id="filter-btn"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="filter-panel"
+        >
+          <img src="/icons/filter-list.svg" alt="" class="filter-btn-icon">
+          <span class="filter-btn-label">Filtrer</span>
+        </button>
+      </div>
+    </div>
 
     <section class="creations-grid" id="creations-grid">
       <div class="grid-sizer"></div>
@@ -133,6 +150,7 @@ permalink: /portfolio/illustrations
                      <br><em>I'm a thread on your shirt that is coming undone</em>
                      <br><em>I feel right, I feel wrong, i feel totally insane</em>
                      <br><em>And I want you more than any stupid song could ever say »</em>"
+            data-colors="rose,bleu,vert,orange,jaune,mauve"
         />
       </div>
 
@@ -150,11 +168,30 @@ permalink: /portfolio/illustrations
                      ❇️ <strong>Particularités :</strong> Perspective isométrique, première illustration graphique au digital<br>
                      💭 <strong>Imagination :</strong> 90% improvisée • 10% réfléchie<br>
                      💬 <strong>Commentaires :</strong><br>
-                     Quelle chance : vous êtes tous conviés à l'anniversaire de Perspikative!! Rendez-vous au sommet du 2 Year Building pour faire la fête! Buffets à volonté sur nos terrasses, tobogan en libre-service, serres tropicales… rien ne vous ennuiera! Même la mascotte à l'entrée peut discuter avec vous 🍰"
+                     Quelle chance : vous êtes tous conviés à l'anniversaire de Perspikative!!
+                     Rendez-vous au sommet du 2 Year Building pour faire la fête! Buffets à volonté sur nos terrasses, tobogan en libre-service, serres tropicales… rien ne vous ennuiera!
+                     Même la mascotte à l'entrée peut discuter avec vous 🍰"
+                     data-colors="rose,beige,rouge,jaune,mauve,violet,vert,brun,orange,bleu"
         />
       </div>
-
     </section>
+
+    <!-- Affiché quand aucun dessin ne correspond à la combinaison de couleurs sélectionnée -->
+    <div class="filter-empty-state" id="filter-empty-state" hidden>
+      <img src="/icons/rechercher.svg" alt="" class="filter-empty-icon">
+      <p>Aucun résultat pour cette combinaison de couleurs</p>
+    </div>
+
+    <div class="filter-panel" id="filter-panel" role="menu" aria-hidden="true">
+      <div class="filter-panel-header">
+        <button type="button" class="filter-panel-reset" id="filter-panel-reset" aria-label="Réinitialiser les filtres" title="Réinitialiser">
+          <img src="/icons/refresh.svg" alt="" class="filter-panel-reset-icon">
+        </button>
+      </div>
+
+      <!-- Pastilles générées dynamiquement depuis les data-colors de chaque dessin -->
+      <div class="filter-swatches" id="filter-swatches"></div>
+    </div>
   </main>
 
   <footer>
@@ -280,6 +317,25 @@ permalink: /portfolio/illustrations
       <img src="/icons/arrow-right-lightbox.svg" alt="Suivant">
     </button>
   </div>
+
+  <!-- ═══ MINI LIGHTBOX : SIGNALEMENT D'UN COMMENTAIRE ═══ -->
+  <div class="report-overlay" id="report-overlay">
+    <div class="report-window">
+      <button class="report-close" id="report-close" aria-label="Fermer">
+        <img src="/icons/fermer.svg" alt="Fermer">
+      </button>
+
+      <h3 class="report-title">Signaler ce commentaire</h3>
+      <p class="report-subtitle">Choisis la raison qui correspond le mieux</p>
+
+      <div class="report-category-list" id="report-category-list">
+        <!-- Catégories + sous-catégories générées en JS (script-comments.js) -->
+      </div>
+
+      <p class="report-confirm" id="report-confirm"></p>
+    </div>
+  </div>
+  <!-- ═══════════════════════════════════════════════════ -->
 
   <script>
     const menuToggle = document.getElementById('menuToggle');
