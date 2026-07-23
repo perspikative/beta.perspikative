@@ -25,6 +25,7 @@ permalink: /portfolio/projets
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
 
   <script type="module" src="/js/firebase.js"></script>
+  <script defer src="/js/moderation.js"></script>
   <script defer src="/js/script-comments.js"></script>
   <script defer src="/js/nav-liquid-glass.js"></script>
   <script defer src="https://cloud.umami.is/script.js" data-website-id="18d7b0fd-c5fb-4b2e-a43b-10cc734daa8f"></script>
@@ -105,7 +106,23 @@ permalink: /portfolio/projets
   <div class="blur-overlay"></div>
 
   <main class="creations">
-    <h2>PROJETS</h2>
+    <div class="creations-toolbar">
+      <h2>CRÉATIONS</h2>
+
+      <div class="color-filter" id="color-filter">
+        <button
+          type="button"
+          class="filter-btn"
+          id="filter-btn"
+          aria-haspopup="true"
+          aria-expanded="false"
+          aria-controls="filter-panel"
+        >
+          <img src="/icons/filter-list.svg" alt="" class="filter-btn-icon">
+          <span class="filter-btn-label">Filtrer</span>
+        </button>
+      </div>
+    </div>
 
     <section class="creations-grid" id="creations-grid">
       <div class="grid-sizer"></div>
@@ -125,6 +142,7 @@ permalink: /portfolio/projets
                      💭 <strong>Imagination :</strong> 90% improvisée • 10% d'Internet<br>
                      💬 <strong>Commentaires :</strong><br>
                      2 artistes, 2 couleurs ; 1 dessin. C'est ainsi qu'est né ce dessin, réalisé en plusieurs fois, sur plusieurs mois. Le concept ? Dessiner chacun de notre côté avec une même couleur, et changer de sens à chaque fois qu'on change de musique. C'était bien fun. J'étais orange, elle était bleu 🧡🩵<br><br>En collaboration avec @supernovaaa_art_"
+          data-colors="bleu,orange,jaune,beige"
         />
       </div>
 
@@ -143,6 +161,7 @@ permalink: /portfolio/projets
                      💭 <strong>Imagination :</strong> 60% réfléchie • 40% improvisée<br>
                      💬 <strong>Commentaires :</strong><br>
                      ART Tower. Attendue et préparée depuis bien longtemps. Explorez la créativité à travers chaque étage de notre tour artistique. Chaque trait est une montée vers l’inspiration… Rejoignez nous dans cette ascension vers l'art sous toutes ses formes! 🎨🙌"
+          data-colors="orange,beige,jaune,bleu,vert,rouge,rose,mauve,brun,violet"
         />
       </div>
 
@@ -159,10 +178,27 @@ permalink: /portfolio/projets
                      ⌛️ <strong>Temps de travail :</strong> Bien longtemps<br>
                      ❇️ <strong>Particularités :</strong> Perspective isométrique, première création exclusive de la chaîne<br>
                      💭 <strong>Imagination :</strong> 80% réfléchie • 15% improvisée • 5% d'Internet<br>"
+          data-colors="rouge,vert,brun,jaune,bleu,rose,orange,mauve,violet,beige"
         />
       </div>
-
     </section>
+
+    <!-- Affiché quand aucun dessin ne correspond à la combinaison de couleurs sélectionnée -->
+    <div class="filter-empty-state" id="filter-empty-state" hidden>
+      <img src="/icons/rechercher.svg" alt="" class="filter-empty-icon">
+      <p>Aucun résultat pour cette combinaison de couleurs</p>
+    </div>
+
+    <div class="filter-panel" id="filter-panel" role="menu" aria-hidden="true">
+      <div class="filter-panel-header">
+        <button type="button" class="filter-panel-reset" id="filter-panel-reset" aria-label="Réinitialiser les filtres" title="Réinitialiser">
+          <img src="/icons/refresh.svg" alt="" class="filter-panel-reset-icon">
+        </button>
+      </div>
+
+      <!-- Pastilles générées dynamiquement depuis les data-colors de chaque dessin -->
+      <div class="filter-swatches" id="filter-swatches"></div>
+    </div>
   </main>
 
   <footer>
@@ -288,6 +324,25 @@ permalink: /portfolio/projets
       <img src="/icons/arrow-right-lightbox.svg" alt="Suivant">
     </button>
   </div>
+
+  <!-- ═══ MINI LIGHTBOX : SIGNALEMENT D'UN COMMENTAIRE ═══ -->
+  <div class="report-overlay" id="report-overlay">
+    <div class="report-window">
+      <button class="report-close" id="report-close" aria-label="Fermer">
+        <img src="/icons/fermer.svg" alt="Fermer">
+      </button>
+
+      <h3 class="report-title">Signaler ce commentaire</h3>
+      <p class="report-subtitle">Choisis la raison qui correspond le mieux</p>
+
+      <div class="report-category-list" id="report-category-list">
+        <!-- Catégories + sous-catégories générées en JS (script-comments.js) -->
+      </div>
+
+      <p class="report-confirm" id="report-confirm"></p>
+    </div>
+  </div>
+  <!-- ═══════════════════════════════════════════════════ -->
 
   <script>
     const menuToggle = document.getElementById('menuToggle');
