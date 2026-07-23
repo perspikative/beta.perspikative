@@ -1,7 +1,8 @@
 import {
     getAuth,
     onAuthStateChanged,
-    updateProfile
+    updateProfile,
+    signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const auth = getAuth();
@@ -38,6 +39,7 @@ const editNameInput = document.getElementById("editNameInput");
 const editBioInput = document.getElementById("editBioInput");
 const bioCharCount = document.getElementById("bioCharCount");
 const avatarGrid = document.getElementById("avatarGrid");
+const btnLogout = document.getElementById("btnLogout");
 
 let currentUser = null;
 let selectedAvatar = DEFAULT_AVATAR;
@@ -271,5 +273,19 @@ editSaveBtn.addEventListener("click", async () => {
         editStatus.classList.add("is-error");
     } finally {
         editSaveBtn.disabled = false;
+    }
+});
+
+// -----------------------------------------------------------------------
+// Déconnexion
+// -----------------------------------------------------------------------
+btnLogout.addEventListener("click", async () => {
+    btnLogout.disabled = true;
+    try {
+        await signOut(auth);
+        window.location.href = "/";
+    } catch (err) {
+        console.error("Erreur lors de la déconnexion :", err);
+        btnLogout.disabled = false;
     }
 });
