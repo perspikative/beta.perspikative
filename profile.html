@@ -9,6 +9,8 @@ permalink: /profile
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mon profil - Perspikative</title>
 
+  <meta name="robots" content="noindex, follow">
+
   <meta name="theme-color" content="#58b3a2" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#344f4a" media="(prefers-color-scheme: dark)">
 
@@ -60,42 +62,16 @@ permalink: /profile
     aspect-ratio: 3 / 4;
     min-height: 520px;
     background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 28px;
+    border-radius: 25px;
     padding: 34px 28px 26px 28px;
     display: flex;
     flex-direction: column;
-    backdrop-filter: blur(18px) saturate(140%);
-    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     box-shadow:
       inset 0 0 16px rgba(255, 255, 255, 0.14),
       0 10px 34px rgba(0, 0, 0, 0.16);
     overflow: hidden;
-  }
-
-  /* halo dégradé décoratif en fond de carte, façon Perspikative */
-  .profile-card::before {
-    content: '';
-    position: absolute;
-    top: -35%;
-    left: -25%;
-    width: 75%;
-    height: 55%;
-    background: radial-gradient(circle, rgba(10, 240, 208, 0.16), transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .profile-card::after {
-    content: '';
-    position: absolute;
-    bottom: -30%;
-    right: -20%;
-    width: 65%;
-    height: 50%;
-    background: radial-gradient(circle, rgba(0, 200, 150, 0.14), transparent 70%);
-    pointer-events: none;
-    z-index: 0;
   }
 
   .profile-card > * {
@@ -286,10 +262,9 @@ permalink: /profile
 
   .profile-panel {
     background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 28px;
-    backdrop-filter: blur(18px) saturate(140%);
-    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     box-shadow:
       inset 0 0 16px rgba(255, 255, 255, 0.12),
       0 10px 34px rgba(0, 0, 0, 0.16);
@@ -786,7 +761,7 @@ permalink: /profile
           <div class="profile-tab-content active" data-tab-panel="compte">
             <div class="tab-placeholder">
               <h3>Section Compte</h3>
-              <p>Bientôt : gestion de ton compte, préférences et connexions.</p>
+              <p>Bientôt : gestion de ton compte, déconnexion et préférences.</p>
             </div>
           </div>
 
@@ -868,7 +843,6 @@ permalink: /profile
     <img src="/icons/rechercher.svg" alt="Rechercher">
   </a>
   
-  <script type="module" src="/js/firebase-init.js"></script>
   <script type="module" src="/js/profile.js"></script>
 
   <script>
