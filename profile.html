@@ -62,8 +62,8 @@ permalink: /profile
     aspect-ratio: 9 / 16;
     min-height: 520px;
     background: rgba(255, 255, 255, 0.06);
-    border-radius: 44px;
-    padding: 34px 28px 26px 28px;
+    border-radius: 70px 40px 40px 40px;
+    padding: 20px 22px 20px 22px;
     display: flex;
     flex-direction: column;
     backdrop-filter: blur(10px);
@@ -83,7 +83,7 @@ permalink: /profile
   .btn-edit {
     position: absolute;
     top: 20px;
-    right: 18px;
+    right: 20px;
     width: 46px;
     height: 46px;
     border-radius: 50%;
@@ -243,31 +243,33 @@ permalink: /profile
     justify-content: center;
     gap: 4px;
     width: 100%;
-    margin-top: 14px;
+    margin-top: 18px;
     padding: 8px 14px;
     background: transparent;
-    border: 2.6px solid rgba(200, 40, 40, 0.9);
+    border: 2.6px solid rgba(200, 50, 50, 0.9);
     border-radius: 25px;
     cursor: pointer;
     font-family: 'Rubik', sans-serif;
     font-size: 1.1rem;
     font-weight: 600;
-    color: rgba(200, 40, 40, 0.9);
+    color: #ffffff;
     letter-spacing: 0.01em;
     transition: all 0.2s ease;
   }
 
   .btn-logout:hover {
-    background: rgba(255, 90, 90, 0.6);
     color: #ffffff;
     transform: translateY(-1px);
+    box-shadow:
+      inset 0 0 12px rgba(200, 50, 50, 0.4),
+      0 0 12px rgba(200, 50, 50, 0.4);
   }
 
   .btn-logout img {
     width: 24px;
     height: 24px;
     opacity: 0.8;
-    transform: scaleX(-1); /* icône login retournée pour évoquer une sortie */
+    transform: scaleX(-1);
   }
 
   /* Mobile : la carte n'a plus besoin d'un ratio fixe */
@@ -275,8 +277,8 @@ permalink: /profile
     .profile-card {
       aspect-ratio: auto;
       min-height: 0;
-      padding: 20px 20px 20px 20px;
-      border-radius: 76px 40px 40px 40px;
+      padding: 20px 22px 20px 22px;
+      border-radius: 72px 40px 40px 40px;
     }
     
     .profile-identity {
