@@ -431,6 +431,74 @@ permalink: /profile
     line-height: 1.2;
   }
 
+  /* Section Compte : champs infos */
+  .account-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .account-field-label {
+    display: block;
+    font-family: 'Rubik', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 8px;
+  }
+
+  .account-field-value {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 18px;
+    padding: 13px 18px;
+    box-shadow:
+      inset 0 0 14px rgba(255, 255, 255, 0.1),
+      0 6px 18px rgba(0, 0, 0, 0.08);
+  }
+
+  .account-field-value span {
+    font-family: 'Rubik', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #ffffff;
+    word-break: break-all;
+  }
+
+  .account-field-value span.is-password {
+    letter-spacing: 3px;
+    font-weight: 700;
+    word-break: normal;
+  }
+
+  .account-field-badge {
+    flex-shrink: 0;
+    font-family: 'Rubik', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    color: rgba(0, 240, 208, 0.85);
+    background: rgba(0, 200, 150, 0.1);
+    border-radius: 50px;
+    padding: 4px 12px;
+    white-space: nowrap;
+  }
+
+  .account-danger-zone {
+    margin-top: 30px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .account-danger-zone .btn-logout {
+    max-width: 260px;
+  }
+
   @media (max-width: 900px) {
     .profile-panel {
       min-height: 340px;
@@ -742,6 +810,7 @@ permalink: /profile
           <li><a href="/contact">CONTACT</a></li>
         </ul>
       </div>
+      </div>
     </div>
   </header>
 
@@ -797,13 +866,44 @@ permalink: /profile
           <button class="profile-tab-btn" data-tab="confidentialite" role="tab" aria-selected="false">
             Confidentialité
           </button>
+          <button class="profile-tab-btn" data-tab="securite" role="tab" aria-selected="false">
+            Sécurité
+          </button>
         </div>
 
         <div class="profile-tab-panels">
           <div class="profile-tab-content active" data-tab-panel="compte">
-            <div class="tab-placeholder">
-              <h3>Section Compte</h3>
-              <p>Bientôt : gestion de ton compte, déconnexion et préférences.</p>
+            <div class="account-fields">
+
+              <div>
+                <span class="account-field-label">Adresse e-mail</span>
+                <div class="account-field-value">
+                  <span id="accountEmail">Chargement…</span>
+                  <span class="account-field-badge">Vérifié</span>
+                </div>
+              </div>
+
+              <div>
+                <span class="account-field-label">Mot de passe</span>
+                <div class="account-field-value">
+                  <span class="is-password">••••••••••</span>
+                </div>
+              </div>
+
+              <div>
+                <span class="account-field-label">ID Perspikative</span>
+                <div class="account-field-value">
+                  <span id="accountId">Chargement…</span>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="account-danger-zone">
+              <button class="btn-logout" id="btnDeleteAccount" type="button">
+                <img src="/icons/cross.svg" alt="">
+                Supprimer mon compte
+              </button>
             </div>
           </div>
 
@@ -811,6 +911,13 @@ permalink: /profile
             <div class="tab-placeholder">
               <h3>Section Confidentialité</h3>
               <p>Bientôt : contrôle de la visibilité de ton profil et de tes données.</p>
+            </div>
+          </div>
+
+          <div class="profile-tab-content" data-tab-panel="securite">
+            <div class="tab-placeholder">
+              <h3>Section Sécurité</h3>
+              <p>Bientôt : gestion des connexions actives et des options de sécurité du compte.</p>
             </div>
           </div>
         </div>
