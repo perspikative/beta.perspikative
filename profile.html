@@ -44,7 +44,7 @@ permalink: /profile
 
   @media (max-width: 1000px) {
     .profile-page {
-      padding: 24px 16px 260px 16px;
+      padding: 24px 16px 40px 16px;
     }
   }
 
@@ -126,7 +126,7 @@ permalink: /profile
   .profile-pic-wrapper::before {
     content: '';
     position: absolute;
-    inset: -4px;
+    inset: -2px;
     border-radius: 50%;
     background: linear-gradient(135deg, #00c896, #0af0d0, #58b3a2);
     z-index: 0;
@@ -162,9 +162,9 @@ permalink: /profile
 
   #email {
     font-size: 1rem;
-    color: rgba(255, 255, 255, 0.55);
+    color: rgba(255, 255, 255, 0.6);
     word-break: break-all;
-    margin: 4px 0 0;
+    margin: 0;
   }
 
   .profile-bio-block {
@@ -254,21 +254,20 @@ permalink: /profile
     font-weight: 600;
     color: #ffffff;
     letter-spacing: 0.01em;
-    transition: all 0.2s ease;
+    transition: all 0.26s ease;
   }
 
   .btn-logout:hover {
     color: #ffffff;
     transform: translateY(-1px);
     box-shadow:
-      inset 0 0 12px rgba(200, 50, 50, 0.4),
-      0 0 12px rgba(200, 50, 50, 0.4);
+      inset 0 0 12px rgba(200, 50, 50, 0.2),
+      0 0 12px rgba(200, 50, 50, 0.2);
   }
 
   .btn-logout img {
     width: 24px;
     height: 24px;
-    opacity: 0.8;
     transform: scaleX(-1);
   }
 
