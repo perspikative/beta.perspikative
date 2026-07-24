@@ -2,7 +2,8 @@ import {
     getAuth,
     onAuthStateChanged,
     updateProfile,
-    signOut
+    signOut,
+    deleteUser
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const auth = getAuth();
@@ -40,6 +41,9 @@ const editBioInput = document.getElementById("editBioInput");
 const bioCharCount = document.getElementById("bioCharCount");
 const avatarGrid = document.getElementById("avatarGrid");
 const btnLogout = document.getElementById("btnLogout");
+const accountEmail = document.getElementById("accountEmail");
+const accountId = document.getElementById("accountId");
+const btnDeleteAccount = document.getElementById("btnDeleteAccount");
 
 let currentUser = null;
 let selectedAvatar = DEFAULT_AVATAR;
@@ -159,6 +163,10 @@ onAuthStateChanged(auth, async (user) => {
     displayName.textContent = user.displayName || "Utilisateur";
     email.textContent = user.email || "";
     selectedAvatar = currentPhoto;
+
+    // Section Compte : e-mail (2e affichage) + ID Perspikative (UID Firebase)
+    accountEmail.textContent = user.email || "—";
+    accountId.textContent = user.uid;
 
     // Date d'inscription : on se base sur Firestore si un doc existe déjà,
     // sinon sur la date de création du compte Firebase Auth (metadata),
@@ -287,5 +295,40 @@ btnLogout.addEventListener("click", async () => {
     } catch (err) {
         console.error("Erreur lors de la déconnexion :", err);
         btnLogout.disabled = false;
+    }
+});
+
+// -----------------------------------------------------------------------
+// Suppression du compte
+// -----------------------------------------------------------------------
+btnDeleteAccount.addEventListener("click", async () => {
+    if (!currentUser) return;
+
+    const confirmed = window.confirm(
+        "Es-tu sûr de vouloir supprimer définitivement ton compte Perspikative ? Cette action est irréversible."
+    );
+    if (!confirmed) return;
+
+    btnDeleteAccount.disabled = true;
+
+    try {
+        // Nettoyage des données Firestore associées avant suppression du compte Auth
+        const { db, fns } = getFire();
+        if (db && fns) {
+            await fns.deleteDoc(fns.doc(db, "users", currentUser.uid));
+        }
+
+        await deleteUser(currentUser);
+        window.location.href = "/";
+    } catch (err) {
+        console.error("Erreur lors de la suppression du compte :", err);
+
+        if (err.code === "auth/requires-recent-login") {
+            alert("Pour supprimer ton compte, reconnecte-toi d'abord (dernière connexion trop ancienne), puis réessaie.");
+        } else {
+            alert("Une erreur est survenue, réessaie plus tard.");
+        }
+    } finally {
+        btnDeleteAccount.disabled = false;
     }
 });
