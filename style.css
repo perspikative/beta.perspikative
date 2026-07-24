@@ -1191,13 +1191,10 @@ main.creations {
     margin-right: 0;
     padding: 10px 10px 10px 10px;
   }
-  
+
   main.creations h2 {
     font-size: 2.46rem;
     margin-bottom: 35px;
-    letter-spacing: -1px;
-    text-align: left;
-    padding-left: 10px;
   }
 
   .creations-grid img {
@@ -5743,7 +5740,7 @@ body {
   border-radius: 30px;
   background: rgba(255, 255, 255, 0.08);
   box-shadow:
-    0 6px 20px rgba(0, 0, 0, 0.08),
+    0 5px 16px rgba(0, 0, 0, 0.08),
     inset 0 0 10px rgba(255, 255, 255, 0.15);
   color: #ffffff;
   font-family: 'Rubik', sans-serif;
