@@ -4191,7 +4191,7 @@ body {
 
 .lb-comment-input-wrap {
   display: flex;
-  gap: 9px;
+  gap: 7px;
   align-items: flex-end;
 }
 
@@ -4233,7 +4233,7 @@ body {
   font-size: 0.9rem;
   font-weight: 300;
   color: #ffffff;
-  line-height: 1.4;
+  line-height: 1.3;
   min-height: 22px;
   max-height: 100px;
   overflow-y: auto;
