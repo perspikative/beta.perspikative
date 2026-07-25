@@ -1793,7 +1793,7 @@ main.creations {
     margin-bottom: 5px;
     font-weight: 900;
     line-height: 1.5rem;
-    letter-spacing: 1px;
+    letter-spacing: 0.06em;
   }
   
   .blog-content p {
