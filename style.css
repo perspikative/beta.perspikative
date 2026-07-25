@@ -1791,9 +1791,9 @@ main.creations {
     font-size: 1.7rem;
     text-transform: uppercase;
     margin-bottom: 5px;
-    font-weight: 600;
+    font-weight: 900;
     line-height: 1.5rem;
-    letter-spacing: 1.1px;
+    letter-spacing: 1px;
   }
   
   .blog-content p {
