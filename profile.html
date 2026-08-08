@@ -32,7 +32,7 @@ permalink: /profile
   /* ============================= LAYOUT GENERAL ============================= */
 
   .profile-page {
-    padding: 50px 140px 230px 140px;
+    padding: 50px 140px 60px 140px;
   }
 
   .profile-layout {
@@ -739,6 +739,46 @@ permalink: /profile
       border-radius: 22px;
     }
   }
+
+  /* ============================= MENTION BÊTA ============================= */
+
+  .profile-beta-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 34px auto 0;
+    max-width: 900px;
+    text-align: center;
+  }
+
+  .profile-beta-note::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    flex-shrink: 0;
+  }
+
+  .profile-beta-note span {
+    font-family: 'Rubik', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.55);
+    letter-spacing: 0.01em;
+  }
+
+  @media (max-width: 520px) {
+    .profile-beta-note {
+      margin-top: 24px;
+      padding: 0 10px;
+    }
+
+    .profile-beta-note span {
+      font-size: 0.82rem;
+    }
+  }
 </style>
 
 </head>
@@ -925,6 +965,12 @@ permalink: /profile
       </div>
 
     </div>
+
+    <!-- ===== MENTION BÊTA ===== -->
+    <p class="profile-beta-note">
+      <span>Cette page est encore en version bêta</span>
+    </p>
+
   </div>
 
   <!-- ===== MODALE EDITION PROFIL ===== -->
