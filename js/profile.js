@@ -30,7 +30,7 @@ const RESERVED_USERNAMES = new Set([
     "login", "profile", "account", "admin", "search", "rechercher",
     "portfolio", "creations", "illustrations", "projets", "commu",
     "actus", "about", "beta", "help", "help-center", "contact", "api",
-    "404", "tartineske", "perspikative", "mentions-legales",
+    "404", "tartineske", "mentions-legales",
     "politique-de-confidentialite", "terms-of-service", "position-ia",
     "brand-guidelines", "art-challenge", "www", "assets", "static",
     "settings", "notifications", "explore", "home", "index"
