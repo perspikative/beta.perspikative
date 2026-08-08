@@ -6,6 +6,8 @@ import {
   getFirestore,
   collection,
   query,
+  where,
+  limit,
   orderBy,
   getDocs,
   addDoc,
@@ -51,6 +53,8 @@ window.__prspkDb = db;
 window.__prspkFire = {
   collection,
   query,
+  where,
+  limit,
   orderBy,
   getDocs,
   addDoc,

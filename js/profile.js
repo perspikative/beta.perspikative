@@ -22,13 +22,31 @@ const MOIS_FR = [
 ];
 
 // -----------------------------------------------------------------------
-// Références DOM
+// Usernames réservés — garde cette liste synchronisée avec les règles
+// Firestore (voir security rules) qui font aussi cette vérification côté
+// serveur pour ne jamais dépendre uniquement du client.
+// -----------------------------------------------------------------------
+const RESERVED_USERNAMES = new Set([
+    "login", "profile", "account", "admin", "search", "rechercher",
+    "portfolio", "creations", "illustrations", "projets", "commu",
+    "actus", "about", "beta", "help", "help-center", "contact", "api",
+    "404", "tartineske", "perspikative", "mentions-legales",
+    "politique-de-confidentialite", "terms-of-service", "position-ia",
+    "brand-guidelines", "art-challenge", "www", "assets", "static",
+    "settings", "notifications", "explore", "home", "index"
+]);
+
+const USERNAME_REGEX = /^[a-z0-9_]{3,20}$/;
+
+// -----------------------------------------------------------------------
+// Références DOM — profil (colonne gauche)
 // -----------------------------------------------------------------------
 const profilePic = document.getElementById("profilePic");
 const displayName = document.getElementById("displayName");
 const email = document.getElementById("email");
 const profileBio = document.getElementById("profileBio");
 const profileSince = document.getElementById("profileSince");
+const profileUsername = document.getElementById("profileUsername");
 
 const btnEditProfile = document.getElementById("btnEditProfile");
 const editOverlay = document.getElementById("editOverlay");
@@ -37,6 +55,8 @@ const editCancelBtn = document.getElementById("editCancelBtn");
 const editSaveBtn = document.getElementById("editSaveBtn");
 const editStatus = document.getElementById("editStatus");
 const editNameInput = document.getElementById("editNameInput");
+const editUsernameInput = document.getElementById("editUsernameInput");
+const editUsernameStatus = document.getElementById("editUsernameStatus");
 const editBioInput = document.getElementById("editBioInput");
 const bioCharCount = document.getElementById("bioCharCount");
 const avatarGrid = document.getElementById("avatarGrid");
@@ -45,11 +65,21 @@ const accountEmail = document.getElementById("accountEmail");
 const accountId = document.getElementById("accountId");
 const btnDeleteAccount = document.getElementById("btnDeleteAccount");
 
+// -----------------------------------------------------------------------
+// Références DOM — onglet Confidentialité
+// -----------------------------------------------------------------------
+const publicUrlValue = document.getElementById("publicUrlValue");
+const btnViewPublicProfile = document.getElementById("btnViewPublicProfile");
+const visibilityForm = document.getElementById("visibilityForm");
+const visibilityStatus = document.getElementById("visibilityStatus");
+
 let currentUser = null;
 let selectedAvatar = DEFAULT_AVATAR;
+let currentUsername = null; // valeur normalisée actuellement enregistrée
+let usernameCheckToken = 0; // pour ignorer les réponses de vérif obsolètes
 
 // -----------------------------------------------------------------------
-// Onglets Compte / Confidentialité
+// Onglets Compte / Confidentialité / Sécurité
 // -----------------------------------------------------------------------
 const tabButtons = document.querySelectorAll(".profile-tab-btn");
 const tabPanels = document.querySelectorAll(".profile-tab-content");
@@ -96,6 +126,40 @@ async function saveUserDoc(uid, data) {
 }
 
 // -----------------------------------------------------------------------
+// Username : normalisation, validation, vérification d'unicité
+// -----------------------------------------------------------------------
+function normalizeUsername(raw) {
+    return (raw || "").trim().toLowerCase();
+}
+
+function validateUsernameFormat(normalized) {
+    if (!normalized) return "Choisis un nom d'utilisateur.";
+    if (!USERNAME_REGEX.test(normalized)) {
+        return "3 à 20 caractères : lettres minuscules, chiffres et _ uniquement, sans espace.";
+    }
+    if (RESERVED_USERNAMES.has(normalized)) {
+        return "Ce nom d'utilisateur est réservé, choisis-en un autre.";
+    }
+    return null;
+}
+
+// Vérifie que le username n'est pas déjà pris par un AUTRE utilisateur.
+// Repose sur une requête where("username", "==", normalized) : voir Firestore
+// rules pour la contrainte d'unicité côté serveur (indispensable, cf. doc).
+async function isUsernameTaken(normalized, ownUid) {
+    const { db, fns } = getFire();
+    if (!db || !fns) return false;
+
+    const usersRef = fns.collection(db, "users");
+    const q = fns.query(usersRef, fns.where("username", "==", normalized), fns.limit(1));
+    const snap = await fns.getDocs(q);
+
+    if (snap.empty) return false;
+    const foundUid = snap.docs[0].id;
+    return foundUid !== ownUid;
+}
+
+// -----------------------------------------------------------------------
 // Formatage de la date d'inscription : "Perspikativeur depuis mars 2026"
 // -----------------------------------------------------------------------
 function formatSince(date) {
@@ -116,6 +180,43 @@ function renderBio(bio) {
         profileBio.textContent = "Aucune bio pour l'instant.";
         profileBio.classList.add("is-empty");
     }
+}
+
+function renderUsername(usernameDisplay) {
+    if (!profileUsername) return;
+    if (usernameDisplay) {
+        profileUsername.textContent = `@${usernameDisplay}`;
+        profileUsername.hidden = false;
+    } else {
+        profileUsername.textContent = "";
+        profileUsername.hidden = true;
+    }
+}
+
+function renderPublicUrl(usernameDisplay) {
+    if (!publicUrlValue) return;
+    if (usernameDisplay) {
+        const url = `perspikative.com/@${usernameDisplay}`;
+        publicUrlValue.textContent = url;
+        if (btnViewPublicProfile) {
+            btnViewPublicProfile.href = `/@${usernameDisplay}`;
+            btnViewPublicProfile.classList.remove("is-disabled");
+        }
+    } else {
+        publicUrlValue.textContent = "Choisis d'abord un nom d'utilisateur";
+        if (btnViewPublicProfile) {
+            btnViewPublicProfile.removeAttribute("href");
+            btnViewPublicProfile.classList.add("is-disabled");
+        }
+    }
+}
+
+function setVisibilityUI(isPublic) {
+    if (!visibilityForm) return;
+    const radios = visibilityForm.querySelectorAll('input[name="visibility"]');
+    radios.forEach((radio) => {
+        radio.checked = (radio.value === "public") === isPublic;
+    });
 }
 
 // -----------------------------------------------------------------------
@@ -173,12 +274,23 @@ onAuthStateChanged(auth, async (user) => {
     // et on la sauvegarde dans Firestore pour qu'elle reste stable.
     let bio = "";
     let createdAt = null;
+    let usernameDisplay = null;
+    let isPublic = false;
 
     try {
         const userDoc = await fetchUserDoc(user.uid);
 
         if (userDoc && userDoc.bio !== undefined) {
             bio = userDoc.bio;
+        }
+
+        if (userDoc && userDoc.username) {
+            currentUsername = userDoc.username;
+            usernameDisplay = userDoc.usernameDisplay || userDoc.username;
+        }
+
+        if (userDoc && typeof userDoc.isPublic === "boolean") {
+            isPublic = userDoc.isPublic;
         }
 
         if (userDoc && userDoc.createdAt && userDoc.createdAt.toDate) {
@@ -204,6 +316,9 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     renderBio(bio);
+    renderUsername(usernameDisplay);
+    renderPublicUrl(usernameDisplay);
+    setVisibilityUI(isPublic);
     profileSince.textContent = formatSince(createdAt);
 });
 
@@ -214,6 +329,9 @@ function openEditModal() {
     if (!currentUser) return;
 
     editNameInput.value = currentUser.displayName || "";
+    editUsernameInput.value = currentUsername || "";
+    editUsernameStatus.textContent = "";
+    editUsernameStatus.classList.remove("is-error", "is-ok");
     editBioInput.value = profileBio.classList.contains("is-empty") ? "" : profileBio.textContent;
     bioCharCount.textContent = String(editBioInput.value.length);
     editStatus.textContent = "";
@@ -242,14 +360,78 @@ editBioInput.addEventListener("input", () => {
     bioCharCount.textContent = String(editBioInput.value.length);
 });
 
+// -----------------------------------------------------------------------
+// Vérification live du username pendant la saisie (debounce simple)
+// -----------------------------------------------------------------------
+let usernameDebounceTimer = null;
+
+if (editUsernameInput) {
+    editUsernameInput.addEventListener("input", () => {
+        const raw = editUsernameInput.value;
+        const normalized = normalizeUsername(raw);
+
+        clearTimeout(usernameDebounceTimer);
+
+        const formatError = validateUsernameFormat(normalized);
+        if (formatError) {
+            editUsernameStatus.textContent = formatError;
+            editUsernameStatus.classList.add("is-error");
+            editUsernameStatus.classList.remove("is-ok");
+            return;
+        }
+
+        if (normalized === currentUsername) {
+            editUsernameStatus.textContent = "C'est déjà ton nom d'utilisateur actuel.";
+            editUsernameStatus.classList.remove("is-error");
+            editUsernameStatus.classList.add("is-ok");
+            return;
+        }
+
+        editUsernameStatus.textContent = "Vérification…";
+        editUsernameStatus.classList.remove("is-error", "is-ok");
+
+        const token = ++usernameCheckToken;
+        usernameDebounceTimer = setTimeout(async () => {
+            try {
+                const taken = await isUsernameTaken(normalized, currentUser ? currentUser.uid : null);
+                if (token !== usernameCheckToken) return; // réponse obsolète
+
+                if (taken) {
+                    editUsernameStatus.textContent = "Ce nom d'utilisateur est déjà pris.";
+                    editUsernameStatus.classList.add("is-error");
+                    editUsernameStatus.classList.remove("is-ok");
+                } else {
+                    editUsernameStatus.textContent = "Disponible ✓";
+                    editUsernameStatus.classList.add("is-ok");
+                    editUsernameStatus.classList.remove("is-error");
+                }
+            } catch (err) {
+                console.error("Erreur de vérification du username :", err);
+                if (token !== usernameCheckToken) return;
+                editUsernameStatus.textContent = "Impossible de vérifier pour l'instant.";
+                editUsernameStatus.classList.add("is-error");
+            }
+        }, 450);
+    });
+}
+
 editSaveBtn.addEventListener("click", async () => {
     if (!currentUser) return;
 
     const newName = editNameInput.value.trim();
     const newBio = editBioInput.value.trim();
+    const rawUsername = editUsernameInput ? editUsernameInput.value : "";
+    const normalizedUsername = normalizeUsername(rawUsername);
 
     if (!newName) {
         editStatus.textContent = "Le nom ne peut pas être vide.";
+        editStatus.classList.add("is-error");
+        return;
+    }
+
+    const formatError = validateUsernameFormat(normalizedUsername);
+    if (formatError) {
+        editStatus.textContent = formatError;
         editStatus.classList.add("is-error");
         return;
     }
@@ -259,19 +441,39 @@ editSaveBtn.addEventListener("click", async () => {
     editStatus.textContent = "Enregistrement…";
 
     try {
+        // Vérification finale d'unicité juste avant écriture (en plus du live
+        // check) pour limiter les races. La garantie définitive reste les
+        // règles Firestore côté serveur.
+        if (normalizedUsername !== currentUsername) {
+            const taken = await isUsernameTaken(normalizedUsername, currentUser.uid);
+            if (taken) {
+                editStatus.textContent = "Ce nom d'utilisateur vient d'être pris, choisis-en un autre.";
+                editStatus.classList.add("is-error");
+                editSaveBtn.disabled = false;
+                return;
+            }
+        }
+
         // Mise à jour du profil Firebase Auth (nom + photo)
         await updateProfile(currentUser, {
             displayName: newName,
             photoURL: selectedAvatar
         });
 
-        // Mise à jour Firestore (bio)
-        await saveUserDoc(currentUser.uid, { bio: newBio });
+        // Mise à jour Firestore (bio + username)
+        await saveUserDoc(currentUser.uid, {
+            bio: newBio,
+            username: normalizedUsername,
+            usernameDisplay: rawUsername.trim()
+        });
 
         // Rafraîchissement de l'affichage
         displayName.textContent = newName;
         profilePic.src = selectedAvatar;
         renderBio(newBio);
+        currentUsername = normalizedUsername;
+        renderUsername(rawUsername.trim());
+        renderPublicUrl(rawUsername.trim());
 
         editStatus.textContent = "Profil mis à jour ✓";
         setTimeout(closeEditModal, 700);
@@ -283,6 +485,43 @@ editSaveBtn.addEventListener("click", async () => {
         editSaveBtn.disabled = false;
     }
 });
+
+// -----------------------------------------------------------------------
+// Onglet Confidentialité : Public / Privé
+// -----------------------------------------------------------------------
+if (visibilityForm) {
+    visibilityForm.addEventListener("change", async (e) => {
+        const radio = e.target;
+        if (!radio || radio.name !== "visibility") return;
+        if (!currentUser) return;
+
+        const wantsPublic = radio.value === "public";
+
+        if (wantsPublic && !currentUsername) {
+            visibilityStatus.textContent = "Choisis d'abord un nom d'utilisateur dans l'onglet Compte avant de passer en public.";
+            visibilityStatus.classList.add("is-error");
+            // On annule visuellement la sélection
+            setVisibilityUI(false);
+            return;
+        }
+
+        visibilityStatus.classList.remove("is-error");
+        visibilityStatus.textContent = "Enregistrement…";
+
+        try {
+            await saveUserDoc(currentUser.uid, { isPublic: wantsPublic });
+            visibilityStatus.textContent = wantsPublic
+                ? "Ton profil est maintenant public ✓"
+                : "Ton profil est maintenant privé ✓";
+            setTimeout(() => { visibilityStatus.textContent = ""; }, 2500);
+        } catch (err) {
+            console.error("Erreur lors de la mise à jour de la visibilité :", err);
+            visibilityStatus.textContent = "Une erreur est survenue, réessaie.";
+            visibilityStatus.classList.add("is-error");
+            setVisibilityUI(!wantsPublic);
+        }
+    });
+}
 
 // -----------------------------------------------------------------------
 // Déconnexion
