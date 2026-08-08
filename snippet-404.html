@@ -1,0 +1,41 @@
+<!--
+  ============================================================
+  À AJOUTER dans ton 404.html existant, tout en haut du <head>
+  (avant tes autres balises), ou juste avant </head>.
+
+  Comment ça marche :
+  - GitHub Pages sert ce fichier 404.html pour toute URL qui ne
+    correspond à aucun fichier réel, SANS changer l'URL affichée
+    dans la barre d'adresse du navigateur.
+  - Si l'URL commence par "/@" (ex: /@alice), ce script redirige
+    en JS vers /@ (la vraie page Jekyll public-profile.html, qui
+    a le permalink "/@"), MAIS en conservant l'URL /@alice via
+    history.replaceState AVANT que la page ne se charge visuellement.
+  - Concrètement le plus simple et le plus robuste ici est de
+    rediriger le NAVIGATEUR vers l'URL /@ index tout en lui passant
+    le username réel, puis de laisser public-profile.js relire le
+    "vrai" chemin original qu'on aura stocké avant la navigation.
+
+  On utilise sessionStorage pour transporter l'URL d'origine sur
+  la redirection, car window.location.pathname changera une fois
+  qu'on navigue vers la page "/@" elle-même.
+  ============================================================
+-->
+<script>
+  (function () {
+    var path = window.location.pathname;
+
+    if (path.indexOf("/@") === 0) {
+      // On mémorise l'URL exacte demandée par la personne
+      sessionStorage.setItem("prspk_pending_username_path", path + window.location.search);
+
+      // On redirige vers la page réelle qui contient toute la logique.
+      // "replace" pour ne pas polluer l'historique avec la 404.
+      window.location.replace("/@");
+      return;
+    }
+
+    // Sinon : vraie 404, on ne fait rien de spécial, le reste de
+    // 404.html s'affiche normalement.
+  })();
+</script>
