@@ -182,7 +182,17 @@ async function saveUsername(uid, oldUsername, newUsername, newUsernameDisplay) {
             throw new Error("USERNAME_TAKEN");
         }
 
-        tx.set(newRef, { uid });
+        // set(..., {merge:false}) implicite : si newSnap n'existe pas encore,
+        // Firestore traite ceci comme une vraie création (règle "create").
+        // S'il existe déjà et nous appartient (renouvellement), c'est un
+        // "update" — autorisé nulle part explicitement dans les règles
+        // usernames/{username} (allow update: if false), donc on ne réécrit
+        // le doc que s'il n'existe pas encore, pour rester dans le chemin
+        // "create" à chaque fois.
+        if (!newSnap.exists()) {
+            tx.set(newRef, { uid });
+        }
+
         if (oldRef && oldUsername !== newUsername) {
             tx.delete(oldRef);
         }
