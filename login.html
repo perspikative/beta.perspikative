@@ -601,8 +601,15 @@ permalink: /login2026
   const provider = new GoogleAuthProvider();
 
   // ─── HELPERS ───
-  function showError(el, msg) { el.textContent = msg; el.classList.add('visible'); }
-  function clearError(el)     { el.classList.remove('visible'); }
+  function showError(el, msg) {
+    el.textContent = msg;
+    el.classList.add('visible');
+    recalcCurrentHeight();
+  }
+  function clearError(el) {
+    el.classList.remove('visible');
+    recalcCurrentHeight();
+  }
   function setLoading(btn, on){ btn.classList.toggle('loading', on); btn.disabled = on; }
   function isValidEmail(v)    { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
 
@@ -637,6 +644,19 @@ permalink: /login2026
   viewport.style.transition = 'none';
   setViewportHeight(panelLogin);
   requestAnimationFrame(() => { viewport.style.transition = ''; });
+
+  // recalcule une fois que tout est bien en place (polices, layout mobile pas encore stabilisé
+  // au tout premier rendu), pour éviter que le panel reste replié sur lui-même au chargement
+  function recalcCurrentHeight() {
+    const isRegister = track.classList.contains('show-register');
+    setViewportHeight(isRegister ? panelRegister : panelLogin);
+  }
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(recalcCurrentHeight);
+  }
+  window.addEventListener('load', recalcCurrentHeight);
+  requestAnimationFrame(() => requestAnimationFrame(recalcCurrentHeight));
 
   function switchTab(toRegister) {
     tabLogin.classList.toggle('active', !toRegister);
