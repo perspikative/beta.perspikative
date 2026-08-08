@@ -121,23 +121,32 @@ function updateMeta({ title, description, image, url, indexable }) {
 }
 
 // -----------------------------------------------------------------------
-// Requête Firestore : trouve l'utilisateur dont le champ "username"
-// (normalisé) correspond. On suppose une collection "users" avec un champ
-// "username" stocké déjà normalisé (minuscules) — voir profile.js.
+// Résolution du username : usernames/{usernameNormalized} contient l'uid
+// propriétaire (c'est ce document qui fait foi pour l'unicité, voir
+// profile.js et les Firestore rules). On lit ensuite users/{uid} pour les
+// données d'affichage. Deux lectures, mais chacune est un accès direct par
+// ID (pas de requête indexée nécessaire, et lisible même sans être loggé
+// grâce à "allow read: if true" sur usernames/{username}).
 // -----------------------------------------------------------------------
 async function findUserByUsername(usernameNormalized) {
     const db = window.__prspkDb;
     const fns = window.__prspkFire;
     if (!db || !fns) throw new Error("Firebase non initialisé");
 
-    const usersRef = fns.collection(db, "users");
-    const q = fns.query(usersRef, fns.where("username", "==", usernameNormalized));
-    const snap = await fns.getDocs(q);
+    const usernameRef = fns.doc(db, "usernames", usernameNormalized);
+    const usernameSnap = await fns.getDoc(usernameRef);
 
-    if (snap.empty) return null;
+    if (!usernameSnap.exists()) return null;
 
-    const docSnap = snap.docs[0];
-    return { uid: docSnap.id, ...docSnap.data() };
+    const uid = usernameSnap.data().uid;
+    if (!uid) return null;
+
+    const userRef = fns.doc(db, "users", uid);
+    const userSnap = await fns.getDoc(userRef);
+
+    if (!userSnap.exists()) return null;
+
+    return { uid, ...userSnap.data() };
 }
 
 // -----------------------------------------------------------------------

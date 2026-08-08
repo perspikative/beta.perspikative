@@ -15,7 +15,8 @@ import {
   doc,
   setDoc,
   getDoc,
-  serverTimestamp
+  serverTimestamp,
+  runTransaction
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 import {
@@ -62,7 +63,8 @@ window.__prspkFire = {
   doc,
   setDoc,
   getDoc,
-  serverTimestamp
+  serverTimestamp,
+  runTransaction
 };
 
 

@@ -144,19 +144,53 @@ function validateUsernameFormat(normalized) {
 }
 
 // Vérifie que le username n'est pas déjà pris par un AUTRE utilisateur.
-// Repose sur une requête where("username", "==", normalized) : voir Firestore
-// rules pour la contrainte d'unicité côté serveur (indispensable, cf. doc).
+// Lit directement usernames/{normalized} : c'est ce document qui fait
+// foi pour l'unicité (son ID EST le username). Une lecture simple suffit
+// ici pour un feedback instantané ; la garantie réelle contre les races
+// vient de la transaction dans saveUsername() plus bas, appliquée à
+// l'écriture, pas à cette vérification "live" qui sert juste d'UX.
 async function isUsernameTaken(normalized, ownUid) {
     const { db, fns } = getFire();
     if (!db || !fns) return false;
 
-    const usersRef = fns.collection(db, "users");
-    const q = fns.query(usersRef, fns.where("username", "==", normalized), fns.limit(1));
-    const snap = await fns.getDocs(q);
+    const ref = fns.doc(db, "usernames", normalized);
+    const snap = await fns.getDoc(ref);
 
-    if (snap.empty) return false;
-    const foundUid = snap.docs[0].id;
-    return foundUid !== ownUid;
+    if (!snap.exists()) return false;
+    return snap.data().uid !== ownUid;
+}
+
+// -----------------------------------------------------------------------
+// Réservation atomique du username : dans une seule transaction Firestore,
+// on vérifie que le nouveau pseudo est libre, on le réserve, on libère
+// l'ancien (s'il y en avait un), et on met à jour users/{uid}. Tout ou
+// rien : si un autre utilisateur a pris le pseudo entre-temps, la
+// transaction échoue proprement et rien n'est écrit.
+// -----------------------------------------------------------------------
+async function saveUsername(uid, oldUsername, newUsername, newUsernameDisplay) {
+    const { db, fns } = getFire();
+    if (!db || !fns) throw new Error("Firebase non initialisé");
+
+    const newRef = fns.doc(db, "usernames", newUsername);
+    const userRef = fns.doc(db, "users", uid);
+    const oldRef = oldUsername ? fns.doc(db, "usernames", oldUsername) : null;
+
+    await fns.runTransaction(db, async (tx) => {
+        const newSnap = await tx.get(newRef);
+
+        if (newSnap.exists() && newSnap.data().uid !== uid) {
+            throw new Error("USERNAME_TAKEN");
+        }
+
+        tx.set(newRef, { uid });
+        if (oldRef && oldUsername !== newUsername) {
+            tx.delete(oldRef);
+        }
+        tx.set(userRef, {
+            username: newUsername,
+            usernameDisplay: newUsernameDisplay
+        }, { merge: true });
+    });
 }
 
 // -----------------------------------------------------------------------
@@ -441,16 +475,25 @@ editSaveBtn.addEventListener("click", async () => {
     editStatus.textContent = "Enregistrement…";
 
     try {
-        // Vérification finale d'unicité juste avant écriture (en plus du live
-        // check) pour limiter les races. La garantie définitive reste les
-        // règles Firestore côté serveur.
+        // Réservation atomique du username (si changé). C'est cette étape,
+        // et non une simple vérification préalable, qui garantit qu'on ne
+        // peut jamais voler un pseudo pris entre-temps par quelqu'un d'autre.
         if (normalizedUsername !== currentUsername) {
-            const taken = await isUsernameTaken(normalizedUsername, currentUser.uid);
-            if (taken) {
-                editStatus.textContent = "Ce nom d'utilisateur vient d'être pris, choisis-en un autre.";
-                editStatus.classList.add("is-error");
-                editSaveBtn.disabled = false;
-                return;
+            try {
+                await saveUsername(
+                    currentUser.uid,
+                    currentUsername,
+                    normalizedUsername,
+                    rawUsername.trim()
+                );
+            } catch (err) {
+                if (err.message === "USERNAME_TAKEN") {
+                    editStatus.textContent = "Ce nom d'utilisateur vient d'être pris, choisis-en un autre.";
+                    editStatus.classList.add("is-error");
+                    editSaveBtn.disabled = false;
+                    return;
+                }
+                throw err;
             }
         }
 
@@ -460,12 +503,10 @@ editSaveBtn.addEventListener("click", async () => {
             photoURL: selectedAvatar
         });
 
-        // Mise à jour Firestore (bio + username)
-        await saveUserDoc(currentUser.uid, {
-            bio: newBio,
-            username: normalizedUsername,
-            usernameDisplay: rawUsername.trim()
-        });
+        // Mise à jour Firestore (bio uniquement ici : le username a déjà
+        // été écrit sur users/{uid} par saveUsername() ci-dessus, dans la
+        // même transaction que la réservation).
+        await saveUserDoc(currentUser.uid, { bio: newBio });
 
         // Rafraîchissement de l'affichage
         displayName.textContent = newName;
