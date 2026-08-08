@@ -1,0 +1,378 @@
+---
+permalink: /@
+---
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">Profil - Perspikative</title>
+
+  <meta id="metaDescription" name="description" content="Découvre ce profil sur Perspikative.">
+  <meta id="metaRobots" name="robots" content="noindex, follow">
+  <link id="canonicalLink" rel="canonical" href="https://perspikative.com/@">
+
+  <meta id="ogTitle" property="og:title" content="Perspikative">
+  <meta id="ogDescription" property="og:description" content="Découvre ce profil sur Perspikative.">
+  <meta id="ogImage" property="og:image" content="https://perspikative.com/logo.svg">
+  <meta property="og:type" content="profile">
+  <meta id="ogUrl" property="og:url" content="https://perspikative.com/@">
+  <meta name="twitter:card" content="summary">
+
+  <meta name="theme-color" content="#58b3a2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#344f4a" media="(prefers-color-scheme: dark)">
+
+  <link rel="icon" type="image/png" href="/favicon-light.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: light)">
+
+  <link rel="stylesheet" href="/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
+
+  <script defer src="/js/nav-liquid-glass.js"></script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="18d7b0fd-c5fb-4b2e-a43b-10cc734daa8f"></script>
+
+<style>
+  * { box-sizing: border-box; }
+
+  .pp-page {
+    padding: 50px 140px 60px 140px;
+    max-width: 760px;
+    margin: 0 auto;
+    min-height: 60vh;
+  }
+
+  @media (max-width: 1000px) {
+    .pp-page { padding: 24px 16px 100px 16px; }
+  }
+
+  /* ===== État chargement ===== */
+  .pp-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    padding: 120px 20px;
+  }
+
+  .pp-loading[hidden] { display: none; }
+
+  /* réutilise le spinner de style.css */
+
+  /* ===== Carte profil public ===== */
+  .pp-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 44px;
+    padding: 44px 40px 40px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow:
+      inset 0 0 16px rgba(255, 255, 255, 0.14),
+      0 10px 34px rgba(0, 0, 0, 0.16);
+  }
+
+  .pp-card[hidden] { display: none; }
+
+  .pp-pic-wrapper {
+    position: relative;
+    width: 130px;
+    height: 130px;
+    flex-shrink: 0;
+  }
+
+  .pp-pic-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00c896, #0af0d0, #58b3a2);
+    z-index: 0;
+  }
+
+  .pp-pic {
+    position: relative;
+    z-index: 1;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    background: #000000;
+  }
+
+  .pp-name {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    color: #ffffff;
+    margin: 20px 0 2px;
+    letter-spacing: -0.02em;
+    word-break: break-word;
+  }
+
+  .pp-username {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 500;
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.55);
+    margin: 0 0 22px;
+  }
+
+  .pp-bio {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 300;
+    font-size: 1.05rem;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.85);
+    max-width: 480px;
+    margin: 0 0 26px;
+    white-space: pre-line;
+    word-break: break-word;
+  }
+
+  .pp-bio.is-empty {
+    color: rgba(255, 255, 255, 0.4);
+    font-style: italic;
+  }
+
+  .pp-since {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(250, 250, 250, 0.05);
+    border-radius: 25px;
+    padding: 8px 16px;
+    box-shadow:
+      inset 0 0 16px rgba(255, 255, 255, 0.16),
+      0 8px 24px rgba(0, 0, 0, 0.1);
+  }
+
+  .pp-since::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #00c896;
+    box-shadow: 0 0 8px #00c896;
+    flex-shrink: 0;
+  }
+
+  .pp-since span {
+    font-family: 'Rubik', sans-serif;
+    font-size: 0.94rem;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: 0.02em;
+  }
+
+  @media (max-width: 520px) {
+    .pp-card {
+      padding: 36px 24px 32px 24px;
+      border-radius: 36px;
+    }
+    .pp-name { font-size: 1.7rem; }
+  }
+
+  /* ===== État privé / 404 ===== */
+  .pp-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 14px;
+    padding: 100px 20px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .pp-state[hidden] { display: none; }
+
+  .pp-state-icon {
+    font-size: 3.4rem;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .pp-state h1 {
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  .pp-state p {
+    font-family: 'Rubik', sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.6);
+    max-width: 360px;
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .pp-back-home {
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    text-decoration: none;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 700;
+    font-size: 0.98rem;
+    padding: 10px 22px;
+    border-radius: 50px;
+    box-shadow:
+      inset 0 0 10px rgba(255, 255, 255, 0.2),
+      0 6px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease;
+  }
+
+  .pp-back-home:hover {
+    transform: translateY(-1px);
+  }
+</style>
+
+</head>
+<body>
+
+  <nav class="mobile-nav">
+    <a href="/" class="nav-icon" title="Accueil">
+      <img src="/icons/accueil.svg" alt="Accueil">
+    </a>
+    <a href="/portfolio" class="nav-icon" title="Portfolio">
+      <img src="/icons/portfolio.svg" alt="Portfolio">
+    </a>
+    <a href="/rechercher" class="nav-icon" title="Rechercher">
+      <img src="/icons/rechercher.svg" alt="Rechercher">
+    </a>
+    <a href="/actus" class="nav-icon" title="Actus">
+      <img src="/icons/actus.svg" alt="Actus">
+    </a>
+    <a href="/profile" class="nav-icon" title="Profil">
+      <img src="/icons/profile.svg" alt="Profil">
+    </a>
+  </nav>
+
+  <div class="nav-blur-gradient" aria-hidden="true">
+    <span class="nav-blur-layer nav-blur-layer--1"></span>
+    <span class="nav-blur-layer nav-blur-layer--2"></span>
+    <span class="nav-blur-layer nav-blur-layer--3"></span>
+    <span class="nav-blur-layer nav-blur-layer--4"></span>
+    <span class="nav-blur-layer nav-blur-layer--5"></span>
+  </div>
+
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <a href="/"><img src="/logo.svg" alt="Perspikative logo"></a>
+      </div>
+
+      <div class="nav-right">
+        <ul class="nav-tabs">
+          <li><a href="/" class="tab"><img src="/icons/accueil.svg" alt="" class="tab-icon"> ACCUEIL</a></li>
+          <li><a href="/portfolio" class="tab"><img src="/icons/portfolio.svg" alt="" class="tab-icon"> PORTFOLIO</a></li>
+          <li><a href="/actus" class="tab"><img src="/icons/actus.svg" alt="" class="tab-icon"> ACTUS</a></li>
+          <li><a href="/profile" class="tab"><img src="/icons/profile.svg" alt="" class="tab-icon"> PROFIL</a></li>
+        </ul>
+
+        <input type="checkbox" id="menuToggle" />
+        <label for="menuToggle" class="burger-icon" title="Menu">
+          <img id="menuIcon" src="/icons/menu.svg" alt="Menu">
+        </label>
+        <div class="mobile-menu">
+          <ul>
+            <li><a href="/commu">COMMUNAUTÉ</a></li>
+            <li><a href="/art-challenge">ART CHALLENGE</a></li>
+            <li><a href="/contact">CONTACT</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="blur-overlay"></div>
+
+  <div class="pp-page">
+
+    <!-- Chargement -->
+    <div class="pp-loading" id="ppLoading">
+      <div class="lb-spinner"></div>
+    </div>
+
+    <!-- Profil public trouvé -->
+    <div class="pp-card" id="ppCard" hidden>
+      <div class="pp-pic-wrapper">
+        <img id="ppPic" class="pp-pic" src="" alt="Photo de profil">
+      </div>
+      <h1 class="pp-name" id="ppName">—</h1>
+      <p class="pp-username" id="ppUsername">@—</p>
+      <p class="pp-bio" id="ppBio"></p>
+      <div class="pp-since">
+        <span id="ppSince">Perspikativeur depuis…</span>
+      </div>
+    </div>
+
+    <!-- Profil privé -->
+    <div class="pp-state" id="ppPrivate" hidden>
+      <div class="pp-state-icon">🔒</div>
+      <h1>Profil privé</h1>
+      <p>Cet utilisateur a choisi de ne pas rendre son profil public.</p>
+      <a href="/" class="pp-back-home">Retour à l'accueil</a>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="social-icons">
+      <a href="https://linktr.ee/perspikative" target="_blank" aria-label="Linktree">
+        <img src="/icons/linktree.svg" alt="Linktree">
+      </a>
+      <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" aria-label="Chaîne WhatsApp">
+        <img src="/icons/whatsapp-channel.svg" alt="Chaîne WhatsApp">
+      </a>
+      <a href="https://www.instagram.com/perspikative" target="_blank" aria-label="Instagram">
+        <img src="/icons/instagram.svg" alt="Instagram">
+      </a>
+      <a href="https://youtube.com/@perspikative" target="_blank" aria-label="YouTube">
+        <img src="/icons/youtube.svg" alt="YouTube">
+      </a>
+      <a href="https://www.pinterest.com/perspikative" target="_blank" aria-label="Pinterest">
+        <img src="/icons/pinterest.svg" alt="Pinterest">
+      </a>
+    </div>
+
+    <p>&copy; 2026 Perspikative™. Tous droits réservés.</p>
+    <p><a href="/mentions-legales" class="footer-link">Mentions légales</a></p>
+    <p><a href="/politique-de-confidentialite" class="footer-link">Politique de confidentialité</a></p>
+    <p><a href="/terms-of-service" class="footer-link">Conditions d'utilisation</a></p>
+    <p><a href="/help-center" class="footer-link">Centre d'aide</a></p>
+    <p><a href="/position-ia" class="footer-link">Position sur l'IA</a></p>
+    <p><a href="/brand-guidelines" class="footer-link">Brand guidelines</a></p>
+  </footer>
+
+  <a href="/rechercher" class="search-float-btn" title="Rechercher">
+    <img src="/icons/rechercher.svg" alt="Rechercher">
+  </a>
+
+  <script type="module" src="/js/firebase-init.js"></script>
+  <script type="module" src="/js/public-profile.js"></script>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    menuToggle.addEventListener('change', (e) => {
+      document.body.classList.toggle('menu-open', e.target.checked);
+    });
+  </script>
+
+  <script src="/script.js"></script>
+</body>
+</html>

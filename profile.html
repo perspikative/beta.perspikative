@@ -160,11 +160,19 @@ permalink: /profile
     word-break: break-word;
   }
 
+  #profileUsername {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 500;
+    font-size: 0.98rem;
+    color: rgba(255, 255, 255, 0.55);
+    margin: 2px 0 0;
+  }
+
   #email {
     font-size: 1rem;
     color: rgba(255, 255, 255, 0.6);
     word-break: break-all;
-    margin: 0;
+    margin: 4px 0 0;
   }
 
   .profile-bio-block {
@@ -508,6 +516,149 @@ permalink: /profile
   }
 
 
+  /* ============================= ONGLET CONFIDENTIALITÉ ============================= */
+
+  .public-url-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 25px;
+    padding: 16px 20px;
+    margin-bottom: 30px;
+    box-shadow:
+      inset 0 0 14px rgba(255, 255, 255, 0.1),
+      0 6px 18px rgba(0, 0, 0, 0.08);
+  }
+
+  .public-url-info {
+    min-width: 0;
+  }
+
+  .public-url-label {
+    display: block;
+    font-family: 'Rubik', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 6px;
+  }
+
+  #publicUrlValue {
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #ffffff;
+    word-break: break-all;
+  }
+
+  .btn-view-public {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #06231d;
+    background: linear-gradient(135deg, #00c896, #0af0d0);
+    padding: 10px 18px;
+    border-radius: 25px;
+    box-shadow: 0 6px 18px rgba(0, 200, 150, 0.25);
+    transition: transform 0.2s ease;
+  }
+
+  .btn-view-public:hover {
+    transform: translateY(-1px);
+  }
+
+  .btn-view-public.is-disabled {
+    pointer-events: none;
+    opacity: 0.4;
+  }
+
+  .visibility-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .visibility-option {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid transparent;
+    border-radius: 22px;
+    padding: 16px 18px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow:
+      inset 0 0 12px rgba(255, 255, 255, 0.08),
+      0 6px 16px rgba(0, 0, 0, 0.06);
+  }
+
+  .visibility-option:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .visibility-option input {
+    margin-top: 3px;
+    accent-color: #00c896;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  .visibility-option-text strong {
+    display: block;
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.02rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 3px;
+  }
+
+  .visibility-option-text span {
+    font-family: 'Rubik', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.3;
+  }
+
+  .visibility-option:has(input:checked) {
+    border-color: #00c896;
+    background: rgba(0, 200, 150, 0.1);
+  }
+
+  .visibility-status {
+    font-family: 'Rubik', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #7CE0B0;
+    margin-top: 14px;
+    min-height: 0;
+  }
+
+  .visibility-status.is-error {
+    color: #ff8a8a;
+  }
+
+  @media (max-width: 520px) {
+    .public-url-card {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+
   /* ============================= MODALE EDITION ============================= */
 
   .edit-overlay {
@@ -655,6 +806,47 @@ permalink: /profile
   .edit-input:focus,
   .edit-textarea:focus {
     background: rgba(255, 255, 255, 0.1);
+  }
+
+  .edit-username-wrap {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 16px;
+    box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.2);
+    overflow: hidden;
+  }
+
+  .edit-username-wrap .edit-username-at {
+    padding: 12px 0 12px 14px;
+    font-family: 'Rubik', sans-serif;
+    font-size: 0.98rem;
+    color: rgba(255, 255, 255, 0.5);
+    flex-shrink: 0;
+  }
+
+  .edit-username-wrap .edit-input {
+    background: transparent;
+    box-shadow: none;
+    padding-left: 4px;
+  }
+
+  .edit-username-status {
+    display: block;
+    font-family: 'Rubik', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.5);
+    margin-top: 6px;
+    min-height: 16px;
+  }
+
+  .edit-username-status.is-error {
+    color: #ff8a8a;
+  }
+
+  .edit-username-status.is-ok {
+    color: #7CE0B0;
   }
 
   .edit-textarea {
@@ -869,6 +1061,7 @@ permalink: /profile
 
         <div class="profile-identity">
           <div id="displayName">Chargement…</div>
+          <div id="profileUsername" hidden></div>
           <div id="email">Chargement…</div>
         </div>
 
@@ -940,10 +1133,36 @@ permalink: /profile
           </div>
 
           <div class="profile-tab-content" data-tab-panel="confidentialite">
-            <div class="tab-placeholder">
-              <h3>Section Confidentialité</h3>
-              <p>Bientôt : contrôle de la visibilité de ton profil et de tes données.</p>
+
+            <div class="public-url-card">
+              <div class="public-url-info">
+                <span class="public-url-label">Votre profil public</span>
+                <span id="publicUrlValue">Choisis d'abord un nom d'utilisateur</span>
+              </div>
+              <a href="#" id="btnViewPublicProfile" class="btn-view-public is-disabled" target="_blank" rel="noopener">
+                Voir mon profil
+              </a>
             </div>
+
+            <span class="account-field-label">Visibilité</span>
+            <form class="visibility-form" id="visibilityForm">
+              <label class="visibility-option">
+                <input type="radio" name="visibility" value="public">
+                <span class="visibility-option-text">
+                  <strong>🌍 Public</strong>
+                  <span>Votre profil peut être consulté par tout le monde via son URL publique.</span>
+                </span>
+              </label>
+              <label class="visibility-option">
+                <input type="radio" name="visibility" value="private" checked>
+                <span class="visibility-option-text">
+                  <strong>🔒 Privé</strong>
+                  <span>Votre profil n'est pas accessible publiquement.</span>
+                </span>
+              </label>
+            </form>
+            <p class="visibility-status" id="visibilityStatus"></p>
+
           </div>
 
           <div class="profile-tab-content" data-tab-panel="securite">
@@ -981,6 +1200,15 @@ permalink: /profile
       <div class="edit-section">
         <label class="edit-label" for="editNameInput">Nom affiché</label>
         <input type="text" id="editNameInput" class="edit-input" maxlength="40" placeholder="Ton nom">
+      </div>
+
+      <div class="edit-section">
+        <label class="edit-label" for="editUsernameInput">Nom d'utilisateur</label>
+        <div class="edit-username-wrap">
+          <span class="edit-username-at">@</span>
+          <input type="text" id="editUsernameInput" class="edit-input" maxlength="20" placeholder="tonpseudo" autocomplete="off" autocapitalize="off" spellcheck="false">
+        </div>
+        <span class="edit-username-status" id="editUsernameStatus"></span>
       </div>
 
       <div class="edit-section">
