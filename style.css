@@ -248,15 +248,16 @@ header h1 {
     font-size: 0.96rem;
   }
 
-  /* Le header sticky est décalé pour laisser la place à la banderole fixed */
-  header {
-    top: 22px !important;
+  /* Le header sticky est décalé pour laisser la place à la banderole fixed,
+     UNIQUEMENT si la banderole est présente dans la page (sélecteur frère) */
+  .announcement-bar ~ header {
+    top: 26px !important;
   }
 
-  /* La mobile-nav (position fixed, bottom) n'a pas besoin d'ajustement,
-     mais on pousse tout le body pour compenser le bandeau fixed en haut */
-  body.home {
-    padding-top: 22px;
+  /* On pousse le contenu du body pour compenser le bandeau fixed en haut,
+     UNIQUEMENT si la banderole est présente dans la page (:has) */
+  body:has(.announcement-bar) {
+    padding-top: 26px;
   }
 }
 
