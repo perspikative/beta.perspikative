@@ -561,6 +561,14 @@ body.menu-open .blur-overlay {
     top: 85px; /* remonte le menu sur mobile */
   }
 
+  /* Si la banderole d'annonce est présente sur la page, elle décale tout
+     de 26px vers le bas (position fixed) : le menu doit suivre.
+     .mobile-menu est imbriqué DANS header, donc on cible header d'abord
+     puis on redescend vers son enfant .mobile-menu */
+  .announcement-bar ~ header .mobile-menu {
+    top: calc(85px + 26px);
+  }
+
   .burger-icon {
     opacity: 1;
     visibility: visible;
@@ -6323,5 +6331,17 @@ body {
   .report-subcategory-btn {
     font-size: 0.95rem;
     padding: 6px 12px;
+  }
+}
+
+/* Mode Clair (par défaut) */
+::selection {
+  background: rgba(15, 32, 67, 0.4); /* Bleu marine très léger */
+}
+
+/* Mode Sombre (Dark Mode) */
+@media (prefers-color-scheme: dark) {
+  ::selection {
+    background: rgba(255, 255, 255, 0.15); /* Voile blanc très discret */
   }
 }
