@@ -1043,16 +1043,12 @@ permalink: /profile
     display: flex;
     align-items: center;
     justify-content: center;
+    perspective: 1100px;
   }
 
   /* Chaque avatar du carousel : positionné en absolu, centré, et décalé en
-     JS via translateX + scale selon sa distance (circulaire) à l'index
-     actif — jamais de rotation 3D, pour garder des cercles toujours
-     parfaitement ronds, jamais écrasés en ellipse.
-     La boucle infinie vient du fait que la distance à l'index actif est
-     calculée de façon circulaire en JS : au-delà du dernier avatar, on
-     retombe sur le premier, et inversement (voir shortestSignedDistance()
-     dans profile.js). */
+     JS via une transform calculée selon sa distance à l'index actif
+     (translateX + scale + rotateY + opacity), pour un vrai effet 3D. */
   .avatar-coverflow-item {
     position: absolute;
     top: 50%;
