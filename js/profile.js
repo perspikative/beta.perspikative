@@ -558,35 +558,28 @@ if (visibilityForm) {
 // Lightbox photo de profil (coverflow 3D — boucle infinie)
 //
 // Principe : on construit AVATAR_COUNT boutons <button class="avatar-
-// coverflow-item"> positionnés en absolu au centre de la piste, puis on
-// les repositionne via transform selon leur distance à l'index actif
-// (voir positionCoverflow()). L'index actif au départ correspond à
-// l'avatar actuellement enregistré. Le bouton Enregistrer ne s'active que
-// si l'avatar centré diffère de celui déjà sauvegardé.
+// coverflow-item"> positionnés en absolu au centre de la piste. Chaque
+// avatar a une position "monde" continue (itemWorldPos[i]), c'est-à-dire
+// son propre cran sur un axe non borné (ex: -1, 0, 1, 2...). Contrairement
+// à un calcul de "distance la plus courte" refait à chaque frame (qui ferait
+// sauter un avatar d'un bord à l'autre en pleine anim), la position monde
+// n'est recalée de ±AVATAR_COUNT QUE quand l'avatar est actuellement caché
+// (hors champ visible) — jamais pendant qu'on le voit se déplacer. C'est ce
+// qui rend la boucle infinie fluide et "propre" visuellement.
 //
-// Boucle infinie : coverflowIndex n'est PAS borné à [0, AVATAR_COUNT-1] —
-// c'est un compteur qui peut monter ou descendre indéfiniment (ex: -3, 12,
-// 25...). Pour savoir quel avatar réel chaque valeur représente, et pour
-// positionner chaque vignette, on utilise un modulo signé (mod()) qui
-// ramène toujours dans [0, AVATAR_COUNT-1] ou dans [-N/2, N/2] selon le
-// besoin. Résultat : on peut tourner à droite ou à gauche sans jamais
-// buter, et on retombe indéfiniment sur les mêmes 8 avatars.
+// Le bouton Enregistrer ne s'active que si l'avatar centré diffère de celui
+// déjà sauvegardé.
 // -----------------------------------------------------------------------
 let coverflowItems = [];      // éléments <button> du carousel, dans l'ordre 1..AVATAR_COUNT
-let coverflowIndex = 0;       // position actuelle (NON bornée : peut être négative ou > AVATAR_COUNT)
+let itemWorldPos = [];        // position monde actuelle de chaque item (même longueur que coverflowItems)
+let coverflowIndex = 0;       // position actuelle du centre (NON bornée : peut être négative ou > AVATAR_COUNT)
 let savedAvatarIndex = 0;     // index réel (0..AVATAR_COUNT-1) de l'avatar enregistré
 let coverflowBuilt = false;
+let isNavigating = false;     // anti double-déclenchement (ex: double-clic, event dupliqué)
 
 // Modulo toujours positif (contrairement à % en JS qui peut être négatif)
 function mod(n, m) {
     return ((n % m) + m) % m;
-}
-
-// Distance signée la plus courte entre deux positions sur un cercle de N
-// éléments (ex: avec N=8, distance entre l'item 7 et l'item 0 est +1, pas -7)
-function shortestSignedDistance(from, to, count) {
-    const raw = mod(to - from, count);
-    return raw > count / 2 ? raw - count : raw;
 }
 
 function avatarIndexFromPath(path) {
@@ -623,39 +616,53 @@ function buildCoverflow() {
         btn.appendChild(check);
 
         btn.addEventListener("click", () => {
-            // Un clic sur un avatar satellite le recentre en suivant le chemin
-            // le plus court (jamais tout le tour), qu'il soit à gauche ou à
-            // droite de la position actuelle — cohérent avec la boucle infinie.
-            const delta = shortestSignedDistance(mod(coverflowIndex, AVATAR_COUNT), i, AVATAR_COUNT);
-            goToCoverflowIndex(coverflowIndex + delta);
+            // Un clic sur un avatar satellite le recentre en utilisant SA
+            // position monde actuelle (pas un recalcul de plus court chemin),
+            // pour rester cohérent avec ce qui est affiché à l'écran.
+            goToCoverflowIndex(itemWorldPos[i]);
         });
 
         avatarCoverflowTrack.appendChild(btn);
         coverflowItems.push(btn);
     }
 
+    // Position monde initiale : simplement l'index naturel de chaque avatar
+    itemWorldPos = coverflowItems.map((_, i) => i);
+
     coverflowBuilt = true;
 }
 
-// Calcule et applique le transform de chaque avatar selon sa distance
-// (signée, circulaire) à l'index actif. Uniquement translateX + scale : pas
-// de rotation 3D, pour que chaque avatar reste un cercle parfait, jamais
-// écrasé en ellipse — juste plus petit et plus transparent en s'éloignant
-// du centre. Comme la piste boucle, chacun des AVATAR_COUNT avatars peut
-// apparaître à plusieurs "crans" virtuels autour du centre.
+// Calcule et applique le transform de chaque avatar selon sa position monde
+// persistante. Uniquement translateX + scale : pas de rotation 3D, pour que
+// chaque avatar reste un cercle parfait, jamais écrasé en ellipse — juste
+// plus petit et plus transparent en s'éloignant du centre.
 function positionCoverflow() {
     const isMobile = window.innerWidth <= 700;
     const spacing = isMobile ? 92 : 150;      // écart horizontal entre avatars
     const scaleStep = isMobile ? 0.16 : 0.14; // réduction de taille par cran
     const maxVisible = isMobile ? 2 : 3;      // nb de crans visibles de chaque côté
 
-    const activeReal = mod(coverflowIndex, AVATAR_COUNT);
-
     coverflowItems.forEach((item, i) => {
-        // Distance circulaire la plus courte (en crans) entre cet avatar et
-        // le centre actuel : c'est ce qui permet la boucle infinie, un
-        // avatar "boucle" toujours par le chemin le plus court.
-        const distance = shortestSignedDistance(activeReal, i, AVATAR_COUNT);
+        // Avant de positionner, on recale la position monde de ±AVATAR_COUNT
+        // si besoin — mais UNIQUEMENT si l'item est actuellement hors du
+        // champ visible (distance > maxVisible + 1 marge de sécurité), donc
+        // jamais pendant qu'on le voit à l'écran : aucun saut visuel.
+        while (itemWorldPos[i] - coverflowIndex > AVATAR_COUNT / 2) {
+            if (Math.abs(itemWorldPos[i] - AVATAR_COUNT - coverflowIndex) < Math.abs(itemWorldPos[i] - coverflowIndex)) {
+                itemWorldPos[i] -= AVATAR_COUNT;
+            } else {
+                break;
+            }
+        }
+        while (coverflowIndex - itemWorldPos[i] > AVATAR_COUNT / 2) {
+            if (Math.abs(itemWorldPos[i] + AVATAR_COUNT - coverflowIndex) < Math.abs(itemWorldPos[i] - coverflowIndex)) {
+                itemWorldPos[i] += AVATAR_COUNT;
+            } else {
+                break;
+            }
+        }
+
+        const distance = itemWorldPos[i] - coverflowIndex;
         const abs = Math.abs(distance);
 
         item.classList.toggle("is-active", distance === 0);
@@ -663,8 +670,8 @@ function positionCoverflow() {
         if (abs > maxVisible) {
             item.style.opacity = "0";
             item.style.pointerEvents = "none";
-            item.style.transform = `translate(-50%, -50%) translateX(${distance * spacing}px) scale(0.4)`;
             item.style.zIndex = "0";
+            item.style.transform = `translate(-50%, -50%) translateX(${distance * spacing}px) scale(0.4)`;
             return;
         }
 
@@ -681,16 +688,23 @@ function positionCoverflow() {
 
     // Le bouton Enregistrer ne s'active que si l'avatar réel actuellement
     // centré diffère de l'avatar réellement enregistré sur le compte.
+    const activeReal = mod(coverflowIndex, AVATAR_COUNT);
     const hasChanged = activeReal !== savedAvatarIndex;
     avatarLightboxSave.disabled = !hasChanged;
 }
 
 function goToCoverflowIndex(index) {
-    // Pas de clamp : on avance/recule librement, la boucle est gérée par le
-    // modulo dans positionCoverflow(). On peut donc dépasser AVATAR_COUNT-1
-    // ou descendre sous 0 indéfiniment.
+    // Anti double-déclenchement : un clic sur une flèche pendant que la
+    // transition précédente joue encore ne doit pas faire avancer de 2 crans
+    // d'un coup. On laisse la transition CSS (0.45s) se terminer avant
+    // d'accepter la prochaine navigation.
+    if (isNavigating) return;
+
     coverflowIndex = index;
     positionCoverflow();
+
+    isNavigating = true;
+    setTimeout(() => { isNavigating = false; }, 460);
 }
 
 // -----------------------------------------------------------------------
@@ -785,6 +799,12 @@ function openAvatarLightbox() {
     const currentPhoto = currentUser.photoURL || DEFAULT_AVATAR;
     savedAvatarIndex = avatarIndexFromPath(currentPhoto);
     coverflowIndex = savedAvatarIndex;
+
+    // Repart d'une position monde "propre" à chaque ouverture (chaque avatar
+    // à son cran naturel), pour éviter d'accumuler des décalages d'une
+    // session de la lightbox à l'autre.
+    itemWorldPos = coverflowItems.map((_, i) => i);
+
     positionCoverflow();
 
     profilePicWrapper.classList.add("is-lightbox-active");
