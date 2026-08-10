@@ -555,19 +555,39 @@ if (visibilityForm) {
 }
 
 // -----------------------------------------------------------------------
-// Lightbox photo de profil (coverflow 3D)
+// Lightbox photo de profil (coverflow 3D — boucle infinie)
 //
 // Principe : on construit AVATAR_COUNT boutons <button class="avatar-
 // coverflow-item"> positionnés en absolu au centre de la piste, puis on
 // les repositionne via transform selon leur distance à l'index actif
 // (voir positionCoverflow()). L'index actif au départ correspond à
 // l'avatar actuellement enregistré. Le bouton Enregistrer ne s'active que
-// si l'avatar survolé/centré diffère de celui déjà sauvegardé.
+// si l'avatar centré diffère de celui déjà sauvegardé.
+//
+// Boucle infinie : coverflowIndex n'est PAS borné à [0, AVATAR_COUNT-1] —
+// c'est un compteur qui peut monter ou descendre indéfiniment (ex: -3, 12,
+// 25...). Pour savoir quel avatar réel chaque valeur représente, et pour
+// positionner chaque vignette, on utilise un modulo signé (mod()) qui
+// ramène toujours dans [0, AVATAR_COUNT-1] ou dans [-N/2, N/2] selon le
+// besoin. Résultat : on peut tourner à droite ou à gauche sans jamais
+// buter, et on retombe indéfiniment sur les mêmes 8 avatars.
 // -----------------------------------------------------------------------
 let coverflowItems = [];      // éléments <button> du carousel, dans l'ordre 1..AVATAR_COUNT
-let coverflowIndex = 0;       // index actuellement centré (0-based)
-let savedAvatarIndex = 0;     // index correspondant à l'avatar réellement enregistré
+let coverflowIndex = 0;       // position actuelle (NON bornée : peut être négative ou > AVATAR_COUNT)
+let savedAvatarIndex = 0;     // index réel (0..AVATAR_COUNT-1) de l'avatar enregistré
 let coverflowBuilt = false;
+
+// Modulo toujours positif (contrairement à % en JS qui peut être négatif)
+function mod(n, m) {
+    return ((n % m) + m) % m;
+}
+
+// Distance signée la plus courte entre deux positions sur un cercle de N
+// éléments (ex: avec N=8, distance entre l'item 7 et l'item 0 est +1, pas -7)
+function shortestSignedDistance(from, to, count) {
+    const raw = mod(to - from, count);
+    return raw > count / 2 ? raw - count : raw;
+}
 
 function avatarIndexFromPath(path) {
     // Le photoURL stocké peut être une URL absolue (Firebase) ou relative ;
@@ -603,10 +623,11 @@ function buildCoverflow() {
         btn.appendChild(check);
 
         btn.addEventListener("click", () => {
-            // Un clic sur un avatar déjà centré ne fait rien de plus ; un
-            // clic sur un avatar satellite le recentre (comportement attendu
-            // d'un coverflow : cliquer amène l'élément au centre).
-            goToCoverflowIndex(i);
+            // Un clic sur un avatar satellite le recentre en suivant le chemin
+            // le plus court (jamais tout le tour), qu'il soit à gauche ou à
+            // droite de la position actuelle — cohérent avec la boucle infinie.
+            const delta = shortestSignedDistance(mod(coverflowIndex, AVATAR_COUNT), i, AVATAR_COUNT);
+            goToCoverflowIndex(coverflowIndex + delta);
         });
 
         avatarCoverflowTrack.appendChild(btn);
@@ -616,18 +637,25 @@ function buildCoverflow() {
     coverflowBuilt = true;
 }
 
-// Calcule et applique le transform 3D de chaque avatar selon sa distance
-// (signée) à l'index actif. Les avatars trop loin sont masqués (opacity 0)
-// pour ne pas surcharger visuellement le carousel.
+// Calcule et applique le transform de chaque avatar selon sa distance
+// (signée, circulaire) à l'index actif. Uniquement translateX + scale : pas
+// de rotation 3D, pour que chaque avatar reste un cercle parfait, jamais
+// écrasé en ellipse — juste plus petit et plus transparent en s'éloignant
+// du centre. Comme la piste boucle, chacun des AVATAR_COUNT avatars peut
+// apparaître à plusieurs "crans" virtuels autour du centre.
 function positionCoverflow() {
     const isMobile = window.innerWidth <= 700;
     const spacing = isMobile ? 92 : 150;      // écart horizontal entre avatars
     const scaleStep = isMobile ? 0.16 : 0.14; // réduction de taille par cran
-    const rotateStep = 26;                    // degrés de rotation Y par cran
     const maxVisible = isMobile ? 2 : 3;      // nb de crans visibles de chaque côté
 
+    const activeReal = mod(coverflowIndex, AVATAR_COUNT);
+
     coverflowItems.forEach((item, i) => {
-        const distance = i - coverflowIndex;
+        // Distance circulaire la plus courte (en crans) entre cet avatar et
+        // le centre actuel : c'est ce qui permet la boucle infinie, un
+        // avatar "boucle" toujours par le chemin le plus court.
+        const distance = shortestSignedDistance(activeReal, i, AVATAR_COUNT);
         const abs = Math.abs(distance);
 
         item.classList.toggle("is-active", distance === 0);
@@ -641,7 +669,6 @@ function positionCoverflow() {
         }
 
         const scale = 1 - abs * scaleStep;
-        const rotate = distance === 0 ? 0 : (distance > 0 ? -rotateStep : rotateStep);
         const translateX = distance * spacing;
         const opacity = 1 - abs * 0.28;
 
@@ -649,18 +676,20 @@ function positionCoverflow() {
         item.style.pointerEvents = "auto";
         item.style.zIndex = String(100 - abs);
         item.style.transform =
-            `translate(-50%, -50%) translateX(${translateX}px) scale(${scale}) rotateY(${rotate}deg)`;
+            `translate(-50%, -50%) translateX(${translateX}px) scale(${scale})`;
     });
 
-    // Le bouton Enregistrer ne s'active que si la sélection diffère de
-    // l'avatar réellement enregistré sur le compte.
-    const hasChanged = coverflowIndex !== savedAvatarIndex;
+    // Le bouton Enregistrer ne s'active que si l'avatar réel actuellement
+    // centré diffère de l'avatar réellement enregistré sur le compte.
+    const hasChanged = activeReal !== savedAvatarIndex;
     avatarLightboxSave.disabled = !hasChanged;
 }
 
 function goToCoverflowIndex(index) {
-    const clamped = Math.max(0, Math.min(AVATAR_COUNT - 1, index));
-    coverflowIndex = clamped;
+    // Pas de clamp : on avance/recule librement, la boucle est gérée par le
+    // modulo dans positionCoverflow(). On peut donc dépasser AVATAR_COUNT-1
+    // ou descendre sous 0 indéfiniment.
+    coverflowIndex = index;
     positionCoverflow();
 }
 
@@ -860,9 +889,11 @@ window.addEventListener("resize", () => {
 
 avatarLightboxSave.addEventListener("click", async () => {
     if (!currentUser) return;
-    if (coverflowIndex === savedAvatarIndex) return;
 
-    const newPhoto = AVATAR_PATH(coverflowIndex + 1);
+    const activeReal = mod(coverflowIndex, AVATAR_COUNT);
+    if (activeReal === savedAvatarIndex) return;
+
+    const newPhoto = AVATAR_PATH(activeReal + 1);
 
     avatarLightboxSave.disabled = true;
     avatarLightboxSave.classList.add("is-saving");
@@ -876,7 +907,7 @@ avatarLightboxSave.addEventListener("click", async () => {
         // toute autre référence locale) reflète immédiatement le nouvel avatar.
         profilePic.src = newPhoto;
         selectedAvatar = newPhoto;
-        savedAvatarIndex = coverflowIndex;
+        savedAvatarIndex = activeReal;
 
         closeAvatarLightbox();
     } catch (err) {
