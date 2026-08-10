@@ -121,6 +121,20 @@ permalink: /profile
     width: 110px;
     height: 110px;
     margin-top: 4px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.2s ease;
+  }
+
+  .profile-pic-wrapper:hover {
+    transform: translateY(-1px);
+  }
+
+  .profile-pic-wrapper:hover .profile-pic-edit-hint {
+    opacity: 1;
   }
 
   .profile-pic-wrapper::before {
@@ -141,6 +155,45 @@ permalink: /profile
     object-fit: cover;
     display: block;
     background: #000000;
+    transition: opacity 0.25s ease;
+  }
+
+  /* Petit badge crayon qui apparaît au survol, pour signaler que c'est cliquable */
+  .profile-pic-edit-hint {
+    position: absolute;
+    z-index: 2;
+    right: -2px;
+    bottom: -2px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(10, 20, 18, 0.85);
+    border: 2px solid rgba(255, 255, 255, 0.14);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  }
+
+  .profile-pic-edit-hint img {
+    width: 16px;
+    height: 16px;
+    opacity: 0.9;
+  }
+
+  @media (pointer: coarse) {
+    .profile-pic-edit-hint {
+      opacity: 1;
+    }
+  }
+
+  /* La photo "réelle" reste visible même quand la lightbox est ouverte ; on
+     l'estompe pendant la transition pour laisser place à l'avatar qui vole
+     dans la lightbox (voir .profile-pic-wrapper.is-lightbox-active) */
+  .profile-pic-wrapper.is-lightbox-active .profile-pic {
+    opacity: 0;
   }
 
   /* Nom + bio */
@@ -751,42 +804,6 @@ permalink: /profile
     margin-bottom: 8px;
   }
 
-  /* Galerie avatars */
-  .avatar-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .avatar-choice {
-    position: relative;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    padding: 0;
-    border: 2.5px solid transparent;
-    cursor: pointer;
-    background: transparent;
-    transition: transform 0.15s ease, border-color 0.15s ease;
-  }
-
-  .avatar-choice img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .avatar-choice:hover {
-    transform: translateY(-2px);
-  }
-
-  .avatar-choice.is-selected {
-    border-color: #0af0d0;
-    box-shadow: 0 0 0 3px rgba(10, 240, 208, 0.18);
-  }
-
   /* Champs texte */
   .edit-input,
   .edit-textarea {
@@ -933,6 +950,281 @@ permalink: /profile
     }
   }
 
+  /* ============================= LIGHTBOX PHOTO DE PROFIL (COVERFLOW) ============================= */
+
+  .avatar-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 10020;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 34px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.35s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.35s;
+  }
+
+  .avatar-lightbox.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  /* Fond : flou progressif, plus prononcé vers le centre. On superpose deux
+     couches : un assombrissement uniforme, et un flou radial simulé via un
+     masque (le centre reste net-ish pour laisser respirer l'avatar actif,
+     le pourtour est très flouté). */
+  .avatar-lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(6, 12, 11, 0.78);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+
+  .avatar-lightbox-backdrop::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(34px) saturate(120%);
+    -webkit-backdrop-filter: blur(34px) saturate(120%);
+    -webkit-mask-image: radial-gradient(circle at 50% 50%, transparent 0%, transparent 14%, #000 46%);
+    mask-image: radial-gradient(circle at 50% 50%, transparent 0%, transparent 14%, #000 46%);
+  }
+
+  .avatar-lightbox-close {
+    position: absolute;
+    top: 26px;
+    right: 26px;
+    z-index: 2;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+  }
+
+  .avatar-lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.16);
+    transform: rotate(90deg);
+  }
+
+  .avatar-lightbox-close img {
+    width: 24px;
+    height: 24px;
+    opacity: 0.9;
+  }
+
+  /* Piste du coverflow */
+  .avatar-coverflow {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    width: 100%;
+    max-width: 760px;
+    padding: 0 20px;
+  }
+
+  .avatar-coverflow-track {
+    position: relative;
+    flex: 1;
+    height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1100px;
+  }
+
+  /* Chaque avatar du carousel : positionné en absolu, centré, et décalé en
+     JS via une transform calculée selon sa distance à l'index actif
+     (translateX + scale + rotateY + opacity), pour un vrai effet 3D. */
+  .avatar-coverflow-item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 190px;
+    height: 190px;
+    border-radius: 50%;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+                filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform, opacity, filter;
+  }
+
+  .avatar-coverflow-item img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    background: #0d1f1c;
+    box-shadow:
+      0 14px 40px rgba(0, 0, 0, 0.35),
+      inset 0 0 0 2px rgba(255, 255, 255, 0.08);
+  }
+
+  /* L'avatar actuellement centré : mis en valeur avec un halo teal */
+  .avatar-coverflow-item.is-active img {
+    box-shadow:
+      0 18px 46px rgba(0, 0, 0, 0.4),
+      0 0 0 3px rgba(10, 240, 208, 0.9),
+      0 0 34px rgba(0, 200, 150, 0.45);
+  }
+
+  /* Petite coche de confirmation sur l'avatar actif */
+  .avatar-coverflow-item .avatar-coverflow-check {
+    position: absolute;
+    right: 6px;
+    bottom: 6px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #00c896, #0af0d0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.6);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 4px 14px rgba(0, 200, 150, 0.4);
+  }
+
+  .avatar-coverflow-item.is-active .avatar-coverflow-check {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  .avatar-coverflow-item .avatar-coverflow-check svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Flèches de navigation (masquées sur mobile, cf. media query plus bas) */
+  .avatar-coverflow-arrow {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+    box-shadow:
+      inset 0 0 12px rgba(255, 255, 255, 0.12),
+      0 6px 18px rgba(0, 0, 0, 0.24);
+    z-index: 2;
+  }
+
+  .avatar-coverflow-arrow:hover {
+    background: rgba(255, 255, 255, 0.16);
+    transform: translateY(-1px);
+  }
+
+  .avatar-coverflow-arrow:active {
+    transform: scale(0.94);
+  }
+
+  .avatar-coverflow-arrow img {
+    width: 24px;
+    height: 24px;
+  }
+
+  /* Bouton Enregistrer : grisé/inerte tant que l'avatar sélectionné est
+     celui déjà enregistré, actif (dégradé teal) sinon. */
+  .avatar-lightbox-save {
+    position: relative;
+    z-index: 1;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    padding: 13px 34px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    color: #06231d;
+    background: linear-gradient(135deg, #00c896, #0af0d0);
+    box-shadow: 0 8px 24px rgba(0, 200, 150, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  }
+
+  .avatar-lightbox-save:not(:disabled):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 28px rgba(0, 200, 150, 0.38);
+  }
+
+  .avatar-lightbox-save:disabled {
+    cursor: default;
+    color: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: none;
+    transform: none;
+  }
+
+  .avatar-lightbox-save.is-saving {
+    opacity: 0.75;
+    pointer-events: none;
+  }
+
+  /* Mobile : coverflow plus compact, flèches masquées (navigation au swipe) */
+  @media (max-width: 700px) {
+    .avatar-coverflow {
+      gap: 0;
+      padding: 0;
+    }
+
+    .avatar-coverflow-arrow {
+      display: none;
+    }
+
+    .avatar-coverflow-track {
+      height: 220px;
+      touch-action: pan-y;
+    }
+
+    .avatar-coverflow-item {
+      width: 130px;
+      height: 130px;
+    }
+
+    .avatar-lightbox {
+      gap: 26px;
+    }
+
+    .avatar-lightbox-close {
+      top: 18px;
+      right: 18px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .avatar-coverflow-item,
+    .avatar-lightbox,
+    .profile-pic-wrapper,
+    .profile-pic {
+      transition-duration: 0.01ms !important;
+    }
+  }
+
   /* ============================= MENTION BÊTA ============================= */
 
   .profile-beta-note {
@@ -1051,14 +1343,17 @@ permalink: /profile
           <img src="/icons/edit.svg" alt="">
         </button>
 
-        <div class="profile-pic-wrapper">
+        <button type="button" class="profile-pic-wrapper" id="btnOpenAvatarLightbox" aria-label="Changer la photo de profil" title="Changer la photo de profil">
           <img
             id="profilePic"
             class="profile-pic"
             src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='110' height='110' viewBox='0 0 90 90'><rect width='100%25' height='100%25' fill='%230d1f1c'/></svg>"
             alt="Photo de profil"
           >
-        </div>
+          <span class="profile-pic-edit-hint">
+            <img src="/icons/edit.svg" alt="">
+          </span>
+        </button>
 
         <div class="profile-identity">
           <div id="displayName">Chargement…</div>
@@ -1194,11 +1489,6 @@ permalink: /profile
       <h2 class="edit-title">Modifier le profil</h2>
 
       <div class="edit-section">
-        <label class="edit-label">Photo de profil</label>
-        <div class="avatar-grid" id="avatarGrid"></div>
-      </div>
-
-      <div class="edit-section">
         <label class="edit-label" for="editNameInput">Nom affiché</label>
         <input type="text" id="editNameInput" class="edit-input" maxlength="40" placeholder="Ton nom">
       </div>
@@ -1225,6 +1515,31 @@ permalink: /profile
 
       <p class="edit-status" id="editStatus"></p>
     </div>
+  </div>
+
+  <!-- ===== LIGHTBOX PHOTO DE PROFIL (COVERFLOW) ===== -->
+  <div class="avatar-lightbox" id="avatarLightbox" aria-hidden="true">
+    <div class="avatar-lightbox-backdrop"></div>
+
+    <button type="button" class="avatar-lightbox-close" id="avatarLightboxClose" aria-label="Fermer">
+      <img src="/icons/cross.svg" alt="">
+    </button>
+
+    <div class="avatar-coverflow" id="avatarCoverflow">
+      <button type="button" class="avatar-coverflow-arrow avatar-coverflow-arrow--left" id="avatarArrowLeft" aria-label="Avatar précédent">
+        <img src="/icons/lightbox-left-arrow.svg" alt="">
+      </button>
+
+      <div class="avatar-coverflow-track" id="avatarCoverflowTrack"></div>
+
+      <button type="button" class="avatar-coverflow-arrow avatar-coverflow-arrow--right" id="avatarArrowRight" aria-label="Avatar suivant">
+        <img src="/icons/lightbox-right-arrow.svg" alt="">
+      </button>
+    </div>
+
+    <button type="button" class="avatar-lightbox-save" id="avatarLightboxSave" disabled>
+      Enregistrer
+    </button>
   </div>
 
   <footer>
