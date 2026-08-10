@@ -59,7 +59,6 @@ const editUsernameInput = document.getElementById("editUsernameInput");
 const editUsernameStatus = document.getElementById("editUsernameStatus");
 const editBioInput = document.getElementById("editBioInput");
 const bioCharCount = document.getElementById("bioCharCount");
-const avatarGrid = document.getElementById("avatarGrid");
 const btnLogout = document.getElementById("btnLogout");
 const accountEmail = document.getElementById("accountEmail");
 const accountId = document.getElementById("accountId");
@@ -72,6 +71,18 @@ const publicUrlValue = document.getElementById("publicUrlValue");
 const btnViewPublicProfile = document.getElementById("btnViewPublicProfile");
 const visibilityForm = document.getElementById("visibilityForm");
 const visibilityStatus = document.getElementById("visibilityStatus");
+
+// -----------------------------------------------------------------------
+// Références DOM — lightbox photo de profil (coverflow)
+// -----------------------------------------------------------------------
+const btnOpenAvatarLightbox = document.getElementById("btnOpenAvatarLightbox");
+const profilePicWrapper = btnOpenAvatarLightbox; // même élément, alias par clarté
+const avatarLightbox = document.getElementById("avatarLightbox");
+const avatarLightboxClose = document.getElementById("avatarLightboxClose");
+const avatarCoverflowTrack = document.getElementById("avatarCoverflowTrack");
+const avatarArrowLeft = document.getElementById("avatarArrowLeft");
+const avatarArrowRight = document.getElementById("avatarArrowRight");
+const avatarLightboxSave = document.getElementById("avatarLightboxSave");
 
 let currentUser = null;
 let selectedAvatar = DEFAULT_AVATAR;
@@ -264,34 +275,6 @@ function setVisibilityUI(isPublic) {
 }
 
 // -----------------------------------------------------------------------
-// Construction de la galerie d'avatars dans la modale
-// -----------------------------------------------------------------------
-function buildAvatarGrid(selected) {
-    avatarGrid.innerHTML = "";
-    for (let i = 1; i <= AVATAR_COUNT; i++) {
-        const path = AVATAR_PATH(i);
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "avatar-choice" + (path === selected ? " is-selected" : "");
-        btn.dataset.avatar = path;
-
-        const img = document.createElement("img");
-        img.src = path;
-        img.alt = `Avatar ${i}`;
-        btn.appendChild(img);
-
-        btn.addEventListener("click", () => {
-            selectedAvatar = path;
-            avatarGrid.querySelectorAll(".avatar-choice").forEach((el) => {
-                el.classList.toggle("is-selected", el.dataset.avatar === path);
-            });
-        });
-
-        avatarGrid.appendChild(btn);
-    }
-}
-
-// -----------------------------------------------------------------------
 // Auth state : chargement du profil
 // -----------------------------------------------------------------------
 onAuthStateChanged(auth, async (user) => {
@@ -380,8 +363,6 @@ function openEditModal() {
     bioCharCount.textContent = String(editBioInput.value.length);
     editStatus.textContent = "";
     editStatus.classList.remove("is-error");
-
-    buildAvatarGrid(selectedAvatar);
 
     editOverlay.classList.add("active");
     document.body.classList.add("menu-open");
@@ -507,10 +488,10 @@ editSaveBtn.addEventListener("click", async () => {
             }
         }
 
-        // Mise à jour du profil Firebase Auth (nom + photo)
+        // Mise à jour du profil Firebase Auth (nom uniquement : la photo de
+        // profil se gère désormais depuis la lightbox coverflow, cf. plus bas)
         await updateProfile(currentUser, {
-            displayName: newName,
-            photoURL: selectedAvatar
+            displayName: newName
         });
 
         // Mise à jour Firestore (bio uniquement ici : le username a déjà
@@ -520,7 +501,6 @@ editSaveBtn.addEventListener("click", async () => {
 
         // Rafraîchissement de l'affichage
         displayName.textContent = newName;
-        profilePic.src = selectedAvatar;
         renderBio(newBio);
         currentUsername = normalizedUsername;
         renderUsername(rawUsername.trim());
@@ -573,6 +553,341 @@ if (visibilityForm) {
         }
     });
 }
+
+// -----------------------------------------------------------------------
+// Lightbox photo de profil (coverflow 3D)
+//
+// Principe : on construit AVATAR_COUNT boutons <button class="avatar-
+// coverflow-item"> positionnés en absolu au centre de la piste, puis on
+// les repositionne via transform selon leur distance à l'index actif
+// (voir positionCoverflow()). L'index actif au départ correspond à
+// l'avatar actuellement enregistré. Le bouton Enregistrer ne s'active que
+// si l'avatar survolé/centré diffère de celui déjà sauvegardé.
+// -----------------------------------------------------------------------
+let coverflowItems = [];      // éléments <button> du carousel, dans l'ordre 1..AVATAR_COUNT
+let coverflowIndex = 0;       // index actuellement centré (0-based)
+let savedAvatarIndex = 0;     // index correspondant à l'avatar réellement enregistré
+let coverflowBuilt = false;
+
+function avatarIndexFromPath(path) {
+    // Le photoURL stocké peut être une URL absolue (Firebase) ou relative ;
+    // on compare juste sur le nom de fichier pour rester robuste.
+    for (let i = 0; i < AVATAR_COUNT; i++) {
+        if (path && path.endsWith(`/${i + 1}.webp`)) return i;
+    }
+    return 0; // avatar 1 par défaut si non reconnu
+}
+
+function buildCoverflow() {
+    if (coverflowBuilt) return;
+    avatarCoverflowTrack.innerHTML = "";
+    coverflowItems = [];
+
+    for (let i = 0; i < AVATAR_COUNT; i++) {
+        const path = AVATAR_PATH(i + 1);
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "avatar-coverflow-item";
+        btn.dataset.index = String(i);
+        btn.setAttribute("aria-label", `Choisir l'avatar ${i + 1}`);
+
+        const img = document.createElement("img");
+        img.src = path;
+        img.alt = `Avatar ${i + 1}`;
+        img.loading = "lazy";
+        btn.appendChild(img);
+
+        const check = document.createElement("span");
+        check.className = "avatar-coverflow-check";
+        check.innerHTML = '<svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#06231d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        btn.appendChild(check);
+
+        btn.addEventListener("click", () => {
+            // Un clic sur un avatar déjà centré ne fait rien de plus ; un
+            // clic sur un avatar satellite le recentre (comportement attendu
+            // d'un coverflow : cliquer amène l'élément au centre).
+            goToCoverflowIndex(i);
+        });
+
+        avatarCoverflowTrack.appendChild(btn);
+        coverflowItems.push(btn);
+    }
+
+    coverflowBuilt = true;
+}
+
+// Calcule et applique le transform 3D de chaque avatar selon sa distance
+// (signée) à l'index actif. Les avatars trop loin sont masqués (opacity 0)
+// pour ne pas surcharger visuellement le carousel.
+function positionCoverflow() {
+    const isMobile = window.innerWidth <= 700;
+    const spacing = isMobile ? 92 : 150;      // écart horizontal entre avatars
+    const scaleStep = isMobile ? 0.16 : 0.14; // réduction de taille par cran
+    const rotateStep = 26;                    // degrés de rotation Y par cran
+    const maxVisible = isMobile ? 2 : 3;      // nb de crans visibles de chaque côté
+
+    coverflowItems.forEach((item, i) => {
+        const distance = i - coverflowIndex;
+        const abs = Math.abs(distance);
+
+        item.classList.toggle("is-active", distance === 0);
+
+        if (abs > maxVisible) {
+            item.style.opacity = "0";
+            item.style.pointerEvents = "none";
+            item.style.transform = `translate(-50%, -50%) translateX(${distance * spacing}px) scale(0.4)`;
+            item.style.zIndex = "0";
+            return;
+        }
+
+        const scale = 1 - abs * scaleStep;
+        const rotate = distance === 0 ? 0 : (distance > 0 ? -rotateStep : rotateStep);
+        const translateX = distance * spacing;
+        const opacity = 1 - abs * 0.28;
+
+        item.style.opacity = String(Math.max(opacity, 0.15));
+        item.style.pointerEvents = "auto";
+        item.style.zIndex = String(100 - abs);
+        item.style.transform =
+            `translate(-50%, -50%) translateX(${translateX}px) scale(${scale}) rotateY(${rotate}deg)`;
+    });
+
+    // Le bouton Enregistrer ne s'active que si la sélection diffère de
+    // l'avatar réellement enregistré sur le compte.
+    const hasChanged = coverflowIndex !== savedAvatarIndex;
+    avatarLightboxSave.disabled = !hasChanged;
+}
+
+function goToCoverflowIndex(index) {
+    const clamped = Math.max(0, Math.min(AVATAR_COUNT - 1, index));
+    coverflowIndex = clamped;
+    positionCoverflow();
+}
+
+// -----------------------------------------------------------------------
+// Ouverture / fermeture animées : la photo de la carte profil "s'envole"
+// vers le centre en s'agrandissant (on masque juste la vraie <img> pendant
+// que la lightbox affiche son propre carousel), puis revient à sa place à
+// la fermeture. Le rendu de vol utilise une image clonée animée en CSS
+// pour un rendu fluide indépendant du reste de la mise en page.
+// -----------------------------------------------------------------------
+let flyingAvatarEl = null;
+
+function flyAvatarToCenter() {
+    const rect = profilePic.getBoundingClientRect();
+    const clone = profilePic.cloneNode(true);
+    clone.removeAttribute("id");
+    clone.style.position = "fixed";
+    clone.style.top = `${rect.top}px`;
+    clone.style.left = `${rect.left}px`;
+    clone.style.width = `${rect.width}px`;
+    clone.style.height = `${rect.height}px`;
+    clone.style.margin = "0";
+    clone.style.borderRadius = "50%";
+    clone.style.zIndex = "10021";
+    clone.style.transition = "all 0.45s cubic-bezier(0.22, 1, 0.36, 1)";
+    clone.style.pointerEvents = "none";
+    clone.style.boxShadow = "0 18px 46px rgba(0,0,0,0.4)";
+    document.body.appendChild(clone);
+    flyingAvatarEl = clone;
+
+    const targetSize = window.innerWidth <= 700 ? 130 : 190;
+    const viewportCenterX = window.innerWidth / 2;
+    const viewportCenterY = window.innerHeight / 2;
+
+    // Force un reflow avant d'appliquer l'état final pour garantir la transition
+    void clone.offsetWidth;
+
+    requestAnimationFrame(() => {
+        clone.style.top = `${viewportCenterY - targetSize / 2}px`;
+        clone.style.left = `${viewportCenterX - targetSize / 2}px`;
+        clone.style.width = `${targetSize}px`;
+        clone.style.height = `${targetSize}px`;
+    });
+
+    setTimeout(() => {
+        if (clone.parentNode) clone.parentNode.removeChild(clone);
+        flyingAvatarEl = null;
+    }, 480);
+}
+
+function flyAvatarBackToCard() {
+    const rect = profilePic.getBoundingClientRect();
+    const clone = profilePic.cloneNode(true);
+    // On part de la position centrale (taille lightbox) vers l'emplacement réel
+    const startSize = window.innerWidth <= 700 ? 130 : 190;
+    const viewportCenterX = window.innerWidth / 2;
+    const viewportCenterY = window.innerHeight / 2;
+
+    clone.removeAttribute("id");
+    clone.style.position = "fixed";
+    clone.style.top = `${viewportCenterY - startSize / 2}px`;
+    clone.style.left = `${viewportCenterX - startSize / 2}px`;
+    clone.style.width = `${startSize}px`;
+    clone.style.height = `${startSize}px`;
+    clone.style.margin = "0";
+    clone.style.borderRadius = "50%";
+    clone.style.zIndex = "10021";
+    clone.style.transition = "all 0.45s cubic-bezier(0.22, 1, 0.36, 1)";
+    clone.style.pointerEvents = "none";
+    clone.style.boxShadow = "0 18px 46px rgba(0,0,0,0.4)";
+    document.body.appendChild(clone);
+
+    void clone.offsetWidth;
+
+    requestAnimationFrame(() => {
+        clone.style.top = `${rect.top}px`;
+        clone.style.left = `${rect.left}px`;
+        clone.style.width = `${rect.width}px`;
+        clone.style.height = `${rect.height}px`;
+    });
+
+    setTimeout(() => {
+        if (clone.parentNode) clone.parentNode.removeChild(clone);
+        profilePicWrapper.classList.remove("is-lightbox-active");
+    }, 480);
+}
+
+function openAvatarLightbox() {
+    if (!currentUser) return;
+
+    buildCoverflow();
+
+    const currentPhoto = currentUser.photoURL || DEFAULT_AVATAR;
+    savedAvatarIndex = avatarIndexFromPath(currentPhoto);
+    coverflowIndex = savedAvatarIndex;
+    positionCoverflow();
+
+    profilePicWrapper.classList.add("is-lightbox-active");
+    flyAvatarToCenter();
+
+    avatarLightbox.classList.add("active");
+    avatarLightbox.setAttribute("aria-hidden", "false");
+    document.body.classList.add("menu-open");
+
+    document.addEventListener("keydown", handleAvatarLightboxKeydown);
+}
+
+function closeAvatarLightbox() {
+    avatarLightbox.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("menu-open");
+    document.removeEventListener("keydown", handleAvatarLightboxKeydown);
+
+    flyAvatarBackToCard();
+
+    // Le fond (backdrop + carousel) s'estompe pendant que l'avatar cloné vole
+    // vers son emplacement réel, pour ne pas "couper" la photo en plein vol.
+    avatarLightbox.classList.remove("active");
+}
+
+function handleAvatarLightboxKeydown(e) {
+    if (e.key === "Escape") {
+        closeAvatarLightbox();
+    } else if (e.key === "ArrowLeft") {
+        goToCoverflowIndex(coverflowIndex - 1);
+    } else if (e.key === "ArrowRight") {
+        goToCoverflowIndex(coverflowIndex + 1);
+    }
+}
+
+if (btnOpenAvatarLightbox) {
+    btnOpenAvatarLightbox.addEventListener("click", openAvatarLightbox);
+}
+
+if (avatarLightboxClose) {
+    avatarLightboxClose.addEventListener("click", closeAvatarLightbox);
+}
+
+if (avatarArrowLeft) {
+    avatarArrowLeft.addEventListener("click", () => goToCoverflowIndex(coverflowIndex - 1));
+}
+
+if (avatarArrowRight) {
+    avatarArrowRight.addEventListener("click", () => goToCoverflowIndex(coverflowIndex + 1));
+}
+
+// Clic sur le fond (en dehors du carousel et du bouton) : ferme, comme les
+// autres overlays du site (édition, report...).
+if (avatarLightbox) {
+    avatarLightbox.addEventListener("click", (e) => {
+        if (e.target === avatarLightbox || e.target.classList.contains("avatar-lightbox-backdrop")) {
+            closeAvatarLightbox();
+        }
+    });
+}
+
+// Navigation tactile (swipe) : indispensable sur mobile où les flèches sont
+// masquées (cf. CSS), mais activée aussi sur desktop par confort.
+(function setupCoverflowSwipe() {
+    if (!avatarCoverflowTrack) return;
+    let startX = 0;
+    let startY = 0;
+    let dragging = false;
+
+    avatarCoverflowTrack.addEventListener("touchstart", (e) => {
+        if (!e.touches || !e.touches[0]) return;
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        dragging = true;
+    }, { passive: true });
+
+    avatarCoverflowTrack.addEventListener("touchend", (e) => {
+        if (!dragging) return;
+        dragging = false;
+        const endTouch = e.changedTouches && e.changedTouches[0];
+        if (!endTouch) return;
+
+        const dx = endTouch.clientX - startX;
+        const dy = endTouch.clientY - startY;
+
+        // Ignore les swipes trop verticaux (l'utilisateur scrolle probablement)
+        if (Math.abs(dx) < 40 || Math.abs(dx) < Math.abs(dy)) return;
+
+        if (dx < 0) {
+            goToCoverflowIndex(coverflowIndex + 1);
+        } else {
+            goToCoverflowIndex(coverflowIndex - 1);
+        }
+    }, { passive: true });
+})();
+
+// Recalcule les positions si la fenêtre change de taille (mobile <-> desktop)
+window.addEventListener("resize", () => {
+    if (avatarLightbox && avatarLightbox.classList.contains("active")) {
+        positionCoverflow();
+    }
+});
+
+avatarLightboxSave.addEventListener("click", async () => {
+    if (!currentUser) return;
+    if (coverflowIndex === savedAvatarIndex) return;
+
+    const newPhoto = AVATAR_PATH(coverflowIndex + 1);
+
+    avatarLightboxSave.disabled = true;
+    avatarLightboxSave.classList.add("is-saving");
+    const originalLabel = avatarLightboxSave.textContent;
+    avatarLightboxSave.textContent = "Enregistrement…";
+
+    try {
+        await updateProfile(currentUser, { photoURL: newPhoto });
+
+        // Rafraîchissement de l'affichage : la photo de la carte profil (et
+        // toute autre référence locale) reflète immédiatement le nouvel avatar.
+        profilePic.src = newPhoto;
+        selectedAvatar = newPhoto;
+        savedAvatarIndex = coverflowIndex;
+
+        closeAvatarLightbox();
+    } catch (err) {
+        console.error("Erreur lors de l'enregistrement de la photo de profil :", err);
+        alert("Une erreur est survenue, réessaie.");
+        avatarLightboxSave.disabled = false;
+    } finally {
+        avatarLightboxSave.classList.remove("is-saving");
+        avatarLightboxSave.textContent = originalLabel;
+    }
+});
 
 // -----------------------------------------------------------------------
 // Déconnexion
