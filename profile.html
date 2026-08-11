@@ -166,21 +166,24 @@ permalink: /profile
     bottom: -2px;
     width: 32px;
     height: 32px;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     border-radius: 50%;
     background: rgba(10, 20, 18, 0.85);
-    border: 2px solid rgba(255, 255, 255, 0.14);
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     opacity: 0;
     transition: opacity 0.2s ease;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 0 16px rgba(255, 255, 255, 0.16),
+      0 4px 14px rgba(0, 0, 0, 0.3);
   }
 
   .profile-pic-edit-hint img {
-    width: 16px;
-    height: 16px;
-    opacity: 0.9;
+    width: 20px;
+    height: 20px;
+    opacity: 1;
   }
 
   @media (pointer: coarse) {
