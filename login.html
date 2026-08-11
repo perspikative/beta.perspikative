@@ -104,9 +104,8 @@ permalink: /login2026
       grid-template-columns: 1fr 1fr;
       padding: 8px;
       gap: 6px;
-      transition: opacity var(--transition);
     }
-
+    
     .tabs::after {
       content: '';
       position: absolute;
@@ -444,113 +443,14 @@ permalink: /login2026
 
     .back-home img:hover { transform: translateX(-2px); opacity: 1; }
 
-    /* ─── VÉRIFICATION EMAIL (inspiré de forgot-password.html) ─── */
-    .verify-view {
-      display: none;
-      text-align: center;
-      padding: 2rem 2rem 2rem;
-    }
-
-    .verify-view.visible {
-      display: block;
-      animation: fadeUp 0.3s ease;
-    }
-
-    .verify-view .icon-wrap {
-      width: 56px;
-      height: 56px;
-      margin: 0 auto 1.1rem;
-      border-radius: 50%;
-      background: rgba(0, 200, 150, 0.18);
-      box-shadow:
-        inset 0 0 12px rgba(255, 255, 255, 0.2),
-        0 6px 16px rgba(0, 0, 0, 0.08);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .verify-view .icon-wrap svg {
-      width: 26px;
-      height: 26px;
-      stroke: var(--teal-3);
-    }
-
-    .verify-view h2 {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 0.6rem;
-    }
-
-    .verify-view p {
-      font-size: 0.96rem;
-      color: #ffffff;
-      opacity: 0.65;
-      line-height: 1.45;
-      margin-bottom: 0.4rem;
-    }
-
-    .verify-view p strong {
-      opacity: 1;
-      font-weight: 600;
-      color: var(--teal-3);
-    }
-
-    .verify-view .verify-sub {
-      opacity: 0.5;
-      font-size: 0.78rem;
-    }
-
-    .verify-view .btn-primary {
-      margin-top: 1.2rem;
-    }
-
-    .resend {
-      margin-top: 1.3rem;
-      font-size: 0.82rem;
-      color: #ffffff;
-      opacity: 0.55;
-    }
-
-    .resend button {
-      background: none;
-      border: none;
-      padding: 0;
-      color: #ffffff;
-      opacity: 0.85;
-      font-family: var(--font);
-      font-size: 0.82rem;
-      font-weight: 600;
-      text-decoration: underline;
-      text-underline-offset: 2px;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-
-    .resend button:hover { opacity: 1; }
-    .resend button:disabled {
-      opacity: 0.35;
-      cursor: default;
-      text-decoration: none;
-    }
-
     /* ─── RESPONSIVE ─── */
     @media (max-width: 480px) {
       .panel { padding: 1.5rem 1.4rem 1.8rem; }
-      .verify-view { padding: 1.6rem 1.4rem 1.8rem; }
       .logo-wrap img { width: 66px; height: 66px; }
     }
   </style>
 </head>
 <body>
-
-  <!-- Ambient orbs -->
-  <div class="bg-orbs" aria-hidden="true">
-    <span></span>
-    <span></span>
-    <span></span>
-  </div>
 
   <!-- Logo -->
   <div class="logo-wrap">
@@ -558,7 +458,7 @@ permalink: /login2026
   </div>
 
   <!-- Card -->
-  <div class="card" role="main" id="card">
+  <div class="card" role="main">
 
     <!-- Tabs -->
     <div class="tabs" id="tabsWrap" role="tablist">
@@ -645,7 +545,7 @@ permalink: /login2026
             <div class="pwd-wrap">
               <input type="password" id="reg-pwd" name="password" placeholder="6 caractères min." autocomplete="new-password" required />
               <button type="button" class="pwd-toggle" aria-label="Afficher le mot de passe" data-target="reg-pwd">
-                <svg id="eye-register" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+                <img src="/icons/contact.svg" alt="" width="18" height="18" />
               </button>
             </div>
           </div>
@@ -666,25 +566,6 @@ permalink: /login2026
       </div>
     </div>
     </div>
-
-    <!-- ── VÉRIFICATION EMAIL (remplace tabs + panels après inscription) ── -->
-    <div class="verify-view" id="verifyView">
-      <div class="icon-wrap" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z" stroke="none"/><path d="M22 6 12 13 2 6"/><path d="M2 6h20v12H2z"/></svg>
-      </div>
-      <h2>Vérifie ton adresse e-mail</h2>
-      <p>On vient d'envoyer un lien de vérification à <strong id="verifySentEmail"></strong>. Clique dessus pour activer ton compte, puis reviens te connecter ici.</p>
-      <p class="verify-sub">Pense à vérifier tes spams si tu ne le vois pas arriver.</p>
-
-      <button class="btn-primary" id="verifyBackBtn" type="button">
-        <span class="btn-label">Retour à la connexion</span>
-      </button>
-
-      <div class="resend">
-        Toujours rien ? <button type="button" id="verifyResendBtn">Renvoyer le lien</button>
-      </div>
-    </div>
-
   </div>
 
   <a class="back-home" href="/">
@@ -695,16 +576,8 @@ permalink: /login2026
 <!-- Firebase SDK (via CDN, compatible GitHub Pages) -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import {
-    getAuth,
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    signInWithPopup,
-    GoogleAuthProvider,
-    updateProfile,
-    sendEmailVerification,
-    signOut
-  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, updateProfile }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
   // ─── CONFIG ───
   const firebaseConfig = {
@@ -755,7 +628,6 @@ permalink: /login2026
   const viewport    = document.getElementById('panelsViewport');
   const panelLogin    = document.getElementById('panel-login');
   const panelRegister = document.getElementById('panel-register');
-  const verifyView    = document.getElementById('verifyView');
 
   function setViewportHeight(panel) {
     viewport.style.height = panel.offsetHeight + 'px';
@@ -769,7 +641,6 @@ permalink: /login2026
   // recalcule une fois que tout est bien en place (polices, layout mobile pas encore stabilisé
   // au tout premier rendu), pour éviter que le panel reste replié sur lui-même au chargement
   function recalcCurrentHeight() {
-    if (verifyView.classList.contains('visible')) return;
     const isRegister = track.classList.contains('show-register');
     setViewportHeight(isRegister ? panelRegister : panelLogin);
   }
@@ -795,7 +666,6 @@ permalink: /login2026
 
   // recalcule la hauteur si la fenêtre est redimensionnée (rotation mobile, etc.)
   window.addEventListener('resize', () => {
-    if (verifyView.classList.contains('visible')) return;
     const isRegister = track.classList.contains('show-register');
     setViewportHeight(isRegister ? panelRegister : panelLogin);
   });
@@ -821,65 +691,6 @@ permalink: /login2026
     });
   });
 
-  // ─── ÉCRAN DE VÉRIFICATION EMAIL ───
-  // Remplace les tabs + panels par verifyView, avec la même logique de
-  // hauteur animée que forgot-password.html.
-  let lastRegisteredEmail = '';
-  let verifyCooldown = false;
-
-  function showVerifyView(email) {
-    lastRegisteredEmail = email;
-    document.getElementById('verifySentEmail').textContent = email;
-
-    // on masque tabs + panels, on affiche verifyView, puis on anime
-    // le viewport (qui joue le rôle de la card) vers la nouvelle hauteur
-    tabsWrap.style.display = 'none';
-    viewport.style.display = 'none';
-    verifyView.classList.add('visible');
-
-    // recalcule la hauteur du conteneur (ici directement la card, car
-    // tabs+panels sont masqués et ne comptent plus dans le flow)
-  }
-
-  function backToLoginFromVerify() {
-    verifyView.classList.remove('visible');
-    tabsWrap.style.display = '';
-    viewport.style.display = '';
-    switchTab(false);
-    recalcCurrentHeight();
-  }
-
-  document.getElementById('verifyBackBtn').addEventListener('click', backToLoginFromVerify);
-
-  document.getElementById('verifyResendBtn').addEventListener('click', async () => {
-    if (verifyCooldown || !auth.currentUser) return;
-
-    verifyCooldown = true;
-    const resendBtn = document.getElementById('verifyResendBtn');
-    resendBtn.disabled = true;
-    const original = resendBtn.textContent;
-    let seconds = 30;
-    resendBtn.textContent = `Renvoyer (${seconds}s)`;
-
-    const timer = setInterval(() => {
-      seconds -= 1;
-      if (seconds <= 0) {
-        clearInterval(timer);
-        resendBtn.disabled = false;
-        resendBtn.textContent = original;
-        verifyCooldown = false;
-      } else {
-        resendBtn.textContent = `Renvoyer (${seconds}s)`;
-      }
-    }, 1000);
-
-    try {
-      await sendEmailVerification(auth.currentUser);
-    } catch (err) {
-      // on ignore silencieusement (le cooldown reste, l'UI ne change pas)
-    }
-  });
-
   // ─── CONNEXION ───
   const loginForm  = document.getElementById('loginForm');
   const loginError = document.getElementById('loginError');
@@ -896,17 +707,7 @@ permalink: /login2026
 
     setLoading(btn, true);
     try {
-      const credential = await signInWithEmailAndPassword(auth, email, pwd);
-
-      // Comptes créés via email/mot de passe : on exige l'email vérifié.
-      // (Les comptes Google n'ont pas ce flag bloquant côté email/password.)
-      if (!credential.user.emailVerified) {
-        await signOut(auth);
-        setLoading(btn, false);
-        showVerifyView(email);
-        return;
-      }
-
+      await signInWithEmailAndPassword(auth, email, pwd);
       window.location.href = '/';
     } catch (err) {
       showError(loginError, firebaseErrMsg(err.code));
@@ -934,14 +735,7 @@ permalink: /login2026
     try {
       const credential = await createUserWithEmailAndPassword(auth, email, pwd);
       await updateProfile(credential.user, { displayName: username });
-
-      // Envoi du mail de vérification, puis déconnexion : le compte
-      // reste inutilisable tant qu'il n'est pas vérifié.
-      await sendEmailVerification(credential.user);
-      await signOut(auth);
-
-      setLoading(btn, false);
-      showVerifyView(email);
+      window.location.href = '/';
     } catch (err) {
       showError(registerError, firebaseErrMsg(err.code));
       setLoading(btn, false);
@@ -949,8 +743,6 @@ permalink: /login2026
   });
 
   // ─── GOOGLE ───
-  // L'email est déjà vérifié par Google : on redirige direct, pas d'écran
-  // de vérification pour ces comptes-là.
   async function handleGoogle() {
     try {
       await signInWithPopup(auth, provider);
