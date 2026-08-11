@@ -94,7 +94,7 @@ permalink: /auth
       background: var(--glass-bg);
       border: 1px solid rgba(255, 255, 255, 0);
       box-shadow: var(--glass-shadow);
-      border-radius: 27px 27px 50px 50px;
+      border-radius: 50px;
       backdrop-filter: blur(18px) saturate(110%);
       -webkit-backdrop-filter: blur(18px) saturate(110%);
       overflow: hidden;
@@ -381,7 +381,7 @@ permalink: /auth
       border: none;
       color: var(--text);
       font-family: var(--font);
-      font-size: 0.92rem;
+      font-size: 1.1rem;
       font-weight: 600;
       cursor: pointer;
       box-shadow:
@@ -470,7 +470,7 @@ permalink: /auth
       </div>
       <h2>Lien invalide ou expiré</h2>
       <p id="errorMessage">Ce lien n'est plus valide. Il a peut-être déjà été utilisé, ou son délai a expiré.</p>
-      <a class="btn-secondary" href="/login2026">Retour à la connexion</a>
+      <a class="btn-secondary" href="/login">Retour à la connexion</a>
     </div>
 
     <!-- ── MODE resetPassword : ÉTAPE 1 (nouveau mot de passe) ── -->
@@ -523,7 +523,7 @@ permalink: /auth
       </div>
       <h2>Mot de passe mis à jour ✓</h2>
       <p>Ton mot de passe a bien été changé. Tu peux maintenant te connecter avec tes nouveaux identifiants.</p>
-      <a class="btn-secondary" href="/login2026" style="margin-top:1.2rem;">Se connecter</a>
+      <a class="btn-secondary" href="/login" style="margin-top:1.2rem;">Se connecter</a>
     </div>
 
     <!-- ── MODE verifyEmail : succès ── -->
@@ -533,7 +533,7 @@ permalink: /auth
       </div>
       <h2>Adresse e-mail vérifiée ✓</h2>
       <p>Ton adresse e-mail a bien été confirmée. Ton compte Perspikative est maintenant actif.</p>
-      <a class="btn-secondary" id="verifyContinueBtn" href="/login2026" style="margin-top:1.2rem;">Se connecter</a>
+      <a class="btn-secondary" id="verifyContinueBtn" href="/login" style="margin-top:1.2rem;">Se connecter</a>
     </div>
 
     <!-- ── MODE recoverEmail : succès ── -->
@@ -545,7 +545,7 @@ permalink: /auth
       <p>Ton adresse e-mail a été rétablie à <strong id="recoveredEmail"></strong>. Si tu n'es pas à l'origine du changement initial, on te recommande de réinitialiser ton mot de passe par sécurité.</p>
       <div class="form-error" id="recoverResetError" style="margin-top:0.9rem;"></div>
       <button class="btn-secondary" id="recoverResetBtn" type="button" style="margin-top:0.6rem;">Réinitialiser mon mot de passe</button>
-      <a class="btn-secondary" href="/login2026">Retour à la connexion</a>
+      <a class="btn-secondary" href="/login">Retour à la connexion</a>
     </div>
 
     <!-- ── MODE recoverEmail : mail de réinitialisation envoyé ── -->
@@ -555,7 +555,7 @@ permalink: /auth
       </div>
       <h2>Vérifie ta boîte mail</h2>
       <p>On vient d'envoyer un lien de réinitialisation à <strong id="recoverResetSentEmail"></strong>.</p>
-      <a class="btn-secondary" href="/login2026" style="margin-top:1.2rem;">Retour à la connexion</a>
+      <a class="btn-secondary" href="/login" style="margin-top:1.2rem;">Retour à la connexion</a>
     </div>
 
   </div>
