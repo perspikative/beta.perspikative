@@ -554,7 +554,7 @@ permalink: /art-challenge
     /* Onglets */
     .edition-tabs {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
       margin-bottom: 36px;
     }
@@ -1302,17 +1302,18 @@ permalink: /art-challenge
 
         <!-- Onglets éditions -->
         <div class="edition-tabs reveal" role="tablist" aria-label="Éditions du ART Challenge">
+          <button class="edition-tab"        role="tab" aria-selected="false" data-panel="ed5">5ème édition</button>
           <button class="edition-tab active" role="tab" aria-selected="true"  data-panel="ed4">4ème édition</button>
           <button class="edition-tab"        role="tab" aria-selected="false" data-panel="ed3">3ème édition</button>
           <button class="edition-tab"        role="tab" aria-selected="false" data-panel="ed2">2ème édition</button>
           <button class="edition-tab"        role="tab" aria-selected="false" data-panel="ed1">1ère édition</button>
         </div>
 
-        <!-- ── Édition 4 ── -->
-        <div class="edition-panel active" id="ed4" role="tabpanel">
+        <!-- ── Édition 5 ── -->
+        <div class="edition-panel" id="ed5" role="tabpanel">
           <div class="edition-meta">
-            <h3>4ème édition  · En cours </h3>
-            <p>Cette édition est en cours. Les gagnants seront affichés ici après la clôture des votes.</p>
+            <h3>5ème édition</h3>
+            <p>Vous n'avez pas remporté l'édition précédente ? Pas de panique, une nouvelle édition arrive prochainement !</p>
           </div>
           <div class="winners-grid">
             <div class="placeholder-card">
@@ -1326,6 +1327,40 @@ permalink: /art-challenge
             <div class="placeholder-card">
               <img src="/icons/portfolio.svg" height="40" width="40" opacity="0.4" alt="" class="placeholder-icon">
               Bientôt
+            </div>
+          </div>
+        </div>
+        
+        <!-- ── Édition 4 ── -->
+        <div class="edition-panel active" id="ed4" role="tabpanel">
+          <div class="edition-meta">
+            <h3>4ème édition · Thème libre</h3>
+            <p><strong style="color:var(--accent-1);">Thème libre</strong> · Été 2026</p>
+          </div>
+          <div class="winners-grid">
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/ed4-1.webp','1er Prix','Enaleyssa','Dessin traditionnel')">
+              <img src="/pics/art-challenge/ed4-1.webp" alt="1er prix édition 4" loading="lazy" />
+              <div class="winner-overlay">
+                <p class="winner-name">Enaleyssa</p>
+                <p class="winner-title">Dessin traditionnel</p>
+              </div>
+              <span class="winner-rank">🥇 1er Prix</span>
+            </div>
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/ed4-2.webp','2e Prix','Sky','Dessin traditionnel')">
+              <img src="/pics/art-challenge/ed4-2.webp" alt="2e prix édition 4" loading="lazy" />
+              <div class="winner-overlay">
+                <p class="winner-name">Sky</p>
+                <p class="winner-title">Dessin traditionnel</p>
+              </div>
+              <span class="winner-rank">🥈 2e Prix</span>
+            </div>
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/ed4-3.webp','3e Prix','Vaati&It;3Link','Dessin traditionnel')">
+              <img src="/pics/art-challenge/ed4-3.webp" alt="3e prix édition 4" loading="lazy" />
+              <div class="winner-overlay">
+                <p class="winner-name">Vaati&It;3Link</p>
+                <p class="winner-title">Dessin traditionnel</p>
+              </div>
+              <span class="winner-rank">🥉 3e Prix</span>
             </div>
           </div>
         </div>
@@ -1337,7 +1372,7 @@ permalink: /art-challenge
             <p><strong style="color:var(--accent-1);">Thème libre</strong> · Hiver 2026</p>
           </div>
           <div class="winners-grid">
-            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/ed3-1.webp','1er Prix','Pseudo du gagnant','Titre de l\'œuvre')">
+            <div class="winner-card glass-card" onclick="acOpenLightbox('/pics/art-challenge/ed3-1.webp','1er Prix','Malo','Dessin traditionnel')">
               <img src="/pics/art-challenge/ed3-1.webp" alt="1er prix édition 3" loading="lazy" />
               <div class="winner-overlay">
                 <p class="winner-name">Malo</p>
