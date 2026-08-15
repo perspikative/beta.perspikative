@@ -10,42 +10,40 @@
   var PFP_COUNT         = 8;  // nb de photos de profil dans /pics/assets/pfp/
   var MAX_COMMENTS_PER_USER_PER_DRAWING = 5; // limite anti-spam par personne et par dessin
 
-  // Catégories de signalement : chaque catégorie a un id, un label, et des
-  // sous-catégories (id + label). Modifie cette liste si tu veux ajouter/
-  // retirer des raisons de signalement, tout le reste s'adapte tout seul.
+// Catégories de signalement : chaque catégorie a un id, un label (avec
+  // emoji) et une courte description citant quelques sous-thèmes, affichée
+  // en petit dans le bouton. Un clic sur un bouton envoie directement le
+  // signalement (plus de sous-catégories à choisir).
   var REPORT_CATEGORIES = [
     {
       id: 'harcelement',
-      label: 'Harcèlement',
-      subcategories: [
-        { id: 'insultes', label: 'Insultes' },
-        { id: 'menaces', label: 'Menaces' },
-        { id: 'moqueries', label: 'Moqueries répétées' }
-      ]
+      label: 'Harcèlement & abus',
+      desc: 'Insultes ou propos offensants / Moqueries répétées / Intimidation'
     },
     {
-      id: 'contenu-explicite',
-      label: 'Contenu explicite',
-      subcategories: [
-        { id: 'pornographie', label: 'Contenu pornographique' },
-        { id: 'violence', label: 'Violence graphique' }
-      ]
+      id: 'contenu-inapproprie',
+      label: 'Contenu inapproprié',
+      desc: 'Contenu sexuel / Violence graphique / Propos haineux'
     },
     {
       id: 'spam',
-      label: 'Spam / Publicité',
-      subcategories: [
-        { id: 'lien-suspect', label: 'Lien suspect' },
-        { id: 'contenu-commercial', label: 'Contenu commercial' }
-      ]
+      label: 'Spam & promotion',
+      desc: 'Liens suspects / Publicité / Contenu commercial non sollicité'
+    },
+    {
+      id: 'trompeur',
+      label: 'Contenu trompeur',
+      desc: 'Fausses informations / Usurpation d\'identité / Manipulation'
+    },
+    {
+      id: 'violation-regles',
+      label: 'Violation des règles',
+      desc: 'Non-respect des conditions d\'utilisation de Perspikative'
     },
     {
       id: 'autre',
-      label: 'Autre',
-      subcategories: [
-        { id: 'hors-sujet', label: 'Hors-sujet' },
-        { id: 'autre-raison', label: 'Autre raison' }
-      ]
+      label: 'Autre problème',
+      desc: 'Une raison qui ne correspond à aucune catégorie ci-dessus'
     }
   ];
 
@@ -485,38 +483,34 @@
     });
   }
 
-  // Construit dynamiquement les catégories + sous-catégories dans le panneau
+  // Construit dynamiquement les 6 boutons de catégorie dans le panneau.
+  // Un clic = un signalement envoyé directement (plus de sous-catégories).
   function buildReportCategories() {
     if (!reportListEl) return;
     reportListEl.innerHTML = '';
 
     REPORT_CATEGORIES.forEach(function (cat) {
-      var block = document.createElement('div');
-      block.className = 'report-category-block';
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'report-category-btn';
+      btn.dataset.category = cat.id;
 
-      var title = document.createElement('p');
-      title.className = 'report-category-title';
+      var title = document.createElement('span');
+      title.className = 'report-category-btn-title';
       title.textContent = cat.label;
-      block.appendChild(title);
 
-      var subWrap = document.createElement('div');
-      subWrap.className = 'report-subcategory-row';
+      var desc = document.createElement('span');
+      desc.className = 'report-category-btn-desc';
+      desc.textContent = cat.desc;
 
-      cat.subcategories.forEach(function (sub) {
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'report-subcategory-btn';
-        btn.textContent = sub.label;
-        btn.dataset.category    = cat.id;
-        btn.dataset.subcategory = sub.id;
-        btn.addEventListener('click', function () {
-          submitReport(cat.id, sub.id);
-        });
-        subWrap.appendChild(btn);
+      btn.appendChild(title);
+      btn.appendChild(desc);
+
+      btn.addEventListener('click', function () {
+        submitReport(cat.id);
       });
 
-      block.appendChild(subWrap);
-      reportListEl.appendChild(block);
+      reportListEl.appendChild(btn);
     });
   }
 
@@ -565,7 +559,7 @@
     reportTargetText      = null;
   }
 
-  function submitReport(categoryId, subcategoryId) {
+  function submitReport(categoryId) {
     var db   = window.__prspkDb;
     var fire = window.__prspkFire;
     if (!db || !fire || !currentDrawingId || !reportTargetId) return;
@@ -588,7 +582,6 @@
     fire.setDoc(docRef, {
       reporterUid:      user ? user.uid : null,
       category:         categoryId,
-      subcategory:       subcategoryId,
       commentAuthorUid: reportTargetAuthorUid,
       commentText:      reportTargetText,
       createdAt:        fire.serverTimestamp()
