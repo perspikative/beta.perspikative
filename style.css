@@ -6180,6 +6180,8 @@ body {
   padding: 24px 24px 22px 24px;
   box-sizing: border-box;
   animation: fadeIn 0.25s ease;
+  scrollbar-width: none; 
+  -ms-overflow-style: none;
   box-shadow:
     inset 0 0 12px rgba(210, 210, 210, 0.16),
     0 8px 30px rgba(0, 0, 0, 0.3);
@@ -6228,59 +6230,57 @@ body {
   margin: 0 0 20px;
 }
 
-/* ── Liste des catégories ──────────────────────────────────────────────── */
+
+
+/* ── Liste des catégories (6 boutons pleine largeur, titre + sous-thèmes) ── */
 
 .report-category-list {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 10px;
 }
 
-.report-category-block {
+.report-category-btn {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-}
-
-.report-category-title {
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  text-align: left;
   font-family: 'Rubik', sans-serif;
-  font-weight: 700;
-  font-size: 1.05rem;
-  color: #ffffff;
-  margin: 0;
-}
-
-.report-subcategory-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.report-subcategory-btn {
-  font-family: 'Rubik', sans-serif;
-  font-weight: 400;
-  font-size: 0.98rem;
-  color: rgba(255, 255, 255, 0.85);
   background: rgba(255, 255, 255, 0.07);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 20px;
-  padding: 6px 13px;
+  border-radius: 16px;
+  padding: 12px 16px;
   cursor: pointer;
   transition: all 0.18s ease;
   box-shadow:
     inset 0 0 8px rgba(255, 255, 255, 0.12),
     0 3px 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
 
-.report-subcategory-btn:hover {
-  background: rgba(255, 80, 80, 0.18);
-  border-color: rgba(255, 80, 80, 0.3);
-  color: #fff;
+.report-category-btn:hover {
+  background: rgba(255, 80, 80, 0.14);
+  border-color: rgba(255, 80, 80, 0.28);
   transform: translateY(-1px);
 }
 
-.report-subcategory-btn:active {
-  transform: scale(0.96);
+.report-category-btn:active {
+  transform: scale(0.98);
+}
+
+.report-category-btn-title {
+  font-weight: 700;
+  font-size: 1.02rem;
+  color: #ffffff;
+}
+
+.report-category-btn-desc {
+  font-weight: 300;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.55);
 }
 
 /* ── Message de confirmation ──────────────────────────────────────────── */
