@@ -1904,9 +1904,9 @@ main.creations {
     font-size: 1.7rem;
     text-transform: uppercase;
     margin-bottom: 5px;
-    font-weight: 900;
+    font-weight: 500;
     line-height: 1.5rem;
-    letter-spacing: 0.06em;
+    letter-spacing: 0em;
   }
   
   .blog-content p {
