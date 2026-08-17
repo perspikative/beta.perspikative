@@ -1,4 +1,4 @@
-const CACHE_NAME = 'perspikative-v3.0';
+const CACHE_NAME = 'perspikative-v1.3.1';
 
 // Fichiers essentiels
 const PRECACHE_ASSETS = [
@@ -6,12 +6,11 @@ const PRECACHE_ASSETS = [
   '/404',
   '/actus',
   '/art-challenge',
+  '/commu/beta-program',
   '/brand-guidelines',
   '/commu',
   '/contact',
   '/faq',
-  '/firebase-init.js',
-  '/firebase.js',
   '/help-center',
   '/login',
   '/logo.svg',
@@ -23,10 +22,15 @@ const PRECACHE_ASSETS = [
   '/portfolio/illustrations',
   '/portfolio/projets',
   '/position-ia',
+  '/js/profile.js',
+  '/profile',
   '/rechercher',
-  '/script-comments.js',
   '/script.js',
   '/style.css',
+  '/js/firebase-init.js',
+  '/js/firebase.js',
+  '/js/moderation.js',
+  '/js/script-comments.js',
   '/fonts/Manoela-Regular.woff2',
   '/fonts/Manoela-Regular.woff',
   '/icons/accueil.svg',
@@ -93,15 +97,12 @@ self.addEventListener('fetch', (event) => {
 
   const url = req.url;
 
-  // ❌ Ignore chrome extensions (TON BUG FIX)
   if (url.startsWith('chrome-extension://')) return;
 
-  // ❌ Ignore non-http(s)
   if (!url.startsWith('http')) return;
 
   const parsedUrl = new URL(url);
 
-  // ❌ Ignore Firebase / externals
   if (
     parsedUrl.hostname.includes('firebase') ||
     parsedUrl.hostname.includes('googleapis') ||
