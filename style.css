@@ -3255,7 +3255,7 @@ body.is-loading {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 22px;
+  gap: 6px;
 }
 
 .loader-logo {
@@ -3266,9 +3266,8 @@ body.is-loading {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  --thickness: 4.6px;
-  background: conic-gradient(from 0deg, transparent 26%, rgba(255, 255, 255, 1) 100%);
-  /* Masque optimisé avec anti-aliasing pour un cercle intérieur parfait */
+  --thickness: 5px;
+  background: conic-gradient(from 0deg, transparent 30%, rgba(255, 255, 255, 1) 100%);
   -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--thickness)), #000 calc(100% - var(--thickness) + 0.5px));
           mask: radial-gradient(farthest-side, transparent calc(100% - var(--thickness)), #000 calc(100% - var(--thickness) + 0.5px));
   position: relative;
