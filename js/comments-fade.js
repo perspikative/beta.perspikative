@@ -25,15 +25,19 @@
     }
 
     updateMaskClasses();
+
     requestAnimationFrame(updateMaskClasses);
+
     requestAnimationFrame(() => {
       requestAnimationFrame(updateMaskClasses);
     });
 
-    container.addEventListener('scroll', updateMaskClasses, { passive: true });
+    container.addEventListener('scroll', updateMaskClasses, {
+      passive: true
+    });
+
 
     const contentObserver = new MutationObserver(() => {
-
       requestAnimationFrame(() => {
         requestAnimationFrame(updateMaskClasses);
       });
@@ -44,11 +48,13 @@
       subtree: false
     });
 
+
     return () => {
       container.removeEventListener('scroll', updateMaskClasses);
       contentObserver.disconnect();
     };
   }
+
 
   function observeLightbox() {
     const lightbox = document.getElementById('lightbox');
@@ -61,23 +67,36 @@
 
     let cleanupFade = initCommentsFade(commentsList);
 
+
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
-        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-          if (lightbox.classList.contains('active') || !lightbox.classList.contains('is-hidden')) {
+        if (
+          mutation.type === 'attributes' &&
+          mutation.attributeName === 'class'
+        ) {
+          if (
+            lightbox.classList.contains('active') ||
+            !lightbox.classList.contains('is-hidden')
+          ) {
             if (cleanupFade) cleanupFade();
-            
+
             cleanupFade = initCommentsFade(commentsList);
           }
         }
       });
     });
 
-    observer.observe(lightbox, { attributes: true });
+    observer.observe(lightbox, {
+      attributes: true
+    });
+
 
     commentsList.addEventListener('scroll', () => {
-    }, { passive: true });
+    }, {
+      passive: true
+    });
   }
+
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', observeLightbox);
@@ -85,6 +104,7 @@
     // Le DOM est déjà chargé
     observeLightbox();
   }
+
 
   window.initCommentsFade = initCommentsFade;
 })();
