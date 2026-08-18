@@ -838,7 +838,7 @@ body.home {
 /* Responsive */
 @media (max-width: 700px) {
   .cta-container {
-    padding: 40px 20px;
+    padding: 34px 28px 30px 28px;
     width: 100%;
     max-width: 420px; /* garde un format harmonieux sur petits écrans */
     margin: 0 auto;   /* recentrage en cas de flex bug */
@@ -869,6 +869,7 @@ body.home {
 .featured-creation {
   margin-bottom: 50px;
   align-self: center;
+  padding: 15px 10px;
   transition: all 0.3s ease;
 }
 
