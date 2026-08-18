@@ -26,7 +26,8 @@
     --header-bg: rgba(91, 179, 163, 0.70);
     --nav-mobile-bg: rgba(255, 255, 255, 0);
     --search-float-btn-bg: rgba(255, 255, 255, 0.1);
-    --mobile-menu-background: rgba(255, 255, 255, 0)
+    --mobile-menu-background: rgba(255, 255, 255, 0);
+    --filter-panel-bg: rgba(83, 173, 154, 1);
   }
 }
 
@@ -41,6 +42,7 @@
     --nav-mobile-bg: rgba(0, 0, 0, 0.38);
     --search-float-btn-bg: rgba(0, 0, 0, 0.2);
     --mobile-menu-background: rgba(0, 0, 0, 0.24);
+    --filter-panel-bg: rgba(0, 0, 0, 1);
   }
 }
 
@@ -5893,7 +5895,7 @@ body {
   /* top / right fixés dynamiquement par script.js, alignés sur le bouton */
   width: 200px;
   padding: 12px;
-  background: rgba(0, 0, 0, 1);
+  background: var(--filter-panel-bg);
   border: none;
   border-radius: 25px;
   box-shadow:
@@ -5920,8 +5922,9 @@ body {
   right: 22px;
   width: 16px;
   height: 16px;
-  background: rgba(0, 0, 0, 1);
+  background: var(--filter-panel-bg);
   border-radius: 2px 0 0 0;
+  box-shadow: inset 2px 2px 7px 0px rgba(255, 255, 255, 0.16);
   transform: rotate(45deg);
 }
 
@@ -5998,15 +6001,15 @@ body {
   height: 22px;
   border-radius: 50%;
   background: var(--chip-color, #999);
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  transition: all 0.1s ease;
+  border: 1.6px solid rgba(255, 255, 255, 0.26);
+  transition: all 0.18s ease;
 }
 
 .filter-chip.is-active .filter-chip-dot {
-  transform: scale(0.88);
+  transform: scale(0.85);
   box-shadow:
-    0 0 0 1.8px rgba(12, 12, 14, 0.9),
-    0 0 0 4px rgba(255, 255, 255, 1);
+    0 0 0 1.8px rgba(0, 0, 0, 0.6),
+    0 0 0 4px rgba(255, 255, 255, 0.4);
 }
 
 /* --------- Dessin masqué par le filtre --------- */
