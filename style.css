@@ -794,6 +794,7 @@ body.home {
   font-size: 2rem;
   font-weight: 700;
   color: #fff;
+  line-height: 1.6rem;
   margin-bottom: 15px;
 }
 
@@ -816,6 +817,7 @@ body.home {
   text-decoration: none;
   font-weight: 700;
   font-size: 1.1rem;
+  line-height: 1.14rem;
   transition: 0.15s ease;
   color: #fff;
   box-shadow:
@@ -842,8 +844,6 @@ body.home {
     width: 100%;
     max-width: 420px; /* garde un format harmonieux sur petits écrans */
     margin: 0 auto;   /* recentrage en cas de flex bug */
-  }
-
   }
 
   .cta-container h2 {
@@ -879,7 +879,7 @@ body.home {
   max-width: 640px;
   justify-content: center;
   gap: 20px;
-  padding: 30px;
+  padding: 16px;
   border-radius: 40px;
   background: rgba(255, 255, 255, 0.1);
   transition: all 0.2s ease;
@@ -1012,6 +1012,7 @@ body.home {
   .featured-title {
     font-size: 2rem;
     font-weight: 500;
+    line-height: 1.8rem;
     letter-spacing: 0.9;
   }
 
@@ -1026,6 +1027,7 @@ body.home {
   .featured-btn {
     padding: 10px 18px;
     margin-top: 0px;
+    line-height: 1.2rem;
   }
  
   .featured-video iframe {
