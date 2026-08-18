@@ -221,8 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ── Résolution de la source ────────────────────────────────────────────
-  // 🆕 Une seule grille désormais : chaque image porte déjà toutes ses
-  // métadonnées, plus besoin d'aller chercher une version "desktop" ailleurs.
   function resolveSource(img) {
     return img.dataset.title ? img : null;
   }
@@ -262,7 +260,6 @@ document.addEventListener('DOMContentLoaded', () => {
       history.pushState(null, '', '#' + source.id);
     }
 
-    // 🆕 Notifie script-comments.js qu'un dessin est affiché
     document.dispatchEvent(new CustomEvent('prspk:lightbox-opened', {
       detail: { drawingId: currentId }
     }));
@@ -403,11 +400,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 // ============================= 2 BIS. GRILLE DYNAMIQUE MASONRY (CRÉATIONS) =============================
-// 🆕 Remplace l'ancien système de colonnes fixes (.layout-3colonnes / .layout-2colonnes).
-// Une seule grille (.creations-grid), qui se recale automatiquement selon la largeur
-// d'écran (le nombre de colonnes est piloté en CSS via .grid-sizer). Masonry ne fait
-// que positionner les .grid-item ; il ne touche jamais aux <img> ni à leurs data-*,
-// donc la lightbox (section 2 ci-dessus) continue de fonctionner à l'identique.
 
 document.addEventListener('DOMContentLoaded', () => {
   const grid = document.querySelector('.creations-grid');
@@ -419,8 +411,6 @@ document.addEventListener('DOMContentLoaded', () => {
     percentPosition: true
   });
 
-  // Recalcule le agencement au fur et à mesure que les images se chargent,
-  // pour éviter que des vignettes ne se chevauchent le temps du chargement.
   if (typeof imagesLoaded !== 'undefined') {
     imagesLoaded(grid).on('progress', () => msnry.layout());
   }
@@ -433,10 +423,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ── Filtre par couleur ───────────────────────────────────────────────────
-  // Chaque <img> porte un data-colors="orange,bleu,..." (une couleur ou plus).
-  // Le panneau de filtre est généré dynamiquement à partir des couleurs
-  // réellement présentes dans la grille : ajouter/modifier un data-colors
-  // sur un dessin suffit, aucune autre modification n'est nécessaire.
 
   const filterBtn       = document.getElementById('filter-btn');
   const colorFilter     = document.getElementById('color-filter');
@@ -463,10 +449,10 @@ document.addEventListener('DOMContentLoaded', () => {
       'rouge': '#E15554',
       'orange': '#F2994A',
       'rose': '#F2A6C9',
-      'brun': '#8B5E3C',
-      'marron': '#6F4423',
       'violet': '#9B6BD9',
       'mauve': '#C9A0DC',
+      'brun': '#8B5E3C',
+      'marron': '#6F4423',
       'gris': '#A0A6AD',
       'beige': '#D9C6A5',
       'noir': '#2B2B2E',
@@ -478,16 +464,9 @@ document.addEventListener('DOMContentLoaded', () => {
       'bordeaux': '#6E1E3A',
       'turquoise': '#2DD4BF',
       'cyan': '#22D3EE',
-      'indigo': '#4F46E5',
-      'corail': '#FF6F61',
-      'saumon': '#FA8072',
       'kaki': '#8A8F5C',
       'olive': '#6B6B1F',
       'marine': '#1E2A5E',
-      'azur': '#3EA8E0',
-      'émeraude': '#0EA678',
-      'ivoire': '#F0EAD6',
-      'lavande': '#B19CD9'
     };
 
     // Couleur de secours déterministe (hash) pour toute future couleur
@@ -875,17 +854,6 @@ observer.observe(document.querySelector('footer'));
 
 
 // ============================= 10. PARALLAX SUR LES IMAGES DE L'ACCUEIL =============================
-// Intensités calées sur les vrais z-index CSS :
-//   z-index 20  (pos-8)  → bouge le plus   (devant)
-//   z-index 14  (pos-2)  → …
-//   z-index 12  (pos-6)  → …
-//   z-index 10  (pos-3)  → …
-//   z-index  7  (pos-4)  → …
-//   z-index  6  (pos-7)  → …
-//   z-index -20 (pos-1, pos-5) → bouge le moins (fond)
-//
-// Chaque image garde sa rotation CSS via getComputedStyle.
-// Lerp par image pour des vitesses de réponse différentes selon le calque.
 
 document.addEventListener('DOMContentLoaded', () => {
   if (window.innerWidth <= 768) return;
