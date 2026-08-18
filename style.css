@@ -1011,6 +1011,8 @@ body.home {
 
   .featured-title {
     font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: 0.9;
   }
 
   .featured-description {
