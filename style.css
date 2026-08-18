@@ -4035,7 +4035,7 @@ body {
 .lb-comments-title {
   font-family: 'Rubik', sans-serif;
   font-weight: 700;
-  font-size: 1.26rem;
+  font-size: 1.3rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: #ffffff;
@@ -4096,7 +4096,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-height: 300px;
+  max-height: 340px;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: thin;
@@ -4239,10 +4239,10 @@ body {
 .lb-comments-empty {
   font-family: 'Rubik', sans-serif;
   font-weight: 300;
-  font-size: 0.95rem;
+  font-size: 0.96rem;
   color: rgba(255,255,255,0.35);
   text-align: center;
-  padding: 10px 0 4px;
+  padding: 16px 0 20px;
 }
 
 /* ── Zone de saisie ─────────────────────────────────────────────────────── */
@@ -6330,5 +6330,103 @@ body {
 @media (prefers-color-scheme: dark) {
   ::selection {
     background: rgba(255, 255, 255, 0.15); /* Voile blanc très discret */
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   FADE DYNAMIQUE AU SCROLL POUR LA LISTE DES COMMENTAIRES
+   ═════════════════════════════════════════════════════════════════════════ */
+
+/* 🔑 Le conteneur avec le masque fade en haut ET en bas */
+.lb-comments-list {
+  /* Masque par défaut : fade en haut et fade en bas */
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 14%,      /* fade du haut sur ~10% de la hauteur */
+    black 86%,
+    transparent 100% /* fade du bas sur ~10% de la hauteur */
+  );
+  
+  /* Transition douce quand on change de classe */
+  transition: mask-image 0.25s ease;
+  
+  /* Support Firefox */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 14%,
+    black 86%,
+    transparent 100%
+  );
+  -webkit-transition: -webkit-mask-image 0.25s ease;
+}
+
+/* Quand on est AU TOP → on enlève le fade du haut */
+.lb-comments-list.at-top {
+  mask-image: linear-gradient(
+    to bottom,
+    black 0%,      /* pas de fade en haut */
+    black 86%,
+    transparent 100%
+  );
+  
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 86%,
+    transparent 100%
+  );
+}
+
+/* Quand on est AU BOTTOM → on enlève le fade du bas */
+.lb-comments-list.at-bottom {
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 14%,
+    black 100%     /* pas de fade en bas */
+  );
+  
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 14%,
+    black 100%
+  );
+}
+
+/* Quand il y a pas assez de contenu pour scroller → pas de fade */
+.lb-comments-list.at-top.at-bottom {
+  mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 100%
+  );
+  
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 100%
+  );
+}
+
+/* Support du mode réduit de mouvement (accessibilité) */
+@media (prefers-reduced-motion: reduce) {
+  .lb-comments-list {
+    transition: none;
+    -webkit-transition: none;
   }
 }
