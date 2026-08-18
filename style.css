@@ -4247,7 +4247,7 @@ body {
 
 /* ── Zone de saisie ─────────────────────────────────────────────────────── */
 .lb-comment-form {
-  padding: 8px 10px 6px 0px;
+  padding: 0px;
 }
 
 .lb-comment-guest {
@@ -4264,7 +4264,7 @@ body {
   font-size: 0.98rem;
   color: #ffffff;
   opacity: 0.75;
-  margin: 10px;
+  margin: 8px;
 }
 
 .lb-comment-login-btn {
@@ -4275,6 +4275,8 @@ body {
   background: rgba(255,255,255,0.04);
   border-radius: 20px;
   padding: 6px 16px;
+  margin: 8px;
+  cursor: pointer;
   text-decoration: none;
   transition: all 0.16s ease;
   white-space: nowrap;
