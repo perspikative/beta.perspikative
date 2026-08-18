@@ -6342,28 +6342,24 @@ body {
 
 
 
-
-
-
-/* ═══════════════════════════════════════════════════════════════════════════
-   FADE DYNAMIQUE AU SCROLL POUR LA LISTE DES COMMENTAIRES
-   ═════════════════════════════════════════════════════════════════════════ */
-
-/* 🔑 Le conteneur avec le masque fade en haut ET en bas */
+/* Liste des commentaires */
 .lb-comments-list {
-  /* Masque par défaut : fade en haut et fade en bas */
+  /* Opacité des fades */
+  --fade-top-opacity: 1;
+  --fade-bottom-opacity: 1;
+
+  /*
+   * Fade haut + bas
+   * Le gradient reste TOUJOURS au même endroit.
+   */
   mask-image: linear-gradient(
     to bottom,
     transparent 0%,
-    black 14%,      /* fade du haut sur ~10% de la hauteur */
+    black 14%,
     black 86%,
-    transparent 100% /* fade du bas sur ~10% de la hauteur */
+    transparent 100%
   );
-  
-  /* Transition douce quand on change de classe */
-  transition: mask-image 0.25s ease;
-  
-  /* Support Firefox */
+
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
@@ -6371,62 +6367,72 @@ body {
     black 86%,
     transparent 100%
   );
-  -webkit-transition: -webkit-mask-image 0.25s ease;
+
+  transition: opacity 0.25s ease;
 }
 
-/* Quand on est AU TOP → on enlève le fade du haut */
+
+/* Tout en haut */
 .lb-comments-list.at-top {
+  /*
+   * On garde le fade à sa place,
+   * mais on le fait disparaître.
+   */
   mask-image: linear-gradient(
     to bottom,
-    black 0%,      /* pas de fade en haut */
+    black 0%,
+    black 14%,
     black 86%,
     transparent 100%
   );
-  
+
   -webkit-mask-image: linear-gradient(
     to bottom,
     black 0%,
+    black 14%,
     black 86%,
     transparent 100%
   );
+
+  transition: opacity 0.25s ease;
 }
 
-/* Quand on est AU BOTTOM → on enlève le fade du bas */
+
+/* Tout en bas */
 .lb-comments-list.at-bottom {
   mask-image: linear-gradient(
     to bottom,
     transparent 0%,
     black 14%,
-    black 100%     /* pas de fade en bas */
+    black 86%,
+    black 100%
   );
-  
+
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0%,
     black 14%,
+    black 86%,
     black 100%
   );
+
+  transition: opacity 0.25s ease;
 }
 
-/* Quand il y a pas assez de contenu pour scroller → pas de fade */
+
+/* Pas assez de contenu pour scroller */
 .lb-comments-list.at-top.at-bottom {
   mask-image: linear-gradient(
     to bottom,
     black 0%,
     black 100%
   );
-  
+
   -webkit-mask-image: linear-gradient(
     to bottom,
     black 0%,
     black 100%
   );
-}
 
-/* Support du mode réduit de mouvement (accessibilité) */
-@media (prefers-reduced-motion: reduce) {
-  .lb-comments-list {
-    transition: none;
-    -webkit-transition: none;
-  }
+  transition: opacity 0.25s ease;
 }
