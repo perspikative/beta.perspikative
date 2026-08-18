@@ -6342,97 +6342,68 @@ body {
 
 
 
-/* Liste des commentaires */
+/* =========================================================
+   FADE DES COMMENTAIRES DE LA LIGHTBOX
+   ========================================================= */
+
+@property --fade-top-start {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --fade-bottom-end {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
 .lb-comments-list {
-  /* Opacité des fades */
-  --fade-top-opacity: 1;
-  --fade-bottom-opacity: 1;
+  --fade-top-start: 0;
+  --fade-bottom-end: 0;
 
-  /*
-   * Fade haut + bas
-   * Le gradient reste TOUJOURS au même endroit.
-   */
+
   mask-image: linear-gradient(
     to bottom,
-    transparent 0%,
-    black 14%,
-    black 86%,
-    transparent 100%
+    rgba(0, 0, 0, var(--fade-top-start)) 0%,
+    rgba(0, 0, 0, 1) 14%,
+    rgba(0, 0, 0, 1) 86%,
+    rgba(0, 0, 0, var(--fade-bottom-end)) 100%
   );
 
   -webkit-mask-image: linear-gradient(
     to bottom,
-    transparent 0%,
-    black 14%,
-    black 86%,
-    transparent 100%
+    rgba(0, 0, 0, var(--fade-top-start)) 0%,
+    rgba(0, 0, 0, 1) 14%,
+    rgba(0, 0, 0, 1) 86%,
+    rgba(0, 0, 0, var(--fade-bottom-end)) 100%
   );
 
-  transition: opacity 0.25s ease;
+  transition:
+    --fade-top-start 0.1s ease,
+    --fade-bottom-end 0.1s ease;
+
+  -webkit-transition:
+    --fade-top-start 0.1s ease,
+    --fade-bottom-end 0.1s ease;
 }
 
-
-/* Tout en haut */
 .lb-comments-list.at-top {
-  /*
-   * On garde le fade à sa place,
-   * mais on le fait disparaître.
-   */
-  mask-image: linear-gradient(
-    to bottom,
-    black 0%,
-    black 14%,
-    black 86%,
-    transparent 100%
-  );
-
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    black 0%,
-    black 14%,
-    black 86%,
-    transparent 100%
-  );
-
-  transition: opacity 0.25s ease;
+  --fade-top-start: 1;
 }
 
-
-/* Tout en bas */
 .lb-comments-list.at-bottom {
-  mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 14%,
-    black 86%,
-    black 100%
-  );
-
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    transparent 0%,
-    black 14%,
-    black 86%,
-    black 100%
-  );
-
-  transition: opacity 0.25s ease;
+  --fade-bottom-end: 1;
 }
 
-
-/* Pas assez de contenu pour scroller */
 .lb-comments-list.at-top.at-bottom {
-  mask-image: linear-gradient(
-    to bottom,
-    black 0%,
-    black 100%
-  );
+  --fade-top-start: 1;
+  --fade-bottom-end: 1;
+}
 
-  -webkit-mask-image: linear-gradient(
-    to bottom,
-    black 0%,
-    black 100%
-  );
-
-  transition: opacity 0.25s ease;
+@media (prefers-reduced-motion: reduce) {
+  .lb-comments-list {
+    transition: none;
+    -webkit-transition: none;
+  }
 }
