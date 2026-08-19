@@ -443,10 +443,221 @@ permalink: /login2026
 
     .back-home img:hover { transform: translateX(-2px); opacity: 1; }
 
+    /* ─── ÉCRAN "VÉRIFIE TON MAIL" (masque le form d'inscription) ─── */
+    .verify-view {
+      display: none;
+      text-align: center;
+      padding: 0.4rem 0 0.2rem;
+    }
+
+    .verify-view.visible {
+      display: block;
+      animation: fadeUp 0.3s ease;
+    }
+
+    .verify-view .icon-wrap {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 1.1rem;
+      border-radius: 50%;
+      background: rgba(0, 200, 150, 0.18);
+      box-shadow:
+        inset 0 0 12px rgba(255, 255, 255, 0.2),
+        0 6px 16px rgba(0, 0, 0, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .verify-view .icon-wrap svg {
+      width: 26px;
+      height: 26px;
+      stroke: var(--teal-3);
+    }
+
+    .verify-view h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.6rem;
+    }
+
+    .verify-view p {
+      font-size: 0.96rem;
+      color: #ffffff;
+      opacity: 0.65;
+      line-height: 1.45;
+      margin-bottom: 0.4rem;
+    }
+
+    .verify-view p strong {
+      opacity: 1;
+      font-weight: 600;
+      color: var(--teal-3);
+    }
+
+    .resend {
+      margin-top: 1.3rem;
+      font-size: 0.82rem;
+      color: #ffffff;
+      opacity: 0.55;
+    }
+
+    .resend button {
+      background: none;
+      border: none;
+      padding: 0;
+      color: #ffffff;
+      opacity: 0.85;
+      font-family: var(--font);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .resend button:hover { opacity: 1; }
+    .resend button:disabled {
+      opacity: 0.35;
+      cursor: default;
+      text-decoration: none;
+    }
+
+    /* ─── BANNIÈRE D'INFO (ex: "adresse vérifiée ✓") ─── */
+    .info-banner {
+      display: none;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+      padding: 0.7rem 0.9rem;
+      border-radius: var(--radius-sm);
+      background: rgba(0, 200, 150, 0.16);
+      box-shadow: inset 0 0 10px 0 rgba(255, 255, 255, 0.14), 0 6px 16px rgba(0, 0, 0, 0.06);
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #ffffff;
+      line-height: 1.35;
+      animation: fadeUp 0.26s ease;
+    }
+
+    .info-banner.visible { display: flex; }
+
+    .info-banner svg {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      stroke: var(--teal-3);
+    }
+
+    /* ─── ÉTAT "COMPLÉTER LE PROFIL" (remplace toute la card, pas d'onglets) ─── */
+    .complete-profile-card {
+      display: none;
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 426px;
+      background: var(--glass-bg);
+      border: 1px solid rgba(255, 255, 255, 0);
+      box-shadow: var(--glass-shadow);
+      border-radius: 27px 27px 50px 50px;
+      backdrop-filter: blur(18px) saturate(110%);
+      -webkit-backdrop-filter: blur(18px) saturate(110%);
+      overflow: hidden;
+    }
+
+    .complete-profile-card.visible {
+      display: block;
+      animation: fadeUp 0.32s ease;
+    }
+
+    .complete-profile-card .card-header {
+      padding: 2rem 2rem 0 2rem;
+      text-align: center;
+    }
+
+    .complete-profile-card .icon-wrap {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 0;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .complete-profile-card .icon-wrap svg {
+      width: 30px;
+      height: 30px;
+      stroke: #ffffff;
+    }
+
+    .complete-profile-card h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+      margin-top: 0.6rem;
+    }
+
+    .complete-profile-card > .card-header p {
+      font-size: 0.96rem;
+      color: #ffffff;
+      opacity: 0.6;
+      line-height: 1.3;
+      margin-bottom: 1.6rem;
+    }
+
+    .complete-profile-card .panel {
+      width: 100%;
+      padding: 0 2rem 2rem 2rem;
+    }
+
+    /* préfixe @ dans le champ username */
+    .field.at-field {
+      position: relative;
+    }
+
+    .field.at-field .at-prefix {
+      position: absolute;
+      left: 1rem;
+      top: calc(1.55rem + 0.82rem);
+      color: var(--text-dim);
+      font-size: 0.96rem;
+      font-family: var(--font);
+      pointer-events: none;
+    }
+
+    .field.at-field input {
+      padding-left: 1.65rem;
+    }
+
+    .field-status {
+      margin-top: 0.4rem;
+      font-size: 0.78rem;
+      opacity: 0.7;
+      min-height: 1.1em;
+      transition: color 0.2s;
+    }
+
+    .field-status.is-error { color: #ff8a8a; opacity: 1; }
+    .field-status.is-ok    { color: var(--teal-3); opacity: 1; }
+
+    .char-count {
+      text-align: right;
+      font-size: 0.74rem;
+      opacity: 0.45;
+      margin-top: 0.3rem;
+    }
+
     /* ─── RESPONSIVE ─── */
     @media (max-width: 480px) {
       .panel { padding: 1.5rem 1.4rem 1.8rem; }
       .logo-wrap img { width: 66px; height: 66px; }
+      .complete-profile-card .panel { padding: 0 1.4rem 1.8rem; }
+      .complete-profile-card .card-header { padding: 1.5rem 1.4rem 0; }
     }
   </style>
 </head>
@@ -473,6 +684,11 @@ permalink: /login2026
 
       <!-- ── CONNEXION ── -->
       <div class="panel" id="panel-login" role="tabpanel" aria-labelledby="tab-login">
+
+        <div class="info-banner" id="verifiedBanner">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          <span>Adresse vérifiée ! Connecte-toi avec ton mot de passe pour finaliser ton compte.</span>
+        </div>
 
         <button class="btn-google" id="googleLoginBtn" type="button">
           <!-- Google G icon -->
@@ -531,11 +747,6 @@ permalink: /login2026
 
         <form id="registerForm" novalidate>
           <div class="field">
-            <label for="reg-name">Nom d'utilisateur</label>
-            <input type="text" id="reg-name" name="username" placeholder="tartineske" autocomplete="username" required />
-          </div>
-
-          <div class="field">
             <label for="reg-email">Adresse e-mail</label>
             <input type="email" id="reg-email" name="email" placeholder="toi@mail.com" autocomplete="email" required />
           </div>
@@ -563,8 +774,56 @@ permalink: /login2026
             et la <a href="/politique-de-confidentialite"><strong>Politique de confidentialité</strong></a>.
           </p>
         </form>
+
+        <!-- ── CONFIRMATION : VÉRIFIE TA BOÎTE MAIL ── -->
+        <div class="verify-view" id="verifyView">
+          <div class="icon-wrap" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+          </div>
+          <h2>Vérifie ta boîte mail !</h2>
+          <p>On a envoyé un lien de confirmation à <strong id="verifySentEmail"></strong>. Clique dessus pour activer ton compte.</p>
+          <p style="opacity:0.5; font-size:0.78rem;">Pense à vérifier tes spams si tu ne le vois pas arriver.</p>
+
+          <div class="resend">
+            Toujours rien ? <button type="button" id="resendVerifyBtn">Renvoyer le lien</button>
+          </div>
+        </div>
       </div>
     </div>
+    </div>
+  </div>
+
+  <!-- ── ÉTAT À PART : COMPLÉTER LE PROFIL (après retour du lien de vérif + reconnexion) ── -->
+  <div class="complete-profile-card" id="completeProfileCard" role="main">
+    <div class="card-header">
+      <div class="icon-wrap" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <h1>Dernière étape !</h1>
+      <p>Choisis ton nom d'utilisateur et le nom affiché sur ton profil Perspikative.</p>
+    </div>
+
+    <div class="panel">
+      <form id="completeProfileForm" novalidate>
+        <div class="field at-field">
+          <label for="cp-username">Nom d'utilisateur</label>
+          <span class="at-prefix" aria-hidden="true">@</span>
+          <input type="text" id="cp-username" name="username" placeholder="tartineske" autocomplete="username" required />
+          <div class="field-status" id="cpUsernameStatus"></div>
+        </div>
+
+        <div class="field">
+          <label for="cp-displayname">Nom affiché</label>
+          <input type="text" id="cp-displayname" name="displayname" placeholder="Tartineske" autocomplete="name" required maxlength="40" />
+        </div>
+
+        <div class="form-error" id="completeProfileError"></div>
+
+        <button class="btn-primary" type="submit">
+          <span class="btn-label">Terminer</span>
+          <span class="spinner"></span>
+        </button>
+      </form>
     </div>
   </div>
 
@@ -576,8 +835,24 @@ permalink: /login2026
 <!-- Firebase SDK (via CDN, compatible GitHub Pages) -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, updateProfile }
-    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    createUserWithEmailAndPassword,
+    signInWithPopup,
+    GoogleAuthProvider,
+    updateProfile,
+    sendEmailVerification,
+    signOut,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    setDoc,
+    runTransaction
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   // ─── CONFIG ───
   const firebaseConfig = {
@@ -591,9 +866,10 @@ permalink: /login2026
 
   const app      = initializeApp(firebaseConfig);
   const auth     = getAuth(app);
+  const db       = getFirestore(app);
   const provider = new GoogleAuthProvider();
 
-  // ─── HELPERS ───
+  // ─── HELPERS GÉNÉRAUX ───
   function showError(el, msg) {
     el.textContent = msg;
     el.classList.add('visible');
@@ -628,6 +904,7 @@ permalink: /login2026
   const viewport    = document.getElementById('panelsViewport');
   const panelLogin    = document.getElementById('panel-login');
   const panelRegister = document.getElementById('panel-register');
+  const mainCard      = document.querySelector('.card');
 
   function setViewportHeight(panel) {
     viewport.style.height = panel.offsetHeight + 'px';
@@ -685,10 +962,57 @@ permalink: /login2026
       input.type   = isText ? 'password' : 'text';
       const eyeId  = btn.dataset.target === 'login-pwd' ? 'eye-login' : 'eye-register';
       const svg    = document.getElementById(eyeId);
-      svg.innerHTML = isText
-        ? '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>'
-        : '<path d="M17.9 17.9A10.9 10.9 0 0 1 12 19c-7 0-11-7-11-7a18.8 18.8 0 0 1 5.1-6.1M9.9 4.2A10.2 10.2 0 0 1 12 4c7 0 11 7 11 7a18.8 18.8 0 0 1-2.2 3.1M1 1l22 22"/><circle cx="12" cy="12" r="3"/>';
+      if (svg) {
+        svg.innerHTML = isText
+          ? '<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>'
+          : '<path d="M17.9 17.9A10.9 10.9 0 0 1 12 19c-7 0-11-7-11-7a18.8 18.8 0 0 1 5.1-6.1M9.9 4.2A10.2 10.2 0 0 1 12 4c7 0 11 7 11 7a18.8 18.8 0 0 1-2.2 3.1M1 1l22 22"/><circle cx="12" cy="12" r="3"/>';
+      }
     });
+  });
+
+  // ─── ÉCRAN "VÉRIFIE TON MAIL" (masque le formulaire d'inscription) ───
+  const registerForm  = document.getElementById('registerForm');
+  const registerError = document.getElementById('registerError');
+  const verifyView       = document.getElementById('verifyView');
+  const verifySentEmail  = document.getElementById('verifySentEmail');
+  const resendVerifyBtn  = document.getElementById('resendVerifyBtn');
+  let pendingVerifyUser = null; // utilisateur fraîchement créé, avant signOut
+  let verifyCooldown = false;
+
+  function showVerifyView(email) {
+    verifySentEmail.textContent = email;
+    registerForm.style.display = 'none';
+    verifyView.classList.add('visible');
+    recalcCurrentHeight();
+  }
+
+  resendVerifyBtn.addEventListener('click', async () => {
+    if (verifyCooldown || !pendingVerifyUser) return;
+    verifyCooldown = true;
+    resendVerifyBtn.disabled = true;
+    const original = resendVerifyBtn.textContent;
+    let seconds = 30;
+    resendVerifyBtn.textContent = `Renvoyer (${seconds}s)`;
+
+    const timer = setInterval(() => {
+      seconds -= 1;
+      if (seconds <= 0) {
+        clearInterval(timer);
+        resendVerifyBtn.disabled = false;
+        resendVerifyBtn.textContent = original;
+        verifyCooldown = false;
+      } else {
+        resendVerifyBtn.textContent = `Renvoyer (${seconds}s)`;
+      }
+    }, 1000);
+
+    try {
+      await sendEmailVerification(pendingVerifyUser, {
+        url: 'https://perspikative.com/login2026'
+      });
+    } catch (err) {
+      // on ignore silencieusement (le cooldown reste, l'UI ne change pas)
+    }
   });
 
   // ─── CONNEXION ───
@@ -707,8 +1031,21 @@ permalink: /login2026
 
     setLoading(btn, true);
     try {
-      await signInWithEmailAndPassword(auth, email, pwd);
-      window.location.href = '/';
+      const credential = await signInWithEmailAndPassword(auth, email, pwd);
+
+      // Compte pas encore vérifié : on le renvoie vers l'écran d'attente
+      // plutôt que de le laisser entrer (garde-fou côté connexion, symétrique
+      // à l'inscription qui bloque déjà tant que l'e-mail n'est pas confirmé).
+      if (!credential.user.emailVerified) {
+        pendingVerifyUser = credential.user;
+        switchTab(true);
+        showVerifyView(email);
+        await signOut(auth);
+        setLoading(btn, false);
+        return;
+      }
+
+      await routeAfterAuth(credential.user);
     } catch (err) {
       showError(loginError, firebaseErrMsg(err.code));
       setLoading(btn, false);
@@ -716,37 +1053,43 @@ permalink: /login2026
   });
 
   // ─── INSCRIPTION ───
-  const registerForm  = document.getElementById('registerForm');
-  const registerError = document.getElementById('registerError');
-
   registerForm.addEventListener('submit', async e => {
     e.preventDefault();
     clearError(registerError);
-    const username = registerForm.username.value.trim();
-    const email    = registerForm.email.value.trim();
-    const pwd      = registerForm.password.value;
-    const btn      = registerForm.querySelector('.btn-primary');
+    const email = registerForm.email.value.trim();
+    const pwd   = registerForm.password.value;
+    const btn   = registerForm.querySelector('.btn-primary');
 
-    if (username.length < 2)  { showError(registerError, 'Ton pseudo doit faire au moins 2 caractères.'); return; }
     if (!isValidEmail(email)) { showError(registerError, 'Adresse e-mail invalide.'); return; }
     if (pwd.length < 6)       { showError(registerError, 'Mot de passe trop court (6 caractères min.).'); return; }
 
     setLoading(btn, true);
     try {
       const credential = await createUserWithEmailAndPassword(auth, email, pwd);
-      await updateProfile(credential.user, { displayName: username });
-      window.location.href = '/';
+
+      await sendEmailVerification(credential.user, {
+        url: 'https://perspikative.com/login2026'
+      });
+
+      pendingVerifyUser = credential.user;
+      showVerifyView(email);
+
+      // On déconnecte tout de suite : impossible d'utiliser le compte tant
+      // que l'adresse n'est pas confirmée (cf. garde côté connexion ci-dessus).
+      await signOut(auth);
+
+      setLoading(btn, false);
     } catch (err) {
       showError(registerError, firebaseErrMsg(err.code));
       setLoading(btn, false);
     }
   });
 
-  // ─── GOOGLE ───
+  // ─── GOOGLE (bypass vérification : e-mail Google déjà digne de confiance) ───
   async function handleGoogle() {
     try {
-      await signInWithPopup(auth, provider);
-      window.location.href = '/';
+      const credential = await signInWithPopup(auth, provider);
+      await routeAfterAuth(credential.user);
     } catch (err) {
       // affiche l'erreur dans le panel actif
       const isRegister = track.classList.contains('show-register');
@@ -757,6 +1100,191 @@ permalink: /login2026
 
   document.getElementById('googleLoginBtn').addEventListener('click', handleGoogle);
   document.getElementById('googleRegisterBtn').addEventListener('click', handleGoogle);
+
+  // ─── APRÈS CONNEXION RÉUSSIE : PROFIL DÉJÀ COMPLET ? ───
+  // Si users/{uid} a déjà un username, le compte est finalisé → accueil.
+  // Sinon (première connexion après vérif e-mail, ou 1re connexion Google),
+  // on affiche l'étape "compléter le profil" directement sur cette page.
+  async function routeAfterAuth(user) {
+    try {
+      const snap = await getDoc(doc(db, 'users', user.uid));
+      if (snap.exists() && snap.data().username) {
+        window.location.href = '/';
+        return;
+      }
+    } catch (err) {
+      console.error('Erreur de vérification du profil :', err);
+    }
+    showCompleteProfile(user);
+  }
+
+  // ─── ÉTAT "COMPLÉTER LE PROFIL" ───
+  const completeProfileCard  = document.getElementById('completeProfileCard');
+  const completeProfileForm  = document.getElementById('completeProfileForm');
+  const completeProfileError = document.getElementById('completeProfileError');
+  const cpUsernameInput      = document.getElementById('cp-username');
+  const cpUsernameStatus     = document.getElementById('cpUsernameStatus');
+  const cpDisplayNameInput   = document.getElementById('cp-displayname');
+  const logoWrap             = document.querySelector('.logo-wrap');
+
+  const RESERVED_USERNAMES = new Set([
+    "login", "profile", "account", "admin", "search", "rechercher",
+    "portfolio", "creations", "illustrations", "projets", "commu",
+    "actus", "about", "beta", "help", "help-center", "contact", "api",
+    "404", "tartineske", "mentions-legales",
+    "politique-de-confidentialite", "terms-of-service", "position-ia",
+    "brand-guidelines", "art-challenge", "www", "assets", "static",
+    "settings", "notifications", "explore", "home", "index"
+  ]);
+  const USERNAME_REGEX = /^[a-z0-9_]{3,20}$/;
+  let completeProfileUser = null;
+  let usernameCheckToken = 0;
+  let usernameDebounceTimer = null;
+
+  function normalizeUsername(raw) {
+    return (raw || "").trim().toLowerCase();
+  }
+
+  function validateUsernameFormat(normalized) {
+    if (!normalized) return "Choisis un nom d'utilisateur.";
+    if (!USERNAME_REGEX.test(normalized)) {
+      return "3 à 20 caractères : lettres minuscules, chiffres et _ uniquement.";
+    }
+    if (RESERVED_USERNAMES.has(normalized)) {
+      return "Ce nom d'utilisateur est réservé, choisis-en un autre.";
+    }
+    return null;
+  }
+
+  async function isUsernameTaken(normalized, ownUid) {
+    const ref = doc(db, "usernames", normalized);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) return false;
+    return snap.data().uid !== ownUid;
+  }
+
+  // Réservation atomique (même logique que profile.js : tout ou rien).
+  async function saveUsername(uid, newUsername, newUsernameDisplay) {
+    const newRef  = doc(db, "usernames", newUsername);
+    const userRef = doc(db, "users", uid);
+
+    await runTransaction(db, async (tx) => {
+      const newSnap = await tx.get(newRef);
+      if (newSnap.exists() && newSnap.data().uid !== uid) {
+        throw new Error("USERNAME_TAKEN");
+      }
+      if (!newSnap.exists()) {
+        tx.set(newRef, { uid });
+      }
+      tx.set(userRef, {
+        username: newUsername,
+        usernameDisplay: newUsernameDisplay
+      }, { merge: true });
+    });
+  }
+
+  cpUsernameInput.addEventListener('input', () => {
+    const normalized = normalizeUsername(cpUsernameInput.value);
+    clearTimeout(usernameDebounceTimer);
+
+    const formatError = validateUsernameFormat(normalized);
+    if (formatError) {
+      cpUsernameStatus.textContent = formatError;
+      cpUsernameStatus.classList.add('is-error');
+      cpUsernameStatus.classList.remove('is-ok');
+      return;
+    }
+
+    cpUsernameStatus.textContent = 'Vérification…';
+    cpUsernameStatus.classList.remove('is-error', 'is-ok');
+
+    const token = ++usernameCheckToken;
+    usernameDebounceTimer = setTimeout(async () => {
+      try {
+        const taken = await isUsernameTaken(normalized, completeProfileUser ? completeProfileUser.uid : null);
+        if (token !== usernameCheckToken) return;
+        if (taken) {
+          cpUsernameStatus.textContent = 'Ce nom d\'utilisateur est déjà pris.';
+          cpUsernameStatus.classList.add('is-error');
+          cpUsernameStatus.classList.remove('is-ok');
+        } else {
+          cpUsernameStatus.textContent = 'Disponible ✓';
+          cpUsernameStatus.classList.add('is-ok');
+          cpUsernameStatus.classList.remove('is-error');
+        }
+      } catch (err) {
+        if (token !== usernameCheckToken) return;
+        cpUsernameStatus.textContent = 'Impossible de vérifier pour l\'instant.';
+        cpUsernameStatus.classList.add('is-error');
+      }
+    }, 450);
+  });
+
+  function showCompleteProfile(user) {
+    completeProfileUser = user;
+    if (logoWrap) logoWrap.style.display = 'none';
+    mainCard.style.display = 'none';
+    completeProfileCard.classList.add('visible');
+  }
+
+  completeProfileForm.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!completeProfileUser) return;
+
+    clearError(completeProfileError);
+    const rawUsername   = cpUsernameInput.value;
+    const normalized     = normalizeUsername(rawUsername);
+    const newDisplayName = cpDisplayNameInput.value.trim();
+    const btn = completeProfileForm.querySelector('.btn-primary');
+
+    const formatError = validateUsernameFormat(normalized);
+    if (formatError) { showError(completeProfileError, formatError); return; }
+    if (!newDisplayName) { showError(completeProfileError, 'Le nom affiché ne peut pas être vide.'); return; }
+
+    setLoading(btn, true);
+    try {
+      await saveUsername(completeProfileUser.uid, normalized, rawUsername.trim());
+      await updateProfile(completeProfileUser, { displayName: newDisplayName });
+      window.location.href = '/profile';
+    } catch (err) {
+      if (err.message === 'USERNAME_TAKEN') {
+        showError(completeProfileError, 'Ce nom d\'utilisateur vient d\'être pris, choisis-en un autre.');
+      } else {
+        console.error('Erreur lors de la finalisation du profil :', err);
+        showError(completeProfileError, 'Une erreur est survenue, réessaie.');
+      }
+      setLoading(btn, false);
+    }
+  });
+
+  // ─── RETOUR DEPUIS LE LIEN DE VÉRIFICATION (?verified=1&email=...) ───
+  // auth-handler.js redirige ici une fois l'e-mail confirmé. L'utilisateur
+  // a été déconnecté après l'inscription, donc on ne peut pas le reconnecter
+  // automatiquement : on pré-remplit juste son e-mail pour lui éviter de le
+  // retaper, il n'a plus qu'à entrer son mot de passe.
+  (function handleVerifiedReturn() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('verified') !== '1') return;
+
+    const email = params.get('email');
+    switchTab(false); // reste/retourne sur le panel Connexion
+
+    if (email) {
+      loginForm.email.value = email;
+    }
+
+    const banner = document.getElementById('verifiedBanner');
+    banner.classList.add('visible');
+    recalcCurrentHeight();
+
+    if (email) {
+      loginForm.password.focus();
+    }
+
+    // Nettoie l'URL pour éviter de réafficher la bannière au refresh
+    const cleanUrl = window.location.origin + window.location.pathname;
+    window.history.replaceState({}, '', cleanUrl);
+  })();
 </script>
 
 </body>
