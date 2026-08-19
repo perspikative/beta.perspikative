@@ -6342,6 +6342,25 @@ body {
 
 
 
+
+
+/* =========================================================
+   FADE DES COMMENTAIRES DE LA LIGHTBOX
+   ========================================================= */
+
+@property --fade-top-start {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+@property --fade-bottom-end {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 0;
+}
+
+
 .lb-comments-list {
   --fade-top-start: 0;
   --fade-bottom-end: 0;
@@ -6350,8 +6369,12 @@ body {
   -webkit-mask-image: none;
 
   transition:
-    --fade-top-start 0.1s ease,
-    --fade-bottom-end 0.1s ease;
+    --fade-top-start 0.12s ease,
+    --fade-bottom-end 0.12s ease;
+
+  -webkit-transition:
+    --fade-top-start 0.12s ease,
+    --fade-bottom-end 0.12s ease;
 }
 
 .lb-comments-list.is-scrollable {
@@ -6378,6 +6401,11 @@ body {
 
 .lb-comments-list.is-scrollable.at-bottom {
   --fade-bottom-end: 1;
+}
+
+.lb-comments-list.is-scrollable:not(.at-top):not(.at-bottom) {
+  --fade-top-start: 0;
+  --fade-bottom-end: 0;
 }
 
 .lb-comments-list.is-scrollable.at-top.at-bottom {
