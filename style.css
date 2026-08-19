@@ -51,7 +51,7 @@ body {
   background: var(--bg);
   color: var(--text);
   cursor: cursor, auto;
-  scrollbar-gutter: stable;
+  scrollbar-gutter: auto;
   scrollbar-width: thin;
   scrollbar-color: #888888 #f1f1f1;
 }
@@ -477,8 +477,8 @@ header h1 {
   left: 0;
   width: 100vw;
   height: 100vh;
-  backdrop-filter: blur(12px) saturate(116%);
-  -webkit-backdrop-filter: blur(12px) saturate(116%);
+  backdrop-filter: blur(10px) saturate(118%);
+  -webkit-backdrop-filter: blur(10px) saturate(118%);
   background: transparent;
   opacity: 0;
   pointer-events: none;
@@ -493,7 +493,7 @@ footer {
 
 body.menu-open main,
 body.menu-open footer {
-  filter: blur(12px);
+  filter: blur(10px);
 }
 
 /* Quand le menu est ouvert */
