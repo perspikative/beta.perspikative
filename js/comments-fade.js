@@ -1,159 +1,393 @@
-(function() {
+(function () {
   'use strict';
 
+
+  /*
+   * =========================================================
+   * CONFIGURATION
+   * =========================================================
+   */
+
+  /*
+   * Petite marge de sécurité pour éviter qu'une différence
+   * de 1 ou 2 pixels due aux arrondis du navigateur fasse
+   * croire que la section est scrollable.
+   */
   const SCROLL_THRESHOLD = 2;
 
+
+  /*
+   * =========================================================
+   * INITIALISATION DU SYSTÈME
+   * =========================================================
+   */
+
   function initCommentsFade(container) {
+
+    /*
+     * Si la liste des commentaires n'existe pas,
+     * on ne fait rien.
+     */
     if (!container) return;
 
+
+    /*
+     * Empêche de lancer plusieurs calculs dans
+     * le même cycle de rendu.
+     */
     let updateScheduled = false;
 
-    function updateMaskClasses() {
-      updateScheduled = false;
 
-      const scrollTop = container.scrollTop;
-      const scrollHeight = container.scrollHeight;
-      const clientHeight = container.clientHeight;
+    /*
+     * =====================================================
+     * CALCUL PRINCIPAL
+     * =====================================================
+     */
+
+    function updateMaskClasses() {
 
       /*
-       * La section est scrollable uniquement si
-       * son contenu dépasse réellement sa hauteur visible.
+       * Le calcul programmé est maintenant exécuté.
+       */
+      updateScheduled = false;
+
+
+      /*
+       * Nombre de pixels actuellement scrollés
+       * depuis le haut de la liste.
+       */
+      const scrollTop = container.scrollTop;
+
+
+      /*
+       * Hauteur TOTALE du contenu de la liste.
+       *
+       * Elle inclut notamment les commentaires qui
+       * sont actuellement en dehors de la zone visible.
+       */
+      const scrollHeight = container.scrollHeight;
+
+
+      /*
+       * Hauteur réellement visible de la liste.
+       */
+      const clientHeight = container.clientHeight;
+
+
+      /*
+       * =================================================
+       * LA RÈGLE PRINCIPALE
+       * =================================================
+       *
+       * Si le contenu est plus grand que la zone visible,
+       * alors la liste est scrollable.
+       *
+       * Sinon, elle ne l'est pas.
        */
       const isScrollable =
         scrollHeight > clientHeight + SCROLL_THRESHOLD;
 
+
       /*
-       * On retire toujours les anciens états avant
-       * de recalculer.
+       * On supprime toujours les anciennes classes
+       * de position avant de recalculer leur état.
        */
       container.classList.remove(
-        'is-scrollable',
         'at-top',
         'at-bottom'
       );
 
+
       /*
-       * Pas de scroll possible = aucun masque.
+       * =================================================
+       * PAS SCROLLABLE
+       * =================================================
        */
+
       if (!isScrollable) {
+
+        /*
+         * TRÈS IMPORTANT :
+         *
+         * On retire complètement la classe qui active
+         * le masque CSS.
+         *
+         * Le CSS correspondant à .is-scrollable
+         * n'est donc plus appliqué du tout.
+         */
+        container.classList.remove('is-scrollable');
+
+
+        /*
+         * On arrête immédiatement la fonction.
+         *
+         * Aucun fade.
+         * Aucun masque.
+         * Aucune classe at-top / at-bottom.
+         */
         return;
       }
 
+
       /*
-       * Le conteneur est réellement scrollable.
+       * =================================================
+       * SCROLLABLE
+       * =================================================
+       */
+
+      /*
+       * La liste est réellement scrollable.
+       *
+       * On active donc le masque CSS.
        */
       container.classList.add('is-scrollable');
 
-      const maxScroll = scrollHeight - clientHeight;
 
       /*
-       * Tout en haut.
+       * Hauteur maximale du scroll.
+       *
+       * Exemple :
+       *
+       * contenu = 1000 px
+       * zone visible = 400 px
+       *
+       * maxScroll = 600 px
+       */
+      const maxScroll =
+        scrollHeight - clientHeight;
+
+
+      /*
+       * =================================================
+       * TOUT EN HAUT
+       * =================================================
+       *
+       * Si scrollTop vaut environ 0,
+       * aucun contenu n'est au-dessus.
        */
       if (scrollTop <= SCROLL_THRESHOLD) {
+
         container.classList.add('at-top');
       }
 
+
       /*
-       * Tout en bas.
+       * =================================================
+       * TOUT EN BAS
+       * =================================================
+       *
+       * Si scrollTop est arrivé à la hauteur maximale,
+       * aucun contenu supplémentaire ne se trouve en dessous.
        */
       if (scrollTop >= maxScroll - SCROLL_THRESHOLD) {
+
         container.classList.add('at-bottom');
       }
     }
 
 
     /*
-     * On attend le prochain frame avant de recalculer.
-     * Cela évite de lire scrollHeight/clientHeight
-     * alors que le layout est encore en train de changer.
+     * =====================================================
+     * PROGRAMMATION DU CALCUL
+     * =====================================================
      */
+
     function scheduleUpdate() {
+
+      /*
+       * Si un calcul est déjà prévu pour ce cycle,
+       * inutile d'en programmer un deuxième.
+       */
       if (updateScheduled) return;
 
+
+      /*
+       * On indique qu'un calcul est en attente.
+       */
       updateScheduled = true;
 
+
+      /*
+       * On attend deux frames.
+       *
+       * Cela laisse au navigateur le temps de :
+       *
+       * 1. modifier le DOM
+       * 2. recalculer les dimensions
+       * 3. effectuer le layout
+       *
+       * avant qu'on lise scrollHeight / clientHeight.
+       */
       requestAnimationFrame(() => {
-        requestAnimationFrame(updateMaskClasses);
+
+        requestAnimationFrame(() => {
+
+          updateMaskClasses();
+
+        });
+
       });
     }
 
 
     /*
-     * Première vérification.
+     * =====================================================
+     * PREMIER CALCUL
+     * =====================================================
+     */
+
+    /*
+     * On ne calcule pas immédiatement.
+     *
+     * On attend que la lightbox et ses commentaires
+     * soient correctement rendus.
      */
     scheduleUpdate();
 
 
     /*
-     * Mise à jour pendant le scroll.
+     * =====================================================
+     * DÉTECTION DU SCROLL
+     * =====================================================
+     */
+
+    /*
+     * Chaque fois que l'utilisateur fait défiler
+     * les commentaires, on recalcule la position.
      */
     container.addEventListener(
       'scroll',
       scheduleUpdate,
-      { passive: true }
+      {
+        passive: true
+      }
     );
 
 
     /*
-     * Surveille les changements de contenu :
+     * =====================================================
+     * DÉTECTION DES MODIFICATIONS DU CONTENU
+     * =====================================================
+     */
+
+    /*
+     * MutationObserver détecte notamment :
+     *
      * - ajout d'un commentaire
      * - suppression d'un commentaire
-     * - changement de texte
-     * - modifications dans les éléments enfants
+     * - modification du texte
+     * - ajout/suppression d'éléments dans un commentaire
      */
-    const contentObserver = new MutationObserver(() => {
-      scheduleUpdate();
-    });
+    const contentObserver =
+      new MutationObserver(() => {
 
+        scheduleUpdate();
+
+      });
+
+
+    /*
+     * On observe toute la liste et ses descendants.
+     */
     contentObserver.observe(container, {
+
+      /*
+       * Détecte les éléments ajoutés ou supprimés.
+       */
       childList: true,
+
+      /*
+       * Observe également les éléments imbriqués.
+       */
       subtree: true,
+
+      /*
+       * Détecte les changements de texte.
+       */
       characterData: true
+
     });
 
 
     /*
-     * Très important :
-     * détecte les changements de taille réels du conteneur.
+     * =====================================================
+     * DÉTECTION DES CHANGEMENTS DE DIMENSIONS
+     * =====================================================
+     */
+
+    /*
+     * ResizeObserver est particulièrement important ici.
      *
      * Par exemple :
-     * - ouverture de la lightbox
-     * - changement de taille de fenêtre
-     * - changement de taille d'un commentaire
-     * - passage d'un état caché à visible
+     *
+     * - la lightbox change de taille
+     * - un commentaire passe sur plusieurs lignes
+     * - un commentaire est supprimé
+     * - la fenêtre est redimensionnée
+     * - le layout mobile/desktop change
      */
-    const resizeObserver = new ResizeObserver(() => {
-      scheduleUpdate();
-    });
+    const resizeObserver =
+      new ResizeObserver(() => {
 
+        scheduleUpdate();
+
+      });
+
+
+    /*
+     * On surveille directement la liste.
+     */
     resizeObserver.observe(container);
 
 
     /*
-     * Nettoyage.
+     * =====================================================
+     * NETTOYAGE
+     * =====================================================
      */
-    return () => {
+
+    return function cleanup() {
+
+      /*
+       * Arrête l'écoute du scroll.
+       */
       container.removeEventListener(
         'scroll',
         scheduleUpdate
       );
 
+
+
       contentObserver.disconnect();
+
+
+
       resizeObserver.disconnect();
+
     };
   }
 
 
   function observeLightbox() {
+
+
     const lightbox =
       document.getElementById('lightbox');
+
+
 
     const commentsList =
       document.getElementById('lb-comments-list');
 
 
+
     if (!lightbox || !commentsList) {
-      setTimeout(observeLightbox, 100);
+
+      setTimeout(
+        observeLightbox,
+        100
+      );
+
       return;
     }
 
@@ -162,40 +396,51 @@
       initCommentsFade(commentsList);
 
 
-    /*
-     * Quand la lightbox change d'état,
-     * on recalcule le système.
-     */
-    const lightboxObserver = new MutationObserver(() => {
-      if (
-        lightbox.classList.contains('active') ||
-        !lightbox.classList.contains('is-hidden')
-      ) {
+
+    const lightboxObserver =
+      new MutationObserver(() => {
+
+
         if (cleanupFade) {
+
           cleanupFade();
+
         }
+
+
 
         cleanupFade =
           initCommentsFade(commentsList);
+
+      });
+
+
+
+    lightboxObserver.observe(
+      lightbox,
+      {
+        attributes: true,
+        attributeFilter: ['class']
       }
-    });
-
-
-    lightboxObserver.observe(lightbox, {
-      attributes: true,
-      attributeFilter: ['class']
-    });
+    );
   }
 
 
+
   if (document.readyState === 'loading') {
+
     document.addEventListener(
       'DOMContentLoaded',
       observeLightbox
     );
+
   } else {
+
+
     observeLightbox();
+
   }
+
 
 
   window.initCommentsFade =
