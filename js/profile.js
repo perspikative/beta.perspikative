@@ -735,15 +735,20 @@ function flyAvatarToCenter() {
     flyingAvatarEl = clone;
 
     const targetSize = window.innerWidth <= 700 ? 130 : 190;
-    const viewportCenterX = window.innerWidth / 2;
-    const viewportCenterY = window.innerHeight / 2;
+    // On vise le centre réel de la piste du coverflow, pas le centre de la
+    // fenêtre : la lightbox est centrée verticalement en flexbox avec le
+    // bouton "Enregistrer" en dessous, donc la piste (et les pdp) sont
+    // décalées plus haut que le milieu exact de l'écran.
+    const trackRect = avatarCoverflowTrack.getBoundingClientRect();
+    const targetCenterX = trackRect.left + trackRect.width / 2;
+    const targetCenterY = trackRect.top + trackRect.height / 2;
 
     // Force un reflow avant d'appliquer l'état final pour garantir la transition
     void clone.offsetWidth;
 
     requestAnimationFrame(() => {
-        clone.style.top = `${viewportCenterY - targetSize / 2}px`;
-        clone.style.left = `${viewportCenterX - targetSize / 2}px`;
+        clone.style.top = `${targetCenterY - targetSize / 2}px`;
+        clone.style.left = `${targetCenterX - targetSize / 2}px`;
         clone.style.width = `${targetSize}px`;
         clone.style.height = `${targetSize}px`;
     });
@@ -759,13 +764,16 @@ function flyAvatarBackToCard() {
     const clone = profilePic.cloneNode(true);
     // On part de la position centrale (taille lightbox) vers l'emplacement réel
     const startSize = window.innerWidth <= 700 ? 130 : 190;
-    const viewportCenterX = window.innerWidth / 2;
-    const viewportCenterY = window.innerHeight / 2;
+    // Même logique que flyAvatarToCenter : le point de départ doit être le
+    // centre réel de la piste du coverflow, pas le centre de la fenêtre.
+    const trackRect = avatarCoverflowTrack.getBoundingClientRect();
+    const startCenterX = trackRect.left + trackRect.width / 2;
+    const startCenterY = trackRect.top + trackRect.height / 2;
 
     clone.removeAttribute("id");
     clone.style.position = "fixed";
-    clone.style.top = `${viewportCenterY - startSize / 2}px`;
-    clone.style.left = `${viewportCenterX - startSize / 2}px`;
+    clone.style.top = `${startCenterY - startSize / 2}px`;
+    clone.style.left = `${startCenterX - startSize / 2}px`;
     clone.style.width = `${startSize}px`;
     clone.style.height = `${startSize}px`;
     clone.style.margin = "0";
