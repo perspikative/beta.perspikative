@@ -142,11 +142,15 @@ permalink: /profile
     background: transparent;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
-    transition: transform 0.2s ease;
+    transition: all 0.26s cubic-bezier(0.35, 0.02, 0.17, 1.03);
   }
 
   .profile-pic-wrapper:hover {
-    transform: translateY(-1px);
+    transform: scale(1);
+  }
+  
+  .profile-pic-wrapper:active {
+    transform: scale(0.96);
   }
 
   .profile-pic-wrapper:hover .profile-pic-edit-hint {
