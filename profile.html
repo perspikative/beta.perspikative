@@ -28,6 +28,22 @@ permalink: /profile
   * {
     box-sizing: border-box;
   }
+  
+  :root {
+    color-scheme: light dark;
+  }
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --profile-pic-edit-hint-bg: rgba(80, 179, 150, 1);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --profile-pic-edit-hint-bg: rgba(45, 46, 50, 1);
+  }
+}
 
   /* ============================= LAYOUT GENERAL ============================= */
 
@@ -142,7 +158,7 @@ permalink: /profile
     position: absolute;
     inset: -2px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #00c896, #0af0d0, #58b3a2);
+    background: rgba(255, 255, 255, 0.08);
     z-index: 0;
   }
 
@@ -169,7 +185,7 @@ permalink: /profile
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     border-radius: 50%;
-    background: rgba(10, 20, 18, 0.85);
+    background: var(--profile-pic-edit-hint-bg);
     border: none;
     display: flex;
     align-items: center;
@@ -177,7 +193,7 @@ permalink: /profile
     opacity: 0;
     transition: opacity 0.2s ease;
     box-shadow: inset 0 0 16px rgba(255, 255, 255, 0.16),
-      0 4px 14px rgba(0, 0, 0, 0.3);
+      0 2px 14px rgba(0, 0, 0, 0.2);
   }
 
   .profile-pic-edit-hint img {
@@ -1581,8 +1597,8 @@ permalink: /profile
     <img src="/icons/rechercher.svg" alt="Rechercher">
   </a>
   
-  <script type="module" src="/js/firebase-init.js"></script>
-  <script type="module" src="/js/profile.js"></script>
+  <script type="module" src="/jss/firebase-init.js"></script>
+  <script type="module" src="/jss/profile.js"></script>
 
   <script>
     const menuToggle = document.getElementById('menuToggle');

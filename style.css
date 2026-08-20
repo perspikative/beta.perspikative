@@ -11,12 +11,10 @@
   font-display: swap;
 }
 
-/* Le site supporte les deux thèmes */
 :root {
   color-scheme: light dark;
 }
 
-/* --- Thème clair (par défaut) --- */
 @media (prefers-color-scheme: light) {
   :root {
     --bg: linear-gradient(135deg, #4AA9A1, #2CA877, #62A78A);
@@ -33,10 +31,10 @@
     --mobile-menu-background: rgba(255, 255, 255, 0);
     --filter-panel-bg: rgba(83, 173, 154, 1);
     --mobile-nav-icon-img: 0 3px 12px rgba(0, 0, 0, 0.4);
+    --profile-pic-edit-hint-bg: rgba(255, 255, 255, 0.85);
   }
 }
 
-/* --- Thème sombre --- */
 @media (prefers-color-scheme: dark) {
   :root {
     --bg: #0e0f13;
@@ -53,10 +51,10 @@
     --mobile-menu-background: rgba(0, 0, 0, 0.24);
     --filter-panel-bg: rgba(42, 43, 46);
     --mobile-nav-icon-img: 0 3px 12px rgba(0, 0, 0, 0.6);
+    --profile-pic-edit-hint-bg: rgba(10, 20, 18, 0.85);
   }
 }
 
-/* Application globale */
 body {
   background: var(--bg);
   color: var(--text);
@@ -66,12 +64,10 @@ body {
   scrollbar-color: #888888 #f1f1f1;
 }
 
-/* Garde la barre de défilement stable */
 html {
   scrollbar-gutter: stable;
 }
 
-/* Optimisations indispensables pour Lenis */
 html.lenis, html.lenis body {
   height: auto;
 }
@@ -107,7 +103,6 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* --- Désactive les halos bleus au toucher sur les écrans tactiles --- */
 @media (pointer: coarse) {
   a,
   button,
