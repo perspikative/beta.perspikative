@@ -21,25 +21,6 @@ permalink: /404
 
 <script defer src="https://cloud.umami.is/script.js" data-website-id="18d7b0fd-c5fb-4b2e-a43b-10cc734daa8f"></script>
 
-<script>
-  (function () {
-    var path = window.location.pathname;
-
-    if (path.indexOf("/@") === 0) {
-      // On mémorise l'URL exacte demandée par la personne
-      sessionStorage.setItem("prspk_pending_username_path", path + window.location.search);
-
-      // On redirige vers la page réelle qui contient toute la logique.
-      // "replace" pour ne pas polluer l'historique avec la 404.
-      window.location.replace("/@");
-      return;
-    }
-
-    // Sinon : vraie 404, on ne fait rien de spécial, le reste de
-    // 404.html s'affiche normalement.
-  })();
-</script>
-
 <style>
   @media (pointer: coarse) {
     a,
@@ -100,7 +81,7 @@ permalink: /404
     text-align: center;
     color: var(--text-color);
     flex-direction: column;
-    transition: background-color 0.6s ease;
+    transition: background-color 0.3s ease;
   }
 
   h1 {
@@ -158,7 +139,7 @@ permalink: /404
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.2rem;
+    gap: 0.6rem;
     padding: 0rem 0;
   }
 
@@ -175,7 +156,7 @@ permalink: /404
 
   @media (max-width: 900px) {
     .social-icons {
-      gap: 0.2rem;
+      gap: 0.4rem;
       padding: 0rem 0;
     }
 
@@ -233,11 +214,11 @@ permalink: /404
   <a href="https://www.instagram.com/perspikative" target="_blank" aria-label="Instagram">
     <img src="/icons/instagram.svg" alt="Instagram">
   </a>
+  <a href="https://discord.com/invite/c5w9ucgDZH" target="_blank" aria-label="Discord">
+    <img src="/icons/discord.svg" alt="Discord">
+  </a>
   <a href="https://youtube.com/@perspikative" target="_blank" aria-label="YouTube">
     <img src="/icons/youtube.svg" alt="YouTube">
-  </a>
-  <a href="https://www.pinterest.com/perspikative" target="_blank" aria-label="Pinterest">
-    <img src="/icons/pinterest.svg" alt="Pinterest">
   </a>
 </div>
 
