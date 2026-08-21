@@ -231,7 +231,7 @@
 
     this._buildDisplacementMap(w, h);
 
-    const value = `url(#${this.filterId}) blur(${this.blur}px) contrast(1.01) saturate(1.1)`;
+    const value = `url(#${this.filterId}) blur(${this.blur}px) contrast(1.02) saturate(1.16)`;
     this.el.style.backdropFilter = value;
     this.el.style.webkitBackdropFilter = value;
   };
@@ -254,9 +254,8 @@
   // Ajoute simplement une ligne ici pour appliquer l'effet à un nouvel élément.
   // shape: 'pill' (barre type mobile-nav), 'circle' (bouton rond), 'rect' (coins arrondis, avec rectRadius)
   const LIQUID_GLASS_TARGETS = [
-    { selector: '.mobile-nav', shape: 'pill', bezel: 30, maxShift: 12 },
+    { selector: '.mobile-nav', shape: 'pill', bezel: 30, maxShift: 14, saturate: 1.2 },
     { selector: '.search-float-btn', shape: 'circle', bezel: 30, maxShift: 3, blur: 4 },
-    { selector: '.tab-indicator', shape: 'pill', bezel: 30, maxShift: 3, blur: 4 },
   ];
 
   LIQUID_GLASS_TARGETS.forEach(function (target) {
