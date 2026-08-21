@@ -98,8 +98,8 @@ permalink: /login
       border: 1px solid rgba(255, 255, 255, 0);
       box-shadow: var(--glass-shadow);
       border-radius: 27px 27px 50px 50px;
-      backdrop-filter: blur(18px) saturate(110%);
-      -webkit-backdrop-filter: blur(18px) saturate(110%);
+      backdrop-filter: saturate(110%);
+      -webkit-backdrop-filter: saturate(110%);
       overflow: hidden;
     }
 
@@ -323,7 +323,7 @@ permalink: /login
     }
 
     .pwd-requirements.visible {
-      max-height: 200px;
+      max-height: 120px;
       opacity: 1;
       margin-top: 0.65rem;
     }
@@ -332,15 +332,14 @@ permalink: /login
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 0.42rem;
-      padding: 0.2rem 0;
+      gap: 0.32rem;
     }
 
     .pwd-requirements li {
       display: flex;
       align-items: center;
-      gap: 0.55rem;
-      font-size: 0.8rem;
+      gap: 0.4rem;
+      font-size: 0.86rem;
       color: #ffffff;
       opacity: 0.55;
       transition: opacity 0.2s ease, color 0.2s ease;
@@ -369,7 +368,7 @@ permalink: /login
 
     .pwd-requirements li.is-met {
       opacity: 1;
-      color: var(--teal-3);
+      color: #ffffff;
     }
 
     .pwd-requirements li.is-met .req-icon .req-cross {
@@ -829,7 +828,7 @@ permalink: /login
             <div class="pwd-wrap">
               <input type="password" id="reg-pwd" name="password" placeholder="6 caractères min." autocomplete="new-password" required maxlength="100" />
               <button type="button" class="pwd-toggle" aria-label="Afficher le mot de passe" data-target="reg-pwd">
-                <img src="/icons/contact.svg" alt="" width="18" height="18" />
+                <img src="/icons/check.svg" alt="" width="18" height="18" />
               </button>
             </div>
 
