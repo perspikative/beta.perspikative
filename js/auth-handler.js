@@ -232,19 +232,44 @@ function handleRecoverEmail(actionCode) {
 
 // =============================================================================
 // MODE : verifyEmail
-// Applique directement le code (applyActionCode) pour confirmer l'adresse.
+// Récupère d'abord l'e-mail du compte via checkActionCode (même pattern que
+// handleRecoverEmail), applique le code, puis renvoie vers /login2026 avec
+// l'e-mail en query param pour que l'utilisateur n'ait plus qu'à saisir son
+// mot de passe et enchaîner sur l'étape "compléter le profil".
 // =============================================================================
 
 function handleVerifyEmail(actionCode, continueUrl) {
-  applyActionCode(auth, actionCode)
+  let verifiedEmail = null;
+
+  checkActionCode(auth, actionCode)
+    .then((info) => {
+      verifiedEmail = info && info["data"] ? info["data"]["email"] : null;
+      return applyActionCode(auth, actionCode);
+    })
     .then(() => {
-      // Adresse e-mail vérifiée. Si un continueUrl est fourni, on l'utilise
-      // pour ramener l'utilisateur exactement là où il en était (par ex.
-      // directement connecté), sinon on pointe vers la page de connexion.
-      if (continueUrl) {
-        $("verifyContinueBtn").href = continueUrl;
+      // Adresse e-mail vérifiée. On construit toujours l'URL de retour
+      // nous-mêmes (avec verified=1 + l'e-mail), même si un continueUrl a
+      // été fourni : c'est ce lien vers /login2026 qui permet d'enchaîner
+      // sur l'étape "compléter le profil" côté client.
+      const target = new URL("https://perspikative.com/login");
+      target.searchParams.set("verified", "1");
+      if (verifiedEmail) {
+        target.searchParams.set("email", verifiedEmail);
+      }
+      const redirectUrl = target.toString();
+
+      const successLink = $("verifyContinueBtn");
+      if (successLink) {
+        successLink.href = redirectUrl;
       }
       showView("view-verify-success");
+
+      // Redirection automatique après un court délai : l'utilisateur n'a
+      // pas besoin de cliquer, mais garde le bouton comme filet de sécurité
+      // si la redirection auto est bloquée (ex: certains clients mail webview).
+      setTimeout(() => {
+        window.location.href = redirectUrl;
+      }, 1800);
     })
     .catch((err) => {
       // Code invalide ou expiré : on invite l'utilisateur à redemander un
