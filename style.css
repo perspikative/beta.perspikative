@@ -1940,7 +1940,6 @@ main.creations {
 
 /* ============================= 11. CONTACT ============================= */
 
-/* Reset / base — page Contact uniquement */
 .contact-container,
 .contact-container * {
   box-sizing: border-box;
@@ -1949,7 +1948,6 @@ main.creations {
   font-family: 'Rubik', system-ui, sans-serif;
 }
 
-/* Container principale */
 .contact-container {
   display: flex;
   flex-direction: column;
@@ -1960,17 +1958,15 @@ main.creations {
   width: 100%;
 }
 
-/* Image ronde */
 .profile-image img {
   width: 120px;
   height: 120px;
   border-radius: 50%;
   object-fit: cover;
-  border: 1px solid rgba(255,255,255,0.2);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  border: 2.2px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* Titre */
 .profile-title {
   font-size: 2.2rem;
   color: #fff;
@@ -1978,7 +1974,6 @@ main.creations {
   text-align: center;
 }
 
-/* Logos horizontaux */
 .social-logos {
   display: flex;
   gap: 8px;
@@ -1997,7 +1992,6 @@ main.creations {
   opacity: 1;
 }
 
-/* Mail */
 .contact-mail {
   display: flex;
   align-items: center;
@@ -2011,7 +2005,6 @@ main.creations {
   height: 20px;
 }
 
-/* Boutons glassmorphism */
 .social-buttons {
   display: flex;
   flex-direction: column;
@@ -2081,7 +2074,6 @@ a {
   transition: color 0.25s ease;
 }
 
-/* Responsive */
 @media (max-width: 700px) {
   .contact-container {
     padding: 32px 16px;
@@ -2129,8 +2121,6 @@ a {
   font-size: 1.2rem;
   opacity: 0.75;
 }
-
-
 
 .faq-categories {
   display: grid;
