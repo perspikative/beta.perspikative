@@ -256,6 +256,7 @@
   const LIQUID_GLASS_TARGETS = [
     { selector: '.mobile-nav', shape: 'pill', bezel: 30, maxShift: 12 },
     { selector: '.search-float-btn', shape: 'circle', bezel: 30, maxShift: 3, blur: 4 },
+    { selector: '.tab-indicator', shape: 'pill', bezel: 30, maxShift: 3, blur: 4 },
   ];
 
   LIQUID_GLASS_TARGETS.forEach(function (target) {
