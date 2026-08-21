@@ -23,6 +23,7 @@
     --border: rgba(0, 0, 0, 0.1);
     --header-bg: rgba(91, 179, 163, 0.70);
     --nav-mobile-bg: rgba(255, 255, 255, 0);
+    --nav-mobile-shadow: 0 4px 22px 0px rgba(0, 0, 0, 0.1), 0 6px 32px 0px rgba(0, 0, 0, 0.18), inset 0 0 12px rgba(255, 255, 255, 0.3);
     --search-float-btn-bg: rgba(255, 255, 255, 0.2);
     --search-float-btn-bg-hover: rgba(255, 255, 255, 0.22);
     --search-float-btn-box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.14), 0 2px 16px rgba(0, 0, 0, 0.06);
@@ -43,11 +44,12 @@
     --border: rgba(255, 255, 255, 0.12);
     --header-bg: rgba(0, 0, 0, 0.66);
     --nav-mobile-bg: rgba(0, 0, 0, 0.38);
+    --nav-mobile-shadow: 0 -1px 8px 0px rgba(0, 0, 0, 0.1), 0 4px 32px 0px rgba(0, 0, 0, 0.18), 0 10px 52px 0px rgba(0, 0, 0, 0.5), inset 0 0 12px rgba(255, 255, 255, 0.3);
     --search-float-btn-bg: rgba(255, 255, 255, 0.12);
     --search-float-btn-bg-hover: rgba(255, 255, 255, 0.14);
-    --search-float-btn-box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.14), 0 3px 26px rgba(0, 0, 0, 0.5);
+    --search-float-btn-box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.14), 0 4px 42px rgba(0, 0, 0, 0.5);
     --search-float-btn-box-shadow-hover: inset 0 2px 14px rgba(255, 255, 255, 0.2), 0 4px 36px rgba(0, 0, 0, 0.6);
-    --search-float-btn-img-shadow: -2px 2px 12px rgba(0, 0, 0, 0.6);
+    --search-float-btn-img-shadow: -2px 2px 16px rgba(0, 0, 0, 1);
     --mobile-menu-background: rgba(0, 0, 0, 0.24);
     --filter-panel-bg: rgba(42, 43, 46);
     --mobile-nav-icon-img: 0 3px 12px rgba(0, 0, 0, 0.6);
@@ -619,9 +621,7 @@ body.menu-open .blur-overlay {
     -webkit-backdrop-filter: blur(4px) saturate(130%);
     filter: brightness(102%);
     transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-    box-shadow:
-      0 6px 26px 0px rgba(0, 0, 0, 0.2),
-      inset 0 0 10px rgba(255, 255, 255, 0.28);
+    box-shadow: var(--nav-mobile-shadow);
   }
 
   .mobile-nav.at-bottom {
@@ -677,8 +677,6 @@ main {
   margin: 20px auto 30px auto;
   background: rgba(255 255 255 / 0.12);
   border-radius: 20px;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
   border: 1px solid rgba(255 255 255 / 0.1);
   color: white;
   user-select: text;
@@ -1081,7 +1079,7 @@ body.home {
   display: block;
   backdrop-filter: blur(15px) saturate(180%);
   -webkit-backdrop-filter: blur(15px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   box-shadow:
     inset 0 0 10px rgba(255 255 255 / 0.2),
@@ -1104,10 +1102,9 @@ body.home {
   bottom: 15px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.15);
-  backdrop-filter: blur(10px) saturate(160%);
-  -webkit-backdrop-filter: blur(10px) saturate(160%);
+  background: rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(6px) saturate(160%);
+  -webkit-backdrop-filter: blur(6px) saturate(160%);
   padding: 8px 24px;
   border-radius: 50px;
   color: #fff;
@@ -1115,10 +1112,11 @@ body.home {
   font-weight: 700;
   letter-spacing: 0px;
   text-shadow: 0 2px 6px rgba(0,0,0,0.15);
-  transition: background-color 0.4s ease, transform 0.4s ease;
+  transition: background-color 0.4s ease, transform 0.3s ease;
   box-shadow:
-    0 4px 16px rgba(0, 0, 0, 0.3),
-    inset 0 0 10px rgba(255 255 255 / 0.15);
+    0 4px 22px rgba(0, 0, 0, 0.2),
+    0 6px 42px rgba(0, 0, 0, 0.5),
+    inset 0 2px 8px rgba(255 255 255 / 0.3);
 }
 
 /* --- Hover --- */
@@ -1128,28 +1126,28 @@ body.home {
 }
 
 .portfolio-card:hover img {
-  filter: brightness(0.8);
+  filter: brightness(0.76);
   transform: scale(1.03);
 }
 
 .portfolio-card:hover span {
-  background: rgba(255,255,255,0.2);
-  transform: translateX(-50%) translateY(-4px);
+  background: rgba(255, 255, 255, 0.05);
+  transform: translateX(-50%) translateY(-2px);
+  backdrop-filter: blur(6px) saturate(180%);
+  -webkit-backdrop-filter: blur(6px) saturate(180%);
 }
-
-/* --- Responsive --- */
 
 @media (max-width: 900px) {
   .portfolio-buttons {
-    padding: 0 10px;    /* marges plus petites pour laisser plus de place */
-    gap: 15px;          /* espace réduit entre les cartes */
+    padding: 0 10px; 
+    gap: 15px;     
   }
 
   .portfolio-card {
-    width: 100%;        /* carte prend toute la largeur disponible */
+    width: 100%;     
     aspect-ratio: 12 / 10;
-    max-width: none;    /* supprime les restrictions */
-    height: 180px;      /* hauteur adaptée */
+    max-width: none; 
+    height: 180px; 
     margin: 0 auto;
     border-radius: 20px;
   }
@@ -1169,15 +1167,15 @@ body.home {
 
 @media (max-width: 700px) {
   .portfolio-buttons {
-    padding: 0px;    /* marges plus petites pour laisser plus de place */
-    gap: 15px;          /* espace réduit entre les cartes */
+    padding: 0px;    
+    gap: 15px;          
   }
 
   .portfolio-card {
-    width: 100%;        /* carte prend toute la largeur disponible */
+    width: 100%;       
     aspect-ratio: 12 / 10;
-    max-width: none;    /* supprime les restrictions */
-    height: 160px;      /* hauteur adaptée */
+    max-width: none;  
+    height: 160px;  
     margin: 0 auto;
   }
 
@@ -1194,11 +1192,10 @@ body.home {
   }
 }
 
-/* Définition d'une apparition subtile */
 @keyframes softFadeInUp {
   0% {
     opacity: 0;
-    transform: translateY(10px); /* Distance réduite pour moins de "violence" */
+    transform: translateY(10px);
   }
   100% {
     opacity: 1;
@@ -1208,8 +1205,7 @@ body.home {
 
 .portfolio-card {
   opacity: 0;
-  /* Utilisation d'un timing plus long (0.8s) et d'un bézier fluide */
-  animation: softFadeInUp 1.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation: softFadeInUp 1.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
 
 /* Décalage temporel (Stagger) */
