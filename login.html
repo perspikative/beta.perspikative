@@ -1,5 +1,5 @@
 ---
-permalink: /login2026
+permalink: /login
 ---
 
 <!DOCTYPE html>
@@ -827,7 +827,7 @@ permalink: /login2026
     </div>
   </div>
 
-  <a class="back-home" href="/">
+  <a class="back-home" id="backHomeLink" href="/">
     <img src="/icons/arrow-left-lightbox.svg" alt="" width="20" height="20" />
     Retourner à l'accueil
   </a>
@@ -1008,7 +1008,7 @@ permalink: /login2026
 
     try {
       await sendEmailVerification(pendingVerifyUser, {
-        url: 'https://perspikative.com/login2026'
+        url: 'https://perspikative.com/login'
       });
     } catch (err) {
       // on ignore silencieusement (le cooldown reste, l'UI ne change pas)
@@ -1068,7 +1068,7 @@ permalink: /login2026
       const credential = await createUserWithEmailAndPassword(auth, email, pwd);
 
       await sendEmailVerification(credential.user, {
-        url: 'https://perspikative.com/login2026'
+        url: 'https://perspikative.com/login'
       });
 
       pendingVerifyUser = credential.user;
@@ -1125,7 +1125,6 @@ permalink: /login2026
   const cpUsernameInput      = document.getElementById('cp-username');
   const cpUsernameStatus     = document.getElementById('cpUsernameStatus');
   const cpDisplayNameInput   = document.getElementById('cp-displayname');
-  const logoWrap             = document.querySelector('.logo-wrap');
 
   const RESERVED_USERNAMES = new Set([
     "login", "profile", "account", "admin", "search", "rechercher",
@@ -1222,9 +1221,20 @@ permalink: /login2026
 
   function showCompleteProfile(user) {
     completeProfileUser = user;
-    if (logoWrap) logoWrap.style.display = 'none';
     mainCard.style.display = 'none';
     completeProfileCard.classList.add('visible');
+
+    const backHomeLink = document.getElementById('backHomeLink');
+    if (backHomeLink) backHomeLink.style.display = 'none';
+
+    // pré-remplissage sympa : partie locale de l'e-mail comme suggestion,
+    // et displayName existant (ex: venant de Google) si présent
+    if (!cpUsernameInput.value && user.email) {
+      cpUsernameInput.value = normalizeUsername(user.email.split('@')[0]).replace(/[^a-z0-9_]/g, '').slice(0, 20);
+    }
+    if (!cpDisplayNameInput.value) {
+      cpDisplayNameInput.value = user.displayName || '';
+    }
   }
 
   completeProfileForm.addEventListener('submit', async e => {
