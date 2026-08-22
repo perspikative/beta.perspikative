@@ -231,7 +231,7 @@
 
     this._buildDisplacementMap(w, h);
 
-    const value = `url(#${this.filterId}) blur(${this.blur}px) contrast(1.02) saturate(1.16)`;
+    const value = `url(#${this.filterId}) blur(${this.blur}px) contrast(1.02) saturate(1.08)`;
     this.el.style.backdropFilter = value;
     this.el.style.webkitBackdropFilter = value;
   };
