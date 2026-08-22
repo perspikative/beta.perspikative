@@ -1152,7 +1152,7 @@ body.home {
     max-width: none; 
     height: 180px; 
     margin: 0 auto;
-    border-radius: 20px;
+    border-radius: 22px;
   }
 
   .portfolio-card span {
@@ -1186,6 +1186,7 @@ body.home {
   .portfolio-card span {
     font-size: 1.14rem;
     padding: 7px 16px;
+    letter-spacing: -0.4px;
   }
 
   main.portfolio-page {
