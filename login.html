@@ -422,7 +422,7 @@ permalink: /login
       cursor: pointer;
       position: relative;
       overflow: hidden;
-      transition: transform 0.18s, box-shadow var(--transition);
+      transition: transform 0.18s, box-shadow var(--transition), opacity 0.3s ease, filter 0.3s ease;
       box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
       margin-top: 0.4rem;
     }
@@ -440,26 +440,56 @@ permalink: /login
     .btn-primary:hover::before { opacity: 1; }
     .btn-primary:active { transform: translateY(0); }
 
+    /* assombri tant que le formulaire n'est pas valide (ex: inscription) */
+    .btn-primary:disabled {
+      opacity: 0.45;
+      filter: saturate(0.6);
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
     /* loading state */
     .btn-primary.loading {
       pointer-events: none;
       opacity: 0.7;
     }
 
+    /* spinner (repris de .loader-spinner dans style.css, réduit pour tenir
+       discrètement dans un bouton plutôt qu'en plein écran de chargement) */
     .btn-primary .spinner {
       display: none;
-      width: 16px; height: 16px;
-      border: 2px solid rgba(6,26,20,0.3);
-      border-top-color: #061a14;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
-      animation: spin 0.6s linear infinite;
+      --thickness: 2px;
+      background: conic-gradient(from 0deg, transparent 30%, rgba(6, 26, 20, 1) 100%);
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - var(--thickness)), #000 calc(100% - var(--thickness) + 0.5px));
+              mask: radial-gradient(farthest-side, transparent calc(100% - var(--thickness)), #000 calc(100% - var(--thickness) + 0.5px));
+      position: relative;
       margin: 0 auto;
+      will-change: transform;
+      animation: lb-spin 0.7s cubic-bezier(0.5, 0.12, 0.46, 0.8) infinite;
+    }
+
+    /* bout arrondi parfaitement aligné, comme .loader-spinner::after */
+    .btn-primary .spinner::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: calc(50% - var(--thickness) / 2);
+      width: var(--thickness);
+      height: var(--thickness);
+      background: #061a14;
+      border-radius: 50%;
     }
 
     .btn-primary.loading .btn-label { display: none; }
     .btn-primary.loading .spinner { display: block; }
 
-    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes lb-spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
 
     /* ─── ERROR MESSAGE ─── */
     .form-error {
@@ -1099,6 +1129,7 @@ permalink: /login
   }
 
   // ─── EXIGENCES MOT DE PASSE (inscription) ───
+  const regEmailInput    = document.getElementById('reg-email');
   const regPwdInput      = document.getElementById('reg-pwd');
   const pwdRequirements  = document.getElementById('pwdRequirements');
   const registerBtn      = registerForm.querySelector('.btn-primary');
@@ -1129,10 +1160,31 @@ permalink: /login
       if (li) li.classList.toggle('is-met', checks[key]);
     });
 
-    registerBtn.disabled = !isPwdValid(pwd);
-
     return checks;
   }
+
+  // Le bouton "Créer mon compte" reste assombri (disabled) tant que l'e-mail
+  // n'est pas valide OU que le mot de passe ne remplit pas toutes les
+  // exigences — c'est-à-dire tant qu'il y a une erreur, quelle qu'elle soit.
+  // On revalide aussi ici emailTakenFlag : si Firebase a répondu
+  // "auth/email-already-in-use" au dernier essai, on garde le bouton
+  // désactivé jusqu'à ce que l'utilisateur modifie l'adresse saisie.
+  let emailTakenFlag = false;
+
+  function updateRegisterFormValidity() {
+    const emailOk = isValidEmail(regEmailInput.value.trim()) && !emailTakenFlag;
+    const pwdOk   = isPwdValid(regPwdInput.value);
+    registerBtn.disabled = !(emailOk && pwdOk);
+  }
+
+  regEmailInput.addEventListener('input', () => {
+    // toute modification de l'e-mail invalide le flag "déjà utilisé" du
+    // précédent essai : on laisse une nouvelle chance tant qu'il n'a pas
+    // été re-vérifié auprès de Firebase (au prochain submit)
+    emailTakenFlag = false;
+    clearError(registerError);
+    updateRegisterFormValidity();
+  });
 
   let pwdReqHeightTimer = null;
   const PWD_REQ_TRANSITION_MS = 400; // légèrement au-dessus de --transition (0.38s) par sécurité
@@ -1162,8 +1214,8 @@ permalink: /login
     pwdReqHeightTimer = setTimeout(recalcCurrentHeight, PWD_REQ_TRANSITION_MS);
   }
 
-  // Bouton désactivé par défaut : le champ mot de passe est vide au chargement
-  registerBtn.disabled = true;
+  // État initial : e-mail et mot de passe vides → bouton désactivé
+  updateRegisterFormValidity();
 
   regPwdInput.addEventListener('focus', () => {
     showPwdRequirements();
@@ -1171,6 +1223,7 @@ permalink: /login
 
   regPwdInput.addEventListener('input', () => {
     updatePwdRequirementsUI();
+    updateRegisterFormValidity();
     // dès qu'il y a du texte, la checklist reste visible même après un blur
     if (regPwdInput.value.length > 0) {
       showPwdRequirements();
@@ -1214,8 +1267,25 @@ permalink: /login
   });
 
   // ─── CONNEXION ───
-  const loginForm  = document.getElementById('loginForm');
-  const loginError = document.getElementById('loginError');
+  const loginForm     = document.getElementById('loginForm');
+  const loginError    = document.getElementById('loginError');
+  const loginEmailInput = document.getElementById('login-email');
+  const loginPwdInput   = document.getElementById('login-pwd');
+  const loginBtn         = loginForm.querySelector('.btn-primary');
+
+  // Le bouton "Se connecter" reste assombri tant que l'e-mail n'est pas
+  // valide ou que le mot de passe est vide — pas de vérification de
+  // conformité ici (contrairement à l'inscription) puisqu'un mot de passe
+  // existant peut avoir été créé avant l'ajout de ces règles.
+  function updateLoginFormValidity() {
+    const emailOk = isValidEmail(loginEmailInput.value.trim());
+    const pwdOk   = loginPwdInput.value.length > 0;
+    loginBtn.disabled = !(emailOk && pwdOk);
+  }
+
+  updateLoginFormValidity();
+  loginEmailInput.addEventListener('input', updateLoginFormValidity);
+  loginPwdInput.addEventListener('input', updateLoginFormValidity);
 
   loginForm.addEventListener('submit', async e => {
     e.preventDefault();
@@ -1279,6 +1349,10 @@ permalink: /login
       setLoading(btn, false);
     } catch (err) {
       showError(registerError, firebaseErrMsg(err.code));
+      if (err.code === 'auth/email-already-in-use') {
+        emailTakenFlag = true;
+        updateRegisterFormValidity();
+      }
       setLoading(btn, false);
     }
   });
@@ -1479,6 +1553,7 @@ permalink: /login
 
     if (email) {
       loginForm.email.value = email;
+      updateLoginFormValidity();
     }
 
     const banner = document.getElementById('verifiedBanner');
