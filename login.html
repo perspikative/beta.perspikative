@@ -1028,14 +1028,16 @@ permalink: /login
 
   function firebaseErrMsg(code) {
     const map = {
-      'auth/user-not-found':       'Aucun compte trouvé avec cet e-mail.',
-      'auth/wrong-password':       'Mot de passe incorrect.',
-      'auth/invalid-credential':   'E-mail ou mot de passe incorrect.',
-      'auth/email-already-in-use': 'Cet e-mail est déjà utilisé.',
-      'auth/weak-password':        'Mot de passe trop faible (6 caractères min.).',
-      'auth/invalid-email':        'Adresse e-mail invalide.',
-      'auth/popup-closed-by-user': 'Connexion Google annulée.',
-      'auth/too-many-requests':    'Trop de tentatives. Réessaie dans quelques minutes.',
+      'auth/user-not-found':         'Aucun compte trouvé avec cet e-mail.',
+      'auth/wrong-password':         'Mot de passe incorrect.',
+      'auth/invalid-credential':     'E-mail ou mot de passe incorrect.',
+      'auth/email-already-in-use':   'Cet e-mail est déjà utilisé.',
+      'auth/weak-password':          'Mot de passe trop faible (6 caractères min.).',
+      'auth/invalid-email':          'Adresse e-mail invalide.',
+      'auth/popup-closed-by-user':   'Connexion Google annulée.',
+      'auth/too-many-requests':      'Trop de tentatives. Réessaie dans quelques minutes.',
+      'auth/network-request-failed': 'Vérifie ta connexion Internet.',
+      'auth/user-disabled':          'Ce compte a été désactivé.',
     };
     return map[code] || 'Une erreur est survenue. Réessaie.';
   }
