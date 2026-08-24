@@ -31,7 +31,7 @@
     --search-float-btn-img-shadow: -2px 2px 6px rgba(0, 0, 0, 0.2);
     --mobile-menu-bg: rgba(255, 255, 255, 0.06);
     --mobile-menu-shadow: -2px 10px 84px rgba(0, 0, 0, 0.2), inset 0 0 13px rgba(255, 255, 255, 0.2);
-    --mobile-menu-text-shadow: -1px 2px 32px rgba(0, 0, 0, 0.16);
+    --mobile-menu-text-shadow: -1px 2px 30px rgba(0, 0, 0, 0.16);
     --filter-panel-bg: rgba(83, 173, 154, 1);
     --mobile-nav-icon-img: 0 3px 12px rgba(0, 0, 0, 0.4);
     --profile-pic-edit-hint-bg: rgba(255, 255, 255, 0.85);
@@ -530,8 +530,6 @@ body.menu-open .blur-overlay {
   color: white;
   text-decoration: none;
   overflow: hidden;
-  backdrop-filter: saturate(180%);
-  -webkit-backdrop-filter: saturate(180%);
   border: none;
   box-shadow:
     0 2px 16px rgba(0 0 0 / 0.1),
@@ -542,13 +540,13 @@ body.menu-open .blur-overlay {
   content: "";
   position: absolute;
   inset: 0;
-  background-color: rgba(255, 255, 255, 0.02);
+  background-color: rgba(255, 255, 255, 0.06);
   transition: background-color 0.2s ease;
   z-index: -1;
 }
 
 .mobile-menu ul li a:hover::before {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.12);
 }
 
 /* --- Afficher le menu quand le checkbox est coché --- */
@@ -6412,3 +6410,5 @@ body {
     -webkit-transition: none;
   }
 }
+
+
