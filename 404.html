@@ -12,6 +12,28 @@ permalink: /404
 
 <meta name="robots" content="noindex, follow">
 
+<script>
+  // ============================= REDIRECTION /@username =============================
+  // GitHub Pages sert cette page 404 pour toute URL qui ne correspond à aucun
+  // fichier statique, y compris /@alice (le profil public est une page Jekyll
+  // unique servie sous /@, pas un fichier par utilisateur).
+  //
+  // Si le chemin ressemble à /@quelquechose, on stocke ce chemin d'origine
+  // dans sessionStorage puis on redirige immédiatement vers /@ : cette page
+  // relit sessionStorage (voir public-profile.js) pour savoir quel profil
+  // afficher, et restaure l'URL propre /@alice avec history.replaceState.
+  //
+  // Placé tout en haut du <head>, avant tout le reste, pour rediriger le
+  // plus vite possible et éviter de laisser la page 404 s'afficher.
+  (function () {
+    var path = window.location.pathname;
+    if (/^\/@[^/]+\/?$/.test(path)) {
+      sessionStorage.setItem("prspk_pending_username_path", path);
+      window.location.replace("/@");
+    }
+  })();
+</script>
+
 <link rel="icon" type="image/png" href="/favicon-light.png" media="(prefers-color-scheme: dark)">
 <link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: light)">
 
