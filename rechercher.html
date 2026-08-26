@@ -103,6 +103,95 @@ permalink: /rechercher
         margin-left: 0rem;
       }
     }
+
+    .search-bubble {
+      position: relative;
+    }
+
+    .search-input {
+      -webkit-mask-image: linear-gradient(to right, #000 0, #000 100%);
+      mask-image: linear-gradient(to right, #000 0, #000 100%);
+      transition: padding-right 0.25s ease, -webkit-mask-image 0.25s ease, mask-image 0.25s ease;
+    }
+
+    .search-input.is-overflowing {
+      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 22px, #000 100%);
+      mask-image: linear-gradient(to right, transparent 0, #000 22px, #000 100%);
+    }
+
+    .search-input.is-overflowing.is-scrolled-back {
+      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 22px, #000 calc(100% - 22px), transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0, #000 22px, #000 calc(100% - 22px), transparent 100%);
+    }
+
+    .search-bubble.has-clear .search-input {
+      padding-right: 30px;
+      -webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 40px), transparent 100%);
+      mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 40px), transparent 100%);
+    }
+
+    .search-bubble.has-clear .search-input.is-overflowing {
+      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 32px, #000 calc(100% - 40px), transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0, #000 32px, #000 calc(100% - 40px), transparent 100%);
+    }
+
+    .search-bubble.has-clear .search-input.is-overflowing.is-scrolled-back {
+      -webkit-mask-image: linear-gradient(to right, transparent 0, #000 32px, #000 calc(100% - 52px), transparent calc(100% - 40px));
+      mask-image: linear-gradient(to right, transparent 0, #000 32px, #000 calc(100% - 52px), transparent calc(100% - 40px));
+    }
+
+    .search-clear-btn {
+      position: absolute;
+      right: 0.65rem;
+      top: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: transparent;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(-50%) scale(0.6);
+      transition: opacity 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  visibility 0.25s;
+    }
+
+    .search-bubble.has-clear .search-clear-btn {
+      opacity: 0.65;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(-50%) scale(1);
+    }
+    
+    .search-bubble.has-clear .search-clear-btn:hover {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateY(-50%) scale(1);
+    }
+
+    .search-clear-btn img {
+      width: 34px;
+      height: 34px;
+      pointer-events: none;
+    }
+    
+    .search-clear-btn:hover,
+    .search-clear-btn:focus-visible {
+      opacity: 1;
+      outline: none;
+    }
+
+    .search-bubble.has-clear .search-clear-btn:active {
+      transform: translateY(-50%) scale(0.85);
+    }
   </style>
 </head>
 
@@ -186,6 +275,9 @@ permalink: /rechercher
       <div class="search-bubble">
         <img src="/icons/rechercher.svg" alt="Loupe" class="search-logo">
         <input type="text" id="searchInput" placeholder="Rechercher..." class="search-input" autocomplete="off" autofocus>
+        <button type="button" id="clearSearchInput" class="search-clear-btn" aria-label="Effacer la recherche">
+          <img src="/icons/cross-small.svg" alt="">
+        </button>
       </div>
 
       <div id="searchResults"></div>
@@ -213,17 +305,17 @@ permalink: /rechercher
       <a href="https://linktr.ee/perspikative" target="_blank" aria-label="Linktree">
         <img src="/icons/linktree.svg" alt="Linktree">
       </a>
-      <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" aria-label="Chaîne WhatsApp">
+     <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" aria-label="Chaîne WhatsApp">
         <img src="/icons/whatsapp-channel.svg" alt="Chaîne WhatsApp">
       </a>
       <a href="https://www.instagram.com/perspikative" target="_blank" aria-label="Instagram">
         <img src="/icons/instagram.svg" alt="Instagram">
       </a>
+      <a href="https://discord.com/invite/c5w9ucgDZH" target="_blank" aria-label="Discord">
+        <img src="/icons/discord.svg" alt="Discord">
+      </a>
       <a href="https://youtube.com/@perspikative" target="_blank" aria-label="YouTube">
         <img src="/icons/youtube.svg" alt="YouTube">
-      </a>
-      <a href="https://www.pinterest.com/perspikative" target="_blank" aria-label="Pinterest">
-        <img src="/icons/pinterest.svg" alt="Pinterest">
       </a>
     </div>
 
@@ -466,6 +558,8 @@ permalink: /rechercher
     const historyList = document.getElementById('searchHistoryList');
     const clearHistoryBtn = document.getElementById('clearSearchHistory');
     const popularList = document.getElementById('popularList');
+    const clearSearchInputBtn = document.getElementById('clearSearchInput');
+    const searchBubble = document.querySelector('.search-bubble');
 
     const SEARCH_HISTORY_KEY = 'perspikative_search_history';
     const SEARCH_HISTORY_LIMIT = 5;
@@ -680,7 +774,15 @@ permalink: /rechercher
       }
     }
 
+    function updateInputOverflow() {
+      searchInput.classList.toggle('is-overflowing', searchInput.scrollWidth > searchInput.clientWidth + 1);
+      searchInput.classList.toggle('is-scrolled-back', searchInput.scrollLeft + searchInput.clientWidth < searchInput.scrollWidth - 1);
+    }
+
     searchInput.addEventListener('input', function(e) {
+      searchBubble.classList.toggle('has-clear', e.target.value !== '');
+      updateInputOverflow();
+      requestAnimationFrame(updateInputOverflow);
       const rawValue = e.target.value.trim();
       if (rawValue === '') {
         if (noResultTimer) clearTimeout(noResultTimer);
@@ -691,6 +793,25 @@ permalink: /rechercher
       }
       defaultViews.hidden = true; // Cache Populaire + Historique pendant la recherche
       runSearch(rawValue.toLowerCase(), e.target.value);
+    });
+
+    searchInput.addEventListener('scroll', updateInputOverflow);
+    searchInput.addEventListener('click', updateInputOverflow);
+    searchInput.addEventListener('keyup', updateInputOverflow);
+
+    searchBubble.classList.toggle('has-clear', searchInput.value !== '');
+    updateInputOverflow();
+    window.addEventListener('resize', updateInputOverflow);
+
+    clearSearchInputBtn.addEventListener('click', function() {
+      searchInput.value = '';
+      searchBubble.classList.remove('has-clear');
+      updateInputOverflow();
+      if (noResultTimer) clearTimeout(noResultTimer);
+      resultsContainer.innerHTML = '';
+      defaultViews.hidden = false;
+      renderSearchHistory();
+      searchInput.focus();
     });
 
     searchInput.addEventListener('keydown', function(e) {
