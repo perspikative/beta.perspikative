@@ -1592,10 +1592,7 @@ main.creations {
   display: flex;
   align-items: center;
   background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   padding: 12px 24px 12px 15px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 40px;
   width: 100%;
   transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
@@ -1729,7 +1726,7 @@ main.creations {
   }
   
   .search-bubble {
-    padding: 9px 10px 9px 15px
+    padding: 11px 10px 9px 15px
   }
   
   .search-input {
@@ -3395,63 +3392,59 @@ body.is-loading {
 
 /* ============================= 8. RECHERCHER ============================= */
 
-
-/* Container pour centrer le message et le bouton */
 .no-results-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 20px;
-    gap: 20px;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  gap: 20px;
+  text-align: center;
 }
 
 .no-results-text {
-    color: white;
-    opacity: 0.8;
-    font-size: 1.1rem;
+  color: white;
+  opacity: 0.8;
+  font-size: 1.1rem;
 }
 
-/* Style du bouton "Rechercher autre chose" */
 .btn-search-again {
-    display: inline-block;
-    padding: 8px 14px;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
-    text-decoration: none;
-    border-radius: 30px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    opacity: 0; /* Caché par défaut */
-    box-shadow:
-      inset 0 0 10px rgba(255, 255, 255, 0.2),
-      0 4px 12px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  padding: 8px 14px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  text-decoration: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  opacity: 0;
+  box-shadow:
+    inset 0 0 10px rgba(255, 255, 255, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .btn-search-again:hover {
-    transform: translateY(-2px);
-    background-color: rgba(255, 255, 255, 0.15);
-    box-shadow:
-      inset 0 0 10px rgba(255, 255, 255, 0.3),
-      0 6px 15px rgba(0, 0, 0, 0.15);
+  opacity: 1;
+  transform: translateY(-2px);
+  background-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 0 10px rgba(255, 255, 255, 0.3),
+    0 6px 15px rgba(0, 0, 0, 0.15);
 }
 
-/* Animation de Fade In en 3 secondes */
 .fade-in-btn {
-    animation: fadeInAnimation 1s forwards;
+  animation: fadeInAnimation 1s forwards;
 }
 
 @keyframes fadeInAnimation {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 
@@ -3459,11 +3452,7 @@ body.is-loading {
 
 
 body {
-  /* Permet au contenu de prendre toute la hauteur, même sous les touches */
   min-height: 100vh;
-  
-  /* Ajoute une marge automatique en bas pour ne pas que ton texte 
-     soit illisible SOUS les boutons, tout en gardant le fond transparent */
   padding-bottom: env(safe-area-inset-bottom);
 }
 
@@ -3473,7 +3462,6 @@ body {
 
 
 
-/* --- SECTION PAR DÉFAUT (Historique + Populaire) --- */
 .section-title {
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.5);
@@ -3543,7 +3531,6 @@ body {
 
 
 
-/* Style commun des images décoratives */
 .p-img {
   position: absolute;
   height: auto;
