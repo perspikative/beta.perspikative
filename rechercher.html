@@ -192,6 +192,25 @@ permalink: /rechercher
     .search-bubble.has-clear .search-clear-btn:active {
       transform: translateY(-50%) scale(0.85);
     }
+
+    .search-page-container {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.35s ease, transform 0.35s ease;
+    }
+
+    .search-page-container.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .search-page-container {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+    }
   </style>
 </head>
 
@@ -835,6 +854,9 @@ permalink: /rechercher
       if (!item) return;
       const term = item.dataset.term || '';
       searchInput.value = term;
+      searchBubble.classList.toggle('has-clear', searchInput.value !== '');
+      updateInputOverflow();
+      requestAnimationFrame(updateInputOverflow);
       defaultViews.hidden = true; // On cache les vues par défaut
       runSearch(term.toLowerCase(), term);
       addToSearchHistory(term);
@@ -849,6 +871,9 @@ permalink: /rechercher
     // Initialisation
     renderPopularContent();
     renderSearchHistory();
+    requestAnimationFrame(function() {
+      document.querySelector('.search-page-container').classList.add('is-visible');
+    });
 
     const menuToggle = document.getElementById('menuToggle');
     if(menuToggle) {
