@@ -124,9 +124,15 @@ function updateMeta({ title, description, image, url, indexable }) {
 // Résolution du username : usernames/{usernameNormalized} contient l'uid
 // propriétaire (c'est ce document qui fait foi pour l'unicité, voir
 // profile.js et les Firestore rules). On lit ensuite users/{uid} pour les
-// données d'affichage. Deux lectures, mais chacune est un accès direct par
-// ID (pas de requête indexée nécessaire, et lisible même sans être loggé
-// grâce à "allow read: if true" sur usernames/{username}).
+// données d'affichage complètes.
+//
+// Cas important : si le profil est privé (isPublic != true), les règles
+// Firestore refusent carrément la lecture de users/{uid} pour un visiteur
+// non-propriétaire (permission-denied, pas juste un doc vide). On ne peut
+// donc PAS distinguer "profil privé" de "n'existe pas" avec cette seule
+// lecture. On retombe alors sur publicProfiles/{uid} (toujours lisible)
+// pour confirmer que le compte existe bel et bien avant d'afficher l'état
+// "Profil privé" plutôt qu'un 404 trompeur.
 // -----------------------------------------------------------------------
 async function findUserByUsername(usernameNormalized) {
     const db = window.__prspkDb;
@@ -142,11 +148,41 @@ async function findUserByUsername(usernameNormalized) {
     if (!uid) return null;
 
     const userRef = fns.doc(db, "users", uid);
-    const userSnap = await fns.getDoc(userRef);
 
-    if (!userSnap.exists()) return null;
+    try {
+        const userSnap = await fns.getDoc(userRef);
+        if (!userSnap.exists()) return null;
 
-    return { uid, ...userSnap.data() };
+        // users/{uid} ne stocke jamais la photo de profil : c'est
+        // publicProfiles/{uid}.photoURL, dans Firestore, qui fait foi
+        // partout dans le projet (voir aussi profile.js). On la récupère
+        // ici pour que le profil public affiche toujours la photo à jour,
+        // y compris quand elle vient d'être changée.
+        let photoURL = null;
+        try {
+            const publicSnap = await fns.getDoc(fns.doc(db, "publicProfiles", uid));
+            if (publicSnap.exists()) photoURL = publicSnap.data().photoURL || null;
+        } catch (photoErr) {
+            console.error("Erreur de lecture de la photo publique :", photoErr);
+        }
+
+        return { uid, ...userSnap.data(), photoURL };
+    } catch (err) {
+        // Lecture refusée : très probablement un profil privé (règle
+        // Firestore). On vérifie via publicProfiles/{uid} (toujours
+        // lisible) que le compte existe réellement avant de conclure.
+        const publicRef = fns.doc(db, "publicProfiles", uid);
+        const publicSnap = await fns.getDoc(publicRef).catch(() => null);
+
+        if (publicSnap && publicSnap.exists()) {
+            return { uid, isPublic: false, username: usernameNormalized };
+        }
+
+        // Ni users/{uid} lisible, ni publicProfiles/{uid} : on ne peut
+        // pas confirmer que le compte existe, on remonte l'erreur telle
+        // quelle pour que l'appelant décide (404).
+        throw err;
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -240,16 +276,33 @@ async function init() {
     }
 }
 
-// On attend que firebase-init.js ait fini de s'initialiser. Comme il expose
-// window.__prspkDb / __prspkFire de façon synchrone au chargement du module
-// (avant même l'auth), un petit setTimeout(0) suffit à laisser le temps au
-// script type="module" de s'exécuter avant le nôtre (chargé juste après).
-if (window.__prspkDb) {
-    init();
+// On attend que firebase-init.js ait fini de s'initialiser. window.__prspkDb
+// est exposé de façon asynchrone (import de modules + init Firebase), donc
+// un setTimeout(0) ne suffit pas de façon fiable : selon la vitesse de
+// chargement des modules, __prspkDb peut ne pas encore exister à ce
+// moment-là (d'où le besoin de rafraîchir manuellement observé en prod).
+// On poll donc jusqu'à ce qu'il soit disponible, avec un timeout de secours.
+function waitForFirebase(callback, { intervalMs = 30, timeoutMs = 8000 } = {}) {
+    if (window.__prspkDb) {
+        callback();
+        return;
+    }
+
+    const start = Date.now();
+    const timer = setInterval(() => {
+        if (window.__prspkDb) {
+            clearInterval(timer);
+            callback();
+        } else if (Date.now() - start > timeoutMs) {
+            clearInterval(timer);
+            console.error("Firebase n'a pas pu s'initialiser à temps.");
+            goTo404();
+        }
+    }, intervalMs);
+}
+
+if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => waitForFirebase(init));
 } else {
-    window.addEventListener("DOMContentLoaded", () => {
-        // Laisse une micro-tâche pour que le module firebase-init.js placé
-        // juste avant dans le HTML ait pu s'exécuter.
-        setTimeout(init, 0);
-    });
+    waitForFirebase(init);
 }

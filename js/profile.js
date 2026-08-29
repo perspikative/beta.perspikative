@@ -137,6 +137,23 @@ async function saveUserDoc(uid, data) {
 }
 
 // -----------------------------------------------------------------------
+// Profil public minimal (displayName + photoURL uniquement), lisible par
+// tout le monde même si le profil complet (users/{uid}) est privé. C'est
+// ce document que script-comments.js consulte pour garder pseudo/photo à
+// jour dans les commentaires, quel que soit isPublic.
+// -----------------------------------------------------------------------
+async function syncPublicProfile(uid, { displayName, photoURL } = {}) {
+    const { db, fns } = getFire();
+    if (!db || !fns) return;
+    const data = {};
+    if (displayName !== undefined) data.displayName = displayName;
+    if (photoURL !== undefined) data.photoURL = photoURL;
+    if (Object.keys(data).length === 0) return;
+    const ref = fns.doc(db, "publicProfiles", uid);
+    await fns.setDoc(ref, data, { merge: true });
+}
+
+// -----------------------------------------------------------------------
 // Username : normalisation, validation, vérification d'unicité
 // -----------------------------------------------------------------------
 function normalizeUsername(raw) {
@@ -286,15 +303,31 @@ onAuthStateChanged(auth, async (user) => {
 
     currentUser = user;
 
-    const currentPhoto = user.photoURL || DEFAULT_AVATAR;
-    profilePic.src = currentPhoto;
     displayName.textContent = user.displayName || "Utilisateur";
     email.textContent = user.email || "";
-    selectedAvatar = currentPhoto;
 
     // Section Compte : e-mail (2e affichage) + ID Perspikative (UID Firebase)
     accountEmail.textContent = user.email || "—";
     accountId.textContent = user.uid;
+
+    // Photo de profil : lue depuis publicProfiles/{uid}.photoURL (Firestore),
+    // seule source de vérité pour la photo dans tout le projet (voir aussi
+    // public-profile.js). On n'écrit jamais l'avatar par défaut ici si le
+    // champ est déjà absent/vide : ça laisse la porte ouverte à une photo
+    // personnalisée posée à la main dans Firestore (cas du compte admin),
+    // sans qu'un simple chargement de page vienne l'écraser.
+    try {
+        const { db, fns } = getFire();
+        if (db && fns) {
+            const publicSnap = await fns.getDoc(fns.doc(db, "publicProfiles", user.uid));
+            const storedPhoto = publicSnap.exists() ? publicSnap.data().photoURL : null;
+            const currentPhoto = storedPhoto || DEFAULT_AVATAR;
+            profilePic.src = currentPhoto;
+            selectedAvatar = currentPhoto;
+        }
+    } catch (err) {
+        console.error("Erreur de chargement de la photo de profil :", err);
+    }
 
     // Date d'inscription : on se base sur Firestore si un doc existe déjà,
     // sinon sur la date de création du compte Firebase Auth (metadata),
@@ -498,6 +531,10 @@ editSaveBtn.addEventListener("click", async () => {
         // été écrit sur users/{uid} par saveUsername() ci-dessus, dans la
         // même transaction que la réservation).
         await saveUserDoc(currentUser.uid, { bio: newBio });
+
+        // Profil public minimal (pour que les commentaires existants de cet
+        // utilisateur affichent le nouveau nom, même si son profil est privé).
+        await syncPublicProfile(currentUser.uid, { displayName: newName });
 
         // Rafraîchissement de l'affichage
         displayName.textContent = newName;
@@ -804,7 +841,10 @@ function openAvatarLightbox() {
 
     buildCoverflow();
 
-    const currentPhoto = currentUser.photoURL || DEFAULT_AVATAR;
+    // selectedAvatar reflète la photo Firestore (publicProfiles/{uid}), la
+    // même source que celle affichée sur la carte profil — on ne relit
+    // plus currentUser.photoURL (Auth) ici, pour rester cohérent.
+    const currentPhoto = selectedAvatar || DEFAULT_AVATAR;
     savedAvatarIndex = avatarIndexFromPath(currentPhoto);
     coverflowIndex = savedAvatarIndex;
 
@@ -930,6 +970,10 @@ avatarLightboxSave.addEventListener("click", async () => {
 
     try {
         await updateProfile(currentUser, { photoURL: newPhoto });
+
+        // Profil public minimal (pour que les commentaires existants de cet
+        // utilisateur affichent la nouvelle photo, même si son profil est privé).
+        await syncPublicProfile(currentUser.uid, { photoURL: newPhoto });
 
         // Rafraîchissement de l'affichage : la photo de la carte profil (et
         // toute autre référence locale) reflète immédiatement le nouvel avatar.
