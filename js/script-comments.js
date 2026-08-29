@@ -216,6 +216,70 @@
   }
 
   // ══════════════════════════════════════════════════════════════════════════
+  // CACHE DES PROFILS (pseudo/photo à jour, indépendamment du snapshot
+  // stocké dans chaque commentaire au moment de sa création). On va lire
+  // users/{uid} une seule fois par auteur distinct affiché, puis on
+  // réutilise le résultat en mémoire pour tous ses autres commentaires.
+  // Les valeurs pseudo/pfp stockées sur le commentaire lui-même restent en
+  // fallback (vieux commentaires, doc users/{uid} absent, etc.).
+  // ══════════════════════════════════════════════════════════════════════════
+
+  var profileCache = {}; // uid -> { pseudo, pfp } | null (déjà tenté, pas trouvé)
+
+  function fetchAuthorProfile(uid) {
+    var db   = window.__prspkDb;
+    var fire = window.__prspkFire;
+    if (!db || !fire || !uid) return Promise.resolve(null);
+
+    if (uid in profileCache) {
+      return Promise.resolve(profileCache[uid]);
+    }
+
+    var ref = fire.doc(db, 'publicProfiles', uid);
+    return fire.getDoc(ref).then(function (snap) {
+      if (!snap.exists()) {
+        profileCache[uid] = null;
+        return null;
+      }
+      var data = snap.data();
+      var profile = {
+        pseudo: data.displayName || null,
+        pfp:    data.photoURL || null
+      };
+      profileCache[uid] = profile;
+      return profile;
+    }).catch(function (err) {
+      console.error('[Comments] Erreur lecture profil auteur :', err);
+      profileCache[uid] = null;
+      return null;
+    });
+  }
+
+  // Récupère les profils à jour pour tous les auteurs distincts d'une liste
+  // de commentaires, puis fusionne (pseudo/pfp frais > valeurs stockées).
+  function hydrateCommentsWithFreshProfiles(comments) {
+    var uids = [];
+    comments.forEach(function (c) {
+      if (c.uid && uids.indexOf(c.uid) === -1) uids.push(c.uid);
+    });
+
+    return Promise.all(uids.map(fetchAuthorProfile)).then(function (profiles) {
+      var byUid = {};
+      uids.forEach(function (uid, i) { byUid[uid] = profiles[i]; });
+
+      comments.forEach(function (c) {
+        var fresh = c.uid ? byUid[c.uid] : null;
+        if (fresh) {
+          if (fresh.pseudo) c.pseudo = fresh.pseudo;
+          if (fresh.pfp)    c.pfp    = fresh.pfp;
+        }
+      });
+
+      return comments;
+    });
+  }
+
+  // ══════════════════════════════════════════════════════════════════════════
   // CHARGEMENT DEPUIS FIREBASE
   // ══════════════════════════════════════════════════════════════════════════
 
@@ -232,11 +296,20 @@
     var q      = fire.query(colRef, fire.orderBy('createdAt', 'desc'));
 
     fire.getDocs(q).then(function (snap) {
+      var loaded = [];
       snap.forEach(function (docSnap) {
-        allComments.push(Object.assign({ id: docSnap.id }, docSnap.data()));
+        loaded.push(Object.assign({ id: docSnap.id }, docSnap.data()));
       });
+      allComments = loaded;
+
+      // Premier rendu immédiat avec les valeurs stockées (pas d'attente),
+      // puis on rafraîchit dès que les profils à jour arrivent.
       renderComments();
       updateSendAvailability();
+
+      hydrateCommentsWithFreshProfiles(loaded).then(function () {
+        renderComments();
+      });
     }).catch(function (err) {
       console.error('[Comments] Erreur chargement :', err);
       listEl.innerHTML = '<p class="lb-comments-empty">Impossible de charger les commentaires</p>';

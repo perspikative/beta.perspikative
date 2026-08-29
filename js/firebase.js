@@ -28,7 +28,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-// 🔥 GLOBAL pour ton script comments
+// GLOBAL pour ton script comments
 window.__prspkDb = db;
 window.__prspkFire = {
   collection,
@@ -43,7 +43,7 @@ window.__prspkFire = {
   serverTimestamp
 };
 
-// 👤 Auth globale
+// Auth globale
 onAuthStateChanged(auth, (user) => {
   window.__prspkUser = user;
   document.dispatchEvent(new CustomEvent('prspk:auth-ready', {

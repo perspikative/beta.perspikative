@@ -1,196 +1,61 @@
 (function () {
   'use strict';
 
-
-  /*
-   * =========================================================
-   * CONFIGURATION
-   * =========================================================
-   */
-
-  /*
-   * Petite marge de sécurité pour éviter qu'une différence
-   * de 1 ou 2 pixels due aux arrondis du navigateur fasse
-   * croire que la section est scrollable.
-   */
   const SCROLL_THRESHOLD = 2;
-
-
-  /*
-   * =========================================================
-   * INITIALISATION DU SYSTÈME
-   * =========================================================
-   */
 
   function initCommentsFade(container) {
 
-    /*
-     * Si la liste des commentaires n'existe pas,
-     * on ne fait rien.
-     */
     if (!container) return;
 
 
-    /*
-     * Empêche de lancer plusieurs calculs dans
-     * le même cycle de rendu.
-     */
     let updateScheduled = false;
-
-
-    /*
-     * =====================================================
-     * CALCUL PRINCIPAL
-     * =====================================================
-     */
 
     function updateMaskClasses() {
 
-      /*
-       * Le calcul programmé est maintenant exécuté.
-       */
       updateScheduled = false;
 
-
-      /*
-       * Nombre de pixels actuellement scrollés
-       * depuis le haut de la liste.
-       */
       const scrollTop = container.scrollTop;
 
 
-      /*
-       * Hauteur TOTALE du contenu de la liste.
-       *
-       * Elle inclut notamment les commentaires qui
-       * sont actuellement en dehors de la zone visible.
-       */
       const scrollHeight = container.scrollHeight;
 
-
-      /*
-       * Hauteur réellement visible de la liste.
-       */
       const clientHeight = container.clientHeight;
 
-
-      /*
-       * =================================================
-       * LA RÈGLE PRINCIPALE
-       * =================================================
-       *
-       * Si le contenu est plus grand que la zone visible,
-       * alors la liste est scrollable.
-       *
-       * Sinon, elle ne l'est pas.
-       */
       const isScrollable =
         scrollHeight > clientHeight + SCROLL_THRESHOLD;
 
-
-      /*
-       * On supprime toujours les anciennes classes
-       * de position avant de recalculer leur état.
-       */
       container.classList.remove(
         'at-top',
         'at-bottom'
       );
 
 
-      /*
-       * =================================================
-       * PAS SCROLLABLE
-       * =================================================
-       */
-
       if (!isScrollable) {
 
-        /*
-         * TRÈS IMPORTANT :
-         *
-         * On retire complètement la classe qui active
-         * le masque CSS.
-         *
-         * Le CSS correspondant à .is-scrollable
-         * n'est donc plus appliqué du tout.
-         */
         container.classList.remove('is-scrollable');
 
-
-        /*
-         * On arrête immédiatement la fonction.
-         *
-         * Aucun fade.
-         * Aucun masque.
-         * Aucune classe at-top / at-bottom.
-         */
         return;
       }
 
 
-      /*
-       * =================================================
-       * SCROLLABLE
-       * =================================================
-       */
-
-      /*
-       * La liste est réellement scrollable.
-       *
-       * On active donc le masque CSS.
-       */
       container.classList.add('is-scrollable');
 
 
-      /*
-       * Hauteur maximale du scroll.
-       *
-       * Exemple :
-       *
-       * contenu = 1000 px
-       * zone visible = 400 px
-       *
-       * maxScroll = 600 px
-       */
       const maxScroll =
         scrollHeight - clientHeight;
 
-
-      /*
-       * =================================================
-       * TOUT EN HAUT
-       * =================================================
-       *
-       * Si scrollTop vaut environ 0,
-       * aucun contenu n'est au-dessus.
-       */
       if (scrollTop <= SCROLL_THRESHOLD) {
 
         container.classList.add('at-top');
       }
 
 
-      /*
-       * =================================================
-       * TOUT EN BAS
-       * =================================================
-       *
-       * Si scrollTop est arrivé à la hauteur maximale,
-       * aucun contenu supplémentaire ne se trouve en dessous.
-       */
       if (scrollTop >= maxScroll - SCROLL_THRESHOLD) {
 
         container.classList.add('at-bottom');
       }
     }
 
-
-    /*
-     * =====================================================
-     * PROGRAMMATION DU CALCUL
-     * =====================================================
-     */
 
     function scheduleUpdate() {
 
@@ -230,18 +95,6 @@
     }
 
 
-    /*
-     * =====================================================
-     * PREMIER CALCUL
-     * =====================================================
-     */
-
-    /*
-     * On ne calcule pas immédiatement.
-     *
-     * On attend que la lightbox et ses commentaires
-     * soient correctement rendus.
-     */
     scheduleUpdate();
 
 
