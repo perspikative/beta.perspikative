@@ -161,6 +161,7 @@ async function findUserByUsername(usernameNormalized) {
         let photoURL = null;
         try {
             const publicSnap = await fns.getDoc(fns.doc(db, "publicProfiles", uid));
+            console.log("[debug photo] uid:", uid, "publicProfiles existe:", publicSnap.exists(), "data:", publicSnap.exists() ? publicSnap.data() : null);
             if (publicSnap.exists()) photoURL = publicSnap.data().photoURL || null;
         } catch (photoErr) {
             console.error("Erreur de lecture de la photo publique :", photoErr);
