@@ -1417,6 +1417,11 @@ permalink: /login
     "settings", "notifications", "explore", "home", "index"
   ]);
   const USERNAME_REGEX = /^[a-z0-9_]{3,20}$/;
+
+  // Avatar par défaut à la création de compte, quel que soit le moyen
+  // (email/mdp ou Google) — on ne reprend jamais la photo Google.
+  // Garde cette valeur synchronisée avec DEFAULT_AVATAR dans profile.js.
+  const DEFAULT_AVATAR = '/pics/assets/pfp/1.webp';
   let completeProfileUser = null;
   let usernameCheckToken = 0;
   let usernameDebounceTimer = null;
@@ -1540,6 +1545,28 @@ permalink: /login
     try {
       await saveUsername(completeProfileUser.uid, normalized, rawUsername.trim());
       await updateProfile(completeProfileUser, { displayName: newDisplayName });
+
+      // Photo de profil : on ne reprend JAMAIS la photo Google/Auth. Tout
+      // le monde démarre avec l'avatar par défaut (/pics/assets/pfp/1.webp),
+      // SAUF si un photoURL a déjà été positionné à la main dans
+      // publicProfiles/{uid} (ex: photo perso pour le compte admin) —
+      // dans ce cas on le laisse tel quel plutôt que de l'écraser.
+      const existingPublicSnap = await getDoc(doc(db, 'publicProfiles', completeProfileUser.uid));
+      const existingPhotoURL = existingPublicSnap.exists() ? existingPublicSnap.data().photoURL : null;
+      const finalPhotoURL = existingPhotoURL || DEFAULT_AVATAR;
+
+      // On aligne aussi le photoURL du compte Auth (Firebase Authentication)
+      // sur cette même valeur, pour que profile.js (qui lit currentUser.photoURL)
+      // affiche la bonne photo dès l'ouverture de la page profil.
+      await updateProfile(completeProfileUser, { photoURL: finalPhotoURL });
+
+      // Profil public minimal (displayName + photoURL), lisible par tous
+      // même si le profil complet reste privé — c'est ce que consultent
+      // les commentaires pour rester à jour.
+      await setDoc(doc(db, 'publicProfiles', completeProfileUser.uid), {
+        displayName: newDisplayName,
+        photoURL: finalPhotoURL
+      }, { merge: true });
 
       // Vérification post-écriture : évite un / trompeur si la transaction
       // a échoué silencieusement (ex: règle Firestore qui bloque sans lever
