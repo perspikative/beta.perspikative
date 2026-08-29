@@ -29,7 +29,7 @@ import {
 // ─── CONFIG (identique au reste du site) ───
 const firebaseConfig = {
   apiKey: "AIzaSyBudMYu4rtSL7GrsX3OMtT8klbBX7h4iTE",
-  authDomain: "auth.perspikative.com",
+  authDomain: "perspikative-app.firebaseapp.com",
   projectId: "perspikative-app",
   storageBucket: "perspikative-app.firebasestorage.app",
   messagingSenderId: "411164951584",
