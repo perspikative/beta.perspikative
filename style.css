@@ -6403,3 +6403,72 @@ body {
 }
 
 
+/* ═══════════════════════════════════════════════════════════════
+   ZOOM PLEIN ÉCRAN DE L'ŒUVRE (clic sur l'image dans la lightbox)
+   Principe FLIP : l'image cliquée est clonée en position: fixed,
+   part de sa position/taille d'origine (First) puis translate/scale
+   en douceur vers son cadrage centré plein écran (Last), sur une
+   courbe bézier custom. Fond quasi noir au-dessus de tout le reste.
+   ═══════════════════════════════════════════════════════════════ */
+
+#zoom-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 3, 3, 0.97);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 10050; /* au-dessus de .lightbox-close (10002) et des flèches */
+  transition:
+    opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#zoom-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+#zoom-img {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* transform-origin fixé en haut à gauche : la position est pilotée
+     entièrement via translate(), calculé en JS avant chaque animation */
+  transform-origin: top left;
+  border-radius: 12px;
+  cursor: zoom-out;
+  will-change: transform, border-radius;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  transition:
+    transform 0.62s cubic-bezier(0.65, 0, 0.35, 1),
+    border-radius 0.62s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+#zoom-img.zoom-flat {
+  border-radius: 4px;
+}
+
+/* image d'origine masquée pendant que le clone plein écran est actif,
+   pour éviter le doublon visuel derrière l'overlay */
+#lightbox-img.zoom-source-hidden {
+  visibility: hidden;
+}
+
+.lightbox-left img,
+#lightbox-img {
+  cursor: zoom-in;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #zoom-overlay {
+    transition: opacity 0.15s linear, visibility 0.15s linear;
+  }
+
+  #zoom-img {
+    transition: opacity 0.15s linear, visibility 0.15s linear, border-radius 0.15s linear;
+  }
+}
+
+
