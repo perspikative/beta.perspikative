@@ -6418,6 +6418,7 @@ body {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  cursor: zoom-out;
   z-index: 10050; /* au-dessus de .lightbox-close (10002) et des flèches */
   transition:
     opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
@@ -6437,8 +6438,8 @@ body {
   /* transform-origin fixé en haut à gauche : la position est pilotée
      entièrement via translate(), calculé en JS avant chaque animation */
   transform-origin: top left;
-  border-radius: 12px;
-  cursor: zoom-out;
+  border-radius: 28px;
+  cursor: zoom-in;
   will-change: transform, border-radius;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   transition:
@@ -6447,7 +6448,7 @@ body {
 }
 
 #zoom-img.zoom-flat {
-  border-radius: 4px;
+  border-radius: 10px;
 }
 
 /* image d'origine masquée pendant que le clone plein écran est actif,
