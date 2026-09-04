@@ -26,10 +26,9 @@ import {
   sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-// ─── CONFIG (identique au reste du site) ───
 const firebaseConfig = {
   apiKey: "AIzaSyBudMYu4rtSL7GrsX3OMtT8klbBX7h4iTE",
-  authDomain: "perspikative-app.firebaseapp.com",
+  authDomain: "auth.perspikative.com",
   projectId: "perspikative-app",
   storageBucket: "perspikative-app.firebasestorage.app",
   messagingSenderId: "411164951584",
