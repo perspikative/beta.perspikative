@@ -10,9 +10,6 @@ const MOIS_FR = [
 
 const DEFAULT_AVATAR = "/pics/assets/pfp/1.webp";
 
-// -----------------------------------------------------------------------
-// Références DOM
-// -----------------------------------------------------------------------
 const ppLoading = document.getElementById("ppLoading");
 const ppCard = document.getElementById("ppCard");
 const ppPrivate = document.getElementById("ppPrivate");
@@ -216,8 +213,8 @@ function renderPublicProfile(userData) {
 
     const canonicalUrl = `https://perspikative.com/@${usernameDisplay}`;
     updateMeta({
-        title: `${displayName} — Perspikative | Artiste`,
-        description: bio || `Découvre le profil de ${displayName} sur Perspikative.`,
+        title: `${displayName} — Profil Perspikative`,
+        description: bio || `Découvre le profil de ${displayName} sur Perspikative !`,
         image: photo,
         url: canonicalUrl,
         indexable: true
