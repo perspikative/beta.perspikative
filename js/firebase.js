@@ -33,7 +33,7 @@ import {
 
 const firebaseConfig = {
   apiKey: "AIzaSyBudMYu4rtSL7GrsX3OMtT8klbBX7h4iTE",
-  authDomain: "perspikative-app.firebaseapp.com",
+  authDomain: "auth.perspikative.com",
   projectId: "perspikative-app",
   storageBucket: "perspikative-app.firebasestorage.app",
   messagingSenderId: "411164951584",
