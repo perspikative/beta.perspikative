@@ -120,16 +120,19 @@ function updateMeta({ title, description, image, url, indexable }) {
 // -----------------------------------------------------------------------
 // Résolution du username : usernames/{usernameNormalized} contient l'uid
 // propriétaire (c'est ce document qui fait foi pour l'unicité, voir
-// profile.js et les Firestore rules). On lit ensuite users/{uid} pour les
-// données d'affichage complètes.
+// profile.js et les Firestore rules).
+//
+// Tout ce qui est affiché publiquement (username pour le @, usernameDisplay
+// pour le nom, photoURL pour la photo) vient EXCLUSIVEMENT de
+// publicProfiles/{uid}, qui est toujours lisible, même profil privé.
+// users/{uid} n'est consulté que pour les champs qui n'existent que là-bas
+// (bio, createdAt) et pour trancher isPublic.
 //
 // Cas important : si le profil est privé (isPublic != true), les règles
 // Firestore refusent carrément la lecture de users/{uid} pour un visiteur
-// non-propriétaire (permission-denied, pas juste un doc vide). On ne peut
-// donc PAS distinguer "profil privé" de "n'existe pas" avec cette seule
-// lecture. On retombe alors sur publicProfiles/{uid} (toujours lisible)
-// pour confirmer que le compte existe bel et bien avant d'afficher l'état
-// "Profil privé" plutôt qu'un 404 trompeur.
+// non-propriétaire (permission-denied, pas juste un doc vide). Dans ce cas
+// on retombe uniquement sur publicProfiles/{uid} pour confirmer que le
+// compte existe et afficher l'état "Profil privé" plutôt qu'un 404 trompeur.
 // -----------------------------------------------------------------------
 async function findUserByUsername(usernameNormalized) {
     const db = window.__prspkDb;
@@ -144,41 +147,38 @@ async function findUserByUsername(usernameNormalized) {
     const uid = usernameSnap.data().uid;
     if (!uid) return null;
 
+    // Source de vérité pour tout ce qui est public : username,
+    // usernameDisplay, photoURL. Lu en premier car toujours accessible,
+    // contrairement à users/{uid} qui peut refuser la lecture.
+    const publicRef = fns.doc(db, "publicProfiles", uid);
+    const publicSnap = await fns.getDoc(publicRef);
+
+    if (!publicSnap.exists()) return null;
+
+    const publicData = publicSnap.data();
+    const publicInfo = {
+        uid,
+        username: publicData.username || usernameNormalized,
+        usernameDisplay: publicData.usernameDisplay || publicData.username || usernameNormalized,
+        photoURL: publicData.photoURL || null
+    };
+
     const userRef = fns.doc(db, "users", uid);
 
     try {
         const userSnap = await fns.getDoc(userRef);
         if (!userSnap.exists()) return null;
 
-        // users/{uid} ne stocke jamais la photo de profil : c'est
-        // publicProfiles/{uid}.photoURL, dans Firestore, qui fait foi
-        // partout dans le projet (voir aussi profile.js). On la récupère
-        // ici pour que le profil public affiche toujours la photo à jour,
-        // y compris quand elle vient d'être changée.
-        let photoURL = null;
-        try {
-            const publicSnap = await fns.getDoc(fns.doc(db, "publicProfiles", uid));
-            if (publicSnap.exists()) photoURL = publicSnap.data().photoURL || null;
-        } catch (photoErr) {
-            console.error("Erreur de lecture de la photo publique :", photoErr);
-        }
+        const userData = userSnap.data();
 
-        return { uid, ...userSnap.data(), photoURL };
+        // publicInfo écrase volontairement tout champ homonyme qui
+        // traînerait encore dans users/{uid} (ex: un vieux username non
+        // nettoyé) : publicProfiles fait foi pour ces trois champs-là.
+        return { ...userData, ...publicInfo };
     } catch (err) {
-        // Lecture refusée : très probablement un profil privé (règle
-        // Firestore). On vérifie via publicProfiles/{uid} (toujours
-        // lisible) que le compte existe réellement avant de conclure.
-        const publicRef = fns.doc(db, "publicProfiles", uid);
-        const publicSnap = await fns.getDoc(publicRef).catch(() => null);
-
-        if (publicSnap && publicSnap.exists()) {
-            return { uid, isPublic: false, username: usernameNormalized };
-        }
-
-        // Ni users/{uid} lisible, ni publicProfiles/{uid} : on ne peut
-        // pas confirmer que le compte existe, on remonte l'erreur telle
-        // quelle pour que l'appelant décide (404).
-        throw err;
+        // Lecture de users/{uid} refusée : profil privé. On a déjà confirmé
+        // via publicProfiles/{uid} que le compte existe, donc pas de 404.
+        return { ...publicInfo, isPublic: false };
     }
 }
 
@@ -186,8 +186,8 @@ async function findUserByUsername(usernameNormalized) {
 // Rendu du profil public
 // -----------------------------------------------------------------------
 function renderPublicProfile(userData) {
-    const displayName = userData.displayName || userData.usernameDisplay || userData.username;
     const usernameDisplay = userData.usernameDisplay || userData.username;
+    const displayName = usernameDisplay;
     const photo = userData.photoURL || DEFAULT_AVATAR;
     const bio = (userData.bio || "").trim();
 
