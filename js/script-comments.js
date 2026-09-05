@@ -140,11 +140,19 @@
       ? '<em>Commentaire masqué</em>'
       : escapeHtml(comment.text);
 
+    // Nom de l'auteur cliquable vers son profil public (/@usernameDisplay)
+    // s'il a réservé un username ; sinon simple texte non cliquable, pour
+    // rester compatible avec les vieux commentaires / profils sans username.
+    var pseudoText = escapeHtml(comment.pseudo || 'Anonyme');
+    var pseudoHtml = comment.usernameDisplay
+      ? '<a class="lb-comment-pseudo" href="/@' + encodeURIComponent(comment.usernameDisplay) + '">' + pseudoText + '</a>'
+      : '<span class="lb-comment-pseudo">' + pseudoText + '</span>';
+
     item.innerHTML =
       '<img class="lb-comment-pfp" src="' + escapeHtml(pfpSrc) + '" alt="avatar">' +
       '<div class="lb-comment-body">' +
         '<div class="lb-comment-meta">' +
-          '<span class="lb-comment-pseudo">' + escapeHtml(comment.pseudo || 'Anonyme') + '</span>' +
+          pseudoHtml +
           '<span class="lb-comment-time">' + formatRelativeTime(comment.createdAt) + '</span>' +
         '</div>' +
         '<div class="lb-comment-text">' + textHtml + '</div>' +
@@ -243,8 +251,9 @@
       }
       var data = snap.data();
       var profile = {
-        pseudo: data.displayName || null,
-        pfp:    data.photoURL || null
+        pseudo:          data.displayName || null,
+        pfp:             data.photoURL || null,
+        usernameDisplay: data.usernameDisplay || data.username || null
       };
       profileCache[uid] = profile;
       return profile;
@@ -270,8 +279,9 @@
       comments.forEach(function (c) {
         var fresh = c.uid ? byUid[c.uid] : null;
         if (fresh) {
-          if (fresh.pseudo) c.pseudo = fresh.pseudo;
-          if (fresh.pfp)    c.pfp    = fresh.pfp;
+          if (fresh.pseudo)          c.pseudo          = fresh.pseudo;
+          if (fresh.pfp)             c.pfp             = fresh.pfp;
+          if (fresh.usernameDisplay) c.usernameDisplay = fresh.usernameDisplay;
         }
       });
 

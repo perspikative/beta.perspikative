@@ -142,12 +142,14 @@ async function saveUserDoc(uid, data) {
 // ce document que script-comments.js consulte pour garder pseudo/photo à
 // jour dans les commentaires, quel que soit isPublic.
 // -----------------------------------------------------------------------
-async function syncPublicProfile(uid, { displayName, photoURL } = {}) {
+async function syncPublicProfile(uid, { displayName, photoURL, username, usernameDisplay } = {}) {
     const { db, fns } = getFire();
     if (!db || !fns) return;
     const data = {};
     if (displayName !== undefined) data.displayName = displayName;
     if (photoURL !== undefined) data.photoURL = photoURL;
+    if (username !== undefined) data.username = username;
+    if (usernameDisplay !== undefined) data.usernameDisplay = usernameDisplay;
     if (Object.keys(data).length === 0) return;
     const ref = fns.doc(db, "publicProfiles", uid);
     await fns.setDoc(ref, data, { merge: true });
@@ -347,6 +349,17 @@ onAuthStateChanged(auth, async (user) => {
         if (userDoc && userDoc.username) {
             currentUsername = userDoc.username;
             usernameDisplay = userDoc.usernameDisplay || userDoc.username;
+
+            // Rattrapage : les comptes créés avant l'ajout du username à
+            // publicProfiles n'ont jamais synchronisé ce champ côté public.
+            // On le fait une fois ici, silencieusement, pour que les
+            // commentaires existants pointent vers /@{usernameDisplay}.
+            syncPublicProfile(user.uid, {
+                username: currentUsername,
+                usernameDisplay
+            }).catch(function (err) {
+                console.error("Erreur de synchro username publicProfiles :", err);
+            });
         }
 
         if (userDoc && typeof userDoc.isPublic === "boolean") {
@@ -534,7 +547,14 @@ editSaveBtn.addEventListener("click", async () => {
 
         // Profil public minimal (pour que les commentaires existants de cet
         // utilisateur affichent le nouveau nom, même si son profil est privé).
-        await syncPublicProfile(currentUser.uid, { displayName: newName });
+        // Le username est inclus ici aussi : c'est ce qui permet aux
+        // commentaires de renvoyer vers /@{usernameDisplay} même si le
+        // profil complet (users/{uid}) reste privé.
+        await syncPublicProfile(currentUser.uid, {
+            displayName: newName,
+            username: normalizedUsername,
+            usernameDisplay: rawUsername.trim()
+        });
 
         // Rafraîchissement de l'affichage
         displayName.textContent = newName;
