@@ -186,15 +186,15 @@ async function findUserByUsername(usernameNormalized) {
 // Rendu du profil public
 // -----------------------------------------------------------------------
 function renderPublicProfile(userData) {
-    const usernameDisplay = userData.usernameDisplay || userData.username;
-    const displayName = usernameDisplay;
+    const displayName = userData.usernameDisplay || userData.username;
+    const username = userData.username; // le @, indépendant du nom affiché
     const photo = userData.photoURL || DEFAULT_AVATAR;
     const bio = (userData.bio || "").trim();
 
     ppPic.src = photo;
     ppPic.alt = `Photo de profil de ${displayName}`;
     ppName.textContent = displayName;
-    ppUsername.textContent = `@${usernameDisplay}`;
+    ppUsername.textContent = `@${username}`;
 
     if (bio) {
         ppBio.textContent = bio;
@@ -211,7 +211,7 @@ function renderPublicProfile(userData) {
     ppSince.textContent = createdAt ? formatSince(createdAt) : "";
     ppSince.closest(".pp-since").hidden = !createdAt;
 
-    const canonicalUrl = `https://perspikative.com/@${usernameDisplay}`;
+    const canonicalUrl = `https://perspikative.com/@${username}`;
     updateMeta({
         title: `${displayName} — Profil Perspikative`,
         description: bio || `Découvre le profil de ${displayName} sur Perspikative !`,

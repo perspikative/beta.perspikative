@@ -139,10 +139,10 @@ async function saveUserDoc(uid, data) {
 
 // -----------------------------------------------------------------------
 // Profil public minimal (username + usernameDisplay + photoURL uniquement,
-// JAMAIS displayName), lisible par
-// tout le monde même si le profil complet (users/{uid}) est privé. C'est
-// ce document que script-comments.js consulte pour garder pseudo/photo à
-// jour dans les commentaires, quel que soit isPublic.
+// JAMAIS displayName), lisible par tout le monde même si le profil complet
+// (users/{uid}) est privé. C'est ce document que script-comments.js et
+// public-profile.js consultent pour garder pseudo/@/photo à jour, quel que
+// soit isPublic.
 // -----------------------------------------------------------------------
 async function syncPublicProfile(uid, { photoURL, username, usernameDisplay } = {}) {
     const { db, fns } = getFire();
@@ -355,7 +355,7 @@ onAuthStateChanged(auth, async (user) => {
             // Rattrapage : les comptes créés avant l'ajout du username à
             // publicProfiles n'ont jamais synchronisé ce champ côté public.
             // On le fait une fois ici, silencieusement, pour que les
-            // commentaires existants pointent vers /@{usernameDisplay}.
+            // commentaires existants pointent vers /@{username}.
             syncPublicProfile(user.uid, {
                 username: currentUsername,
                 usernameDisplay
@@ -391,8 +391,8 @@ onAuthStateChanged(auth, async (user) => {
     }
 
     renderBio(bio);
-    renderUsername(usernameDisplay);
-    renderPublicUrl(usernameDisplay);
+    renderUsername(currentUsername);
+    renderPublicUrl(currentUsername);
     setVisibilityUI(isPublic);
     profileSince.textContent = formatSince(createdAt);
 });
@@ -403,7 +403,11 @@ onAuthStateChanged(auth, async (user) => {
 function openEditModal() {
     if (!currentUser) return;
 
-    editNameInput.value = currentUser.displayName || "";
+    // "Nom affiché" (editNameInput) pilote usernameDisplay dans Firestore —
+    // totalement indépendant du "Nom d'utilisateur" (editUsernameInput, le
+    // @). On pré-remplit donc avec currentUsernameDisplay, pas avec le
+    // displayName Firebase Auth.
+    editNameInput.value = currentUsernameDisplay || currentUser.displayName || "";
     editUsernameInput.value = currentUsername || "";
     editUsernameStatus.textContent = "";
     editUsernameStatus.classList.remove("is-error", "is-ok");
@@ -491,9 +495,9 @@ if (editUsernameInput) {
 editSaveBtn.addEventListener("click", async () => {
     if (!currentUser) return;
 
-    const newName = editNameInput.value.trim();
+    const newName = editNameInput.value.trim(); // "Nom affiché" -> usernameDisplay
     const newBio = editBioInput.value.trim();
-    const rawUsername = editUsernameInput ? editUsernameInput.value : "";
+    const rawUsername = editUsernameInput ? editUsernameInput.value : ""; // "Nom d'utilisateur" -> username (le @)
     const normalizedUsername = normalizeUsername(rawUsername);
 
     if (!newName) {
@@ -514,19 +518,25 @@ editSaveBtn.addEventListener("click", async () => {
     editStatus.textContent = "Enregistrement…";
 
     try {
+        // Les deux champs sont désormais totalement indépendants :
+        // - "Nom affiché" (newName)        -> usernameDisplay
+        // - "Nom d'utilisateur" (rawUsername) -> username (le @, normalisé)
+        var usernameChanged = normalizedUsername !== currentUsername;
+        var displayChanged  = newName !== (currentUsernameDisplay || "");
+
         // Réservation atomique du username (si changé). C'est cette étape,
         // et non une simple vérification préalable, qui garantit qu'on ne
         // peut jamais voler un pseudo pris entre-temps par quelqu'un d'autre.
-        var usernameChanged = normalizedUsername !== currentUsername;
-        var displayChanged  = rawUsername.trim() !== (currentUsernameDisplay || "");
-
+        // Le usernameDisplay qu'on lui passe est celui du champ "Nom
+        // affiché" (newName), pas la casse du champ username : le username
+        // n'a pas de "casse d'affichage" propre, seul son @ existe.
         if (usernameChanged) {
             try {
                 await saveUsername(
                     currentUser.uid,
                     currentUsername,
                     normalizedUsername,
-                    rawUsername.trim()
+                    newName
                 );
             } catch (err) {
                 if (err.message === "USERNAME_TAKEN") {
@@ -538,23 +548,22 @@ editSaveBtn.addEventListener("click", async () => {
                 throw err;
             }
         } else if (displayChanged) {
-            // Le username normalisé (ex. "timothee") n'a pas changé, mais sa
-            // casse d'affichage oui (ex. "Timothe" -> "Timothée"). saveUsername()
-            // n'est pas appelé dans ce cas (rien à réserver/libérer côté
-            // usernames/{username}), donc on met juste à jour usernameDisplay
-            // sur users/{uid} nous-mêmes pour ne pas perdre ce changement.
-            await saveUserDoc(currentUser.uid, { usernameDisplay: rawUsername.trim() });
+            // Le username n'a pas changé, mais le "Nom affiché" oui.
+            // saveUsername() n'est pas appelé dans ce cas (rien à
+            // réserver/libérer côté usernames/{username}), donc on met
+            // juste à jour usernameDisplay sur users/{uid} nous-mêmes.
+            await saveUserDoc(currentUser.uid, { usernameDisplay: newName });
         }
 
-        // Mise à jour du profil Firebase Auth (nom uniquement : la photo de
-        // profil se gère désormais depuis la lightbox coverflow, cf. plus bas)
+        // Mise à jour du profil Firebase Auth (le displayName Firebase Auth
+        // suit lui aussi "Nom affiché", pour rester cohérent avec Google/les
+        // autres surfaces qui lisent auth.currentUser.displayName).
         await updateProfile(currentUser, {
             displayName: newName
         });
 
-        // Mise à jour Firestore (bio uniquement ici : le username a déjà
-        // été écrit sur users/{uid} par saveUsername() ci-dessus, dans la
-        // même transaction que la réservation).
+        // Mise à jour Firestore (bio uniquement ici : usernameDisplay et
+        // username ont déjà été écrits sur users/{uid} ci-dessus).
         await saveUserDoc(currentUser.uid, { bio: newBio });
 
         // Profil public minimal (username + usernameDisplay + photoURL
@@ -562,18 +571,18 @@ editSaveBtn.addEventListener("click", async () => {
         // lisible même si le profil complet (users/{uid}) est privé, qui
         // fait foi partout où l'uid apparaît publiquement (commentaires,
         // page /@username). On le repropage à CHAQUE sauvegarde du profil
-        // (pas seulement si le username a changé), pour rattraper au
+        // (pas seulement si quelque chose a changé), pour rattraper au
         // passage tout désync éventuel avec users/{uid} et usernames/{...}.
         await syncPublicProfile(currentUser.uid, {
             username: normalizedUsername,
-            usernameDisplay: rawUsername.trim()
+            usernameDisplay: newName
         });
 
         // Rafraîchissement de l'affichage
         displayName.textContent = newName;
         renderBio(newBio);
         currentUsername = normalizedUsername;
-        currentUsernameDisplay = rawUsername.trim();
+        currentUsernameDisplay = newName;
         renderUsername(rawUsername.trim());
         renderPublicUrl(rawUsername.trim());
 
