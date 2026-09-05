@@ -1529,7 +1529,10 @@ permalink: /login
 
     setLoading(btn, true);
     try {
-      await saveUsername(completeProfileUser.uid, normalized, rawUsername.trim());
+      // Le usernameDisplay correspond au champ "Nom affiché" (newDisplayName),
+      // pas à la casse du champ "Nom d'utilisateur" (rawUsername) — les deux
+      // champs sont indépendants (même logique que profile.js).
+      await saveUsername(completeProfileUser.uid, normalized, newDisplayName);
       await updateProfile(completeProfileUser, { displayName: newDisplayName });
 
       // Photo de profil : on ne reprend JAMAIS la photo Google/Auth. Tout
@@ -1546,11 +1549,13 @@ permalink: /login
       // affiche la bonne photo dès l'ouverture de la page profil.
       await updateProfile(completeProfileUser, { photoURL: finalPhotoURL });
 
-      // Profil public minimal (displayName + photoURL), lisible par tous
-      // même si le profil complet reste privé — c'est ce que consultent
-      // les commentaires pour rester à jour.
+      // Profil public minimal (username + usernameDisplay + photoURL
+      // uniquement, JAMAIS displayName), lisible par tous même si le profil
+      // complet reste privé — c'est ce que consultent les commentaires et
+      // la page /@username pour rester à jour (voir aussi profile.js).
       await setDoc(doc(db, 'publicProfiles', completeProfileUser.uid), {
-        displayName: newDisplayName,
+        username: normalized,
+        usernameDisplay: newDisplayName,
         photoURL: finalPhotoURL
       }, { merge: true });
 
