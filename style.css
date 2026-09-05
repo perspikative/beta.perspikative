@@ -4145,6 +4145,7 @@ body {
   font-size: 0.98rem;
   color: #ffffff;
   opacity: 0.8;
+  transition: opacity 0.18s ease;
 }
 
 .lb-comment-pseudo:hover {
