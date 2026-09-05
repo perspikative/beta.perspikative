@@ -4143,7 +4143,12 @@ body {
   font-family: 'Rubik', sans-serif;
   font-weight: 700;
   font-size: 0.98rem;
-  color: #fff;
+  color: #ffffff;
+  opacity: 0.8;
+}
+
+.lb-comment-pseudo:hover {
+  opacity: 1;
 }
 
 .lb-comment-time {
@@ -6474,14 +6479,3 @@ body {
 
 
 
-
-a.lb-comment-pseudo {
-  color: inherit;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-a.lb-comment-pseudo:hover,
-a.lb-comment-pseudo:focus-visible {
-  text-decoration: underline;
-}
