@@ -87,6 +87,7 @@ const avatarLightboxSave = document.getElementById("avatarLightboxSave");
 let currentUser = null;
 let selectedAvatar = DEFAULT_AVATAR;
 let currentUsername = null; // valeur normalisée actuellement enregistrée
+let currentUsernameDisplay = null; // casse d'affichage actuellement enregistrée
 let usernameCheckToken = 0; // pour ignorer les réponses de vérif obsolètes
 
 // -----------------------------------------------------------------------
@@ -349,6 +350,7 @@ onAuthStateChanged(auth, async (user) => {
         if (userDoc && userDoc.username) {
             currentUsername = userDoc.username;
             usernameDisplay = userDoc.usernameDisplay || userDoc.username;
+            currentUsernameDisplay = usernameDisplay;
 
             // Rattrapage : les comptes créés avant l'ajout du username à
             // publicProfiles n'ont jamais synchronisé ce champ côté public.
@@ -515,7 +517,10 @@ editSaveBtn.addEventListener("click", async () => {
         // Réservation atomique du username (si changé). C'est cette étape,
         // et non une simple vérification préalable, qui garantit qu'on ne
         // peut jamais voler un pseudo pris entre-temps par quelqu'un d'autre.
-        if (normalizedUsername !== currentUsername) {
+        var usernameChanged = normalizedUsername !== currentUsername;
+        var displayChanged  = rawUsername.trim() !== (currentUsernameDisplay || "");
+
+        if (usernameChanged) {
             try {
                 await saveUsername(
                     currentUser.uid,
@@ -532,6 +537,13 @@ editSaveBtn.addEventListener("click", async () => {
                 }
                 throw err;
             }
+        } else if (displayChanged) {
+            // Le username normalisé (ex. "timothee") n'a pas changé, mais sa
+            // casse d'affichage oui (ex. "Timothe" -> "Timothée"). saveUsername()
+            // n'est pas appelé dans ce cas (rien à réserver/libérer côté
+            // usernames/{username}), donc on met juste à jour usernameDisplay
+            // sur users/{uid} nous-mêmes pour ne pas perdre ce changement.
+            await saveUserDoc(currentUser.uid, { usernameDisplay: rawUsername.trim() });
         }
 
         // Mise à jour du profil Firebase Auth (nom uniquement : la photo de
@@ -549,7 +561,9 @@ editSaveBtn.addEventListener("click", async () => {
         // utilisateur affichent le nouveau nom, même si son profil est privé).
         // Le username est inclus ici aussi : c'est ce qui permet aux
         // commentaires de renvoyer vers /@{usernameDisplay} même si le
-        // profil complet (users/{uid}) reste privé.
+        // profil complet (users/{uid}) reste privé. On le repropage à
+        // CHAQUE sauvegarde du profil (pas seulement si changé), pour
+        // rattraper au passage tout désync éventuel avec users/{uid}.
         await syncPublicProfile(currentUser.uid, {
             displayName: newName,
             username: normalizedUsername,
@@ -560,6 +574,7 @@ editSaveBtn.addEventListener("click", async () => {
         displayName.textContent = newName;
         renderBio(newBio);
         currentUsername = normalizedUsername;
+        currentUsernameDisplay = rawUsername.trim();
         renderUsername(rawUsername.trim());
         renderPublicUrl(rawUsername.trim());
 
