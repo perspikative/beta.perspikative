@@ -138,16 +138,15 @@ async function saveUserDoc(uid, data) {
 }
 
 // -----------------------------------------------------------------------
-// Profil public minimal (displayName + photoURL uniquement), lisible par
-// tout le monde même si le profil complet (users/{uid}) est privé. C'est
-// ce document que script-comments.js consulte pour garder pseudo/photo à
-// jour dans les commentaires, quel que soit isPublic.
+// Profil public minimal (username + usernameDisplay + photoURL uniquement),
+// lisible par tout le monde même si le profil complet (users/{uid}) est
+// privé. C'est ce document que script-comments.js et public-profile.js
+// consultent pour afficher pseudo/photo/@ à jour, quel que soit isPublic.
 // -----------------------------------------------------------------------
-async function syncPublicProfile(uid, { displayName, photoURL, username, usernameDisplay } = {}) {
+async function syncPublicProfile(uid, { photoURL, username, usernameDisplay } = {}) {
     const { db, fns } = getFire();
     if (!db || !fns) return;
     const data = {};
-    if (displayName !== undefined) data.displayName = displayName;
     if (photoURL !== undefined) data.photoURL = photoURL;
     if (username !== undefined) data.username = username;
     if (usernameDisplay !== undefined) data.usernameDisplay = usernameDisplay;
@@ -558,14 +557,13 @@ editSaveBtn.addEventListener("click", async () => {
         await saveUserDoc(currentUser.uid, { bio: newBio });
 
         // Profil public minimal (pour que les commentaires existants de cet
-        // utilisateur affichent le nouveau nom, même si son profil est privé).
-        // Le username est inclus ici aussi : c'est ce qui permet aux
-        // commentaires de renvoyer vers /@{usernameDisplay} même si le
-        // profil complet (users/{uid}) reste privé. On le repropage à
-        // CHAQUE sauvegarde du profil (pas seulement si changé), pour
-        // rattraper au passage tout désync éventuel avec users/{uid}.
+        // utilisateur affichent le bon nom, même si son profil est privé).
+        // On ne propage plus displayName ici : c'est usernameDisplay qui
+        // fait foi partout en public (commentaires, page /@username), pour
+        // ne plus avoir deux noms différents affichés selon les endroits.
+        // On le repropage à CHAQUE sauvegarde du profil (pas seulement si
+        // changé), pour rattraper au passage tout désync avec users/{uid}.
         await syncPublicProfile(currentUser.uid, {
-            displayName: newName,
             username: normalizedUsername,
             usernameDisplay: rawUsername.trim()
         });
