@@ -78,7 +78,7 @@ permalink: /profile
     aspect-ratio: 9 / 16;
     min-height: 520px;
     background: rgba(255, 255, 255, 0.06);
-    border-radius: 70px 40px 40px 40px;
+    border-radius: 72px 40px 40px 40px;
     padding: 20px 22px 20px 22px;
     display: flex;
     flex-direction: column;
@@ -221,18 +221,18 @@ permalink: /profile
 
   /* Nom + bio */
   .profile-identity {
-    margin-top: 16px;
+    margin-top: 10px;
     min-width: 0;
   }
 
   #displayName {
     font-family: 'Rubik', sans-serif;
     font-weight: 700;
-    font-size: 1.85rem;
+    font-size: 2rem;
     color: #ffffff;
-    line-height: 1.05;
+    line-height: 0.98;
     margin: 0;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.026em;
     word-break: break-word;
   }
 
@@ -240,12 +240,12 @@ permalink: /profile
     font-family: 'Rubik', sans-serif;
     font-weight: 500;
     font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.76);
   }
 
   #email {
     font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.76);
     word-break: break-all;
     margin: 0;
   }
@@ -258,9 +258,9 @@ permalink: /profile
 
   .profile-bio-label {
     font-family: 'Rubik', sans-serif;
-    font-size: 1.05rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    letter-spacing: 1px;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
     color: #ffffff;
     margin: 0 0 8px;
@@ -269,9 +269,9 @@ permalink: /profile
   #profileBio {
     font-family: 'Rubik', sans-serif;
     font-weight: 300;
-    font-size: 1rem;
-    line-height: 1.3;
-    color: rgba(255, 255, 255, 0.85);
+    font-size: 1.1rem;
+    line-height: 1.26;
+    color: rgba(255, 255, 255, 0.76);
     margin: 0;
     white-space: pre-line;
     word-break: break-word;
@@ -290,8 +290,8 @@ permalink: /profile
   .profile-since {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    align-self: flex-start;
+    gap: 5px;
+    align-self: center;
     background: rgba(250, 250, 250, 0.05);
     border-radius: 25px;
     padding: 8px 16px;
@@ -302,18 +302,14 @@ permalink: /profile
   }
 
   .profile-since::before {
-    content: '';
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: #00c896;
-    box-shadow: 0 0 8px #00c896;
-    flex-shrink: 0;
+    content: '✦';
+    font-size: 1rem;
+    color: #ffffff;
   }
 
   .profile-since span {
     font-family: 'Rubik', sans-serif;
-    font-size: 0.94rem;
+    font-size: 1rem;
     font-weight: 600;
     color: #ffffff;
     letter-spacing: 0.02em;
@@ -354,15 +350,23 @@ permalink: /profile
     transform: scaleX(-1);
   }
 
-  /* Mobile : la carte n'a plus besoin d'un ratio fixe */
   @media (max-width: 520px) {
     .profile-card {
       aspect-ratio: auto;
       min-height: 0;
-      padding: 20px 22px 20px 22px;
-      border-radius: 72px 40px 40px 40px;
+      padding: 20px 22px 22px 22px;
+      border-radius: 73px 40px 40px 40px;
     }
     
+    .profile-since span {
+      font-size: 0.94rem;
+      letter-spacing: 0.02em;
+    }
+    
+    .profile-since::before {
+      font-size: 0.94rem;
+    }
+
     .profile-identity {
       margin-top: 6px;
     }
@@ -524,11 +528,11 @@ permalink: /profile
   .account-field-label {
     display: block;
     font-family: 'Rubik', sans-serif;
-    font-size: 1.05rem;
+    font-size: 1.06rem;
     font-weight: 700;
-    letter-spacing: 1.4px;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.76);
     margin-bottom: 8px;
     max-width: 440px;
   }
@@ -1513,9 +1517,8 @@ permalink: /profile
 
     </div>
 
-    <!-- ===== MENTION BÊTA ===== -->
     <p class="profile-beta-note">
-      <span>Cette page est encore en version bêta.</span>
+      <span>Les profils sont encore en version bêta.</span>
     </p>
 
   </div>
