@@ -1063,9 +1063,24 @@ btnDeleteAccount.addEventListener("click", async () => {
     btnDeleteAccount.disabled = true;
 
     try {
-        // Nettoyage des données Firestore associées avant suppression du compte Auth
+        // Nettoyage des données Firestore associées avant suppression du
+        // compte Auth. Les trois suppressions doivent réussir : si l'une
+        // échoue (règle Firestore, coupure réseau...), on bloque la
+        // suppression du compte Auth plutôt que de laisser des restes
+        // orphelins dans Firestore.
         const { db, fns } = getFire();
         if (db && fns) {
+            // Libère le @ (usernames/{username}) s'il existait, pour qu'il
+            // redevienne disponible pour quelqu'un d'autre.
+            if (currentUsername) {
+                await fns.deleteDoc(fns.doc(db, "usernames", currentUsername));
+            }
+
+            // Supprime le profil public minimal (username, usernameDisplay,
+            // photoURL) — plus rien de visible publiquement pour cet uid.
+            await fns.deleteDoc(fns.doc(db, "publicProfiles", currentUser.uid));
+
+            // Supprime le profil complet (bio, isPublic, etc.).
             await fns.deleteDoc(fns.doc(db, "users", currentUser.uid));
         }
 
