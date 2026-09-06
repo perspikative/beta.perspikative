@@ -133,7 +133,7 @@
     item.className    = 'lb-comment-item';
     item.dataset.id   = comment.id;
 
-    var pfpSrc = comment.pfp || '/pics/assets/pfp/1.webp';
+    var pfpSrc = comment.photoURL || '/pics/assets/pfp/1.webp';
     var hidden = isHidden(comment);
 
     var textHtml = hidden
@@ -143,9 +143,9 @@
     // Nom de l'auteur cliquable vers son profil public (/@username) s'il a
     // réservé un username ; sinon simple texte non cliquable, pour rester
     // compatible avec les vieux commentaires / profils sans username. Le
-    // texte affiché est le "Nom affiché" (pseudo/usernameDisplay), le lien
-    // pointe vers le @ (comment.username).
-    var pseudoText = escapeHtml(comment.pseudo || 'Anonyme');
+    // texte affiché est le "Nom affiché" (usernameDisplay), le lien pointe
+    // vers le @ (comment.username).
+    var pseudoText = escapeHtml(comment.usernameDisplay || 'Anonyme');
     var pseudoHtml = comment.username
       ? '<a class="lb-comment-pseudo" href="/@' + encodeURIComponent(comment.username) + '">' + pseudoText + '</a>'
       : '<span class="lb-comment-pseudo">' + pseudoText + '</span>';
@@ -226,15 +226,16 @@
   }
 
   // ══════════════════════════════════════════════════════════════════════════
-  // CACHE DES PROFILS (pseudo/photo à jour, indépendamment du snapshot
-  // stocké dans chaque commentaire au moment de sa création). On va lire
-  // users/{uid} une seule fois par auteur distinct affiché, puis on
-  // réutilise le résultat en mémoire pour tous ses autres commentaires.
-  // Les valeurs pseudo/pfp stockées sur le commentaire lui-même restent en
-  // fallback (vieux commentaires, doc users/{uid} absent, etc.).
+  // CACHE DES PROFILS (usernameDisplay/photoURL à jour, indépendamment du
+  // snapshot stocké dans chaque commentaire au moment de sa création). On va
+  // lire publicProfiles/{uid} une seule fois par auteur distinct affiché,
+  // puis on réutilise le résultat en mémoire pour tous ses autres commentaires.
+  // Les valeurs usernameDisplay/photoURL stockées sur le commentaire lui-même
+  // restent en fallback (vieux commentaires, doc publicProfiles/{uid}
+  // absent, etc.).
   // ══════════════════════════════════════════════════════════════════════════
 
-  var profileCache = {}; // uid -> { pseudo, pfp } | null (déjà tenté, pas trouvé)
+  var profileCache = {}; // uid -> { usernameDisplay, photoURL, username } | null (déjà tenté, pas trouvé)
 
   function fetchAuthorProfile(uid) {
     var db   = window.__prspkDb;
@@ -253,9 +254,9 @@
       }
       var data = snap.data();
       var profile = {
-        pseudo:   data.usernameDisplay || data.username || null, // nom affiché public
-        pfp:      data.photoURL || null,
-        username: data.username || null // le @, utilisé pour le lien vers le profil
+        usernameDisplay: data.usernameDisplay || data.username || null, // nom affiché public
+        photoURL:        data.photoURL || null,
+        username:        data.username || null // le @, utilisé pour le lien vers le profil
       };
       profileCache[uid] = profile;
       return profile;
@@ -267,7 +268,7 @@
   }
 
   // Récupère les profils à jour pour tous les auteurs distincts d'une liste
-  // de commentaires, puis fusionne (pseudo/pfp frais > valeurs stockées).
+  // de commentaires, puis fusionne (usernameDisplay/photoURL frais > valeurs stockées).
   function hydrateCommentsWithFreshProfiles(comments) {
     var uids = [];
     comments.forEach(function (c) {
@@ -281,9 +282,9 @@
       comments.forEach(function (c) {
         var fresh = c.uid ? byUid[c.uid] : null;
         if (fresh) {
-          if (fresh.pseudo)   c.pseudo   = fresh.pseudo;
-          if (fresh.pfp)      c.pfp      = fresh.pfp;
-          if (fresh.username) c.username = fresh.username;
+          if (fresh.usernameDisplay) c.usernameDisplay = fresh.usernameDisplay;
+          if (fresh.photoURL)        c.photoURL        = fresh.photoURL;
+          if (fresh.username)        c.username        = fresh.username;
         }
       });
 
@@ -412,40 +413,45 @@
       ? window.PrspkModeration.check(text)
       : { flagged: false, status: 'visible' };
 
-    // Le pseudo/username stockés sur le commentaire (snapshot au moment du
-    // post, utilisés en fallback si publicProfiles ne charge pas plus tard)
-    // doivent être les mêmes qu'ailleurs — pas le displayName Firebase Auth.
-    // On les lit via fetchAuthorProfile (déjà en cache pour cet uid dans la
-    // plupart des cas, puisque l'utilisateur voit déjà ses propres commentaires).
+    // Le usernameDisplay/username/photoURL stockés sur le commentaire
+    // (snapshot au moment du post, utilisés en fallback si publicProfiles
+    // ne charge pas plus tard) doivent être les mêmes qu'ailleurs — pas le
+    // displayName Firebase Auth. On les lit via fetchAuthorProfile (déjà en
+    // cache pour cet uid dans la plupart des cas, puisque l'utilisateur
+    // voit déjà ses propres commentaires).
     fetchAuthorProfile(user.uid).then(function (authorProfile) {
-      var pseudo = (authorProfile && authorProfile.pseudo)
+      var usernameDisplay = (authorProfile && authorProfile.usernameDisplay)
         || user.displayName
         || 'Anonyme';
       var username = (authorProfile && authorProfile.username) || null;
+      var photoURL = (authorProfile && authorProfile.photoURL)
+        || user.photoURL
+        || getPfpFromUid(user.uid);
 
       var colRef = fire.collection(db, 'drawings', currentDrawingId, 'comments');
       fire.addDoc(colRef, {
-        uid:       user.uid,
-        email:     user.email || null,   // stocké pour modération uniquement, jamais affiché
-        pseudo:    pseudo,
-        pfp:       user.photoURL || getPfpFromUid(user.uid),
-        text:      text,
-        status:    moderation.status, // "visible" ou "hidden" — modifiable ensuite depuis Firestore
-        createdAt: fire.serverTimestamp()
+        uid:             user.uid,
+        email:           user.email || null,   // stocké pour modération uniquement, jamais affiché
+        usernameDisplay: usernameDisplay,
+        username:        username,
+        photoURL:        photoURL,
+        text:            text,
+        status:          moderation.status, // "visible" ou "hidden" — modifiable ensuite depuis Firestore
+        createdAt:       fire.serverTimestamp()
       }).then(function (docRef) {
         textarea.value = '';
         autoResizeTextarea();
 
         // Ajoute le commentaire localement en tête de liste
         var newComment = {
-          id:        docRef.id,
-          uid:       user.uid,
-          pseudo:    pseudo,
-          username:  username,
-          pfp:       user.photoURL || getPfpFromUid(user.uid),
-          text:      text,
-          status:    moderation.status,
-          createdAt: { toDate: function () { return new Date(); } }
+          id:              docRef.id,
+          uid:             user.uid,
+          usernameDisplay: usernameDisplay,
+          username:        username,
+          photoURL:        photoURL,
+          text:            text,
+          status:          moderation.status,
+          createdAt:       { toDate: function () { return new Date(); } }
         };
         allComments.unshift(newComment);
         if (displayedCount < allComments.length) displayedCount++;
