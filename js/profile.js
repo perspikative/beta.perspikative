@@ -306,12 +306,40 @@ onAuthStateChanged(auth, async (user) => {
 
     currentUser = user;
 
-    displayName.textContent = user.displayName || "Utilisateur";
-    email.textContent = user.email || "";
+    // Tout ce qui vient de Firebase Auth est déjà disponible localement
+    // (pas de round-trip réseau) : on l'affiche immédiatement, avant même
+    // de lancer les lectures Firestore ci-dessous. La page n'a plus besoin
+    // d'attendre Firestore pour montrer quelque chose.
+    // Chaque élément est vérifié avant écriture : onAuthStateChanged peut
+    // se déclencher avant que tous les éléments du DOM soient garantis
+    // disponibles selon le navigateur/l'ordre de chargement, et un accès
+    // direct sur un élément absent plantait tout le reste du callback.
+    if (displayName)  displayName.textContent = user.displayName || "Utilisateur";
+    if (email)         email.textContent = user.email || "";
+    if (accountEmail)  accountEmail.textContent = user.email || "—";
+    if (accountId)     accountId.textContent = user.uid;
 
-    // Section Compte : e-mail (2e affichage) + ID Perspikative (UID Firebase)
-    accountEmail.textContent = user.email || "—";
-    accountId.textContent = user.uid;
+    // Les deux lectures Firestore ci-dessous (publicProfiles et users) sont
+    // indépendantes l'une de l'autre : on les lance en parallèle avec
+    // Promise.all plutôt qu'en série avec deux await successifs. Ça réduit
+    // le temps d'attente total à celui de la plus lente des deux requêtes,
+    // au lieu de la somme des deux (c'était la cause principale de la
+    // lenteur observée au chargement du profil).
+    const { db, fns } = getFire();
+
+    const publicProfilePromise = (db && fns)
+        ? fns.getDoc(fns.doc(db, "publicProfiles", user.uid)).catch((err) => {
+            console.error("Erreur de chargement du profil public :", err);
+            return null;
+        })
+        : Promise.resolve(null);
+
+    const userDocPromise = fetchUserDoc(user.uid).catch((err) => {
+        console.error("Erreur de chargement du profil Firestore :", err);
+        return null;
+    });
+
+    const [publicSnap, userDoc] = await Promise.all([publicProfilePromise, userDocPromise]);
 
     // Photo de profil : lue depuis publicProfiles/{uid}.photoURL (Firestore),
     // seule source de vérité pour la photo dans tout le projet (voir aussi
@@ -319,18 +347,10 @@ onAuthStateChanged(auth, async (user) => {
     // champ est déjà absent/vide : ça laisse la porte ouverte à une photo
     // personnalisée posée à la main dans Firestore (cas du compte admin),
     // sans qu'un simple chargement de page vienne l'écraser.
-    try {
-        const { db, fns } = getFire();
-        if (db && fns) {
-            const publicSnap = await fns.getDoc(fns.doc(db, "publicProfiles", user.uid));
-            const storedPhoto = publicSnap.exists() ? publicSnap.data().photoURL : null;
-            const currentPhoto = storedPhoto || DEFAULT_AVATAR;
-            profilePic.src = currentPhoto;
-            selectedAvatar = currentPhoto;
-        }
-    } catch (err) {
-        console.error("Erreur de chargement de la photo de profil :", err);
-    }
+    const storedPhoto = publicSnap && publicSnap.exists() ? publicSnap.data().photoURL : null;
+    const currentPhoto = storedPhoto || DEFAULT_AVATAR;
+    profilePic.src = currentPhoto;
+    selectedAvatar = currentPhoto;
 
     // Date d'inscription : on se base sur Firestore si un doc existe déjà,
     // sinon sur la date de création du compte Firebase Auth (metadata),
@@ -341,8 +361,6 @@ onAuthStateChanged(auth, async (user) => {
     let isPublic = false;
 
     try {
-        const userDoc = await fetchUserDoc(user.uid);
-
         if (userDoc && userDoc.bio !== undefined) {
             bio = userDoc.bio;
         }
@@ -376,7 +394,6 @@ onAuthStateChanged(auth, async (user) => {
                 ? new Date(user.metadata.creationTime)
                 : new Date();
 
-            const { fns } = getFire();
             if (fns) {
                 await saveUserDoc(user.uid, {
                     createdAt: fns.serverTimestamp()
@@ -384,7 +401,7 @@ onAuthStateChanged(auth, async (user) => {
             }
         }
     } catch (err) {
-        console.error("Erreur de chargement du profil Firestore :", err);
+        console.error("Erreur de traitement du profil Firestore :", err);
         createdAt = user.metadata && user.metadata.creationTime
             ? new Date(user.metadata.creationTime)
             : new Date();
