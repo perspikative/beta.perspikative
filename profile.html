@@ -1574,6 +1574,48 @@ permalink: /profile
     color: rgba(255, 255, 255, 0.38);
   }
 
+  .social-save-btn {
+    align-self: flex-start;
+    margin-top: 2px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #00c896, #0af0d0);
+    color: #ffffff;
+    font-family: 'Rubik', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0, 200, 150, 0.2);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+  }
+
+  .social-save-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+  }
+
+  .social-save-btn:disabled {
+    opacity: 0.55;
+    cursor: wait;
+  }
+
+  .social-save-btn.is-saving {
+    pointer-events: none;
+  }
+
+  .social-status {
+    min-height: 1.2em;
+    margin: 0;
+    font-family: 'Rubik', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.62);
+  }
+
+  .social-status.is-error {
+    color: rgba(255, 130, 130, 0.95);
+  }
+
   .badges-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
@@ -1877,23 +1919,23 @@ permalink: /profile
             <form class="social-networks-form" id="socialForm">
               <div class="social-input-group">
                 <img src="/icons/instagram.svg" alt="Instagram" class="social-input-icon">
-                <input type="text" class="social-input" id="socialInstagram" placeholder="@pseudo_instagram" />
+                <input type="text" class="social-input" id="socialInstagram" placeholder="@pseudo_instagram" autocomplete="off" />
               </div>
-              
+
               <div class="social-input-group">
-                <img src="/icons/pinterest.svg" alt="Pinterest" class="social-input-icon">
-                <input type="text" class="social-input" id="socialPinterest" placeholder="@pseudo_pinterest" />
+                <img src="/icons/whatsapp-channel.svg" alt="WhatsApp" class="social-input-icon">
+                <input type="url" class="social-input" id="socialWhatsapp" placeholder="https://wa.me/..." autocomplete="url" />
               </div>
 
               <div class="social-input-group">
                 <img src="/icons/youtube.svg" alt="YouTube" class="social-input-icon">
-                <input type="text" class="social-input" id="socialYoutube" placeholder="Nom de chaîne ou URL" />
+                <input type="text" class="social-input" id="socialYoutube" placeholder="@pseudo_youtube" autocomplete="off" />
               </div>
 
-              <div class="social-input-group">
-                <img src="/icons/discord.svg" alt="Discord" class="social-input-icon">
-                <input type="text" class="social-input" id="socialDiscord" placeholder="Pseudo Discord" />
-              </div>
+              <button type="submit" class="social-save-btn" id="socialSaveBtn">
+                Enregistrer
+              </button>
+              <p class="social-status" id="socialStatus" aria-live="polite"></p>
             </form>
 
             <h3 class="profile-section-title">Badges</h3>
