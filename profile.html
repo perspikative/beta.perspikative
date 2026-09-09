@@ -282,6 +282,193 @@ permalink: /profile
     font-style: italic;
   }
 
+  /* ===== SKELETONS DE CHARGEMENT =====
+     Le contenu réel reste dans le flux normal (aucun layout shift) ; le
+     skeleton est positionné par-dessus en absolu, exactement à la même
+     place, puis disparait en fondu une fois les données prêtes
+     (voir .is-loaded plus bas + profile.js). Couvre : displayName,
+     profileBio, accountEmail, accountId (texte) et profilePic (photo). */
+  #displayName,
+  #profileBio,
+  #accountEmail,
+  #accountId {
+    position: relative;
+  }
+
+  #displayName .skeleton-bar,
+  #profileBio .skeleton-bar,
+  #accountEmail .skeleton-bar,
+  #accountId .skeleton-bar {
+    position: absolute;
+    inset: 0;
+    display: block;
+    overflow: hidden;
+    opacity: 1;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  #displayName .skeleton-bar {
+    top: 0.14em;
+    left: 0;
+    height: 1.1em;
+    width: 62%;
+    max-width: 220px;
+    border-radius: 25px;
+  }
+
+  #profileBio .skeleton-bar {
+    top: 0.1em;
+    left: 0;
+    height: 1em;
+    width: 88%;
+    border-radius: 25px;
+  }
+
+  #accountEmail .skeleton-bar {
+    top: 0.12em;
+    left: 0;
+    height: 1.1em;
+    width: 170px;
+    border-radius: 25px;
+  }
+
+  #accountId .skeleton-bar {
+    top: 0.12em;
+    left: 0;
+    height: 1.1em;
+    width: 210px;
+    border-radius: 25px;
+  }
+
+  #displayName .skeleton-bar::before,
+  #profileBio .skeleton-bar::before,
+  #accountEmail .skeleton-bar::before,
+  #accountId .skeleton-bar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--skeleton-base);
+  }
+
+  #displayName .skeleton-bar::after,
+  #profileBio .skeleton-bar::after,
+  #accountEmail .skeleton-bar::after,
+  #accountId .skeleton-bar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      100deg,
+      transparent 0%,
+      var(--skeleton-shine) 50%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    animation: skeleton-shimmer 1.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+
+  #displayName > span.real-text,
+  #profileBio > span.real-text,
+  #accountEmail > span.real-text,
+  #accountId > span.real-text {
+    display: inline-block;
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  #displayName.is-loaded .skeleton-bar,
+  #profileBio.is-loaded .skeleton-bar,
+  #accountEmail.is-loaded .skeleton-bar,
+  #accountId.is-loaded .skeleton-bar {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  #displayName.is-loaded > span.real-text,
+  #profileBio.is-loaded > span.real-text,
+  #accountEmail.is-loaded > span.real-text,
+  #accountId.is-loaded > span.real-text {
+    opacity: 1;
+  }
+
+  /* ----- Variante photo de profil : masque circulaire plein, pas une
+     barre. Superposé par-dessus l'<img> (qui garde sa taille normale,
+     donc pas de layout shift non plus ici). ----- */
+  .skeleton-avatar {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    opacity: 1;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+  }
+
+  .skeleton-avatar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--skeleton-base);
+  }
+
+  .skeleton-avatar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      100deg,
+      transparent 0%,
+      var(--skeleton-shine) 50%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    animation: skeleton-shimmer 1.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+
+  #profilePic {
+    opacity: 0;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  #profilePic.is-loaded {
+    opacity: 1;
+  }
+
+  .profile-pic-wrapper.is-loaded .skeleton-avatar {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @keyframes skeleton-shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #displayName .skeleton-bar::after,
+    #profileBio .skeleton-bar::after,
+    #accountEmail .skeleton-bar::after,
+    #accountId .skeleton-bar::after,
+    .skeleton-avatar::after {
+      animation: none;
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root {
+      --skeleton-base: rgba(0, 0, 0, 0.09);
+      --skeleton-shine: rgba(0, 0, 0, 0.16);
+    }
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --skeleton-base: rgba(255, 255, 255, 0.09);
+      --skeleton-shine: rgba(255, 255, 255, 0.22);
+    }
+  }
+
   /* Pousse le badge d'ancienneté tout en bas de la carte */
   .profile-spacer {
     flex: 1;
@@ -1416,6 +1603,7 @@ permalink: /profile
         </button>
 
         <button type="button" class="profile-pic-wrapper" id="btnOpenAvatarLightbox" aria-label="Changer la photo de profil" title="Changer la photo de profil">
+          <span class="skeleton-bar skeleton-avatar" aria-hidden="true"></span>
           <img
             id="profilePic"
             class="profile-pic"
@@ -1428,13 +1616,13 @@ permalink: /profile
         </button>
 
         <div class="profile-identity">
-          <div id="displayName">Chargement…</div>
+          <div id="displayName"><span class="skeleton-bar" aria-hidden="true"></span><span class="real-text">Utilisateur</span></div>
           <div id="profileUsername" hidden></div>
         </div>
 
         <div class="profile-bio-block">
           <p class="profile-bio-label">Bio</p>
-          <p id="profileBio">Chargement…</p>
+          <p id="profileBio"><span class="skeleton-bar" aria-hidden="true"></span><span class="real-text"></span></p>
         </div>
 
         <div class="profile-spacer"></div>
@@ -1470,7 +1658,7 @@ permalink: /profile
               <div>
                 <span class="account-field-label">Adresse e-mail</span>
                 <div class="account-field-value">
-                  <span id="accountEmail">Chargement…</span>
+                  <span id="accountEmail"><span class="skeleton-bar" aria-hidden="true"></span><span class="real-text"></span></span>
                   <span class="account-field-badge">Vérifiée</span>
                 </div>
               </div>
@@ -1485,7 +1673,7 @@ permalink: /profile
               <div>
                 <span class="account-field-label">ID Perspikative</span>
                 <div class="account-field-value">
-                  <span id="accountId">Chargement…</span>
+                  <span id="accountId"><span class="skeleton-bar" aria-hidden="true"></span><span class="real-text"></span></span>
                 </div>
               </div>
 
