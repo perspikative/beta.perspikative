@@ -244,17 +244,50 @@ function formatSince(date) {
 }
 
 // -----------------------------------------------------------------------
+// Helper : écrit du texte dans la partie ".real-text" d'un élément qui
+// contient aussi un skeleton de chargement superposé (voir CSS), sans
+// jamais toucher au skeleton lui-même (il est retiré via .is-loaded,
+// séparément — voir markLoaded()).
+// -----------------------------------------------------------------------
+function setRealText(el, text) {
+    if (!el) return;
+    const target = el.querySelector(".real-text");
+    if (target) {
+        target.textContent = text;
+    } else {
+        // Élément sans skeleton (pas concerné par ce système) : fallback
+        // sur l'ancien comportement direct.
+        el.textContent = text;
+    }
+}
+
+function getRealText(el) {
+    if (!el) return "";
+    const target = el.querySelector(".real-text");
+    return target ? target.textContent : el.textContent;
+}
+
+// Déclenche le fade-in : masque le skeleton, affiche le texte réel déjà
+// posé par setRealText(). À appeler une seule fois les données définitives
+// disponibles pour cet élément (pas de flash / pas de retour au skeleton
+// après coup).
+function markLoaded(el) {
+    if (el) el.classList.add("is-loaded");
+}
+
+// -----------------------------------------------------------------------
 // Rendu de la bio (avec état vide stylé)
 // -----------------------------------------------------------------------
 function renderBio(bio) {
     const trimmed = (bio || "").trim();
     if (trimmed) {
-        profileBio.textContent = trimmed;
+        setRealText(profileBio, trimmed);
         profileBio.classList.remove("is-empty");
     } else {
-        profileBio.textContent = "Aucune bio pour l'instant.";
+        setRealText(profileBio, "Aucune bio pour l'instant.");
         profileBio.classList.add("is-empty");
     }
+    markLoaded(profileBio);
 }
 
 function renderUsername(usernameDisplay) {
@@ -308,23 +341,24 @@ onAuthStateChanged(auth, async (user) => {
 
     // Tout ce qui vient de Firebase Auth est déjà disponible localement
     // (pas de round-trip réseau) : on l'affiche immédiatement, avant même
-    // de lancer les lectures Firestore ci-dessous. La page n'a plus besoin
-    // d'attendre Firestore pour montrer quelque chose.
-    // Chaque élément est vérifié avant écriture : onAuthStateChanged peut
-    // se déclencher avant que tous les éléments du DOM soient garantis
-    // disponibles selon le navigateur/l'ordre de chargement, et un accès
-    // direct sur un élément absent plantait tout le reste du callback.
-    if (displayName)  displayName.textContent = user.displayName || "Utilisateur";
-    if (email)         email.textContent = user.email || "";
-    if (accountEmail)  accountEmail.textContent = user.email || "—";
-    if (accountId)     accountId.textContent = user.uid;
+    // de lancer les lectures Firestore ci-dessous. Chaque élément est
+    // vérifié avant écriture : onAuthStateChanged peut se déclencher avant
+    // que tous les éléments du DOM soient garantis disponibles selon le
+    // navigateur/l'ordre de chargement, et un accès direct sur un élément
+    // absent plantait tout le reste du callback (bug déjà rencontré).
+    setRealText(displayName, user.displayName || "Utilisateur");
+    markLoaded(displayName);
+    if (email)        email.textContent = user.email || "";
+    setRealText(accountEmail, user.email || "—");
+    markLoaded(accountEmail);
+    setRealText(accountId, user.uid);
+    markLoaded(accountId);
 
     // Les deux lectures Firestore ci-dessous (publicProfiles et users) sont
     // indépendantes l'une de l'autre : on les lance en parallèle avec
     // Promise.all plutôt qu'en série avec deux await successifs. Ça réduit
     // le temps d'attente total à celui de la plus lente des deux requêtes,
-    // au lieu de la somme des deux (c'était la cause principale de la
-    // lenteur observée au chargement du profil).
+    // au lieu de la somme des deux.
     const { db, fns } = getFire();
 
     const publicProfilePromise = (db && fns)
@@ -349,7 +383,10 @@ onAuthStateChanged(auth, async (user) => {
     // sans qu'un simple chargement de page vienne l'écraser.
     const storedPhoto = publicSnap && publicSnap.exists() ? publicSnap.data().photoURL : null;
     const currentPhoto = storedPhoto || DEFAULT_AVATAR;
-    profilePic.src = currentPhoto;
+    if (profilePic) {
+        profilePic.src = currentPhoto;
+        profilePic.classList.add("is-loaded");
+    }
     selectedAvatar = currentPhoto;
 
     // Date d'inscription : on se base sur Firestore si un doc existe déjà,
@@ -411,7 +448,7 @@ onAuthStateChanged(auth, async (user) => {
     renderUsername(currentUsername);
     renderPublicUrl(currentUsername);
     setVisibilityUI(isPublic);
-    profileSince.textContent = formatSince(createdAt);
+    if (profileSince) profileSince.textContent = formatSince(createdAt);
 });
 
 // -----------------------------------------------------------------------
@@ -428,7 +465,7 @@ function openEditModal() {
     editUsernameInput.value = currentUsername || "";
     editUsernameStatus.textContent = "";
     editUsernameStatus.classList.remove("is-error", "is-ok");
-    editBioInput.value = profileBio.classList.contains("is-empty") ? "" : profileBio.textContent;
+    editBioInput.value = profileBio.classList.contains("is-empty") ? "" : getRealText(profileBio);
     bioCharCount.textContent = String(editBioInput.value.length);
     editStatus.textContent = "";
     editStatus.classList.remove("is-error");
@@ -596,7 +633,7 @@ editSaveBtn.addEventListener("click", async () => {
         });
 
         // Rafraîchissement de l'affichage
-        displayName.textContent = newName;
+        setRealText(displayName, newName);
         renderBio(newBio);
         currentUsername = normalizedUsername;
         currentUsernameDisplay = newName;
