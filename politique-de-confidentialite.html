@@ -4,364 +4,177 @@ permalink: /politique-de-confidentialite
 
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Politique de confidentialité</title>
-  
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Politique de confidentialité — LM</title>
+
   <meta name="robots" content="noindex, follow">
 
-  <meta name="theme-color" content="#58b3a2" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#344f4a" media="(prefers-color-scheme: dark)">
-
-  <link rel="icon" type="image/png" href="/favicon-light.png" media="(prefers-color-scheme: dark)">
-  <link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: light)">
-
-  <link rel="stylesheet" href="/style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
+  <meta property="og:title" content="Politique de confidentialité — LM">
+  <meta property="og:url" content="https://lm-assistantedigitale.fr/politique-de-confidentialite">
+  <meta property="og:type" content="website">
   
-  <script defer src="/js/nav-liquid-glass.js"></script>
-  <script defer src="https://cloud.umami.is/script.js" data-website-id="18d7b0fd-c5fb-4b2e-a43b-10cc734daa8f"></script>
-
-  <style>
-    :root {
-      --pc-accent-1: #00c896;
-      --pc-glass-bg: rgba(255, 255, 255, 0.08);
-      --pc-glass-inset: inset 0 0 14px rgba(255, 255, 255, 0.2);
-      --pc-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
-      --pc-text-muted: rgba(255, 255, 255, 0.7);
-      --pc-radius-card: 25px;
-    }
-
-    /* Wrapper glass, gère aussi le scroll horizontal sur mobile */
-    .tiers-table-wrap {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      margin: 24px 0;
-      padding: 12px;
-      border-radius: var(--pc-radius-card);
-      background: var(--pc-glass-bg);
-      box-shadow: var(--pc-glass-inset), var(--pc-shadow);
-    }
-
-    .tiers-table-wrap::-webkit-scrollbar { height: 6px; }
-    .tiers-table-wrap::-webkit-scrollbar-thumb {
-      background: var(--pc-accent-1);
-      border-radius: 10px;
-    }
-
-    .tiers-table {
-      width: 100%;
-      min-width: 460px;
-      border-collapse: separate;
-      border-spacing: 3.6px;
-      font-family: 'Rubik', sans-serif;
-    }
-
-    .tiers-table thead th {
-      text-align: left;
-      padding: 10px 20px 12px;
-      font-weight: 700;
-      font-size: 1.12rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      color: rgba(250, 250, 250, 1);
-    }
-
-    .tiers-table tbody tr {
-      background: rgba(255, 255, 255, 0.04);
-      transition: background 0.15s ease;
-    }
-
-    .tiers-table tbody tr:hover {
-      background: rgba(250, 250, 250, 0.1);
-    }
-
-    .tiers-table tbody td {
-      padding: 16px 20px;
-      font-size: 1.1rem;
-      line-height: 1.3;
-      color: var(--pc-text-muted);
-      vertical-align: middle;
-    }
-
-    .tiers-table tbody td:first-child {
-      font-weight: 700;
-      color: #ffffff;
-      border-radius: 20px 0 0 20px;
-      white-space: nowrap;
-    }
-
-    .tiers-table tbody td:last-child {
-      border-radius: 0 20px 20px 0;
-    }
-
-    @media (max-width: 900px) {
-      .tiers-table { min-width: 70px; }
-      .tiers-table thead th { font-size: 1rem; padding: 8px 14px 12px; }
-      .tiers-table tbody td { padding: 8px 12px; font-size: 1rem; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      .tiers-table tbody tr { transition: none; }
-    }
-  </style>
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  
+  <link rel="icon" type="image/png" href="/favicon.png"">
+  <link rel="stylesheet" href="/style.css">
 </head>
 
-<body class="mentions-body">
+<body>
+<a class="skip-link" href="#main">Aller au contenu</a>
 
-  <nav class="mobile-nav">
-    <a href="/" class="nav-icon" title="Accueil">
-      <img src="/icons/accueil.svg" alt="Accueil">
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href="/" class="brand" aria-label="LM — Accueil">
+      <img src="/pics/logo.svg" alt="Logo LM">
     </a>
-    <a href="/portfolio" class="nav-icon" title="Portfolio">
-      <img src="/icons/portfolio.svg" alt="Portfolio">
-    </a>
-    <a href="/rechercher" class="nav-icon" title="Rechercher">
-      <img src="/icons/rechercher.svg" alt="Rechercher">
-    </a>
-    <a href="/actus" class="nav-icon" title="Actus">
-      <img src="/icons/actus.svg" alt="Actus">
-    </a>
-    <a href="/profile" class="nav-icon" title="Profil">
-      <img src="/icons/profile.svg" alt="Profil">
-    </a>
-  </nav>
-
-  <div class="nav-blur-gradient" aria-hidden="true">
-    <span class="nav-blur-layer nav-blur-layer--1"></span>
-    <span class="nav-blur-layer nav-blur-layer--2"></span>
-    <span class="nav-blur-layer nav-blur-layer--3"></span>
-    <span class="nav-blur-layer nav-blur-layer--4"></span>
-    <span class="nav-blur-layer nav-blur-layer--5"></span>
+    <nav class="main-nav" aria-label="Navigation principale">
+      <ul>
+        <li><a href="/">Accueil</a></li>
+        <li><a href="/a-propos">À propos</a></li>
+        <li><a href="/prestations">Prestations</a></li>
+        <li><a href="/tarifs">Tarifs</a></li>
+      </ul>
+    </nav>
+    <div class="header-actions">
+      <a href="/contact" class="btn btn--primary">
+        Contactez-moi
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <button class="hamburger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
   </div>
+</header>
 
-  <header>
-    <div class="header-content">
-      <div class="logo">
-        <a href="/"><img src="/logo.svg" alt="Perspikative logo"></a>
+<nav id="mobile-menu" class="mobile-menu" aria-label="Navigation mobile">
+  <ul>
+    <li><a href="/">Accueil</a></li>
+    <li><a href="/a-propos">À propos</a></li>
+    <li><a href="/prestations">Prestations</a></li>
+    <li><a href="/tarifs">Tarifs</a></li>
+  </ul>
+  <div class="mobile-menu__footer">
+    <a href="/contact" class="btn btn--primary">Contactez-moi</a>
+  </div>
+</nav>
+
+<main id="main">
+
+  <section class="page-hero">
+    <div class="container">
+      <h1>Politique de confidentialité</h1>
+      <p class="lede">Dernière mise à jour : 23 août 2026</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="legal-content">
+        
+        <div class="legal-block">
+          <p>La présente politique de confidentialité a pour objectif d'informer les visiteurs du site <a href="https://lm-assistantedigitale.fr">lm-assistantedigitale.fr</a> sur la manière dont leurs données personnelles sont collectées et utilisées.</p>
+        </div>
+
+        <div class="legal-block">
+          <h2>Données collectées</h2>
+          <p>Lorsque vous utilisez le formulaire de contact du site, les données suivantes peuvent être collectées :</p>
+          <ul>
+            <li>Prénom</li>
+            <li>Nom</li>
+            <li>Adresse e-mail</li>
+            <li>Contenu de votre message</li>
+          </ul>
+          <br><p>La transmission de ces informations est nécessaire pour permettre à LM Assistante Digitale de répondre à votre demande.</p>
+        </div>
+
+        <div class="legal-block">
+          <h2>Utilisation des données</h2>
+          <p>Les informations transmises via le formulaire de contact sont utilisées uniquement afin de :</p>
+          <ul>
+            <li>Répondre à votre demande ;</li>
+            <li>Echanger avec vous dans le cadre d'une éventuelle prestation ;</li>
+            <li>Assurer le suivi de nos échanges</li>
+          </ul>
+          <br><p>Vos données personnelles ne sont ni vendues, ni louées, ni cédées à des fins commerciales.</p>
+        </div>
+
+        <div class="legal-block">
+          <h2>Base légale du traitement</h2>
+          <p>Le traitement de vos données est fondé sur votre demande de contact et, lorsque votre demande concerne une éventuelle prestation, sur les mesures précontractuelles pouvant être nécessaires à la préparation de cette relation professionnelle.</p>
+        </div>
+
+        <div class="legal-block">
+          <h2>Durée de conservation</h2>
+          <p>Les données transmises via le formulaire de contact sont conservées pendant la durée nécessaire au traitement de votre demande et au suivi de nos échanges.</p>
+          <p>Elles peuvent ensuite être supprimées ou conservées uniquement lorsque cela est nécessaire au respect d'une obligation légale.</p>
+        </div>
+
+        <div class="legal-block">
+          <h2>Destinataire des données</h2>
+          <p>Les données transmises via le formulaire sont destinées à **LM Assistante Digitale** et peuvent être traitées par les prestataires techniques nécessaires au fonctionnement du site et du formulaire de contact. Ces données ne sont pas transmises à des tiers à des fins commerciales.</p>
+        </div>
+        
+        <div class="legal-block">
+          <h2>Vos droits</h2>
+          <p>Conformément à la réglementation applicable en matière de protection des données personnelles, notamment le Règlement général sur la protection des données (RGPD), vous disposez, selon les conditions prévues par la réglementation, d'un droit :</p>
+          <ul>
+            <li>d'accès à vos données personnelles</li>
+            <li>de rectification de vos données</li>
+            <li>d'effacement de vos données</li>
+            <li>d'opposition au traitement de vos données</li>
+            <li>de portabilité de vos données lorsque ce droit est applicable</li>
+          </ul>
+          <br><p>Pour exercer vos droits ou pour toute question concernant le traitement de vos données personnelles, vous pouvez contacter <a href="contact@lm-assistantedigitale.fr">contact@lm-assistantedigitale.fr</a>.</p>
+        </div>
+
       </div>
+    </div>
+  </section>
 
-      <div class="nav-right">
-        <ul class="nav-tabs">
-          <li>
-            <a href="/" class="tab">
-              <img src="/icons/accueil.svg" alt="" class="tab-icon"> ACCUEIL
-            </a>
-          </li>
-          <li>
-            <a href="/portfolio" class="tab">
-              <img src="/icons/portfolio.svg" alt="" class="tab-icon"> PORTFOLIO
-            </a>
-          </li>
-          <li>
-            <a href="/actus" class="tab">
-              <img src="/icons/actus.svg" alt="" class="tab-icon"> ACTUS
-            </a>
-          </li>
-          <li>
-            <a href="/profile" class="tab">
-              <img src="/icons/profile.svg" alt="" class="tab-icon"> PROFIL
-            </a>
-          </li>
-        </ul>
+</main>
 
-        <input type="checkbox" id="menuToggle" />
-        <label for="menuToggle" class="burger-icon" title="Menu">
-          <img id="menuIcon" src="icons/menu.svg" alt="Menu">
-        </label>
-      <div class="mobile-menu">
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="/pics/logo-footer.svg" alt="Logo LM">
+        <p>Assistante digitale, spécialisée en gestion administrative — au service des indépendants, artisans et petites entreprises.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Navigation</h4>
         <ul>
-          <li><a href="/commu">COMMUNAUTÉ</a></li>
-          <li><a href="/art-challenge">ART CHALLENGE</a></li>
-          <li><a href="/contact">CONTACT</a></li>
+          <li><a href="/">Accueil</a></li>
+          <li><a href="/a-propos">À propos</a></li>
+          <li><a href="/prestations">Prestations</a></li>
+          <li><a href="/tarifs">Tarifs</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Suivre</h4>
+        <ul>
+          <li><a href="https://linkedin.com/company/lm-assistante-digitale" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="https://www.instagram.com/lm_assistantedigitale" target="_blank" rel="noopener">Instagram</a></li>
+          <li><a href="mailto:contact@lm-assistantedigitale.fr">contact@lm-assistantedigitale.fr</a></li>
         </ul>
       </div>
     </div>
-  </header>
-
-  <div class="blur-overlay"></div>
-
-  <main class="mentions-wrapper">
-    <section class="mentions-content">
-      <img src="/icons/politique-de-confidentialite.svg" alt="" class="mentions-icon">
-      <h1>POLITIQUE DE CONFIDENTIALITÉ</h1>
-      <p class="mentions-date">Dernière mise à jour : 12/08/2026</p>
-
-      <p>Cette politique explique de manière claire et transparente quelles donnéees peuvent être collectées
-        lorsque vous naviguez sur le site <a href="https://perspikative.com" class="host-link"><strong>perspikative.com</strong></a>,
-        pourquoi elles le sont, et comment elles sont utilisées.
-
-      <h2>1. DONNÉES COLLECTÉES</h2>
-      <p>Le site peut collecter deux types de données :</p>
-
-      <p><strong>Données fournies volontairement</strong></p>
-      <p>
-        Lorsque vous créez votre compte Perspikative, les informations suivantes peuvent être récoltées :
-      </p>
-      <ul>
-        <li>Nom</li>
-        <li>Prénom</li>
-        <li>Adresse mail</li>
-        <li>Photo de profil</li>
-        <li>Pseudonyme</li>
-      </ul>
-      <p>
-        Ces informations sont uniquement utilisées pour votre compte Perspikative. Ils sont gérés à l'aide de Firebase, un service fourni par Google.
-        Les informations nécessaires au fonctionnement de votre compte (comme votre adresse mail, votre nom d'utilisateur ou les données liées à votre profil) sont stockées et traitées via cette plateforme.
-        Perspikative ne vend ni ne partage vos données personnelles à des tiers à des fins commerciales.
-      </p>
-
-      <p><strong>Données de navigation</strong></p>
-      <p>
-        Perspikative utilise <a href="https://umami.is" target="_blank" class="host-link"><strong>Umami Analytics</strong></a> afin d'obtenir des statistiques de fréquentation du site de manière respectueuse de la vie privée des utilisateurs, sans l'utilisation de cookies.
-        Les informations suivantes peuvent être mesurées de façon anonyme :
-      </p>
-      <ul>
-        <li>Nombre de visiteurs</li>
-        <li>Nombre de visites</li>
-        <li>Nombre de vues</li>
-        <li>Taux moyen de rebond</li>
-        <li>Temps moyen de visite</li> 
-        <li>Pages visitées</li>
-        <li>Source de trafic</li>
-        <li>Navigateur utilisé</li>
-        <li>Système d'exploitation utilisé</li>
-        <li>Appareils utilisés</li>
-        <li>Emplacement géographique approximatif</li>
-      </ul>
-
-      <h2>2. COOKIES</h2>
-
-      <p>
-        Perspikative n'utilise que des <strong>cookies essentiels</strong> au fonctionnement du site
-        (comptes, favoris, recherches récentes...) et des cookies issus d'API externes (telles que les commentaires et l'intégration de vidéos YouTube).
-      </p>
-      <p>
-        Le site n'utilise pas de cookies à des fins de suivi, de publicité ou d'analyse, et ne collecte aucune donnée personnelle via les cookies.
-        Les statistiques du site sont seulement fournies de manière anonyme par <a href="https://umami.is" target="_blank" class="host-link"><strong>Umami Analytics</strong></a>.
-      </p>
-
-      <h2>3. UTILISATION DES DONNÉES</h2>
-
-      <p>Les données collectées sont utilisées exclusivement pour :</p>
-      <ul>
-        <li>Créer votre compte Perspikative ;</li>
-        <li>Comprendre la fréquentation du site (anonymement) ;</li>
-        <li>Améliorer le contenu, les performances et l'expérience utilisateur (anonymement) ;</li>
-        <li>Identifier la popularité des pages (anonymement) ;</li>
-        <li>Prévenir les abus, les fraudes et les actes malveillants envers le site.</li>
-      </ul> 
-      <p>Aucune donnée personnelle n'est vendue, cédée ou partagée avec des tiers à des fins commerciales sous aucun prétexte.</p>
-
-      <h2>4. DURÉE DE CONSERVATION</h2>
-
-      <p>Les données fournies pour la création de votre compte sont conservées tout le temps où votre compte existe. Si vous décidez de supprimer votre compte, toutes vos données seront supprimées.</p>
-      <p>Les statistiques anonymes de fréquentation sont conservées pour une durée limitée dans Umami Analytics.</p>
-      
-      <h2>5. SERVICES TIERS</h2>
-
-      <p>Le site fait appel à plusieurs services externes pour fonctionner :</p>
-
-      <div class="tiers-table-wrap">
-        <table class="tiers-table">
-          <thead>
-            <tr>
-              <th scope="col">Service</th>
-              <th scope="col">Utilisation</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Firebase (Google)</td>
-              <td>Comptes utilisateurs, authentification, base de données et e-mails</td>
-            </tr>
-            <tr>
-              <td>GitHub Pages</td>
-              <td>Hébergement du site</td>
-            </tr>
-            <tr>
-              <td>Hostinger</td>
-              <td>Gestion du nom de domaine et DNS</td>
-            </tr>
-            <tr>
-              <td>YouTube (Google)</td>
-              <td>Intégration de vidéos</td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="footer-bottom">
+      <span>© 2026 LM Assistante digitale. Tous droits réservés.</span>
+      <div class="footer-bottom__links">
+        <a href="/mentions-legales">Mentions légales</a>
+        <a href="/politique-de-confidentialite">Politique de confidentialité</a>
       </div>
-
-      <p>YouTube applique sa propre <a href="https://www.youtube.com/howyoutubeworks/privacy/" target="_blank" class="host-link">politique de confidentialité</a>, que vous acceptez en lisant les vidéos.</p>
-
-      <h2>6. VOS DROITS</h2>
-
-      <p>Conformément au Règlement Général sur la Protection des Données (RGPD), vous disposez des droits suivants :</p>
-      <ul>
-        <li>Droit d'accès à vos données</li>
-        <li>Droit de rectification</li>
-        <li>Droit de suppression</li>
-      </ul>
-
-      <p>Pour toute demande, vous pouvez me contacter : <a href="mailto:perspikative@gmail.com" class="host-link">perspikative@gmail.com</a></p>
-
-      <h2>6. RESPONSABLE DU TRAITEMENT</h2>
-
-      <p><strong>Responsable du site :</strong> Tartineske</p>
-      <p><strong>Statut :</strong> Particulier (projet personnel)</p>
-      <p>
-        <strong>Contact :</strong>
-        <a href="mailto:perspikative@gmail.com" class="host-link">
-          perspikative@gmail.com
-        </a>
-      </p>
-
-      <a href="#" onclick="history.back()" class="back-home">
-        <img src="/icons/retour.svg" alt="Retour" />
-      </a>
-    </section>
-  </main>
-
-
-
-  <footer>
-    <div class="social-icons">
-      <a href="https://linktr.ee/perspikative" target="_blank" aria-label="Linktree">
-        <img src="/icons/linktree.svg" alt="Linktree">
-      </a>
-     <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" aria-label="Chaîne WhatsApp">
-        <img src="/icons/whatsapp-channel.svg" alt="Chaîne WhatsApp">
-      </a>
-      <a href="https://www.instagram.com/perspikative" target="_blank" aria-label="Instagram">
-        <img src="/icons/instagram.svg" alt="Instagram">
-      </a>
-      <a href="https://discord.com/invite/c5w9ucgDZH" target="_blank" aria-label="Discord">
-        <img src="/icons/discord.svg" alt="Discord">
-      </a>
-      <a href="https://youtube.com/@perspikative" target="_blank" aria-label="YouTube">
-        <img src="/icons/youtube.svg" alt="YouTube">
-      </a>
     </div>
+  </div>
+</footer>
 
-    <p>&copy; 2026 Perspikative™. Tous droits réservés.</p>
-    <p><a href="/mentions-legales" class="footer-link">Mentions légales</a></p>
-    <p><a href="/politique-de-confidentialite" class="footer-link">Politique de confidentialité</a></p>
-    <p><a href="/terms-of-service" class="footer-link">Conditions d'utilisation</a></p>
-    <p><a href="/help-center" class="footer-link">Centre d'aide</a></p>
-    <p><a href="/position-ia" class="footer-link">Position sur l'IA</a></p>
-    <p><a href="/brand-guidelines" class="footer-link">Brand guidelines</a></p>
-  </footer>
-
-  <script>
-    const menuToggle = document.getElementById('menuToggle');
-    menuToggle.addEventListener('change', (e) => {
-      document.body.classList.toggle('menu-open', e.target.checked);
-    });
-  </script>
-
-  <script src="/script.js"></script>
+<script src="/script.js"></script>
 </body>
 </html>
-
