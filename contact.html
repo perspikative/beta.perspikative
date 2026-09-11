@@ -4,182 +4,231 @@ permalink: /contact
 
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Contact — LM Assistante digitale</title>
+  <title>Contact</title>
 
-  <meta name="description" content="Contactez-moi pour discuter de vos besoins en gestion administrative et découvrir comment LM peut alléger votre quotidien professionnel.">
-  <meta name="keywords" content="LM assistante digitale, contact, gestion administrative, indépendants, artisans, petites entreprises">
+  <meta name="description" content="Une idée, une collab ou une question ? Contacte Perspikative et retrouve tous les liens pour suivre l'aventure !" />
   <meta name="robots" content="index, follow">
 
-  <meta property="og:title" content="LM — Assistante digitale & gestion administrative">
-  <meta property="og:description" content="LM est une assistante digitale et experte en gestion administrative, dédiée aux indépendants, artisans et petites entreprises.">
-  <meta property="og:url" content="https://lm-assistantedigitale.fr/contact">
-  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#58b3a2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#344f4a" media="(prefers-color-scheme: dark)">
+
+  <link rel="icon" type="image/png" href="/favicon-light.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: light)">
+
+  <link rel="stylesheet" href="/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
   
-  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
-  
-  <link rel="icon" type="image/png" href="/favicon.png"">
-  <link rel="stylesheet" href="/style.css">
+  <script defer src="/js/nav-liquid-glass.js"></script>
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="18d7b0fd-c5fb-4b2e-a43b-10cc734daa8f"></script>
 </head>
 
-<body>
-<a class="skip-link" href="#main">Aller au contenu</a>
+<body class="contact">
 
-<header class="site-header">
-  <div class="container site-header__inner">
-    <a href="/" class="brand" aria-label="LM — Accueil">
-      <img src="/pics/logo.svg" alt="Logo LM">
+  <nav class="mobile-nav">
+    <a href="/" class="nav-icon" title="Accueil">
+      <img src="/icons/accueil.svg" alt="Accueil">
     </a>
-    <nav class="main-nav" aria-label="Navigation principale">
-      <ul>
-        <li><a href="/">Accueil</a></li>
-        <li><a href="/a-propos">À propos</a></li>
-        <li><a href="/prestations">Prestations</a></li>
-        <li><a href="/tarifs">Tarifs</a></li>
-      </ul>
-    </nav>
-    <div class="header-actions">
-      <a href="/contact" class="btn btn--primary">
-        Contactez-moi
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    <a href="/portfolio" class="nav-icon" title="Portfolio">
+      <img src="/icons/portfolio.svg" alt="Portfolio">
+    </a>
+    <a href="/rechercher" class="nav-icon" title="Rechercher">
+      <img src="/icons/rechercher.svg" alt="Rechercher">
+    </a>
+    <a href="/actus" class="nav-icon" title="Actus">
+      <img src="/icons/actus.svg" alt="Actus">
+    </a>
+    <a href="/profile" class="nav-icon" title="Profil">
+      <img src="/icons/profile.svg" alt="Profil">
+    </a>
+  </nav>
+
+  <div class="nav-blur-gradient" aria-hidden="true">
+    <span class="nav-blur-layer nav-blur-layer--1"></span>
+    <span class="nav-blur-layer nav-blur-layer--2"></span>
+    <span class="nav-blur-layer nav-blur-layer--3"></span>
+    <span class="nav-blur-layer nav-blur-layer--4"></span>
+    <span class="nav-blur-layer nav-blur-layer--5"></span>
+  </div>
+
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <a href="/"><img src="/logo.svg" alt="Perspikative logo"></a>
+      </div>
+
+      <div class="nav-right">
+        <ul class="nav-tabs">
+          <li>
+            <a href="/" class="tab">
+              <img src="/icons/accueil.svg" alt="" class="tab-icon"> ACCUEIL
+            </a>
+          </li>
+          <li>
+            <a href="/portfolio" class="tab">
+              <img src="/icons/portfolio.svg" alt="" class="tab-icon"> PORTFOLIO
+            </a>
+          </li>
+          <li>
+            <a href="/actus" class="tab">
+              <img src="/icons/actus.svg" alt="" class="tab-icon"> ACTUS
+            </a>
+          </li>
+          <li>
+            <a href="/profile" class="tab">
+              <img src="/icons/profile.svg" alt="" class="tab-icon"> PROFIL
+            </a>
+          </li>
+        </ul>
+
+        <input type="checkbox" id="menuToggle" />
+        <label for="menuToggle" class="burger-icon" title="Menu">
+          <img id="menuIcon" src="icons/menu.svg" alt="Menu">
+        </label>
+      <div class="mobile-menu">
+        <ul>
+          <li><a href="/commu">COMMUNAUTÉ</a></li>
+          <li><a href="/art-challenge">ART CHALLENGE</a></li>
+          <li><a href="/contact">CONTACT</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <div class="blur-overlay"></div>
+
+  <main>
+    <div class="contact-container">
+
+      <!-- Rond avec image -->
+      <div class="profile-image">
+        <img src="/pics/assets/social-icon.webp" alt="Perspikative">
+      </div>
+
+      <!-- Titre -->
+      <h1 class="profile-title">Perspikative</h1>
+
+      <!-- Logos horizontaux -->
+      <div class="social-logos">
+        <a href="https://linktr.ee/perspikative" target="_blank" rel="noopener">
+          <img src="/icons/linktree.svg" alt="Linktree">
+        </a>
+        <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" rel="noopener">
+          <img src="/icons/whatsapp-channel.svg" alt="WhatsApp Channel">
+        </a>
+        <a href="https://instagram.com/perspikative" target="_blank" rel="noopener">
+          <img src="/icons/instagram.svg" alt="Instagram">
+        </a>
+        <a href="https://discord.com/invite/c5w9ucgDZH" target="_blank" aria-label="Discord">
+          <img src="/icons/discord.svg" alt="Discord">
+        </a>
+        <a href="https://youtube.com/@perspikative" target="_blank" rel="noopener">
+          <img src="/icons/youtube.svg" alt="YouTube">
+        </a>
+      </div>
+
+      <!-- Mail -->
+      <div class="contact-mail">
+        <a href="mailto:perspikative@gmail.com">
+          <img src="/icons/contact-active.svg" alt="Mail">
+          <span>perspikative@gmail.com</span>
+        </a>
+      </div>
+
+      <!-- Boutons glassmorphism -->
+      <div class="social-buttons">
+        <a href="https://linktr.ee/perspikative" target="_blank" rel="noopener">
+          <div class="social-button">
+            <img src="/icons/linktree.svg" alt="Linktree">
+            <span>Linktree</span>
+          </div>
+        </a>
+        <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" rel="noopener">
+          <div class="social-button">
+            <img src="/icons/whatsapp-channel.svg" alt="WhatsApp">
+            <span>WhatsApp</span>
+          </div>
+        </a>
+        <a href="https://instagram.com/perspikative" target="_blank" rel="noopener">
+          <div class="social-button">
+            <img src="/icons/instagram.svg" alt="Instagram">
+            <span>Instagram</span>
+          </div>
+        </a>
+        <a href="https://discord.com/invite/c5w9ucgDZH" target="_blank" rel="noopener">
+          <div class="social-button">
+            <img src="/icons/discord.svg" alt="Discord">
+            <span>Discord</span>
+          </div>
+        </a>
+        <a href="https://youtube.com/@perspikative" target="_blank" rel="noopener">
+          <div class="social-button">
+            <img src="/icons/youtube.svg" alt="YouTube">
+            <span>YouTube</span>
+          </div>
+        </a>
+        <a href="https://ngl.link/perspikative" target="_blank" rel="noopener">
+          <div class="social-button">
+            <img src="/icons/ngl.png" alt="NGL">
+            <span>NGL</span>
+          </div>
+        </a>
+        <a href="https://buymeacoffee.com/perspikative" target="_blank" rel="noopener">
+          <div class="social-button">
+            <img src="/icons/buymeacoffee.svg" alt="Buy Me a Coffee">
+            <span>Buy Me a Coffee</span>
+          </div>
+        </a>
+        <div class="cat-container">
+          <img src="pics/cat/cat-letter.svg" alt="Chat avec une lettre" class="cat-footer">
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="social-icons">
+      <a href="https://linktr.ee/perspikative" target="_blank" aria-label="Linktree">
+        <img src="/icons/linktree.svg" alt="Linktree">
       </a>
-      <button class="hamburger" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="mobile-menu">
-        <span></span><span></span><span></span>
-      </button>
+     <a href="https://www.whatsapp.com/channel/0029VaKP3Kd5Ui2gky1r5m3y" target="_blank" aria-label="Chaîne WhatsApp">
+        <img src="/icons/whatsapp-channel.svg" alt="Chaîne WhatsApp">
+      </a>
+      <a href="https://www.instagram.com/perspikative" target="_blank" aria-label="Instagram">
+        <img src="/icons/instagram.svg" alt="Instagram">
+      </a>
+      <a href="https://discord.com/invite/c5w9ucgDZH" target="_blank" aria-label="Discord">
+        <img src="/icons/discord.svg" alt="Discord">
+      </a>
+      <a href="https://youtube.com/@perspikative" target="_blank" aria-label="YouTube">
+        <img src="/icons/youtube.svg" alt="YouTube">
+      </a>
     </div>
-  </div>
-</header>
 
-<nav id="mobile-menu" class="mobile-menu" aria-label="Navigation mobile">
-  <ul>
-    <li><a href="/">Accueil</a></li>
-    <li><a href="/a-propos">À propos</a></li>
-    <li><a href="/prestations">Prestations</a></li>
-    <li><a href="/tarifs">Tarifs</a></li>
-  </ul>
-  <div class="mobile-menu__footer">
-    <a href="/contact" class="btn btn--primary">Contactez-moi</a>
-  </div>
-</nav>
+    <p>&copy; 2026 Perspikative™. Tous droits réservés.</p>
+    <p><a href="/mentions-legales" class="footer-link">Mentions légales</a></p>
+    <p><a href="/politique-de-confidentialite" class="footer-link">Politique de confidentialité</a></p>
+    <p><a href="/terms-of-service" class="footer-link">Conditions d'utilisation</a></p>
+    <p><a href="/help-center" class="footer-link">Centre d'aide</a></p>
+    <p><a href="/position-ia" class="footer-link">Position sur l'IA</a></p>
+    <p><a href="/brand-guidelines" class="footer-link">Brand guidelines</a></p>
+  </footer>
 
-<main id="main">
+  <a href="/rechercher" class="search-float-btn" title="Rechercher">
+    <img src="/icons/rechercher.svg" alt="Rechercher">
+  </a>
 
-  <section class="page-hero">
-    <div class="container">
-      <p class="eyebrow">Contact</p>
-      <h1>Parlons de votre quotidien professionnel.</h1>
-      <p class="lede">Je suis à votre écoute pour définir ensemble vos besoins, je m'adapte à chaque demande</p>
-    </div>
-  </section>
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    menuToggle.addEventListener('change', (e) => {
+      document.body.classList.toggle('menu-open', e.target.checked);
+    });
+  </script>
 
-  <section class="section">
-    <div class="container contact-layout">
-
-      <div class="contact-info reveal">
-        <div class="contact-info__block">
-          <h3>Email</h3>
-          <a href="mailto:contact@lm-assistantedigitale.fr">contact@lm-assistantedigitale.fr</a>
-        </div>
-        <div class="contact-info__block">
-          <h3>Téléphone</h3>
-          <p>06 62 68 28 14</p>
-        </div>
-        <div class="contact-info__block">
-          <h3>Réseaux</h3>
-          <div class="contact-info__socials">
-            <a href="https://linkedin.com/company/lm-assistante-digitale" rel="noopener">LinkedIn</a>
-            <a href="https://www.instagram.com/lm_assistantedigitale" rel="noopener">Instagram</a>
-          </div>
-        </div>
-      </div>
-
-      <form id="contact-form" class="reveal" action="https://api.web3forms.com/submit" method="POST" novalidate>
-        <input type="hidden" name="access_key" value="16178687-a2e2-489a-a52f-5c8aad9b9979">
-        <input type="hidden" name="subject" value="Nouveau message depuis LM Assistante digitale">
-        <input type="hidden" name="from_name" value="LM Assistante digitale">
-        <div class="form-grid form-grid--split">
-          <div class="field">
-            <label for="prenom">Prénom</label>
-            <input type="text" id="prenom" name="prenom" required autocomplete="given-name">
-            <span class="field__error" role="alert"></span>
-          </div>
-          <div class="field">
-            <label for="nom">Nom</label>
-            <input type="text" id="nom" name="nom" required autocomplete="family-name">
-            <span class="field__error" role="alert"></span>
-          </div>
-        </div>
-
-        <div class="form-grid" style="margin-top:var(--space-sm);">
-          <div class="field">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" required autocomplete="email">
-            <span class="field__error" role="alert"></span>
-          </div>
-          <div class="field">
-            <label for="message">Message</label>
-            <textarea id="message" name="message" required></textarea>
-            <span class="field__error" role="alert"></span>
-          </div>
-        </div>
-
-        <div class="form-status" role="status" aria-live="polite"></div>
-
-        <div style="margin-top:var(--space-sm);">
-          <button type="submit" class="btn btn--primary">
-            Envoyer le message
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </button>
-        </div>
-        <p class="legal-notice">En envoyant ce message, vous acceptez la <a href="/politique-de-confidentialite">politique de confidentialité</a> du site.</p>
-      </form>
-
-    </div>
-  </section>
-
-</main>
-
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <img src="/pics/logo-footer.svg" alt="Logo LM">
-        <p>Assistante digitale, spécialisée en gestion administrative — au service des indépendants, artisans et petites entreprises.</p>
-      </div>
-      <div class="footer-col">
-        <h4>Navigation</h4>
-        <ul>
-          <li><a href="/">Accueil</a></li>
-          <li><a href="/a-propos">À propos</a></li>
-          <li><a href="/prestations">Prestations</a></li>
-          <li><a href="/tarifs">Tarifs</a></li>
-          <li><a href="/contact">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Suivre</h4>
-        <ul>
-          <li><a href="https://linkedin.com/company/lm-assistante-digitale" target="_blank" rel="noopener">LinkedIn</a></li>
-          <li><a href="https://www.instagram.com/lm_assistantedigitale" target="_blank" rel="noopener">Instagram</a></li>
-          <li><a href="mailto:contact@lm-assistantedigitale.fr">contact@lm-assistantedigitale.fr</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 LM Assistante digitale. Tous droits réservés.</span>
-      <div class="footer-bottom__links">
-        <a href="/mentions-legales">Mentions légales</a>
-        <a href="/politique-de-confidentialite">Politique de confidentialité</a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-<script src="/script.js"></script>
+  <script src="/script.js"></script>
 </body>
 </html>
