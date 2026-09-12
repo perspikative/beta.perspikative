@@ -282,6 +282,12 @@ permalink: /profile
     font-style: italic;
   }
 
+  /* Pas de username choisi : une fois chargé, on masque complètement la
+     ligne (pas de skeleton "vide" laissé affiché, pas de texte "@"). */
+  #profileUsername.is-empty.is-loaded {
+    display: none;
+  }
+
   /* ===== SKELETONS DE CHARGEMENT =====
      Le contenu réel reste dans le flux normal (aucun layout shift) ; le
      skeleton est positionné par-dessus en absolu, exactement à la même
@@ -289,6 +295,7 @@ permalink: /profile
      (voir .is-loaded plus bas + profile.js). Couvre : displayName,
      profileBio, accountEmail, accountId (texte) et profilePic (photo). */
   #displayName,
+  #profileUsername,
   #profileBio,
   #accountEmail,
   #accountId {
@@ -296,6 +303,7 @@ permalink: /profile
   }
 
   #displayName .skeleton-bar,
+  #profileUsername .skeleton-bar,
   #profileBio .skeleton-bar,
   #accountEmail .skeleton-bar,
   #accountId .skeleton-bar {
@@ -313,6 +321,14 @@ permalink: /profile
     height: 1.1em;
     width: 62%;
     max-width: 220px;
+    border-radius: 25px;
+  }
+
+  #profileUsername .skeleton-bar {
+    top: 0.1em;
+    left: 0;
+    height: 1em;
+    width: 120px;
     border-radius: 25px;
   }
 
@@ -341,6 +357,7 @@ permalink: /profile
   }
 
   #displayName .skeleton-bar::before,
+  #profileUsername .skeleton-bar::before,
   #profileBio .skeleton-bar::before,
   #accountEmail .skeleton-bar::before,
   #accountId .skeleton-bar::before {
@@ -351,6 +368,7 @@ permalink: /profile
   }
 
   #displayName .skeleton-bar::after,
+  #profileUsername .skeleton-bar::after,
   #profileBio .skeleton-bar::after,
   #accountEmail .skeleton-bar::after,
   #accountId .skeleton-bar::after {
@@ -368,6 +386,7 @@ permalink: /profile
   }
 
   #displayName > span.real-text,
+  #profileUsername > span.real-text,
   #profileBio > span.real-text,
   #accountEmail > span.real-text,
   #accountId > span.real-text {
@@ -377,6 +396,7 @@ permalink: /profile
   }
 
   #displayName.is-loaded .skeleton-bar,
+  #profileUsername.is-loaded .skeleton-bar,
   #profileBio.is-loaded .skeleton-bar,
   #accountEmail.is-loaded .skeleton-bar,
   #accountId.is-loaded .skeleton-bar {
@@ -385,6 +405,7 @@ permalink: /profile
   }
 
   #displayName.is-loaded > span.real-text,
+  #profileUsername.is-loaded > span.real-text,
   #profileBio.is-loaded > span.real-text,
   #accountEmail.is-loaded > span.real-text,
   #accountId.is-loaded > span.real-text {
@@ -447,6 +468,7 @@ permalink: /profile
 
   @media (prefers-reduced-motion: reduce) {
     #displayName .skeleton-bar::after,
+    #profileUsername .skeleton-bar::after,
     #profileBio .skeleton-bar::after,
     #accountEmail .skeleton-bar::after,
     #accountId .skeleton-bar::after,
@@ -1514,188 +1536,6 @@ permalink: /profile
       font-size: 0.96rem;
     }
   }
-
-  /* ============================= ONGLET PROFIL (RÉSEAUX & BADGES) ============================= */
-
-  .profile-section-title {
-    font-family: 'Rubik', sans-serif;
-    font-size: 1.06rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.76);
-    margin: 0 0 14px 0;
-  }
-
-  .social-networks-form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 32px;
-  }
-
-  .social-input-group {
-    display: flex;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
-    padding: 8px 16px;
-    box-shadow:
-      inset 0 0 12px rgba(255, 255, 255, 0.08),
-      0 4px 14px rgba(0, 0, 0, 0.06);
-    transition: background 0.2s ease, border-color 0.2s ease;
-    border: 1.5px solid transparent;
-  }
-
-  .social-input-group:focus-within {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(0, 200, 150, 0.6);
-  }
-
-  .social-input-icon {
-    width: 22px;
-    height: 22px;
-    flex-shrink: 0;
-    margin-right: 12px;
-    opacity: 0.85;
-  }
-
-  .social-input {
-    flex: 1;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: #ffffff;
-    font-family: 'Rubik', sans-serif;
-    font-size: 0.98rem;
-  }
-
-  .social-input::placeholder {
-    color: rgba(255, 255, 255, 0.38);
-  }
-
-  .social-save-btn {
-    align-self: flex-start;
-    margin-top: 2px;
-    padding: 10px 18px;
-    border: none;
-    border-radius: 25px;
-    background: linear-gradient(135deg, #00c896, #0af0d0);
-    color: #ffffff;
-    font-family: 'Rubik', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 700;
-    cursor: pointer;
-    box-shadow: 0 6px 18px rgba(0, 200, 150, 0.2);
-    transition: transform 0.2s ease, opacity 0.2s ease;
-  }
-
-  .social-save-btn:hover:not(:disabled) {
-    transform: translateY(-1px);
-  }
-
-  .social-save-btn:disabled {
-    opacity: 0.55;
-    cursor: wait;
-  }
-
-  .social-save-btn.is-saving {
-    pointer-events: none;
-  }
-
-  .social-status {
-    min-height: 1.2em;
-    margin: 0;
-    font-family: 'Rubik', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: rgba(255, 255, 255, 0.62);
-  }
-
-  .social-status.is-error {
-    color: rgba(255, 130, 130, 0.95);
-  }
-
-  .badges-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
-    gap: 14px;
-  }
-
-  .badge-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 18px 12px;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 24px;
-    box-shadow:
-      inset 0 0 12px rgba(255, 255, 255, 0.08),
-      0 6px 16px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease, background 0.2s ease;
-  }
-
-  .badge-card:hover {
-    transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.08);
-  }
-
-  .badge-card.locked {
-    opacity: 0.45;
-    filter: grayscale(0.8);
-  }
-
-  .badge-icon-wrap {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 10px;
-    font-size: 1.5rem;
-    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.12);
-  }
-
-  .badge-title {
-    font-family: 'Rubik', sans-serif;
-    font-size: 0.92rem;
-    font-weight: 700;
-    color: #ffffff;
-    margin: 0 0 4px 0;
-  }
-
-  .badge-desc {
-    font-family: 'Rubik', sans-serif;
-    font-size: 0.78rem;
-    color: rgba(255, 255, 255, 0.6);
-    line-height: 1.25;
-    margin: 0;
-  }
-
-  .badge-status {
-    margin-top: 8px;
-    font-family: 'Rubik', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-
-  .badge-card.unlocked .badge-status {
-    background: rgba(0, 200, 150, 0.2);
-    color: #7CE0B0;
-    border: 1px solid rgba(0, 200, 150, 0.4);
-  }
-
-  .badge-card.locked .badge-status {
-    background: rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.4);
-  }
 </style>
 
 </head>
@@ -1789,7 +1629,7 @@ permalink: /profile
           <img
             id="profilePic"
             class="profile-pic"
-            src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='110' height='110' viewBox='0 0 90 90'><rect width='100%25' height='100%25' fill='%200d1f1c'/></svg>"
+            src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='110' height='110' viewBox='0 0 90 90'><rect width='100%25' height='100%25' fill='%230d1f1c'/></svg>"
             alt="Photo de profil"
           >
           <span class="profile-pic-edit-hint">
@@ -1799,7 +1639,7 @@ permalink: /profile
 
         <div class="profile-identity">
           <div id="displayName"><span class="skeleton-bar" aria-hidden="true"></span><span class="real-text">Utilisateur</span></div>
-          <div id="profileUsername" hidden></div>
+          <div id="profileUsername"><span class="skeleton-bar" aria-hidden="true"></span><span class="real-text"></span></div>
         </div>
 
         <div class="profile-bio-block">
@@ -1828,10 +1668,7 @@ permalink: /profile
           <button class="profile-tab-btn" data-tab="confidentialite" role="tab" aria-selected="false">
             Confidentialité
           </button>
-          <button class="profile-tab-btn" data-tab="profile" role="tab" aria-selected="false">
-            Profil
-          </button>
-          <button class="profile-tab-btn" data-tab="security" role="tab" aria-selected="false">
+          <button class="profile-tab-btn" data-tab="securite" role="tab" aria-selected="false">
             Sécurité
           </button>
         </div>
@@ -1913,73 +1750,8 @@ permalink: /profile
             <p class="visibility-status" id="visibilityStatus"></p>
 
           </div>
-          
-          <div class="profile-tab-content" data-tab-panel="profile">
-            <h3 class="profile-section-title">Réseaux sociaux</h3>
-            <form class="social-networks-form" id="socialForm">
-              <div class="social-input-group">
-                <img src="/icons/instagram.svg" alt="Instagram" class="social-input-icon">
-                <input type="text" class="social-input" id="socialInstagram" placeholder="@pseudo_instagram" autocomplete="off" />
-              </div>
 
-              <div class="social-input-group">
-                <img src="/icons/whatsapp-channel.svg" alt="WhatsApp" class="social-input-icon">
-                <input type="url" class="social-input" id="socialWhatsapp" placeholder="https://wa.me/..." autocomplete="url" />
-              </div>
-
-              <div class="social-input-group">
-                <img src="/icons/youtube.svg" alt="YouTube" class="social-input-icon">
-                <input type="text" class="social-input" id="socialYoutube" placeholder="@pseudo_youtube" autocomplete="off" />
-              </div>
-
-              <button type="submit" class="social-save-btn" id="socialSaveBtn">
-                Enregistrer
-              </button>
-              <p class="social-status" id="socialStatus" aria-live="polite"></p>
-            </form>
-
-            <h3 class="profile-section-title">Badges</h3>
-            <div class="badges-grid">
-              
-              <div class="badge-card unlocked">
-                <div class="badge-icon-wrap">✦</div>
-                <h4 class="badge-title">Pionnier</h4>
-                <p class="badge-desc">Membre de la bêta Perspikative</p>
-                <span class="badge-status">Débloqué</span>
-              </div>
-
-              <div class="badge-card unlocked">
-                <div class="badge-icon-wrap">🎨</div>
-                <h4 class="badge-title">Artiste</h4>
-                <p class="badge-desc">A partagé une création</p>
-                <span class="badge-status">Débloqué</span>
-              </div>
-
-              <div class="badge-card locked">
-                <div class="badge-icon-wrap">🏆</div>
-                <h4 class="badge-title">Challenger</h4>
-                <p class="badge-desc">A participé à un Art Challenge</p>
-                <span class="badge-status">Verrouillé</span>
-              </div>
-
-              <div class="badge-card locked">
-                <div class="badge-icon-wrap">💬</div>
-                <h4 class="badge-title">Bavard</h4>
-                <p class="badge-desc">A posté 10 commentaires</p>
-                <span class="badge-status">Verrouillé</span>
-              </div>
-
-              <div class="badge-card locked">
-                <div class="badge-icon-wrap">⭐</div>
-                <h4 class="badge-title">Inspiration</h4>
-                <p class="badge-desc">A accumulé 50 réactions</p>
-                <span class="badge-status">Verrouillé</span>
-              </div>
-
-            </div>
-          </div>
-
-          <div class="profile-tab-content" data-tab-panel="security">
+          <div class="profile-tab-content" data-tab-panel="securite">
             <div class="tab-placeholder">
               <h3>Section Sécurité</h3>
               <p>Bientôt : gestion des connexions actives et des options de sécurité du compte.</p>
@@ -2091,8 +1863,8 @@ permalink: /profile
     <img src="/icons/rechercher.svg" alt="Rechercher">
   </a>
   
-  <script type="module" src="/js/firebase.js"></script>
-  <script type="module" src="/js/profile.js"></script>
+  <script type="module" src="/jss/firebase.js"></script>
+  <script type="module" src="/jss/profile.js"></script>
 
   <script>
     const menuToggle = document.getElementById('menuToggle');
