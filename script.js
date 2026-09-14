@@ -121,6 +121,67 @@ document.addEventListener('DOMContentLoaded', () => {
   const lbPrevBtn     = document.getElementById('lb-prev');
   const lbNextBtn     = document.getElementById('lb-next');
 
+  // ── Auth Firebase (import dynamique : script.js n'est pas un module) ────
+  // firebase.js (chargé en <script type="module"> avant celui-ci) a déjà
+  // initialisé l'app Firebase, donc getAuth() ici récupère la même
+  // instance sans réinitialiser quoi que ce soit.
+  import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js')
+    .then(({ getAuth, onAuthStateChanged }) => {
+      const auth = getAuth();
+      onAuthStateChanged(auth, function(user) {
+        currentFirebaseUser = user || null;
+
+        // L'utilisateur vient de se (dé)connecter pendant que la lightbox
+        // est ouverte sur une œuvre : on rafraîchit l'état du bouton like
+        // en conséquence plutôt que de laisser un état obsolète affiché.
+        if (currentId) {
+          if (currentFirebaseUser) {
+            refreshLikeStateFromFirestore(currentId);
+          } else {
+            updateLikeUI(currentId, false);
+          }
+        }
+      });
+    })
+    .catch(function(err) {
+      console.error('Erreur de chargement de Firebase Auth :', err);
+    });
+
+  // ── Mini lightbox "Se connecter" (déclenchée par un like sans session) ──
+  const loginPromptOverlay = document.getElementById('login-prompt-overlay');
+  const loginPromptClose   = document.getElementById('login-prompt-close');
+
+  function openLoginPrompt() {
+    if (!loginPromptOverlay) return;
+    loginPromptOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLoginPrompt() {
+    if (!loginPromptOverlay) return;
+    loginPromptOverlay.classList.remove('active');
+    // On ne relâche le scroll que si la lightbox principale n'est plus active
+    if (!lightbox.classList.contains('active')) {
+      document.body.style.overflow = '';
+    }
+  }
+
+  if (loginPromptClose) {
+    loginPromptClose.addEventListener('click', closeLoginPrompt);
+  }
+
+  if (loginPromptOverlay) {
+    loginPromptOverlay.addEventListener('click', function(e) {
+      if (e.target === loginPromptOverlay) closeLoginPrompt();
+    });
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && loginPromptOverlay && loginPromptOverlay.classList.contains('active')) {
+      closeLoginPrompt();
+    }
+  });
+
   if (!lightboxImg || !lightboxTitle || !lightboxDesc || !closeBtn) {
     console.warn('Lightbox : certains éléments sont manquants.');
     return;
@@ -153,33 +214,69 @@ document.addEventListener('DOMContentLoaded', () => {
     lbNextBtn.style.opacity = idx >= items.length - 1 ? '0.3' : '1';
   }
 
-  // ── LIKES STORE (localStorage) ──────────────────────────────────────────
-  const LikesStore = {
-    _key: 'prspk_likes',
-    _data: function() {
-      try { return JSON.parse(localStorage.getItem(this._key)) || {}; }
-      catch(e) { return {}; }
-    },
-    _save: function(data) {
-      localStorage.setItem(this._key, JSON.stringify(data));
-    },
-    hasLiked: function(id) {
-      return !!this._data()[id];
-    },
-    toggle: function(id) {
-      var data = this._data();
-      data[id] = !data[id];
-      this._save(data);
-      return data[id];
+  // ── LIKES (Firestore : users/{uid}/likedDrawings/{id}) ──────────────────
+  // currentFirebaseUser est tenu à jour par onAuthStateChanged plus bas.
+  // likedCache mémorise, pour la session en cours, les états déjà vérifiés
+  // en base pour éviter de re-lire Firestore à chaque réouverture d'une
+  // même œuvre pendant qu'on navigue dans la galerie.
+  let currentFirebaseUser = null;
+  const likedCache = {};   // { [drawingId]: true | false }
+  let likeCheckToken = 0;  // pour ignorer les réponses de lecture obsolètes
+
+  function getFirebaseBits() {
+    return {
+      db: window.__prspkDb,
+      fns: window.__prspkFire
+    };
+  }
+
+  function likedDrawingRef(uid, id) {
+    const { db, fns } = getFirebaseBits();
+    if (!db || !fns) return null;
+    return fns.doc(db, 'users', uid, 'likedDrawings', id);
+  }
+
+  // Vérifie en base si l'œuvre `id` est likée par l'utilisateur courant, et
+  // met à jour l'UI en conséquence (utilisé à l'ouverture de la lightbox).
+  async function refreshLikeStateFromFirestore(id) {
+    if (!currentFirebaseUser) {
+      updateLikeUI(id, false);
+      return;
     }
-  };
+
+    if (Object.prototype.hasOwnProperty.call(likedCache, id)) {
+      updateLikeUI(id, likedCache[id]);
+      return;
+    }
+
+    const token = ++likeCheckToken;
+    const { fns } = getFirebaseBits();
+    const ref = likedDrawingRef(currentFirebaseUser.uid, id);
+    if (!ref || !fns) return;
+
+    try {
+      const snap = await fns.getDoc(ref);
+      const liked = snap.exists();
+      likedCache[id] = liked;
+
+      // Ignore une réponse arrivée après avoir déjà navigué vers une autre
+      // œuvre (currentId a changé pendant l'attente réseau).
+      if (token === likeCheckToken && id === currentId) {
+        updateLikeUI(id, liked);
+      }
+    } catch (err) {
+      console.error('Erreur de lecture du like :', err);
+    }
+  }
 
   // ── UI like ──────────────────────────────────────────────────────────────
-  function updateLikeUI(id) {
+  // `liked` peut être omis : dans ce cas on affiche l'état "non liké" par
+  // défaut en attendant la vérification Firestore (refreshLikeStateFromFirestore).
+  function updateLikeUI(id, liked) {
     if (!lbLikeBtn || !lbLikeIcon) return;
-    var liked = LikesStore.hasLiked(id);
-    lbLikeIcon.src = liked ? '/icons/like-active.svg' : '/icons/like.svg';
-    lbLikeBtn.classList.toggle('liked', liked);
+    const isLiked = !!liked;
+    lbLikeIcon.src = isLiked ? '/icons/like-active.svg' : '/icons/like.svg';
+    lbLikeBtn.classList.toggle('liked', isLiked);
   }
 
   // ── Animation like ───────────────────────────────────────────────────────
@@ -253,7 +350,12 @@ document.addEventListener('DOMContentLoaded', () => {
     currentId = source.id || source.src;
     lightbox.dataset.id = currentId;
 
-    if (lbLikeBtn) updateLikeUI(currentId);
+    if (lbLikeBtn) {
+      // Affichage immédiat de l'état connu (cache ou "non liké" par défaut),
+      // pendant que la vérification Firestore se fait en arrière-plan.
+      updateLikeUI(currentId, likedCache[currentId]);
+      refreshLikeStateFromFirestore(currentId);
+    }
     updateNavButtons();
 
     if (source.id) {
@@ -321,10 +423,62 @@ document.addEventListener('DOMContentLoaded', () => {
   if (lbLikeBtn) {
     lbLikeBtn.addEventListener('click', function() {
       if (!currentId) return;
-      var liked = LikesStore.toggle(currentId);
-      updateLikeUI(currentId);
-      animateLike(liked);
+
+      // Non connecté : on ouvre la mini lightbox "Se connecter" et on
+      // n'écrit rien.
+      if (!currentFirebaseUser) {
+        openLoginPrompt();
+        return;
+      }
+
+      toggleLikeInFirestore(currentId, lightbox.dataset.id === currentId ? getCurrentSourceForLike() : null);
     });
+  }
+
+  // Récupère l'élément source (.prspk-thumb) de l'œuvre actuellement
+  // affichée, pour en tirer les infos minimales (src, titre) à stocker
+  // dans Firestore avec le like.
+  function getCurrentSourceForLike() {
+    if (!currentId) return null;
+    return document.getElementById(currentId) || null;
+  }
+
+  // Toggle du like dans Firestore : users/{uid}/likedDrawings/{id}.
+  // - Si l'œuvre n'est pas encore likée : setDoc avec likedAt + infos
+  //   minimales (src, titre) pour un affichage rapide dans le profil.
+  // - Si elle l'est déjà : deleteDoc.
+  // L'UI est mise à jour de façon optimiste (avant confirmation réseau),
+  // puis remise en cohérence en cas d'erreur.
+  async function toggleLikeInFirestore(id, sourceEl) {
+    const { fns } = getFirebaseBits();
+    const ref = likedDrawingRef(currentFirebaseUser.uid, id);
+    if (!ref || !fns) return;
+
+    const wasLiked = !!likedCache[id];
+    const nowLiked = !wasLiked;
+
+    // Optimiste : on met à jour tout de suite l'UI et le cache local.
+    likedCache[id] = nowLiked;
+    updateLikeUI(id, nowLiked);
+    animateLike(nowLiked);
+
+    try {
+      if (nowLiked) {
+        const source = sourceEl || getCurrentSourceForLike();
+        await fns.setDoc(ref, {
+          likedAt: fns.serverTimestamp(),
+          src: source ? source.getAttribute('src') : '',
+          title: source ? (source.dataset.title || '') : ''
+        });
+      } else {
+        await fns.deleteDoc(ref);
+      }
+    } catch (err) {
+      console.error('Erreur lors de l\'enregistrement du like :', err);
+      // Rollback de l'UI si l'écriture a échoué.
+      likedCache[id] = wasLiked;
+      updateLikeUI(id, wasLiked);
+    }
   }
 
   // ── Bouton copier le lien ────────────────────────────────────────────────

@@ -967,6 +967,120 @@ permalink: /profile
   }
 
 
+  /* ============================= ONGLET MON PROFIL (LIKES) ============================= */
+
+  .liked-drawings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 14px;
+  }
+
+  .liked-drawing-card {
+    position: relative;
+    display: block;
+    aspect-ratio: 1 / 1;
+    border-radius: 20px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow:
+      inset 0 0 12px rgba(255, 255, 255, 0.1),
+      0 6px 18px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    transition: transform 0.2s ease;
+  }
+
+  .liked-drawing-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .liked-drawing-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .liked-drawing-card .liked-drawing-title {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 18px 10px 8px 10px;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: #ffffff;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.65) 100%);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .liked-drawings-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 6px;
+    padding: 60px 20px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .liked-drawings-empty-icon {
+    width: 40px;
+    height: 40px;
+    opacity: 0.4;
+    margin-bottom: 6px;
+  }
+
+  .liked-drawings-empty h3 {
+    font-family: 'Rubik', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+  }
+
+  .liked-drawings-empty p {
+    font-family: 'Rubik', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 300;
+    max-width: 300px;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  .liked-drawings-loading {
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
+  }
+
+  .liked-drawings-loading.is-hidden {
+    display: none;
+  }
+
+  .lb-spinner-fallback {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    border-top-color: rgba(255, 255, 255, 0.75);
+    animation: liked-spin 0.8s linear infinite;
+  }
+
+  @keyframes liked-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 480px) {
+    .liked-drawings-grid {
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 10px;
+    }
+  }
+
   @media (max-width: 900px) {
     .public-url-card {
       flex-direction: column;
@@ -1671,6 +1785,9 @@ permalink: /profile
           <button class="profile-tab-btn" data-tab="securite" role="tab" aria-selected="false">
             Sécurité
           </button>
+          <button class="profile-tab-btn" data-tab="monprofil" role="tab" aria-selected="false">
+            Mon Profil
+          </button>
         </div>
 
         <div class="profile-tab-panels">
@@ -1755,6 +1872,24 @@ permalink: /profile
             <div class="tab-placeholder">
               <h3>Section Sécurité</h3>
               <p>Bientôt : gestion des connexions actives et des options de sécurité du compte.</p>
+            </div>
+          </div>
+
+          <div class="profile-tab-content" data-tab-panel="monprofil">
+            <span class="account-field-label">Œuvres likées</span>
+
+            <div class="liked-drawings-grid" id="likedDrawingsGrid">
+              <!-- Rempli dynamiquement par profile.js -->
+            </div>
+
+            <div class="liked-drawings-empty" id="likedDrawingsEmpty" style="display:none">
+              <img src="/icons/heart.svg" alt="" class="liked-drawings-empty-icon">
+              <h3>Aucune œuvre likée pour l'instant</h3>
+              <p>Les créations que tu likes dans la galerie apparaîtront ici.</p>
+            </div>
+
+            <div class="liked-drawings-loading" id="likedDrawingsLoading">
+              <span class="lb-spinner-fallback"></span>
             </div>
           </div>
         </div>
