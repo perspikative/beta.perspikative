@@ -73,6 +73,13 @@ const visibilityForm = document.getElementById("visibilityForm");
 const visibilityStatus = document.getElementById("visibilityStatus");
 
 // -----------------------------------------------------------------------
+// Références DOM — onglet Mon Profil (œuvres likées)
+// -----------------------------------------------------------------------
+const likedDrawingsGrid = document.getElementById("likedDrawingsGrid");
+const likedDrawingsEmpty = document.getElementById("likedDrawingsEmpty");
+const likedDrawingsLoading = document.getElementById("likedDrawingsLoading");
+
+// -----------------------------------------------------------------------
 // Références DOM — lightbox photo de profil (coverflow)
 // -----------------------------------------------------------------------
 const btnOpenAvatarLightbox = document.getElementById("btnOpenAvatarLightbox");
@@ -329,6 +336,90 @@ function setVisibilityUI(isPublic) {
 }
 
 // -----------------------------------------------------------------------
+// Onglet Mon Profil : œuvres likées (users/{uid}/likedDrawings/{id}),
+// chaque doc contenant likedAt, src et title (voir toggleLikeInFirestore
+// dans script.js, qui écrit ces documents depuis la lightbox des œuvres).
+// -----------------------------------------------------------------------
+function renderLikedDrawings(items) {
+    if (!likedDrawingsGrid) return;
+
+    likedDrawingsGrid.innerHTML = "";
+
+    if (!items.length) {
+        likedDrawingsGrid.style.display = "none";
+        if (likedDrawingsEmpty) likedDrawingsEmpty.style.display = "flex";
+        return;
+    }
+
+    likedDrawingsGrid.style.display = "grid";
+    if (likedDrawingsEmpty) likedDrawingsEmpty.style.display = "none";
+
+    items.forEach((item) => {
+        const card = document.createElement("a");
+        card.className = "liked-drawing-card";
+        // Renvoie vers la galerie, ouverte directement sur cette œuvre
+        // (voir script.js : ouverture via hash au chargement de la page).
+        card.href = `/illustrations#${item.id}`;
+
+        const img = document.createElement("img");
+        img.src = item.src || "";
+        img.alt = item.title || "";
+        img.loading = "lazy";
+        card.appendChild(img);
+
+        if (item.title) {
+            const titleEl = document.createElement("span");
+            titleEl.className = "liked-drawing-title";
+            titleEl.textContent = item.title;
+            card.appendChild(titleEl);
+        }
+
+        likedDrawingsGrid.appendChild(card);
+    });
+}
+
+async function loadLikedDrawings(uid) {
+    if (!likedDrawingsGrid) return;
+
+    const { db, fns } = getFire();
+    if (!db || !fns) {
+        if (likedDrawingsLoading) likedDrawingsLoading.classList.add("is-hidden");
+        return;
+    }
+
+    if (likedDrawingsLoading) likedDrawingsLoading.classList.remove("is-hidden");
+    likedDrawingsGrid.style.display = "none";
+    if (likedDrawingsEmpty) likedDrawingsEmpty.style.display = "none";
+
+    try {
+        const colRef = fns.collection(db, "users", uid, "likedDrawings");
+        const snap = await fns.getDocs(colRef);
+
+        const items = [];
+        snap.forEach((docSnap) => {
+            const data = docSnap.data() || {};
+            items.push({
+                id: docSnap.id,
+                src: data.src || "",
+                title: data.title || "",
+                likedAt: data.likedAt && data.likedAt.toMillis ? data.likedAt.toMillis() : 0
+            });
+        });
+
+        // Plus récemment liké en premier. Tri côté client (pas de query()
+        // orderBy pour rester simple et ne pas dépendre d'un index composite).
+        items.sort((a, b) => b.likedAt - a.likedAt);
+
+        renderLikedDrawings(items);
+    } catch (err) {
+        console.error("Erreur de chargement des œuvres likées :", err);
+        renderLikedDrawings([]);
+    } finally {
+        if (likedDrawingsLoading) likedDrawingsLoading.classList.add("is-hidden");
+    }
+}
+
+// -----------------------------------------------------------------------
 // Auth state : chargement du profil
 // -----------------------------------------------------------------------
 onAuthStateChanged(auth, async (user) => {
@@ -450,6 +541,8 @@ onAuthStateChanged(auth, async (user) => {
     renderPublicUrl(currentUsername);
     setVisibilityUI(isPublic);
     if (profileSince) profileSince.textContent = formatSince(createdAt);
+
+    loadLikedDrawings(user.uid);
 });
 
 // -----------------------------------------------------------------------
