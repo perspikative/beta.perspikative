@@ -121,32 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const lbPrevBtn     = document.getElementById('lb-prev');
   const lbNextBtn     = document.getElementById('lb-next');
 
-  // ── Auth Firebase (import dynamique : script.js n'est pas un module) ────
-  // firebase.js (chargé en <script type="module"> avant celui-ci) a déjà
-  // initialisé l'app Firebase, donc getAuth() ici récupère la même
-  // instance sans réinitialiser quoi que ce soit.
-  import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js')
-    .then(({ getAuth, onAuthStateChanged }) => {
-      const auth = getAuth();
-      onAuthStateChanged(auth, function(user) {
-        currentFirebaseUser = user || null;
-
-        // L'utilisateur vient de se (dé)connecter pendant que la lightbox
-        // est ouverte sur une œuvre : on rafraîchit l'état du bouton like
-        // en conséquence plutôt que de laisser un état obsolète affiché.
-        if (currentId) {
-          if (currentFirebaseUser) {
-            refreshLikeStateFromFirestore(currentId);
-          } else {
-            updateLikeUI(currentId, false);
-          }
-        }
-      });
-    })
-    .catch(function(err) {
-      console.error('Erreur de chargement de Firebase Auth :', err);
-    });
-
   // ── Mini lightbox "Se connecter" (déclenchée par un like sans session) ──
   const loginPromptOverlay = document.getElementById('login-prompt-overlay');
   const loginPromptClose   = document.getElementById('login-prompt-close');
@@ -215,13 +189,49 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ── LIKES (Firestore : users/{uid}/likedDrawings/{id}) ──────────────────
-  // currentFirebaseUser est tenu à jour par onAuthStateChanged plus bas.
+  // currentFirebaseUser est tenu à jour via window.__prspkAuthReady /
+  // l'event "prspk:auth-ready" (voir plus bas), exposés par firebase.js.
   // likedCache mémorise, pour la session en cours, les états déjà vérifiés
   // en base pour éviter de re-lire Firestore à chaque réouverture d'une
   // même œuvre pendant qu'on navigue dans la galerie.
   let currentFirebaseUser = null;
   const likedCache = {};   // { [drawingId]: true | false }
   let likeCheckToken = 0;  // pour ignorer les réponses de lecture obsolètes
+
+  // firebase.js (chargé avant, en <script type="module">) expose déjà
+  // window.__prspkAuthReady (Promise résolue avec l'utilisateur courant dès
+  // le premier onAuthStateChanged) et l'event "prspk:auth-ready" à chaque
+  // changement ultérieur. On réutilise ce pont plutôt que de réimporter et
+  // réinitialiser un second onAuthStateChanged ici.
+  function handleAuthUser(user) {
+    currentFirebaseUser = user || null;
+
+    // L'utilisateur vient de se (dé)connecter pendant que la lightbox est
+    // ouverte sur une œuvre : on rafraîchit l'état du bouton like en
+    // conséquence plutôt que de laisser un état obsolète affiché.
+    if (currentId) {
+      if (currentFirebaseUser) {
+        refreshLikeStateFromFirestore(currentId);
+      } else {
+        updateLikeUI(currentId, false);
+      }
+    }
+  }
+
+  if (window.__prspkAuthReady) {
+    window.__prspkAuthReady.then(handleAuthUser).catch(function(err) {
+      console.error('Erreur de résolution de l\'auth :', err);
+    });
+  } else {
+    // Filet de sécurité si firebase.js n'a pas encore posé la promesse
+    // (ordre de chargement inattendu) : on retombe sur __prspkUser, déjà
+    // tenu à jour par firebase.js à chaque changement d'état.
+    currentFirebaseUser = window.__prspkUser || null;
+  }
+
+  document.addEventListener('prspk:auth-ready', function(e) {
+    handleAuthUser(e.detail ? e.detail.user : null);
+  });
 
   function getFirebaseBits() {
     return {
