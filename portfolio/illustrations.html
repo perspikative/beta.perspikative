@@ -38,6 +38,129 @@ permalink: /portfolio/illustrations
       padding-left: 8px;
     }
   }
+
+  /* ═══ MINI LIGHTBOX : INVITATION À SE CONNECTER ═══ */
+  .login-prompt-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+  }
+
+  .login-prompt-overlay.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .login-prompt-window {
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+    padding: 40px 28px 32px 28px;
+    border-radius: 32px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow:
+      inset 0 0 16px rgba(255, 255, 255, 0.16),
+      0 12px 40px rgba(0, 0, 0, 0.3);
+    transform: scale(0.94) translateY(8px);
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .login-prompt-overlay.active .login-prompt-window {
+    transform: scale(1) translateY(0);
+  }
+
+  .login-prompt-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.07);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .login-prompt-close img {
+    width: 16px;
+    height: 16px;
+    opacity: 0.85;
+  }
+
+  .login-prompt-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(0, 200, 150, 0.25), rgba(10, 240, 208, 0.15));
+    box-shadow: inset 0 0 14px rgba(255, 255, 255, 0.18);
+    margin-bottom: 6px;
+  }
+
+  .login-prompt-icon img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .login-prompt-title {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #ffffff;
+    margin: 0;
+  }
+
+  .login-prompt-subtitle {
+    font-family: 'Rubik', sans-serif;
+    font-weight: 400;
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.68);
+    line-height: 1.35;
+    margin: 0 0 8px 0;
+  }
+
+  .login-prompt-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    text-decoration: none;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 700;
+    font-size: 0.98rem;
+    color: #ffffff;
+    background: linear-gradient(135deg, #00c896, #0af0d0);
+    padding: 13px 18px;
+    border-radius: 25px;
+    box-shadow: 0 8px 22px rgba(0, 200, 150, 0.28);
+    transition: transform 0.2s ease;
+  }
+
+  .login-prompt-btn:hover {
+    transform: translateY(-1px);
+  }
   </style>
 </head>
 
@@ -333,6 +456,25 @@ permalink: /portfolio/illustrations
     <img id="zoom-img" src="" alt="">
   </div>
   <!-- ═══════════════════════════════════════════════════════════════ -->
+
+  <!-- ═══ MINI LIGHTBOX : INVITATION À SE CONNECTER (like sans session) ═══ -->
+  <div class="login-prompt-overlay" id="login-prompt-overlay">
+    <div class="login-prompt-window">
+      <button class="login-prompt-close" id="login-prompt-close" aria-label="Fermer">
+        <img src="/icons/fermer.svg" alt="Fermer">
+      </button>
+
+      <span class="login-prompt-icon">
+        <img src="/icons/heart.svg" alt="">
+      </span>
+
+      <h3 class="login-prompt-title">Connecte-toi pour liker</h3>
+      <p class="login-prompt-subtitle">Crée un compte ou connecte-toi pour garder tes œuvres likées dans ton profil.</p>
+
+      <a href="/login" class="login-prompt-btn">Se connecter</a>
+    </div>
+  </div>
+  <!-- ═══════════════════════════════════════════════════════════════════ -->
 
   <!-- ═══ MINI LIGHTBOX : SIGNALEMENT D'UN COMMENTAIRE ═══ -->
   <div class="report-overlay" id="report-overlay">
