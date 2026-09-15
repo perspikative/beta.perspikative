@@ -337,8 +337,12 @@ function setVisibilityUI(isPublic) {
 
 // -----------------------------------------------------------------------
 // Onglet Mon Profil : œuvres likées (users/{uid}/likedDrawings/{id}),
-// chaque doc contenant likedAt, src et title (voir toggleLikeInFirestore
-// dans script.js, qui écrit ces documents depuis la lightbox des œuvres).
+// chaque doc contenant likedAt, src, title et page (voir
+// toggleLikeInFirestore dans script.js, qui écrit ces documents depuis la
+// lightbox des œuvres). `page` est le chemin canonique exact de l'œuvre
+// (ex. /portfolio/illustrations/xxx) : on l'utilise tel quel comme lien,
+// sans reconstruire quoi que ce soit côté profil, pour rester correct
+// quelle que soit la catégorie (creations / illustrations / projets).
 // -----------------------------------------------------------------------
 function renderLikedDrawings(items) {
     if (!likedDrawingsGrid) return;
@@ -357,9 +361,9 @@ function renderLikedDrawings(items) {
     items.forEach((item) => {
         const card = document.createElement("a");
         card.className = "liked-drawing-card";
-        // Renvoie vers la galerie, ouverte directement sur cette œuvre
-        // (voir script.js : ouverture via hash au chargement de la page).
-        card.href = `/illustrations#${item.id}`;
+        // Chemin canonique stocké au moment du like (fallback si un
+        // ancien like n'a pas encore ce champ, ex. avant cette mise à jour).
+        card.href = item.page || `/portfolio/creations#${item.id}`;
 
         const img = document.createElement("img");
         img.src = item.src || "";
@@ -402,6 +406,7 @@ async function loadLikedDrawings(uid) {
                 id: docSnap.id,
                 src: data.src || "",
                 title: data.title || "",
+                page: data.page || "",
                 likedAt: data.likedAt && data.likedAt.toMillis ? data.likedAt.toMillis() : 0
             });
         });
