@@ -1,4 +1,4 @@
-const CACHE_NAME = 'perspikative-v1.3.1';
+const CACHE_NAME = 'perspikative-v1.3.6';
 
 // Fichiers essentiels
 const PRECACHE_ASSETS = [
@@ -6,8 +6,10 @@ const PRECACHE_ASSETS = [
   '/404',
   '/actus',
   '/art-challenge',
+  '/auth',
   '/commu/beta-program',
   '/brand-guidelines',
+  '/changelog',
   '/commu',
   '/contact',
   '/faq',
@@ -22,14 +24,17 @@ const PRECACHE_ASSETS = [
   '/portfolio/illustrations',
   '/portfolio/projets',
   '/position-ia',
-  '/js/profile.js',
   '/profile',
   '/rechercher',
   '/script.js',
   '/style.css',
-  '/js/firebase-init.js',
+  '/js/auth-handler.js',
+  '/js/comments-fade.js',
   '/js/firebase.js',
   '/js/moderation.js',
+  '/js/nav-liquid-glass.js',
+  '/js/profile.js',
+  '/js/public-profile.js',
   '/js/script-comments.js',
   '/fonts/Manoela-Regular.woff2',
   '/fonts/Manoela-Regular.woff',
@@ -47,12 +52,13 @@ const PRECACHE_ASSETS = [
   '/icons/menu.svg',
   '/icons/portfolio.svg',
   '/icons/portfolio-active.svg',
+  '/icons/profile.svg',
+  '/icons/profile-active.svg',
   '/icons/rechercher.svg',
   '/icons/rechercher-active.svg'
 ];
 
 
-// -------------------- INSTALL --------------------
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(async (cache) => {
@@ -68,7 +74,6 @@ self.addEventListener('install', (event) => {
 });
 
 
-// -------------------- ACTIVATE --------------------
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     (async () => {
@@ -88,11 +93,9 @@ self.addEventListener('activate', (event) => {
 });
 
 
-// -------------------- FETCH --------------------
 self.addEventListener('fetch', (event) => {
   const req = event.request;
 
-  // ⚠️ only GET
   if (req.method !== 'GET') return;
 
   const url = req.url;
@@ -111,7 +114,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // -------------------- NAVIGATION (pages HTML) --------------------
   if (req.mode === 'navigate') {
     event.respondWith(
       fetch(req)
@@ -132,7 +134,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // -------------------- STATIC FILES (CSS/JS/IMG) --------------------
   event.respondWith(
     caches.match(req).then((cached) => {
       const fetchPromise = fetch(req)
