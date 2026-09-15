@@ -455,7 +455,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Toggle du like dans Firestore : users/{uid}/likedDrawings/{id}.
   // - Si l'œuvre n'est pas encore likée : setDoc avec likedAt + infos
-  //   minimales (src, titre) pour un affichage rapide dans le profil.
+  //   minimales (src, titre, page) pour un affichage rapide et un lien
+  //   correct dans le profil. `page` reprend exactement la même logique
+  //   que les boutons copier/partager : data-page de la source si présent
+  //   (chemin canonique exact, ex. /portfolio/illustrations/xxx), sinon
+  //   le même fallback générique /portfolio/creations/{id}.
   // - Si elle l'est déjà : deleteDoc.
   // L'UI est mise à jour de façon optimiste (avant confirmation réseau),
   // puis remise en cohérence en cas d'erreur.
@@ -475,10 +479,15 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       if (nowLiked) {
         const source = sourceEl || getCurrentSourceForLike();
+        const page = (source && source.dataset.page)
+          ? source.dataset.page
+          : '/portfolio/creations/' + id;
+
         await fns.setDoc(ref, {
           likedAt: fns.serverTimestamp(),
           src: source ? source.getAttribute('src') : '',
-          title: source ? (source.dataset.title || '') : ''
+          title: source ? (source.dataset.title || '') : '',
+          page: page
         });
       } else {
         await fns.deleteDoc(ref);
