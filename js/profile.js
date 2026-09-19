@@ -123,6 +123,13 @@ tabButtons.forEach((btn) => {
         tabPanels.forEach((panel) => {
             panel.classList.toggle("active", panel.dataset.tabPanel === target);
         });
+
+        // L'onglet "Mon Profil" vient de devenir visible : le nombre de
+        // colonnes de la grille n'était pas mesurable tant que le panneau
+        // était display:none, donc on recalcule maintenant qu'il l'est.
+        if (target === "monprofil" && typeof renderLikedDrawings === "function") {
+            renderLikedDrawings();
+        }
     });
 });
 
@@ -362,8 +369,12 @@ function setVisibilityUI(isPublic) {
 
 function getLikedGridColumnCount() {
     if (!likedDrawingsGrid) return 1;
+    // Force le navigateur à appliquer les styles en attente (ex: le
+    // display:grid qu'on vient de poser) avant de lire les colonnes,
+    // sinon la valeur peut encore refléter l'état précédent.
+    void likedDrawingsGrid.offsetHeight;
     const cols = window.getComputedStyle(likedDrawingsGrid).gridTemplateColumns;
-    if (!cols) return 1;
+    if (!cols || cols === "none") return 1;
     return cols.split(" ").filter(Boolean).length || 1;
 }
 
