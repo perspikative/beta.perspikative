@@ -1007,7 +1007,6 @@ permalink: /profile
     grid-template-columns: repeat(2, 1fr);
     gap: 14px;
     margin-top: 14px;
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   @media (min-width: 640px) {
@@ -1020,12 +1019,6 @@ permalink: /profile
 
   @media (min-width: 1200px) {
     .liked-drawings-grid { grid-template-columns: repeat(5, 1fr); }
-  }
-
-  /* Petit décalage horizontal en écho au titre, pour lier visuellement
-     les deux mouvements pendant la transition d'expansion. */
-  .liked-drawings-grid.is-expanded {
-    transform: translateX(8px);
   }
 
   .liked-drawing-card {
