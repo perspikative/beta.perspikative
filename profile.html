@@ -971,8 +971,8 @@ permalink: /profile
 
   .liked-drawings-heading {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    align-self: center;
+    gap: 6px;
     width: fit-content;
     transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
   }
@@ -1025,12 +1025,11 @@ permalink: /profile
     position: relative;
     display: block;
     aspect-ratio: 1 / 1;
-    border-radius: 20px;
+    border-radius: 14px;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0.05);
-    box-shadow:
-      inset 0 0 12px rgba(255, 255, 255, 0.1),
-      0 6px 18px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0);
+    border: none;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
     text-decoration: none;
     transition: transform 0.2s ease, opacity 0.3s ease;
     animation: liked-card-in 0.3s ease both;
