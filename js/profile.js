@@ -78,6 +78,14 @@ const visibilityStatus = document.getElementById("visibilityStatus");
 const likedDrawingsGrid = document.getElementById("likedDrawingsGrid");
 const likedDrawingsEmpty = document.getElementById("likedDrawingsEmpty");
 const likedDrawingsLoading = document.getElementById("likedDrawingsLoading");
+const likedDrawingsHeading = document.getElementById("likedDrawingsHeading");
+const likedDrawingsBackIcon = document.getElementById("likedDrawingsBackIcon");
+
+// Toutes les œuvres likées actuellement chargées (mises à jour à chaque
+// loadLikedDrawings), pour pouvoir re-render entre vue réduite/étendue
+// sans refaire d'appel réseau.
+let allLikedDrawings = [];
+let likedDrawingsExpanded = false;
 
 // -----------------------------------------------------------------------
 // Références DOM — lightbox photo de profil (coverflow)
@@ -343,10 +351,68 @@ function setVisibilityUI(isPublic) {
 // (ex. /portfolio/illustrations/xxx) : on l'utilise tel quel comme lien,
 // sans reconstruire quoi que ce soit côté profil, pour rester correct
 // quelle que soit la catégorie (creations / illustrations / projets).
+//
+// Vue réduite : une seule ligne complète de la grille. Si le nombre
+// d'œuvres dépasse cette ligne, le dernier emplacement devient la carte
+// "Voir plus" (donc colonnes - 1 œuvres affichées + le bouton). Si tout
+// tient dans la ligne, pas de bouton. Le nombre de colonnes est lu
+// directement depuis la grille rendue (grid-template-columns), pour
+// rester juste quel que soit le breakpoint CSS actif.
 // -----------------------------------------------------------------------
-function renderLikedDrawings(items) {
+
+function getLikedGridColumnCount() {
+    if (!likedDrawingsGrid) return 1;
+    const cols = window.getComputedStyle(likedDrawingsGrid).gridTemplateColumns;
+    if (!cols) return 1;
+    return cols.split(" ").filter(Boolean).length || 1;
+}
+
+function buildLikedDrawingCard(item) {
+    const card = document.createElement("a");
+    card.className = "liked-drawing-card";
+    // Chemin canonique stocké au moment du like (fallback si un ancien
+    // like n'a pas encore ce champ, ex. avant cette mise à jour).
+    card.href = item.page || `/portfolio/creations#${item.id}`;
+
+    const img = document.createElement("img");
+    img.src = item.src || "";
+    img.alt = item.title || "";
+    img.loading = "lazy";
+    card.appendChild(img);
+
+    return card;
+}
+
+function buildLikedDrawingsMoreCard(remainingCount) {
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "liked-drawing-card liked-drawing-more";
+    card.setAttribute("aria-label", `Voir les ${remainingCount} autres œuvres likées`);
+
+    const inner = document.createElement("span");
+    inner.className = "liked-drawing-more-inner";
+
+    const icon = document.createElement("img");
+    icon.src = "/icons/arrow-right-lightbox.svg";
+    icon.alt = "";
+    inner.appendChild(icon);
+
+    const label = document.createElement("span");
+    label.textContent = "Voir plus";
+    inner.appendChild(label);
+
+    card.appendChild(inner);
+    card.addEventListener("click", expandLikedDrawings);
+
+    return card;
+}
+
+// Rejoue le rendu de la grille selon allLikedDrawings et l'état
+// courant (réduit/étendu), sans refaire d'appel réseau.
+function renderLikedDrawings() {
     if (!likedDrawingsGrid) return;
 
+    const items = allLikedDrawings;
     likedDrawingsGrid.innerHTML = "";
 
     if (!items.length) {
@@ -358,29 +424,55 @@ function renderLikedDrawings(items) {
     likedDrawingsGrid.style.display = "grid";
     if (likedDrawingsEmpty) likedDrawingsEmpty.style.display = "none";
 
-    items.forEach((item) => {
-        const card = document.createElement("a");
-        card.className = "liked-drawing-card";
-        // Chemin canonique stocké au moment du like (fallback si un
-        // ancien like n'a pas encore ce champ, ex. avant cette mise à jour).
-        card.href = item.page || `/portfolio/creations#${item.id}`;
+    const columns = getLikedGridColumnCount();
+    const overflowsOneLine = items.length > columns;
 
-        const img = document.createElement("img");
-        img.src = item.src || "";
-        img.alt = item.title || "";
-        img.loading = "lazy";
-        card.appendChild(img);
+    let visibleItems = items;
+    let remainingCount = 0;
 
-        if (item.title) {
-            const titleEl = document.createElement("span");
-            titleEl.className = "liked-drawing-title";
-            titleEl.textContent = item.title;
-            card.appendChild(titleEl);
-        }
+    if (!likedDrawingsExpanded && overflowsOneLine) {
+        // colonnes - 1 œuvres, le dernier emplacement de la ligne étant
+        // réservé à la carte "Voir plus".
+        const visibleCount = Math.max(columns - 1, 1);
+        visibleItems = items.slice(0, visibleCount);
+        remainingCount = items.length - visibleCount;
+    }
 
-        likedDrawingsGrid.appendChild(card);
+    visibleItems.forEach((item) => {
+        likedDrawingsGrid.appendChild(buildLikedDrawingCard(item));
+    });
+
+    if (!likedDrawingsExpanded && overflowsOneLine) {
+        likedDrawingsGrid.appendChild(buildLikedDrawingsMoreCard(remainingCount));
+    }
+}
+
+function expandLikedDrawings() {
+    likedDrawingsExpanded = true;
+    if (likedDrawingsHeading) likedDrawingsHeading.classList.add("is-expanded");
+    if (likedDrawingsGrid) likedDrawingsGrid.classList.add("is-expanded");
+    renderLikedDrawings();
+}
+
+function collapseLikedDrawings() {
+    likedDrawingsExpanded = false;
+    if (likedDrawingsHeading) likedDrawingsHeading.classList.remove("is-expanded");
+    if (likedDrawingsGrid) likedDrawingsGrid.classList.remove("is-expanded");
+    renderLikedDrawings();
+}
+
+if (likedDrawingsBackIcon) {
+    likedDrawingsBackIcon.addEventListener("click", () => {
+        if (likedDrawingsExpanded) collapseLikedDrawings();
     });
 }
+
+// La ligne complète dépend de la largeur d'écran (breakpoints CSS) :
+// on recalcule au resize pour rester juste si l'utilisateur redimensionne
+// la fenêtre en vue réduite.
+window.addEventListener("resize", () => {
+    if (!likedDrawingsExpanded) renderLikedDrawings();
+});
 
 async function loadLikedDrawings(uid) {
     if (!likedDrawingsGrid) return;
@@ -415,10 +507,15 @@ async function loadLikedDrawings(uid) {
         // orderBy pour rester simple et ne pas dépendre d'un index composite).
         items.sort((a, b) => b.likedAt - a.likedAt);
 
-        renderLikedDrawings(items);
+        allLikedDrawings = items;
+        likedDrawingsExpanded = false;
+        if (likedDrawingsHeading) likedDrawingsHeading.classList.remove("is-expanded");
+        if (likedDrawingsGrid) likedDrawingsGrid.classList.remove("is-expanded");
+        renderLikedDrawings();
     } catch (err) {
         console.error("Erreur de chargement des œuvres likées :", err);
-        renderLikedDrawings([]);
+        allLikedDrawings = [];
+        renderLikedDrawings();
     } finally {
         if (likedDrawingsLoading) likedDrawingsLoading.classList.add("is-hidden");
     }
