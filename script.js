@@ -453,6 +453,19 @@ document.addEventListener('DOMContentLoaded', () => {
     return document.getElementById(currentId) || null;
   }
 
+  // Résout le chemin absolu d'une image (/portfolio/...) à partir de
+  // l'attribut src brut de l'élément (ex: "creations/46.webp" → 
+  // "/portfolio/creations/46.webp"), pour un affichage correct dans le
+  // profil quelle que soit la page d'où provient le like. Une URL déjà
+  // absolue (http(s):// ou commençant par /) est laissée telle quelle.
+  function resolveAbsoluteSrc(source) {
+    if (!source) return '';
+    const raw = source.getAttribute('src') || '';
+    if (!raw) return '';
+    if (/^https?:\/\//i.test(raw) || raw.startsWith('/')) return raw;
+    return '/portfolio/' + raw.replace(/^\.?\//, '');
+  }
+
   // Toggle du like dans Firestore : users/{uid}/likedDrawings/{id}.
   // - Si l'œuvre n'est pas encore likée : setDoc avec likedAt + infos
   //   minimales (src, titre, page) pour un affichage rapide et un lien
@@ -482,10 +495,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const page = (source && source.dataset.page)
           ? source.dataset.page
           : '/portfolio/creations/' + id;
+        const src = resolveAbsoluteSrc(source);
 
         await fns.setDoc(ref, {
           likedAt: fns.serverTimestamp(),
-          src: source ? source.getAttribute('src') : '',
+          src: src,
           title: source ? (source.dataset.title || '') : '',
           page: page
         });
