@@ -969,10 +969,63 @@ permalink: /profile
 
   /* ============================= ONGLET MON PROFIL (LIKES) ============================= */
 
+  .liked-drawings-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .liked-drawings-back-icon {
+    width: 18px;
+    height: 18px;
+    opacity: 0;
+    transform: translateX(-6px);
+    pointer-events: none;
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+
+  /* État étendu : le titre glisse vers la droite, la flèche apparaît en fade-in */
+  .liked-drawings-heading.is-expanded {
+    transform: translateX(22px);
+  }
+
+  .liked-drawings-heading.is-expanded .liked-drawings-back-icon {
+    opacity: 0.85;
+    transform: translateX(0);
+    pointer-events: auto;
+    cursor: pointer;
+  }
+
+  .liked-drawings-heading.is-expanded .liked-drawings-back-icon:hover {
+    opacity: 1;
+  }
+
   .liked-drawings-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 14px;
+    margin-top: 14px;
+    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @media (min-width: 640px) {
+    .liked-drawings-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+
+  @media (min-width: 900px) {
+    .liked-drawings-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
+  @media (min-width: 1200px) {
+    .liked-drawings-grid { grid-template-columns: repeat(5, 1fr); }
+  }
+
+  /* Petit décalage horizontal en écho au titre, pour lier visuellement
+     les deux mouvements pendant la transition d'expansion. */
+  .liked-drawings-grid.is-expanded {
+    transform: translateX(8px);
   }
 
   .liked-drawing-card {
@@ -986,7 +1039,13 @@ permalink: /profile
       inset 0 0 12px rgba(255, 255, 255, 0.1),
       0 6px 18px rgba(0, 0, 0, 0.1);
     text-decoration: none;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, opacity 0.3s ease;
+    animation: liked-card-in 0.3s ease both;
+  }
+
+  @keyframes liked-card-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   .liked-drawing-card:hover {
@@ -1000,20 +1059,39 @@ permalink: /profile
     display: block;
   }
 
-  .liked-drawing-card .liked-drawing-title {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 18px 10px 8px 10px;
+  /* Carte "Voir plus" : même emplacement de grille qu'une œuvre, mais
+     plus petite et centrée, pour bien se distinguer visuellement. */
+  .liked-drawing-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14%;
+  }
+
+  .liked-drawing-more-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .liked-drawing-more-inner img {
+    width: 18px;
+    height: 18px;
+    opacity: 0.8;
+  }
+
+  .liked-drawing-more-inner span {
     font-family: 'Rubik', sans-serif;
     font-weight: 600;
-    font-size: 0.8rem;
-    color: #ffffff;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.65) 100%);
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.75);
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .liked-drawings-empty {
@@ -1076,7 +1154,6 @@ permalink: /profile
 
   @media (max-width: 480px) {
     .liked-drawings-grid {
-      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
       gap: 10px;
     }
   }
@@ -1876,7 +1953,10 @@ permalink: /profile
           </div>
 
           <div class="profile-tab-content" data-tab-panel="monprofil">
-            <span class="account-field-label">Œuvres likées</span>
+            <div class="liked-drawings-heading" id="likedDrawingsHeading">
+              <img src="/icons/arrow-left-lightbox.svg" alt="" class="liked-drawings-back-icon" id="likedDrawingsBackIcon">
+              <span class="account-field-label">Œuvres likées</span>
+            </div>
 
             <div class="liked-drawings-grid" id="likedDrawingsGrid">
               <!-- Rempli dynamiquement par profile.js -->
