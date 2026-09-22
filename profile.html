@@ -994,21 +994,13 @@ permalink: /profile
     aspect-ratio: 1 / 1;
     border-radius: 14px;
     overflow: hidden;
-    background: rgba(255, 255, 255, 0);
+    /* Placeholder visible dès l'insertion (avant que l'image ait fini de
+       charger), pour que le carré ne reste jamais vide un instant. */
+    background: rgba(255, 255, 255, 0.06);
     border: none;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
     text-decoration: none;
-    transition: transform 0.2s ease, opacity 0.3s ease;
-    animation: liked-card-in 0.3s ease both;
-  }
-
-  @keyframes liked-card-in {
-    from { opacity: 0; transform: translateY(6px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  .liked-drawing-card:hover {
-    transform: translateY(-2px);
+    transition: transform 0.2s ease;
   }
 
   .liked-drawing-card img {
@@ -1016,6 +1008,25 @@ permalink: /profile
     height: 100%;
     object-fit: cover;
     display: block;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  /* La carte "Voir plus" n'a pas de photo à charger : son icône doit
+     rester visible tout de suite, pas attendre une classe is-loaded
+     qu'elle ne recevra jamais. */
+  .liked-drawing-more img {
+    opacity: 1;
+  }
+
+  /* Ajoutée par profile.js une fois l'image réellement chargée (ou en
+     erreur), pour ne jamais montrer un fade-in avant que l'image existe. */
+  .liked-drawing-card.is-loaded img {
+    opacity: 1;
+  }
+
+  .liked-drawing-card:hover {
+    transform: translateY(-2px);
   }
 
   /* Carte "Voir plus" : même emplacement de grille qu'une œuvre, mais
