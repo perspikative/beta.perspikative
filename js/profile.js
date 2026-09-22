@@ -382,15 +382,31 @@ function getLikedGridColumnCount() {
 
 function buildLikedDrawingCard(item) {
     const card = document.createElement("a");
+    // L'animation d'entrée (liked-card-in) n'est appliquée qu'une fois
+    // l'image réellement affichable (voir plus bas), pour éviter une case
+    // vide qui termine son fade-in avant que l'image n'ait fini de charger.
     card.className = "liked-drawing-card";
     // Chemin canonique stocké au moment du like (fallback si un ancien
     // like n'a pas encore ce champ, ex. avant cette mise à jour).
     card.href = item.page || `/portfolio/creations#${item.id}`;
 
     const img = document.createElement("img");
-    img.src = item.src || "";
     img.alt = item.title || "";
-    img.loading = "lazy";
+    // Pas de lazy loading ici : ces cartes sont ajoutées explicitement au
+    // clic (l'utilisateur veut les voir tout de suite), donc on charge
+    // sans attendre qu'elles entrent dans le viewport.
+
+    const reveal = () => card.classList.add("is-loaded");
+    if (img.complete) {
+        // Déjà en cache (ex: vue juste avant dans la galerie) : pas besoin
+        // d'attendre un événement qui ne se déclenchera pas.
+        reveal();
+    } else {
+        img.addEventListener("load", reveal, { once: true });
+        img.addEventListener("error", reveal, { once: true });
+    }
+    img.src = item.src || "";
+
     card.appendChild(img);
 
     return card;
@@ -428,9 +444,19 @@ function removeMoreCardIfAny() {
     if (existing) existing.remove();
 }
 
+// Capacité de la toute première page (avant le premier clic sur "Voir
+// plus"), bouton compris. Sur mobile (2 colonnes), une seule ligne ne
+// donnerait qu'1 dessin + le bouton, ce qui est trop maigre visuellement :
+// on affiche alors deux lignes complètes (un "carré" 2×2 avec le bouton
+// en 4ᵉ position, donc 3 œuvres + bouton). Sur desktop (3+ colonnes), une
+// ligne suffit déjà à remplir l'espace.
+function getFirstPageCapacity(columns) {
+    return columns <= 2 ? (columns * 2) - 1 : columns - 1;
+}
+
 // Premier rendu (ou re-rendu, ex: changement de colonnes au resize) : vide
-// la grille et affiche la première ligne, avec le bouton "Voir plus" si le
-// total déborde d'une ligne.
+// la grille et affiche la première page, avec le bouton "Voir plus" si le
+// total déborde.
 function renderLikedDrawings() {
     if (!likedDrawingsGrid) return;
 
@@ -447,18 +473,20 @@ function renderLikedDrawings() {
     if (likedDrawingsEmpty) likedDrawingsEmpty.style.display = "none";
 
     const columns = getLikedGridColumnCount();
-    const overflowsOneLine = items.length > columns;
+    const capacity = getFirstPageCapacity(columns);
+    // Nombre total de cases disponibles sur la première page SANS bouton :
+    // une ligne sur desktop (3+ colonnes), deux lignes sur mobile (≤2).
+    const totalSlotsWithoutButton = columns <= 2 ? columns * 2 : columns;
+    const reallyOverflows = items.length > totalSlotsWithoutButton;
 
-    // colonnes - 1 œuvres si ça déborde (le dernier emplacement de la
-    // ligne est réservé au bouton), sinon toutes les œuvres tiennent.
-    const visibleCount = overflowsOneLine ? Math.max(columns - 1, 1) : items.length;
+    const visibleCount = reallyOverflows ? capacity : items.length;
     likedDrawingsShownCount = visibleCount;
 
     items.slice(0, visibleCount).forEach((item) => {
         likedDrawingsGrid.appendChild(buildLikedDrawingCard(item));
     });
 
-    if (overflowsOneLine) {
+    if (reallyOverflows) {
         likedDrawingsGrid.appendChild(buildLikedDrawingsMoreCard(items.length - visibleCount));
     }
 }
