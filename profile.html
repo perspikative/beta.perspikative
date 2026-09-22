@@ -967,41 +967,7 @@ permalink: /profile
   }
 
 
-  /* ============================= ONGLET MON PROFIL (LIKES) ============================= */
-
-  .liked-drawings-heading {
-    display: flex;
-    align-self: center;
-    gap: 6px;
-    width: fit-content;
-    transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .liked-drawings-back-icon {
-    width: 18px;
-    height: 18px;
-    opacity: 0;
-    transform: translateX(-6px);
-    pointer-events: none;
-    transition: opacity 0.35s ease, transform 0.35s ease;
-    margin: -1px;
-  }
-
-  /* État étendu : le titre glisse vers la droite, la flèche apparaît en fade-in */
-  .liked-drawings-heading.is-expanded {
-    transform: translateX(16px);
-  }
-
-  .liked-drawings-heading.is-expanded .liked-drawings-back-icon {
-    opacity: 0.85;
-    transform: translateX(0);
-    pointer-events: auto;
-    cursor: pointer;
-  }
-
-  .liked-drawings-heading.is-expanded .liked-drawings-back-icon:hover {
-    opacity: 1;
-  }
+  /* ============================= ONGLET PROFIL (LIKES) ============================= */
 
   .liked-drawings-grid {
     display: grid;
@@ -1871,7 +1837,7 @@ permalink: /profile
             Sécurité
           </button>
           <button class="profile-tab-btn" data-tab="monprofil" role="tab" aria-selected="false">
-            Mon Profil
+            Profil
           </button>
         </div>
 
@@ -1961,10 +1927,7 @@ permalink: /profile
           </div>
 
           <div class="profile-tab-content" data-tab-panel="monprofil">
-            <div class="liked-drawings-heading" id="likedDrawingsHeading">
-              <img src="/icons/arrow-left-lightbox.svg" alt="" class="liked-drawings-back-icon" id="likedDrawingsBackIcon">
-              <span class="account-field-label">Œuvres likées</span>
-            </div>
+            <span class="account-field-label">Œuvres likées</span>
 
             <div class="liked-drawings-grid" id="likedDrawingsGrid">
               <!-- Rempli dynamiquement par profile.js -->
