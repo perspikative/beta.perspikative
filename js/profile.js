@@ -73,19 +73,18 @@ const visibilityForm = document.getElementById("visibilityForm");
 const visibilityStatus = document.getElementById("visibilityStatus");
 
 // -----------------------------------------------------------------------
-// Références DOM — onglet Mon Profil (œuvres likées)
+// Références DOM — onglet Profil (œuvres likées)
 // -----------------------------------------------------------------------
 const likedDrawingsGrid = document.getElementById("likedDrawingsGrid");
 const likedDrawingsEmpty = document.getElementById("likedDrawingsEmpty");
 const likedDrawingsLoading = document.getElementById("likedDrawingsLoading");
-const likedDrawingsHeading = document.getElementById("likedDrawingsHeading");
-const likedDrawingsBackIcon = document.getElementById("likedDrawingsBackIcon");
 
 // Toutes les œuvres likées actuellement chargées (mises à jour à chaque
-// loadLikedDrawings), pour pouvoir re-render entre vue réduite/étendue
-// sans refaire d'appel réseau.
+// loadLikedDrawings), pour pouvoir paginer l'affichage sans refaire
+// d'appel réseau. likedDrawingsShownCount suit combien d'entre elles sont
+// actuellement affichées dans la grille.
 let allLikedDrawings = [];
-let likedDrawingsExpanded = false;
+let likedDrawingsShownCount = 0;
 
 // -----------------------------------------------------------------------
 // Références DOM — lightbox photo de profil (coverflow)
@@ -124,7 +123,7 @@ tabButtons.forEach((btn) => {
             panel.classList.toggle("active", panel.dataset.tabPanel === target);
         });
 
-        // L'onglet "Mon Profil" vient de devenir visible : le nombre de
+        // L'onglet "Profil" vient de devenir visible : le nombre de
         // colonnes de la grille n'était pas mesurable tant que le panneau
         // était display:none, donc on recalcule maintenant qu'il l'est.
         if (target === "monprofil" && typeof renderLikedDrawings === "function") {
@@ -351,7 +350,7 @@ function setVisibilityUI(isPublic) {
 }
 
 // -----------------------------------------------------------------------
-// Onglet Mon Profil : œuvres likées (users/{uid}/likedDrawings/{id}),
+// Onglet Profil : œuvres likées (users/{uid}/likedDrawings/{id}),
 // chaque doc contenant likedAt, src, title et page (voir
 // toggleLikeInFirestore dans script.js, qui écrit ces documents depuis la
 // lightbox des œuvres). `page` est le chemin canonique exact de l'œuvre
@@ -359,12 +358,15 @@ function setVisibilityUI(isPublic) {
 // sans reconstruire quoi que ce soit côté profil, pour rester correct
 // quelle que soit la catégorie (creations / illustrations / projets).
 //
-// Vue réduite : une seule ligne complète de la grille. Si le nombre
-// d'œuvres dépasse cette ligne, le dernier emplacement devient la carte
-// "Voir plus" (donc colonnes - 1 œuvres affichées + le bouton). Si tout
-// tient dans la ligne, pas de bouton. Le nombre de colonnes est lu
-// directement depuis la grille rendue (grid-template-columns), pour
-// rester juste quel que soit le breakpoint CSS actif.
+// Pagination "charger plus" : au premier affichage, une ligne complète de
+// la grille est montrée. Si ça déborde, le dernier emplacement de cette
+// ligne devient la carte "Voir plus" (donc colonnes - 1 œuvres + bouton).
+// Au clic, une ligne complète supplémentaire est ajoutée SOUS les cartes
+// déjà affichées (rien n'est retiré ni déplacé) ; le bouton se replace en
+// tout dernier, ou disparaît s'il n'y a plus rien à charger. Le nombre de
+// colonnes est lu directement depuis la grille rendue
+// (grid-template-columns), pour rester juste quel que soit le breakpoint
+// CSS actif.
 // -----------------------------------------------------------------------
 
 function getLikedGridColumnCount() {
@@ -413,13 +415,22 @@ function buildLikedDrawingsMoreCard(remainingCount) {
     inner.appendChild(label);
 
     card.appendChild(inner);
-    card.addEventListener("click", expandLikedDrawings);
+    card.addEventListener("click", showMoreLikedDrawings);
 
     return card;
 }
 
-// Rejoue le rendu de la grille selon allLikedDrawings et l'état
-// courant (réduit/étendu), sans refaire d'appel réseau.
+// Retire la carte "Voir plus" de la grille si elle y est (avant d'ajouter
+// de nouvelles cartes, pour ne pas la laisser coincée au milieu).
+function removeMoreCardIfAny() {
+    if (!likedDrawingsGrid) return;
+    const existing = likedDrawingsGrid.querySelector(".liked-drawing-more");
+    if (existing) existing.remove();
+}
+
+// Premier rendu (ou re-rendu, ex: changement de colonnes au resize) : vide
+// la grille et affiche la première ligne, avec le bouton "Voir plus" si le
+// total déborde d'une ligne.
 function renderLikedDrawings() {
     if (!likedDrawingsGrid) return;
 
@@ -438,51 +449,65 @@ function renderLikedDrawings() {
     const columns = getLikedGridColumnCount();
     const overflowsOneLine = items.length > columns;
 
-    let visibleItems = items;
-    let remainingCount = 0;
+    // colonnes - 1 œuvres si ça déborde (le dernier emplacement de la
+    // ligne est réservé au bouton), sinon toutes les œuvres tiennent.
+    const visibleCount = overflowsOneLine ? Math.max(columns - 1, 1) : items.length;
+    likedDrawingsShownCount = visibleCount;
 
-    if (!likedDrawingsExpanded && overflowsOneLine) {
-        // colonnes - 1 œuvres, le dernier emplacement de la ligne étant
-        // réservé à la carte "Voir plus".
-        const visibleCount = Math.max(columns - 1, 1);
-        visibleItems = items.slice(0, visibleCount);
-        remainingCount = items.length - visibleCount;
-    }
-
-    visibleItems.forEach((item) => {
+    items.slice(0, visibleCount).forEach((item) => {
         likedDrawingsGrid.appendChild(buildLikedDrawingCard(item));
     });
 
-    if (!likedDrawingsExpanded && overflowsOneLine) {
-        likedDrawingsGrid.appendChild(buildLikedDrawingsMoreCard(remainingCount));
+    if (overflowsOneLine) {
+        likedDrawingsGrid.appendChild(buildLikedDrawingsMoreCard(items.length - visibleCount));
     }
 }
 
-function expandLikedDrawings() {
-    likedDrawingsExpanded = true;
-    if (likedDrawingsHeading) likedDrawingsHeading.classList.add("is-expanded");
-    if (likedDrawingsGrid) likedDrawingsGrid.classList.add("is-expanded");
-    renderLikedDrawings();
-}
+// Clic sur "Voir plus" : ajoute une ligne complète supplémentaire sous les
+// cartes déjà affichées, sans rien retirer ni redisposer. Le bouton se
+// replace en tout dernier s'il reste des œuvres, sinon disparaît.
+function showMoreLikedDrawings() {
+    if (!likedDrawingsGrid) return;
 
-function collapseLikedDrawings() {
-    likedDrawingsExpanded = false;
-    if (likedDrawingsHeading) likedDrawingsHeading.classList.remove("is-expanded");
-    if (likedDrawingsGrid) likedDrawingsGrid.classList.remove("is-expanded");
-    renderLikedDrawings();
-}
+    const items = allLikedDrawings;
+    const columns = getLikedGridColumnCount();
+    const remaining = items.length - likedDrawingsShownCount;
+    if (remaining <= 0) return;
 
-if (likedDrawingsBackIcon) {
-    likedDrawingsBackIcon.addEventListener("click", () => {
-        if (likedDrawingsExpanded) collapseLikedDrawings();
+    removeMoreCardIfAny();
+
+    const stillOverflowsAfterThisPage = remaining > columns;
+    // Une ligne complète si d'autres œuvres restent après celle-ci
+    // (colonnes - 1 pour laisser la place au bouton suivant), sinon tout
+    // ce qu'il reste.
+    const nextBatchSize = stillOverflowsAfterThisPage
+        ? Math.max(columns - 1, 1)
+        : remaining;
+
+    const nextItems = items.slice(
+        likedDrawingsShownCount,
+        likedDrawingsShownCount + nextBatchSize
+    );
+
+    nextItems.forEach((item) => {
+        likedDrawingsGrid.appendChild(buildLikedDrawingCard(item));
     });
+
+    likedDrawingsShownCount += nextItems.length;
+
+    if (likedDrawingsShownCount < items.length) {
+        likedDrawingsGrid.appendChild(
+            buildLikedDrawingsMoreCard(items.length - likedDrawingsShownCount)
+        );
+    }
 }
 
-// La ligne complète dépend de la largeur d'écran (breakpoints CSS) :
-// on recalcule au resize pour rester juste si l'utilisateur redimensionne
-// la fenêtre en vue réduite.
+// La ligne complète dépend de la largeur d'écran (breakpoints CSS) : on
+// recalcule au resize pour rester juste (repart de la première ligne,
+// plus simple et plus sûr que d'essayer de réajuster une pagination déjà
+// entamée à un nombre de colonnes différent).
 window.addEventListener("resize", () => {
-    if (!likedDrawingsExpanded) renderLikedDrawings();
+    renderLikedDrawings();
 });
 
 async function loadLikedDrawings(uid) {
@@ -519,13 +544,12 @@ async function loadLikedDrawings(uid) {
         items.sort((a, b) => b.likedAt - a.likedAt);
 
         allLikedDrawings = items;
-        likedDrawingsExpanded = false;
-        if (likedDrawingsHeading) likedDrawingsHeading.classList.remove("is-expanded");
-        if (likedDrawingsGrid) likedDrawingsGrid.classList.remove("is-expanded");
+        likedDrawingsShownCount = 0;
         renderLikedDrawings();
     } catch (err) {
         console.error("Erreur de chargement des œuvres likées :", err);
         allLikedDrawings = [];
+        likedDrawingsShownCount = 0;
         renderLikedDrawings();
     } finally {
         if (likedDrawingsLoading) likedDrawingsLoading.classList.add("is-hidden");
