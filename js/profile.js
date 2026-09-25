@@ -491,26 +491,23 @@ function renderLikedDrawings() {
     }
 }
 
-// Clic sur "Voir plus" : ajoute une ligne complète supplémentaire sous les
-// cartes déjà affichées, sans rien retirer ni redisposer. Le bouton se
-// replace en tout dernier s'il reste des œuvres, sinon disparaît.
+// Nombre d'œuvres ajoutées à chaque clic sur "Voir plus" (au-delà de la
+// toute première page, gérée séparément par getFirstPageCapacity).
+const LIKED_DRAWINGS_BATCH_SIZE = 4;
+
+// Clic sur "Voir plus" : ajoute un lot fixe d'œuvres sous les cartes déjà
+// affichées, sans rien retirer ni redisposer. Le bouton se replace en
+// tout dernier s'il reste des œuvres, sinon disparaît.
 function showMoreLikedDrawings() {
     if (!likedDrawingsGrid) return;
 
     const items = allLikedDrawings;
-    const columns = getLikedGridColumnCount();
     const remaining = items.length - likedDrawingsShownCount;
     if (remaining <= 0) return;
 
     removeMoreCardIfAny();
 
-    const stillOverflowsAfterThisPage = remaining > columns;
-    // Une ligne complète si d'autres œuvres restent après celle-ci
-    // (colonnes - 1 pour laisser la place au bouton suivant), sinon tout
-    // ce qu'il reste.
-    const nextBatchSize = stillOverflowsAfterThisPage
-        ? Math.max(columns - 1, 1)
-        : remaining;
+    const nextBatchSize = Math.min(LIKED_DRAWINGS_BATCH_SIZE, remaining);
 
     const nextItems = items.slice(
         likedDrawingsShownCount,
