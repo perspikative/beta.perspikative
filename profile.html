@@ -1008,21 +1008,22 @@ permalink: /profile
     height: 100%;
     object-fit: cover;
     display: block;
-    opacity: 0;
-    transition: opacity 0.25s ease;
   }
 
-  /* La carte "Voir plus" n'a pas de photo à charger : son icône doit
-     rester visible tout de suite, pas attendre une classe is-loaded
-     qu'elle ne recevra jamais. */
-  .liked-drawing-more img {
-    opacity: 1;
+  /* Animation d'entrée jouée UNE fois, quand l'image finit de charger
+     (voir profile.js). On l'applique à l'opacité de la CARTE (pas de
+     l'image) : Safari iOS peut décharger puis redécoder silencieusement
+     une image hors-viewport sans réémettre l'événement "load" — si
+     l'opacité dépendait de l'image elle-même, un redécodage la laisserait
+     invisible en permanence après un simple scroll.
+     "both" garde l'état final (opacity:1) après la fin de l'animation. */
+  .liked-drawing-card.is-loaded {
+    animation: liked-card-reveal 0.25s ease both;
   }
 
-  /* Ajoutée par profile.js une fois l'image réellement chargée (ou en
-     erreur), pour ne jamais montrer un fade-in avant que l'image existe. */
-  .liked-drawing-card.is-loaded img {
-    opacity: 1;
+  @keyframes liked-card-reveal {
+    from { opacity: 0; }
+    to   { opacity: 1; }
   }
 
   .liked-drawing-card:hover {
