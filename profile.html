@@ -746,6 +746,10 @@ permalink: /profile
     max-width: 440px;
   }
 
+  .liked-drawings-section-title {
+    margin-top: 36px;
+  }
+
   .account-field-value {
     display: flex;
     align-items: center;
@@ -1839,7 +1843,10 @@ permalink: /profile
       <!-- ===== COLONNE DROITE : ONGLETS ===== -->
       <div class="profile-panel">
         <div class="profile-tabs" role="tablist">
-          <button class="profile-tab-btn active" data-tab="compte" role="tab" aria-selected="true">
+          <button class="profile-tab-btn active" data-tab="monprofil" role="tab" aria-selected="true">
+            Profil
+          </button>
+          <button class="profile-tab-btn" data-tab="compte" role="tab" aria-selected="false">
             Compte
           </button>
           <button class="profile-tab-btn" data-tab="confidentialite" role="tab" aria-selected="false">
@@ -1848,13 +1855,10 @@ permalink: /profile
           <button class="profile-tab-btn" data-tab="securite" role="tab" aria-selected="false">
             Sécurité
           </button>
-          <button class="profile-tab-btn" data-tab="monprofil" role="tab" aria-selected="false">
-            Profil
-          </button>
         </div>
 
         <div class="profile-tab-panels">
-          <div class="profile-tab-content active" data-tab-panel="compte">
+          <div class="profile-tab-content" data-tab-panel="compte">
             <div class="account-fields">
 
               <div>
@@ -1938,7 +1942,7 @@ permalink: /profile
             </div>
           </div>
 
-          <div class="profile-tab-content" data-tab-panel="monprofil">
+          <div class="profile-tab-content active" data-tab-panel="monprofil">
             <span class="account-field-label">Œuvres likées</span>
 
             <div class="liked-drawings-grid" id="likedDrawingsGrid">
@@ -1954,6 +1958,8 @@ permalink: /profile
             <div class="liked-drawings-loading" id="likedDrawingsLoading">
               <span class="lb-spinner-fallback"></span>
             </div>
+
+            <span class="account-field-label liked-drawings-section-title">Badges</span>
           </div>
         </div>
       </div>
