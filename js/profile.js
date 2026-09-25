@@ -77,7 +77,6 @@ const visibilityStatus = document.getElementById("visibilityStatus");
 // -----------------------------------------------------------------------
 const likedDrawingsGrid = document.getElementById("likedDrawingsGrid");
 const likedDrawingsEmpty = document.getElementById("likedDrawingsEmpty");
-const likedDrawingsLoading = document.getElementById("likedDrawingsLoading");
 
 // Toutes les œuvres likées actuellement chargées (mises à jour à chaque
 // loadLikedDrawings), pour pouvoir paginer l'affichage sans refaire
@@ -106,7 +105,7 @@ let usernameCheckToken = 0; // pour ignorer les réponses de vérif obsolètes
 
 // -----------------------------------------------------------------------
 // Onglets Profil / Compte / Confidentialité / Sécurité
-// Persistance via l'URL (#compte, #confidentialite, #securite, #monprofil)
+// Persistance via l'URL (#account, #privacy, #security, #profile)
 // pour rester sur le bon onglet même après un rafraîchissement de page.
 // -----------------------------------------------------------------------
 const tabButtons = document.querySelectorAll(".profile-tab-btn");
@@ -130,7 +129,7 @@ function activateProfileTab(target, options) {
     // L'onglet "Profil" vient de devenir visible : le nombre de colonnes
     // de la grille n'était pas mesurable tant que le panneau était
     // display:none, donc on recalcule maintenant qu'il l'est.
-    if (target === "monprofil" && typeof renderLikedDrawings === "function") {
+    if (target === "profile" && typeof renderLikedDrawings === "function") {
         renderLikedDrawings();
     }
 
@@ -484,6 +483,30 @@ function getFirstPageCapacity(columns) {
     return columns <= 2 ? (columns * 2) - 1 : columns - 1;
 }
 
+// Affiche des cases "squelette" (shimmer) à la place du contenu, pendant
+// le chargement réseau initial — même emplacement/forme que la première
+// page réelle (une ligne sur desktop, un carré 2×2 sur mobile), pour
+// éviter tout changement de mise en page une fois les données arrivées.
+function showLikedDrawingsSkeleton() {
+    if (!likedDrawingsGrid) return;
+
+    likedDrawingsGrid.innerHTML = "";
+    likedDrawingsGrid.style.display = "grid";
+    if (likedDrawingsEmpty) likedDrawingsEmpty.style.display = "none";
+
+    const columns = getLikedGridColumnCount();
+    // +1 : on occupe aussi l'emplacement du bouton "Voir plus" éventuel,
+    // par précaution visuelle (on ne sait pas encore s'il y en aura un).
+    const skeletonCount = getFirstPageCapacity(columns) + 1;
+
+    for (let i = 0; i < skeletonCount; i++) {
+        const skeleton = document.createElement("div");
+        skeleton.className = "liked-drawing-skeleton";
+        skeleton.setAttribute("aria-hidden", "true");
+        likedDrawingsGrid.appendChild(skeleton);
+    }
+}
+
 // Premier rendu (ou re-rendu, ex: changement de colonnes au resize) : vide
 // la grille et affiche la première page, avec le bouton "Voir plus" si le
 // total déborde.
@@ -577,13 +600,9 @@ async function loadLikedDrawings(uid) {
     if (!likedDrawingsGrid) return;
 
     const { db, fns } = getFire();
-    if (!db || !fns) {
-        if (likedDrawingsLoading) likedDrawingsLoading.classList.add("is-hidden");
-        return;
-    }
+    if (!db || !fns) return;
 
-    if (likedDrawingsLoading) likedDrawingsLoading.classList.remove("is-hidden");
-    likedDrawingsGrid.style.display = "none";
+    showLikedDrawingsSkeleton();
     if (likedDrawingsEmpty) likedDrawingsEmpty.style.display = "none";
 
     try {
@@ -614,8 +633,6 @@ async function loadLikedDrawings(uid) {
         allLikedDrawings = [];
         likedDrawingsShownCount = 0;
         renderLikedDrawings();
-    } finally {
-        if (likedDrawingsLoading) likedDrawingsLoading.classList.add("is-hidden");
     }
 }
 
