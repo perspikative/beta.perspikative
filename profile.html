@@ -998,13 +998,45 @@ permalink: /profile
     aspect-ratio: 1 / 1;
     border-radius: 14px;
     overflow: hidden;
-    /* Placeholder visible dès l'insertion (avant que l'image ait fini de
-       charger), pour que le carré ne reste jamais vide un instant. */
-    background: rgba(255, 255, 255, 0.06);
+    /* Fond shimmer visible dès l'insertion (avant que l'image ait fini de
+       charger), retiré une fois l'image chargée (voir .is-loaded plus bas). */
+    background: var(--skeleton-base);
     border: none;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
     text-decoration: none;
     transition: transform 0.2s ease;
+  }
+
+  .liked-drawing-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      100deg,
+      transparent 0%,
+      var(--skeleton-shine) 50%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    animation: skeleton-shimmer 1.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  /* La carte "Voir plus" n'a pas d'image à charger : pas de shimmer. */
+  .liked-drawing-more::after {
+    display: none;
+  }
+
+  .liked-drawing-card.is-loaded::after {
+    animation: none;
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .liked-drawing-card::after {
+      animation: none;
+    }
   }
 
   .liked-drawing-card img {
@@ -1110,27 +1142,36 @@ permalink: /profile
     line-height: 1.3;
   }
 
-  .liked-drawings-loading {
-    display: flex;
-    justify-content: center;
-    padding: 40px 0;
+  /* Cases "squelette" affichées pendant le chargement (remplacent
+     l'ancien spinner rond) : même forme que les vraies cartes, avec
+     l'effet shimmer déjà utilisé pour displayName/profileBio/etc. plus
+     haut, réutilisé ici sur un bloc plein plutôt qu'une barre de texte. */
+  .liked-drawing-skeleton {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border-radius: 14px;
+    overflow: hidden;
+    background: var(--skeleton-base);
   }
 
-  .liked-drawings-loading.is-hidden {
-    display: none;
+  .liked-drawing-skeleton::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      100deg,
+      transparent 0%,
+      var(--skeleton-shine) 50%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    animation: skeleton-shimmer 1.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
   }
 
-  .lb-spinner-fallback {
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    border: 3px solid rgba(255, 255, 255, 0.2);
-    border-top-color: rgba(255, 255, 255, 0.75);
-    animation: liked-spin 0.8s linear infinite;
-  }
-
-  @keyframes liked-spin {
-    to { transform: rotate(360deg); }
+  @media (prefers-reduced-motion: reduce) {
+    .liked-drawing-skeleton::after {
+      animation: none;
+    }
   }
 
   @media (max-width: 480px) {
@@ -1843,22 +1884,22 @@ permalink: /profile
       <!-- ===== COLONNE DROITE : ONGLETS ===== -->
       <div class="profile-panel">
         <div class="profile-tabs" role="tablist">
-          <button class="profile-tab-btn active" data-tab="monprofil" role="tab" aria-selected="true">
+          <button class="profile-tab-btn active" data-tab="profile" role="tab" aria-selected="true">
             Profil
           </button>
-          <button class="profile-tab-btn" data-tab="compte" role="tab" aria-selected="false">
+          <button class="profile-tab-btn" data-tab="account" role="tab" aria-selected="false">
             Compte
           </button>
-          <button class="profile-tab-btn" data-tab="confidentialite" role="tab" aria-selected="false">
+          <button class="profile-tab-btn" data-tab="privacy" role="tab" aria-selected="false">
             Confidentialité
           </button>
-          <button class="profile-tab-btn" data-tab="securite" role="tab" aria-selected="false">
+          <button class="profile-tab-btn" data-tab="security" role="tab" aria-selected="false">
             Sécurité
           </button>
         </div>
 
         <div class="profile-tab-panels">
-          <div class="profile-tab-content" data-tab-panel="compte">
+          <div class="profile-tab-content" data-tab-panel="account">
             <div class="account-fields">
 
               <div>
@@ -1893,7 +1934,7 @@ permalink: /profile
             </div>
           </div>
 
-          <div class="profile-tab-content" data-tab-panel="confidentialite">
+          <div class="profile-tab-content" data-tab-panel="privacy">
 
             <div class="public-url-card">
               <div class="public-url-info">
@@ -1935,14 +1976,14 @@ permalink: /profile
 
           </div>
 
-          <div class="profile-tab-content" data-tab-panel="securite">
+          <div class="profile-tab-content" data-tab-panel="security">
             <div class="tab-placeholder">
               <h3>Section Sécurité</h3>
               <p>Bientôt : gestion des connexions actives et des options de sécurité du compte.</p>
             </div>
           </div>
 
-          <div class="profile-tab-content active" data-tab-panel="monprofil">
+          <div class="profile-tab-content active" data-tab-panel="profile">
             <span class="account-field-label">Œuvres likées</span>
 
             <div class="liked-drawings-grid" id="likedDrawingsGrid">
@@ -1953,10 +1994,6 @@ permalink: /profile
               <img src="/icons/heart.svg" alt="" class="liked-drawings-empty-icon">
               <h3>Aucune œuvre likée pour l'instant</h3>
               <p>Les créations que tu likes dans la galerie apparaîtront ici.</p>
-            </div>
-
-            <div class="liked-drawings-loading" id="likedDrawingsLoading">
-              <span class="lb-spinner-fallback"></span>
             </div>
 
             <span class="account-field-label liked-drawings-section-title">Badges</span>
