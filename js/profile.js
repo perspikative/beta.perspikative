@@ -528,10 +528,18 @@ function showMoreLikedDrawings() {
 }
 
 // La ligne complète dépend de la largeur d'écran (breakpoints CSS) : on
-// recalcule au resize pour rester juste (repart de la première ligne,
-// plus simple et plus sûr que d'essayer de réajuster une pagination déjà
+// recalcule au resize pour rester juste (repart de la première page, plus
+// simple et plus sûr que d'essayer de réajuster une pagination déjà
 // entamée à un nombre de colonnes différent).
+//
+// On ne réagit qu'à un changement de LARGEUR : sur Safari iOS, faire
+// défiler la page rétracte/réaffiche la barre d'adresse, ce qui déclenche
+// un resize à chaque scroll (seule la hauteur change). Sans ce filtre, la
+// grille se réinitialisait à sa première page à chaque scroll mobile.
+let likedDrawingsLastWidth = window.innerWidth;
 window.addEventListener("resize", () => {
+    if (window.innerWidth === likedDrawingsLastWidth) return;
+    likedDrawingsLastWidth = window.innerWidth;
     renderLikedDrawings();
 });
 
