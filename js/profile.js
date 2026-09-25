@@ -105,32 +105,62 @@ let currentUsernameDisplay = null; // casse d'affichage actuellement enregistré
 let usernameCheckToken = 0; // pour ignorer les réponses de vérif obsolètes
 
 // -----------------------------------------------------------------------
-// Onglets Compte / Confidentialité / Sécurité
+// Onglets Profil / Compte / Confidentialité / Sécurité
+// Persistance via l'URL (#compte, #confidentialite, #securite, #monprofil)
+// pour rester sur le bon onglet même après un rafraîchissement de page.
 // -----------------------------------------------------------------------
 const tabButtons = document.querySelectorAll(".profile-tab-btn");
 const tabPanels = document.querySelectorAll(".profile-tab-content");
+const validProfileTabs = Array.from(tabButtons).map((b) => b.dataset.tab);
+
+function activateProfileTab(target, options) {
+    const opts = options || {};
+    if (!validProfileTabs.includes(target)) return;
+
+    tabButtons.forEach((b) => {
+        const isTarget = b.dataset.tab === target;
+        b.classList.toggle("active", isTarget);
+        b.setAttribute("aria-selected", isTarget ? "true" : "false");
+    });
+
+    tabPanels.forEach((panel) => {
+        panel.classList.toggle("active", panel.dataset.tabPanel === target);
+    });
+
+    // L'onglet "Profil" vient de devenir visible : le nombre de colonnes
+    // de la grille n'était pas mesurable tant que le panneau était
+    // display:none, donc on recalcule maintenant qu'il l'est.
+    if (target === "monprofil" && typeof renderLikedDrawings === "function") {
+        renderLikedDrawings();
+    }
+
+    if (!opts.skipHashUpdate && window.location.hash.slice(1) !== target) {
+        // replaceState plutôt que d'assigner location.hash : évite d'empiler
+        // une entrée d'historique par clic d'onglet (le bouton retour du
+        // navigateur ne doit pas naviguer onglet par onglet).
+        history.replaceState(null, "", `#${target}`);
+    }
+}
 
 tabButtons.forEach((btn) => {
     btn.addEventListener("click", () => {
-        const target = btn.dataset.tab;
-
-        tabButtons.forEach((b) => {
-            b.classList.toggle("active", b === btn);
-            b.setAttribute("aria-selected", b === btn ? "true" : "false");
-        });
-
-        tabPanels.forEach((panel) => {
-            panel.classList.toggle("active", panel.dataset.tabPanel === target);
-        });
-
-        // L'onglet "Profil" vient de devenir visible : le nombre de
-        // colonnes de la grille n'était pas mesurable tant que le panneau
-        // était display:none, donc on recalcule maintenant qu'il l'est.
-        if (target === "monprofil" && typeof renderLikedDrawings === "function") {
-            renderLikedDrawings();
-        }
+        activateProfileTab(btn.dataset.tab);
     });
 });
+
+// Au chargement (et si l'utilisateur navigue avec les boutons
+// précédent/suivant du navigateur, ou modifie le hash manuellement) :
+// ouvre l'onglet correspondant au hash s'il est valide, sinon garde celui
+// déjà actif dans le HTML (Profil, par défaut).
+function activateProfileTabFromHash() {
+    const hash = window.location.hash.slice(1);
+    if (hash && validProfileTabs.includes(hash)) {
+        activateProfileTab(hash, { skipHashUpdate: true });
+    }
+}
+
+activateProfileTabFromHash();
+window.addEventListener("hashchange", activateProfileTabFromHash);
 
 // -----------------------------------------------------------------------
 // Utilitaires Firestore (via window.__prspkDb / window.__prspkFire,
