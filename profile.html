@@ -1984,12 +1984,6 @@ permalink: /profile
             <span class="account-field-label">Œuvres likées</span>
 
             <div class="liked-drawings-grid" id="likedDrawingsGrid">
-              <!-- Skeletons visibles dès le chargement de la page, sans
-                   dépendre du JS (voir profile.js qui les remplace par le
-                   vrai contenu une fois les données Firestore prêtes, ou
-                   les laisse tels quels si le JS est indisponible). La
-                   5ᵉ case est masquée sous 900px pour former un carré 2×2
-                   sur mobile plutôt qu'une ligne incomplète. -->
               <div class="liked-drawing-skeleton" aria-hidden="true"></div>
               <div class="liked-drawing-skeleton" aria-hidden="true"></div>
               <div class="liked-drawing-skeleton" aria-hidden="true"></div>
@@ -1999,8 +1993,8 @@ permalink: /profile
 
             <div class="liked-drawings-empty" id="likedDrawingsEmpty" style="display:none">
               <img src="/icons/heart.svg" alt="" class="liked-drawings-empty-icon">
-              <h3>Aucune œuvre likée pour l'instant</h3>
-              <p>Les créations que tu likes dans la galerie apparaîtront ici.</p>
+              <h3>Pas encore de coups de cœur ?</h3>
+              <p>Tes œuvres likées apparaîtront ici.</p>
             </div>
 
             <span class="account-field-label liked-drawings-section-title">Badges</span>
