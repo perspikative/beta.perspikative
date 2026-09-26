@@ -483,30 +483,6 @@ function getFirstPageCapacity(columns) {
     return columns <= 2 ? (columns * 2) - 1 : columns - 1;
 }
 
-// Affiche des cases "squelette" (shimmer) à la place du contenu, pendant
-// le chargement réseau initial — même emplacement/forme que la première
-// page réelle (une ligne sur desktop, un carré 2×2 sur mobile), pour
-// éviter tout changement de mise en page une fois les données arrivées.
-function showLikedDrawingsSkeleton() {
-    if (!likedDrawingsGrid) return;
-
-    likedDrawingsGrid.innerHTML = "";
-    likedDrawingsGrid.style.display = "grid";
-    if (likedDrawingsEmpty) likedDrawingsEmpty.style.display = "none";
-
-    const columns = getLikedGridColumnCount();
-    // +1 : on occupe aussi l'emplacement du bouton "Voir plus" éventuel,
-    // par précaution visuelle (on ne sait pas encore s'il y en aura un).
-    const skeletonCount = getFirstPageCapacity(columns) + 1;
-
-    for (let i = 0; i < skeletonCount; i++) {
-        const skeleton = document.createElement("div");
-        skeleton.className = "liked-drawing-skeleton";
-        skeleton.setAttribute("aria-hidden", "true");
-        likedDrawingsGrid.appendChild(skeleton);
-    }
-}
-
 // Premier rendu (ou re-rendu, ex: changement de colonnes au resize) : vide
 // la grille et affiche la première page, avec le bouton "Voir plus" si le
 // total déborde.
@@ -600,10 +576,10 @@ async function loadLikedDrawings(uid) {
     if (!likedDrawingsGrid) return;
 
     const { db, fns } = getFire();
+    // Si Firebase n'est pas disponible (JS coupé, hors-ligne, etc.), on
+    // laisse volontairement les skeletons du HTML statique tels quels
+    // plutôt que de les remplacer par un état vide trompeur.
     if (!db || !fns) return;
-
-    showLikedDrawingsSkeleton();
-    if (likedDrawingsEmpty) likedDrawingsEmpty.style.display = "none";
 
     try {
         const colRef = fns.collection(db, "users", uid, "likedDrawings");
