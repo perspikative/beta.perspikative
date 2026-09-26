@@ -1044,13 +1044,6 @@ permalink: /profile
     display: block;
   }
 
-  /* Animation d'entrée jouée UNE fois, quand l'image finit de charger
-     (voir profile.js). On l'applique à l'opacité de la CARTE (pas de
-     l'image) : Safari iOS peut décharger puis redécoder silencieusement
-     une image hors-viewport sans réémettre l'événement "load" — si
-     l'opacité dépendait de l'image elle-même, un redécodage la laisserait
-     invisible en permanence après un simple scroll.
-     "both" garde l'état final (opacity:1) après la fin de l'animation. */
   .liked-drawing-card.is-loaded {
     animation: liked-card-reveal 0.25s ease both;
   }
@@ -1064,8 +1057,6 @@ permalink: /profile
     transform: translateY(-2px);
   }
 
-  /* Carte "Voir plus" : même emplacement de grille qu'une œuvre, mais
-     plus petite et centrée, pour bien se distinguer visuellement. */
   .liked-drawing-more {
     display: flex;
     align-items: center;
@@ -1092,15 +1083,15 @@ permalink: /profile
   }
 
   .liked-drawing-more-inner img {
-    width: 21px;
-    height: 21px;
+    width: 30px;
+    height: 30px;
     opacity: 0.8;
   }
 
   .liked-drawing-more-inner span {
     font-family: 'Rubik', sans-serif;
     font-weight: 600;
-    font-size: 0.72rem;
+    font-size: 0.94rem;
     color: rgba(255, 255, 255, 0.75);
     white-space: nowrap;
   }
