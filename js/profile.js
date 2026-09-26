@@ -572,6 +572,293 @@ window.addEventListener("resize", () => {
     renderLikedDrawings();
 });
 
+// -----------------------------------------------------------------------
+// Réseaux sociaux (publicProfiles/{uid}/socialMedia, document unique avec
+// les champs whatsapp / instagram / youtube — chacun un lien complet).
+// -----------------------------------------------------------------------
+let currentSocialUid = null;
+let currentSocialLinks = { whatsapp: "", instagram: "", youtube: "" };
+
+const SOCIAL_NETWORKS = {
+    whatsapp: {
+        label: "WhatsApp",
+        editLabel: "Modifier WhatsApp",
+        placeholder: "Lien WhatsApp (whatsapp.com/...)",
+        inputMode: "url",
+        // WhatsApp : l'utilisateur colle un lien complet, on vérifie juste
+        // qu'il pointe vers whatsapp.com avant de l'accepter tel quel.
+        toLink(rawValue) {
+            const trimmed = rawValue.trim();
+            if (!trimmed) return { error: "Merci d'indiquer un lien." };
+            let normalized = trimmed;
+            if (!/^https?:\/\//i.test(normalized)) {
+                normalized = "https://" + normalized;
+            }
+            if (!/(^|\.)whatsapp\.com/i.test(normalized)) {
+                return { error: "Le lien doit contenir whatsapp.com." };
+            }
+            return { link: normalized };
+        }
+    },
+    instagram: {
+        label: "Instagram",
+        editLabel: "Modifier Instagram",
+        placeholder: "Ton nom d'utilisateur Instagram",
+        inputMode: "text",
+        // Instagram : l'utilisateur tape juste son pseudo (sans @), on
+        // génère et stocke toujours le lien complet, jamais de @ nulle part.
+        toLink(rawValue) {
+            const username = rawValue.trim().replace(/^@+/, "");
+            if (!username) return { error: "Merci d'indiquer un nom d'utilisateur." };
+            if (!/^[a-zA-Z0-9._]{1,30}$/.test(username)) {
+                return { error: "Nom d'utilisateur Instagram invalide." };
+            }
+            return { link: `https://instagram.com/${username}` };
+        }
+    },
+    youtube: {
+        label: "YouTube",
+        editLabel: "Modifier YouTube",
+        placeholder: "Ton nom d'utilisateur YouTube",
+        inputMode: "text",
+        // YouTube : même principe qu'Instagram, format @handle moderne.
+        toLink(rawValue) {
+            const username = rawValue.trim().replace(/^@+/, "");
+            if (!username) return { error: "Merci d'indiquer un nom d'utilisateur." };
+            if (!/^[a-zA-Z0-9._-]{1,30}$/.test(username)) {
+                return { error: "Nom d'utilisateur YouTube invalide." };
+            }
+            return { link: `https://www.youtube.com/@${username}` };
+        }
+    }
+};
+
+const SOCIAL_NETWORK_ORDER = ["whatsapp", "instagram", "youtube"];
+
+const socialLinksList = document.getElementById("socialLinksList");
+const socialAddRow = document.getElementById("socialAddRow");
+const socialAddToggle = document.getElementById("socialAddToggle");
+const socialAddOptions = document.getElementById("socialAddOptions");
+
+function socialRowEl(network) {
+    return document.getElementById(
+        "social" + network.charAt(0).toUpperCase() + network.slice(1)
+    );
+}
+
+// Affiche le lien complet stocké tel quel (pas de @ à reconstituer, pas de
+// raccourci d'affichage demandé) dans la barre d'un réseau donné.
+function renderSocialRow(network) {
+    const row = socialRowEl(network);
+    if (!row) return;
+    const link = currentSocialLinks[network];
+    const textEl = row.querySelector(".social-link-text");
+
+    if (!link) {
+        row.style.display = "none";
+        return;
+    }
+
+    row.style.display = "flex";
+    setRealText(textEl, link);
+    textEl.classList.remove("is-empty");
+    markLoaded(textEl);
+}
+
+// (Re)construit la liste déroulante des réseaux pas encore renseignés, et
+// masque entièrement la barre "Ajouter" si les 3 sont déjà configurés.
+function renderSocialAddOptions() {
+    if (!socialAddOptions || !socialAddRow) return;
+
+    const missing = SOCIAL_NETWORK_ORDER.filter((n) => !currentSocialLinks[n]);
+
+    if (!missing.length) {
+        socialAddRow.style.display = "none";
+        return;
+    }
+
+    socialAddRow.style.display = "flex";
+    socialAddOptions.innerHTML = "";
+
+    missing.forEach((network) => {
+        const config = SOCIAL_NETWORKS[network];
+        const option = document.createElement("button");
+        option.type = "button";
+        option.className = "social-link-add-option";
+
+        const icon = document.createElement("img");
+        icon.src = `/icons/${network}.svg`;
+        icon.alt = "";
+        option.appendChild(icon);
+
+        const label = document.createElement("span");
+        label.textContent = config.label;
+        option.appendChild(label);
+
+        option.addEventListener("click", () => {
+            closeSocialAddMenu();
+            openSocialEdit(network);
+        });
+
+        socialAddOptions.appendChild(option);
+    });
+}
+
+function renderAllSocialLinks() {
+    SOCIAL_NETWORK_ORDER.forEach(renderSocialRow);
+    renderSocialAddOptions();
+}
+
+function closeSocialAddMenu() {
+    if (socialAddRow) socialAddRow.classList.remove("is-open");
+}
+
+if (socialAddToggle) {
+    socialAddToggle.addEventListener("click", () => {
+        if (!socialAddRow) return;
+        socialAddRow.classList.toggle("is-open");
+    });
+}
+
+// Bascule une barre réseau en mode édition : masque le texte/icône,
+// affiche un formulaire inline (input + confirmer/annuler).
+function openSocialEdit(network) {
+    const row = socialRowEl(network);
+    if (!row) return;
+
+    // Une seule édition à la fois : ferme les autres barres restées ouvertes.
+    SOCIAL_NETWORK_ORDER.forEach((n) => {
+        if (n !== network) closeSocialEdit(n);
+    });
+
+    row.style.display = "flex";
+    row.classList.add("is-editing");
+    row.classList.remove("has-error");
+
+    let form = row.querySelector(".social-link-edit-form");
+    if (!form) {
+        const config = SOCIAL_NETWORKS[network];
+        form = document.createElement("span");
+        form.className = "social-link-edit-form";
+
+        const input = document.createElement("input");
+        input.type = "text";
+        input.className = "social-link-edit-input";
+        input.placeholder = config.placeholder;
+        input.autocomplete = "off";
+        input.spellcheck = false;
+        form.appendChild(input);
+
+        const confirmBtn = document.createElement("button");
+        confirmBtn.type = "button";
+        confirmBtn.className = "social-link-edit-confirm";
+        confirmBtn.setAttribute("aria-label", "Valider");
+        confirmBtn.textContent = "✓";
+        form.appendChild(confirmBtn);
+
+        const cancelBtn = document.createElement("button");
+        cancelBtn.type = "button";
+        cancelBtn.className = "social-link-edit-cancel";
+        cancelBtn.setAttribute("aria-label", "Annuler");
+        cancelBtn.textContent = "✕";
+        form.appendChild(cancelBtn);
+
+        confirmBtn.addEventListener("click", () => confirmSocialEdit(network));
+        input.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") confirmSocialEdit(network);
+            if (e.key === "Escape") closeSocialEdit(network);
+        });
+        cancelBtn.addEventListener("click", () => closeSocialEdit(network));
+
+        row.insertBefore(form, row.querySelector(".social-link-edit-btn"));
+    }
+
+    const input = form.querySelector(".social-link-edit-input");
+    // Pré-remplit avec le pseudo/lien déjà enregistré, pour permettre une
+    // simple correction plutôt que de tout retaper.
+    input.value = currentSocialLinks[network] || "";
+    input.focus();
+}
+
+function closeSocialEdit(network) {
+    const row = socialRowEl(network);
+    if (!row) return;
+    row.classList.remove("is-editing");
+    row.classList.remove("has-error");
+    // Une barre fermée sans avoir de lien enregistré redevient masquée
+    // (cas d'un ajout annulé depuis le menu "Ajouter").
+    if (!currentSocialLinks[network]) {
+        row.style.display = "none";
+    }
+}
+
+async function confirmSocialEdit(network) {
+    const row = socialRowEl(network);
+    if (!row || !currentSocialUid) return;
+
+    const input = row.querySelector(".social-link-edit-input");
+    const errorEl = row.querySelector(".social-link-error");
+    const config = SOCIAL_NETWORKS[network];
+    const result = config.toLink(input.value || "");
+
+    if (result.error) {
+        row.classList.add("has-error");
+        if (errorEl) errorEl.textContent = result.error;
+        return;
+    }
+
+    row.classList.remove("has-error");
+
+    const { db, fns } = getFire();
+    if (!db || !fns) return;
+
+    try {
+        const ref = fns.doc(db, "publicProfiles", currentSocialUid, "socialMedia", "links");
+        await fns.setDoc(ref, { [network]: result.link }, { merge: true });
+
+        currentSocialLinks[network] = result.link;
+        closeSocialEdit(network);
+        renderAllSocialLinks();
+    } catch (err) {
+        console.error("Erreur lors de l'enregistrement du réseau social :", err);
+        row.classList.add("has-error");
+        if (errorEl) errorEl.textContent = "Une erreur est survenue, réessaie.";
+    }
+}
+
+SOCIAL_NETWORK_ORDER.forEach((network) => {
+    const row = socialRowEl(network);
+    if (!row) return;
+    const editBtn = row.querySelector(".social-link-edit-btn");
+    if (editBtn) {
+        editBtn.addEventListener("click", () => openSocialEdit(network));
+    }
+});
+
+async function loadSocialLinks(uid) {
+    currentSocialUid = uid;
+
+    const { db, fns } = getFire();
+    if (!db || !fns) return;
+
+    try {
+        const ref = fns.doc(db, "publicProfiles", uid, "socialMedia", "links");
+        const snap = await fns.getDoc(ref);
+        const data = snap.exists() ? snap.data() : {};
+
+        currentSocialLinks = {
+            whatsapp: data.whatsapp || "",
+            instagram: data.instagram || "",
+            youtube: data.youtube || ""
+        };
+    } catch (err) {
+        console.error("Erreur de chargement des réseaux sociaux :", err);
+        currentSocialLinks = { whatsapp: "", instagram: "", youtube: "" };
+    }
+
+    renderAllSocialLinks();
+}
+
 async function loadLikedDrawings(uid) {
     if (!likedDrawingsGrid) return;
 
@@ -736,6 +1023,7 @@ onAuthStateChanged(auth, async (user) => {
     if (profileSince) profileSince.textContent = formatSince(createdAt);
 
     loadLikedDrawings(user.uid);
+    loadSocialLinks(user.uid);
 });
 
 // -----------------------------------------------------------------------
