@@ -761,6 +761,7 @@ permalink: /profile
   .social-link-row {
     justify-content: flex-start;
     flex-wrap: wrap;
+    border-radius: 32px;
   }
 
   .social-link-error {
@@ -769,8 +770,8 @@ permalink: /profile
 
   .social-link-icon {
     flex-shrink: 0;
-    width: 22px;
-    height: 22px;
+    width: 30px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -789,7 +790,13 @@ permalink: /profile
     font-family: 'Rubik', sans-serif;
     font-weight: 500;
     color: #ffffff;
-    word-break: break-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* Fondu de lisibilité en bout de texte, juste avant le(s) bouton(s)
+       d'action, pour adoucir la coupure quand le lien est tronqué. */
+    -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent 100%);
+    mask-image: linear-gradient(90deg, #000 85%, transparent 100%);
   }
 
   .social-link-text.is-empty > span.real-text {
@@ -872,6 +879,11 @@ permalink: /profile
 
   .social-link-text > span.real-text {
     display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: bottom;
     opacity: 0;
     transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -879,6 +891,10 @@ permalink: /profile
   .social-link-text.is-loaded .skeleton-bar {
     opacity: 0;
     pointer-events: none;
+  }
+
+  .social-link-text.is-loaded .skeleton-bar::after {
+    animation: none;
   }
 
   .social-link-text.is-loaded > span.real-text {
@@ -891,6 +907,7 @@ permalink: /profile
     align-items: stretch;
     padding: 0;
     overflow: hidden;
+    border-radius: 32px;
   }
 
   .social-link-add-btn {
