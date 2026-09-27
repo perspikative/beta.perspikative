@@ -943,9 +943,9 @@ permalink: /profile
   }
 
   .social-link-add-option {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 12px;
+    gap: 8px;
     width: 100%;
     padding: 12px 18px;
     background: none;
@@ -964,8 +964,8 @@ permalink: /profile
 
   .social-link-add-option img {
     flex-shrink: 0;
-    width: 20px;
-    height: 20px;
+    width: 29px;
+    height: 29px;
   }
 
   /* ----- Mode édition inline d'une barre réseau ----- */
@@ -2275,10 +2275,9 @@ permalink: /profile
             <span class="account-field-label">Réseaux sociaux</span>
 
             <div class="social-links-list" id="socialLinksList">
-              <!-- Barres réseaux (whatsapp/instagram/youtube) + barre
-                   "Ajouter" gérées dynamiquement par profile.js -->
+              
               <div class="account-field-value social-link-row" id="socialWhatsapp" data-network="whatsapp" style="display:none">
-                <span class="social-link-icon"><img src="/icons/whatsapp.svg" alt=""></span>
+                <span class="social-link-icon"><img src="/icons/whatsapp-channel.svg" alt=""></span>
                 <span class="social-link-text"><span class="skeleton-bar" aria-hidden="true"></span><span class="real-text"></span></span>
                 <button type="button" class="social-link-delete-btn" aria-label="Supprimer WhatsApp">
                   <img src="/icons/lightbox-trash.svg" alt="">
