@@ -582,7 +582,6 @@ let currentSocialLinks = { whatsapp: "", instagram: "", youtube: "" };
 const SOCIAL_NETWORKS = {
     whatsapp: {
         label: "WhatsApp",
-        editLabel: "Modifier WhatsApp",
         placeholder: "Lien WhatsApp (whatsapp.com/...)",
         inputMode: "url",
         // WhatsApp : l'utilisateur colle un lien complet, on vérifie juste
@@ -598,11 +597,14 @@ const SOCIAL_NETWORKS = {
                 return { error: "Le lien doit contenir whatsapp.com." };
             }
             return { link: normalized };
+        },
+        // Affichage : le lien complet tel quel, pas de reformattage.
+        toDisplay(link) {
+            return link;
         }
     },
     instagram: {
         label: "Instagram",
-        editLabel: "Modifier Instagram",
         placeholder: "Ton nom d'utilisateur Instagram",
         inputMode: "text",
         // Instagram : l'utilisateur tape juste son pseudo (sans @), on
@@ -614,11 +616,16 @@ const SOCIAL_NETWORKS = {
                 return { error: "Nom d'utilisateur Instagram invalide." };
             }
             return { link: `https://instagram.com/${username}` };
+        },
+        // Affichage : @pseudo dérivé du lien stocké, jamais le début du
+        // lien (instagram.com/...) — extrait tout ce qui suit le dernier "/".
+        toDisplay(link) {
+            const username = link.replace(/\/+$/, "").split("/").pop();
+            return `@${username}`;
         }
     },
     youtube: {
         label: "YouTube",
-        editLabel: "Modifier YouTube",
         placeholder: "Ton nom d'utilisateur YouTube",
         inputMode: "text",
         // YouTube : même principe qu'Instagram, format @handle moderne.
@@ -629,6 +636,12 @@ const SOCIAL_NETWORKS = {
                 return { error: "Nom d'utilisateur YouTube invalide." };
             }
             return { link: `https://www.youtube.com/@${username}` };
+        },
+        // Affichage : @pseudo dérivé du lien stocké (déjà préfixé par @
+        // dans l'URL elle-même, on le récupère tel quel).
+        toDisplay(link) {
+            const handle = link.replace(/\/+$/, "").split("/").pop();
+            return handle.startsWith("@") ? handle : `@${handle}`;
         }
     }
 };
@@ -660,7 +673,7 @@ function renderSocialRow(network) {
     }
 
     row.style.display = "flex";
-    setRealText(textEl, link);
+    setRealText(textEl, SOCIAL_NETWORKS[network].toDisplay(link));
     textEl.classList.remove("is-empty");
     markLoaded(textEl);
 }
@@ -770,7 +783,7 @@ function openSocialEdit(network) {
         });
         cancelBtn.addEventListener("click", () => closeSocialEdit(network));
 
-        row.insertBefore(form, row.querySelector(".social-link-edit-btn"));
+        row.insertBefore(form, row.querySelector(".social-link-delete-btn"));
     }
 
     const input = form.querySelector(".social-link-edit-input");
@@ -826,12 +839,42 @@ async function confirmSocialEdit(network) {
     }
 }
 
+// Supprime le lien enregistré pour un réseau : retire le champ dans
+// Firestore et remet la barre à l'état masqué (le réseau redevient
+// proposable depuis la barre "Ajouter des réseaux sociaux").
+async function deleteSocialLink(network) {
+    if (!currentSocialUid) return;
+
+    const { db, fns } = getFire();
+    if (!db || !fns) return;
+
+    const previousLink = currentSocialLinks[network];
+    // Optimiste : on masque tout de suite, avant confirmation réseau.
+    currentSocialLinks[network] = "";
+    renderAllSocialLinks();
+
+    try {
+        const ref = fns.doc(db, "publicProfiles", currentSocialUid, "socialMedia", "links");
+        // Note : deleteField() n'est pas exposé dans window.__prspkFire
+        // (firebase.js), donc on écrit une chaîne vide plutôt que de
+        // vraiment retirer le champ. Le résultat est identique pour
+        // l'affichage (une chaîne vide masque la barre), mais le champ
+        // reste présent dans le document Firestore avec une valeur vide.
+        await fns.setDoc(ref, { [network]: "" }, { merge: true });
+    } catch (err) {
+        console.error("Erreur lors de la suppression du réseau social :", err);
+        // Rollback si l'écriture a échoué.
+        currentSocialLinks[network] = previousLink;
+        renderAllSocialLinks();
+    }
+}
+
 SOCIAL_NETWORK_ORDER.forEach((network) => {
     const row = socialRowEl(network);
     if (!row) return;
-    const editBtn = row.querySelector(".social-link-edit-btn");
-    if (editBtn) {
-        editBtn.addEventListener("click", () => openSocialEdit(network));
+    const deleteBtn = row.querySelector(".social-link-delete-btn");
+    if (deleteBtn) {
+        deleteBtn.addEventListener("click", () => deleteSocialLink(network));
     }
 });
 
