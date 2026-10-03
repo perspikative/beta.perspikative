@@ -149,6 +149,8 @@ permalink: /@
     white-space: pre-line;
     word-break: break-word;
     overflow-wrap: anywhere;
+    position: relative;
+    min-height: 2.8em;
   }
 
   .pp-bio.is-empty {
@@ -338,6 +340,77 @@ permalink: /@
     }
   }
 
+  /* Bio : deux barres qui réservent la place du texte */
+  #ppBio .skeleton-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    top: 0.15em;
+    display: block;
+    overflow: hidden;
+    height: 1em;
+    width: 90%;
+    max-width: 380px;
+    border-radius: 25px;
+    opacity: 1;
+    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  #ppBio .skeleton-bar--2 {
+    top: 1.55em;
+    width: 60%;
+    max-width: 260px;
+  }
+
+  #ppBio .skeleton-bar::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--skeleton-base);
+  }
+
+  #ppBio .skeleton-bar::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      100deg,
+      transparent 0%,
+      var(--skeleton-shine) 50%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    animation: skeleton-shimmer 1.6s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+  }
+
+  #ppBio.is-loaded .skeleton-bar {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #ppBio .skeleton-bar::after { animation: none; }
+  }
+
+  /* ===== Apparition en fondu quand les infos ont chargé ===== */
+  .pp-since:not(.is-loaded) {
+    opacity: 0;
+  }
+
+  .pp-revealed {
+    animation: ppFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  @keyframes ppFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pp-revealed { animation: none; }
+  }
+
   /* ===== État privé / 404 ===== */
   .pp-state {
     display: flex;
@@ -479,7 +552,7 @@ permalink: /@
       </div>
       <h1 class="pp-name" id="ppName"><span class="skeleton-bar" aria-hidden="true"></span><span class="real-text">—</span></h1>
       <p class="pp-username" id="ppUsername"><span class="skeleton-bar" aria-hidden="true"></span><span class="real-text">@—</span></p>
-      <p class="pp-bio" id="ppBio"></p>
+      <p class="pp-bio" id="ppBio"><span class="skeleton-bar" aria-hidden="true"></span><span class="skeleton-bar skeleton-bar--2" aria-hidden="true"></span></p>
       <div class="pp-since">
         <span id="ppSince">Perspikativeur depuis…</span>
       </div>
@@ -545,6 +618,18 @@ permalink: /@
       if (ppPic.src.startsWith('data:')) return;
       ppPic.classList.add('is-loaded');
       ppPic.parentElement.classList.add('is-loaded');
+    });
+
+    // Fade-in de chaque élément dès que le JS lui injecte son contenu
+    ['ppName', 'ppUsername', 'ppBio', 'ppSince'].forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const target = id === 'ppSince' ? el.parentElement : el;
+      new MutationObserver((_, obs) => {
+        el.classList.add('is-loaded');
+        target.classList.add('is-loaded', 'pp-revealed');
+        obs.disconnect();
+      }).observe(el, { childList: true, characterData: true, subtree: true });
     });
   </script>
 
