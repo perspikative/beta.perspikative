@@ -402,6 +402,21 @@ permalink: /@
     animation: ppFadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
   }
 
+  /* Nom et username : simple fondu, sans mouvement */
+  .pp-revealed-fade {
+    animation: ppFadeOnly 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  /* "Perspikativeur depuis" : même montée que la bio, mais en décalé */
+  .pp-since.pp-revealed {
+    animation-delay: 0.25s;
+  }
+
+  @keyframes ppFadeOnly {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
   @keyframes ppFadeIn {
     from { opacity: 0; transform: translateY(6px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -409,6 +424,7 @@ permalink: /@
 
   @media (prefers-reduced-motion: reduce) {
     .pp-revealed { animation: none; }
+    .pp-revealed-fade { animation: none; }
   }
 
   /* ===== État privé / 404 ===== */
@@ -625,9 +641,10 @@ permalink: /@
       const el = document.getElementById(id);
       if (!el) return;
       const target = id === 'ppSince' ? el.parentElement : el;
+      const revealClass = (id === 'ppName' || id === 'ppUsername') ? 'pp-revealed-fade' : 'pp-revealed';
       new MutationObserver((_, obs) => {
         el.classList.add('is-loaded');
-        target.classList.add('is-loaded', 'pp-revealed');
+        target.classList.add('is-loaded', revealClass);
         obs.disconnect();
       }).observe(el, { childList: true, characterData: true, subtree: true });
     });
