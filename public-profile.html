@@ -37,6 +37,7 @@ permalink: /@
 
   .pp-page {
     padding: 50px 140px 60px 140px;
+    width: 100%;
     max-width: 760px;
     margin: 0 auto;
     min-height: 60vh;
@@ -63,6 +64,11 @@ permalink: /@
   /* ===== Carte profil public ===== */
   .pp-card {
     position: relative;
+    width: 100%;
+    max-width: 520px;
+    min-width: min(340px, 100%);
+    min-height: 360px;
+    margin: 0 auto;
     background: rgba(255, 255, 255, 0.06);
     border-radius: 44px;
     padding: 44px 40px 40px 40px;
@@ -111,9 +117,13 @@ permalink: /@
     font-weight: 700;
     font-size: 2.2rem;
     color: #ffffff;
+    line-height: 1;
+    width: 100%;
+    max-width: 100%;
     margin: 8px 0 -2px 0;
     letter-spacing: -0.02em;
     word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   .pp-username {
@@ -121,7 +131,10 @@ permalink: /@
     font-weight: 500;
     font-size: 1.05rem;
     color: rgba(255, 255, 255, 0.55);
+    width: 100%;
+    max-width: 100%;
     margin: 0 0 22px;
+    overflow-wrap: anywhere;
   }
 
   .pp-bio {
@@ -130,10 +143,12 @@ permalink: /@
     font-size: 1.05rem;
     line-height: 1.4;
     color: rgba(255, 255, 255, 0.85);
-    max-width: 480px;
+    width: 100%;
+    max-width: 100%;
     margin: 0 0 26px;
     white-space: pre-line;
     word-break: break-word;
+    overflow-wrap: anywhere;
   }
 
   .pp-bio.is-empty {
@@ -195,16 +210,17 @@ permalink: /@
   }
 
   #ppName .skeleton-bar {
-    top: 0.1em;
-    height: 1em;
-    width: 62%;
-    max-width: 220px;
+    top: 0.04em;
+    height: 0.92em;
+    width: 240px;
+    max-width: 85%;
   }
 
   #ppUsername .skeleton-bar {
     top: 0.1em;
     height: 1em;
-    width: 120px;
+    width: 170px;
+    max-width: 65%;
   }
 
   #ppName .skeleton-bar::before,
