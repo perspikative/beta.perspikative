@@ -1,8 +1,9 @@
-const CACHE_NAME = 'perspikative-v1.3.6';
+const CACHE_NAME = 'perspikative-v1.3.7';
 
 // Fichiers essentiels
 const PRECACHE_ASSETS = [
   '/',
+   '/@',
   '/404',
   '/actus',
   '/art-challenge',
@@ -13,6 +14,7 @@ const PRECACHE_ASSETS = [
   '/commu',
   '/contact',
   '/faq',
+  '/forgot-password',
   '/help-center',
   '/login',
   '/logo.svg',
@@ -23,6 +25,7 @@ const PRECACHE_ASSETS = [
   '/portfolio/creations',
   '/portfolio/illustrations',
   '/portfolio/projets',
+  '/portfolio/portfolio.css',
   '/position-ia',
   '/profile',
   '/rechercher',
