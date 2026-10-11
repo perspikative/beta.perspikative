@@ -144,7 +144,7 @@ body {
 /* ============================= 3. HEADER ET NAVIGATION ============================= */
 
 header {
-  background: rgba(255 255 255 / 0.12);
+  background: rgba(255 255 255 / 0.1);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   color: white;
@@ -2636,7 +2636,7 @@ ul {
 /* ============================= 16. FOOTER ============================= */
 
 footer {
-  background: rgba(255 255 255 / 0.12);
+  background: rgba(255 255 255 / 0.1);
   color: white;
   text-align: center;
   padding: 15px;
