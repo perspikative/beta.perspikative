@@ -215,16 +215,17 @@ permalink: /about
 
     .ap-tab-label {
       grid-column: 1;
-      justify-self: end;
+      justify-self: start;
       max-width: 100%;
       display: inline-flex;
       align-items: center;
       gap: 8px;
       font-size: .9rem;
-      font-weight: 500;
+      font-weight: 800;
       letter-spacing: .01em;
       opacity: var(--lab, 0);
       transition: color .2s;
+      text-transform: uppercase;
     }
     .ap-tab-label svg { width: 14px; height: 14px; flex: none; }
     .ap-tab:hover .ap-tab-label { color: var(--ap-text); }
@@ -370,8 +371,8 @@ permalink: /about
         column-gap: clamp(32px, 6vw, 96px);
       }
       .ap-tab-label {
-        grid-column: 2;
-        justify-self: center;
+        grid-column: 1;
+        justify-self: start;
       }
       .ap-art {
         max-width: none;
