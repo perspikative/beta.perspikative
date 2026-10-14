@@ -271,13 +271,7 @@ permalink: /about
       border: 1px solid var(--ap-panel-border);
       box-shadow: inset 0 1px 0 var(--ap-panel-hi);
     }
-    .ap-art::before {
-      content: "";
-      position: absolute;
-      inset: -30%;
-      background: radial-gradient(closest-side, var(--ap-glow), transparent 70%);
-      pointer-events: none;
-    }
+
     .ap-art img {
       position: relative;
       display: block;
@@ -311,21 +305,14 @@ permalink: /about
     .ap-title {
       margin: 0;
       font-size: clamp(1.6rem, 6.4vw, 2.1rem);
-      font-weight: 600;
-      line-height: 1.12;
-      letter-spacing: -.02em;
-      color: var(--ap-text);
+      font-weight: 900;
+      line-height: 0.9;
+      letter-spacing: -0.03em;
       text-wrap: balance;
+      text-transform: uppercase;
+      color: #ffffff;
     }
-    @supports (background-clip: text) or (-webkit-background-clip: text) {
-      .ap-title {
-        background: linear-gradient(90deg, var(--ap-text) 35%, var(--ap-accent));
-        -webkit-background-clip: text;
-        background-clip: text;
-        color: transparent;
-      }
-    }
-    /* Mobile : paragraphe centré avec bords droits (justifié) */
+
     .ap-p {
       margin: 0;
       color: var(--ap-muted);
@@ -382,7 +369,7 @@ permalink: /about
         max-width: 30rem;
         gap: 18px;
       }
-      .ap-title { font-size: clamp(2rem, 3.4vw, 3rem); }
+      .ap-title { font-size: clamp(2.6rem, 3.4vw, 3.2rem); text-transform: uppercase; font-weight: 900; line-height: 0.9; letter-spacing: -0.03em; color: #ffffff; }
       .ap-p {
         font-size: 1.125rem;
         text-align: left;
@@ -413,8 +400,8 @@ permalink: /about
       <div class="nav-right">
         <ul class="nav-tabs">
           <li>
-            <a href="/" class="tab active">
-              <img src="/icons/accueil-active.svg" alt="" class="tab-icon"> ACCUEIL
+            <a href="/" class="tab">
+              <img src="/icons/accueil.svg" alt="" class="tab-icon"> ACCUEIL
             </a>
           </li>
           <li>
@@ -514,29 +501,29 @@ permalink: /about
         title: "Mais qui suis-je ?",
         img: "/pics/cat/cat-classic.svg",
         alt: "Illustration : qui est Tartineske",
-        text: "Appelez moi Tartineske. Artiste visuel et développeur créatif indépendant, je dessine, je code et je donne vie à des univers graphiques inspirés de la musique, des films et des séries que j’aime. Ici, tout est fait main, des illustrations jusqu’à la dernière ligne de code."
+        text: "Appelez moi Tartineske (prononcez taʁtinɛːsk). Je suis le fondateur de Perspikative (vous croyiez que j'étais qui?). Dans la vie, j'aime beaucoup de choses. Perspikative rassemble quelques de mes passions, comme le dessin, le graphisme, le développement web, la création de contenu… Mais j'adore aussi écouter de la musique, aller courir, lire, écrire, faire des courts-métrages, apprendre des langues, jouer à Minecraft, aussi. Mon envie débordante d'apprendre de nouvelles choses et d'expérimenter ne m'a jamais quitté. Derrière Perspikative se cache…",
       },
       {
-        id: "perspikative",
-        title: "Perspikative, c’est quoi ?",
+        id: "origine-du-commencement",
+        title: "L'origine du commencement",
         img: "/pics/cat/cat-classic.svg",
         alt: "Illustration : le portfolio Perspikative",
-        text: "Perspikative, c’est mon portfolio artistique et le lieu où tout se rassemble : créations, illustrations, projets et actus. Un espace pensé pour explorer mon travail tranquillement, mais aussi pour suivre ce qui se prépare dans l’ombre.",
+        text: "À l'origine du commencement, là où tout a commencé, il y a eu le commencement : WhatsApp. Perspikative est né le 11 février 2024. Sa naissance était un peu imprévue, j'avoue. J'ai commencé à poster mes premiers dessins sur la chaîne. Assez rapidement, c'est là que c'est devenu intéressant : j'ai justement découvert que Perspikative pouvait être infini, complètement ce qu’il voulait. Et quand on ne me fixe aucune barrière, je ne m'en fixe aucune. C'est ainsi que Perspikative a grandi si vite…",
         cta: { label: "Explorer le portfolio", href: "/portfolio" }
       },
       {
-        id: "univers",
-        title: "Mon univers",
+        id: "mmmh-perspikative",
+        title: "Mmmh, Perspikative",
         img: "/pics/cat/cat-classic.svg",
-        alt: "Illustration : les inspirations de l’artiste",
-        text: "Mes idées naissent devant un générique de série, au détour d’un morceau ou d’une scène de film. The Castle Byers, par exemple, est né de Stranger Things. Je garde ce qui me touche, puis je le transforme en images."
+        alt: "Illustration : l'histoire de Perspikative",
+        text: "Perspikative a prit une grande place dans ma vie. J'y ai appris un tas de choses avec, on dirait pas comme ça. Perspikative m'a fait braver l'inconnu comme je ne l'aurai jamais imaginé. Bon, pas de là à gravir l'Everest, mais il se trouve qu'on peut se créer des comptes Perspikative (vous trouvez pas ça génial ??). Ça témoigne de l'ampleur du projet. De toute façon, je savais très bien que si je dessinais juste, j'allais me lasser un jour ou l'autre. Perspikative est bien plus joli ainsi, mêlant plusieurs choses que j'aime, vous ne trouvez pas ?"
       },
       {
-        id: "communaute",
-        title: "La communauté",
+        id: "une-adorable-communaute",
+        title: "Une adorable communauté",
         img: "/pics/cat/cat-book-404.svg",
         alt: "Illustration : la communauté Perspikative",
-        text: "Perspikative, ce n’est pas qu’un site : c’est aussi une communauté d’artistes et de curieux. On partage, on s’encourage et on discute sur Discord, sur la chaîne WhatsApp, sur Instagram ou sur YouTube. Viens, il y a de la place pour toi.",
+        text: "La plupart des personnes qui m'ont parlé de Perspikative semblaient sous le charme. Me faisiez-vous simplement plaisir, où vous êtes vraiment charmés quand vous arrivez sur mon site ? Personnellement, je sais que je passe un temps monstre sur celui-ci, telle un narcissique devant son miroir. Je suis assez fier de mon œuvre disons aussi. En tous cas, j'adore quand on me parle de Perspikative. Je peux en parler pendant des heures avec vous. J'essaye toujours d'améliorer ce que je fais.",
         cta: { label: "Rejoindre la communauté", href: "/commu" }
       },
       {
