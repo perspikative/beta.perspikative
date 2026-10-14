@@ -1,17 +1,25 @@
+---
+permalink: /about
+---
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>À propos – Perspikative</title>
-  <meta name="description" content="Qui est derrière Perspikative ? Découvre l’artiste, le portfolio, l’univers, la communauté et l’ART Challenge.">
-  <meta name="theme-color" content="#344f4a">
+  <title>À propos</title>
+  <meta name="description" content="Qui est derrière Perspikative ? Découvre l'artiste et l'histoire de cette aventure...">
+  
+  <meta name="theme-color" content="#58b3a2" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#344f4a" media="(prefers-color-scheme: dark)">
+
+  <link rel="icon" type="image/png" href="/favicon-light.png" media="(prefers-color-scheme: dark)">
+  <link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: light)">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <!-- Ton CSS global (header, footer, etc.) -->
   <link rel="stylesheet" href="style.css">
 
   <style>
@@ -51,6 +59,7 @@
       box-shadow: none;
       border: 0;
     }
+
     .ap-main *, .ap-main *::before, .ap-main *::after { box-sizing: border-box; }
 
     /* ---------- La pile ---------- */
@@ -80,7 +89,7 @@
       transform: scale(calc(1 - 0.016 * var(--k, 0)));
       will-change: transform;
     }
-    .ap-card:nth-of-type(1) { --surface: #0d2a24; }
+    .ap-card:nth-of-type(1) { --surface: #55b0a0; }
     .ap-card:nth-of-type(2) { --surface: #0f3029; }
     .ap-card:nth-of-type(3) { --surface: #123730; }
     .ap-card:nth-of-type(4) { --surface: #153e36; }
@@ -236,6 +245,16 @@
       text-wrap: balance;
     }
     @supports (background-clip: text) or (-webkit-background-clip: text) {
+      .ap-main {
+        background: #00000000;
+        color: var(--ap-text);
+        font-family: "Rubik", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        box-shadow: none;
+        border: 0;
+        padding: 20px;
+      }
+
       .ap-title {
         background: linear-gradient(90deg, var(--ap-text) 35%, var(--ap-accent));
         -webkit-background-clip: text;
@@ -430,7 +449,7 @@
       {
         id: "perspikative",
         title: "Perspikative, c’est quoi ?",
-        img: "/pics/cat/cat2.svg",
+        img: "/pics/cat/cat-classic.svg",
         alt: "Illustration : le portfolio Perspikative",
         text: "Perspikative, c’est mon portfolio artistique et le lieu où tout se rassemble : créations, illustrations, projets et actus. Un espace pensé pour explorer mon travail tranquillement, mais aussi pour suivre ce qui se prépare dans l’ombre.",
         cta: { label: "Explorer le portfolio", href: "/portfolio" }
@@ -438,14 +457,14 @@
       {
         id: "univers",
         title: "Mon univers",
-        img: "/pics/cat/cat3.svg",
+        img: "/pics/cat/cat-classic.svg",
         alt: "Illustration : les inspirations de l’artiste",
         text: "Mes idées naissent devant un générique de série, au détour d’un morceau ou d’une scène de film. The Castle Byers, par exemple, est né de Stranger Things. Je garde ce qui me touche, puis je le transforme en images."
       },
       {
         id: "communaute",
         title: "La communauté",
-        img: "/pics/cat/cat4.svg",
+        img: "/pics/cat/cat-book-404.svg",
         alt: "Illustration : la communauté Perspikative",
         text: "Perspikative, ce n’est pas qu’un site : c’est aussi une communauté d’artistes et de curieux. On partage, on s’encourage et on discute sur Discord, sur la chaîne WhatsApp, sur Instagram ou sur YouTube. Viens, il y a de la place pour toi.",
         cta: { label: "Rejoindre la communauté", href: "/commu" }
@@ -453,7 +472,7 @@
       {
         id: "art-challenge",
         title: "L’ART Challenge",
-        img: "/pics/cat/cat5.svg",
+        img: "/pics/cat/cat-art-challenge.svg",
         alt: "Illustration : l’ART Challenge",
         text: "Une à deux fois par an, je lance l’ART Challenge : un concours d’art visuel ouvert à tous. Thème, récompenses, galerie des gagnants… tout est sur sa page dédiée. Et si c’était ton tour de participer ?",
         cta: { label: "Découvrir l’ART Challenge", href: "/art-challenge" }
