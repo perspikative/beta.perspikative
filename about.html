@@ -29,8 +29,8 @@ permalink: /about
 
   <style>
     :root {
-      --ap-text: #04231d;
-      --ap-muted: #0b3028;
+      --ap-text: #ffffff;
+      --ap-muted: #ffffff;
       --ap-accent: #0a4a44;
 
       --ap-cta-bg: linear-gradient(135deg, #0b3d36, #0f5a50);
@@ -112,12 +112,15 @@ permalink: /about
     }
     .ap-skip:focus { left: 12px; }
 
-    /* Pleine largeur : aucun padding / marge / max-width sur le main */
+    /* Pleine largeur : aucun padding horizontal / marge / max-width sur le main.
+       Un peu d'espace au-dessus et en dessous de la pile de sections
+       (ajuste --ap-gap pour en avoir plus ou moins). */
     .ap-main {
+      --ap-gap: clamp(16px, 3vw, 40px);
       width: 100%;
       max-width: none;
       margin: 0;
-      padding: 0;
+      padding: var(--ap-gap) 0;
       background: #00000000;
       color: var(--ap-text);
       font-family: "Rubik", -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
@@ -133,6 +136,9 @@ permalink: /about
       --ap-top: 0px;       /* réglé en JS : bas du header s’il est fixe / sticky */
       position: relative;
       width: 100%;
+      /* clip (et non hidden) pour ne pas casser le position: sticky */
+      border-radius: var(--ap-radius);
+      overflow: clip;
     }
 
     /* Chaque carte colle en haut, décalée d’un bandeau par rang :
@@ -164,8 +170,8 @@ permalink: /about
     .ap-card:nth-of-type(8) { --surface: var(--ap-s8); }
 
     /* Dernière carte : coins du bas arrondis aussi */
-    .ap-card:last-child {
-      border-radius: var(--ap-radius);
+    .ap-stack > .ap-card:last-of-type {
+      border-radius: var(--ap-radius) var(--ap-radius) var(--ap-radius) var(--ap-radius);
     }
 
     /* ---------- Bandeau (titre cliquable) ---------- */
@@ -553,14 +559,6 @@ permalink: /about
         alt: "Illustration : la communauté Perspikative",
         text: "La plupart des personnes qui m'ont parlé de Perspikative semblaient sous le charme. Me faisiez-vous simplement plaisir, où vous êtes vraiment charmés quand vous arrivez sur mon site ? Personnellement, je sais que je passe un temps monstre sur celui-ci, telle un narcissique devant son miroir. Je suis assez fier de mon œuvre disons aussi. En tous cas, j'adore quand on me parle de Perspikative. Je peux en parler pendant des heures avec vous. J'essaye toujours d'améliorer ce que je fais.",
         cta: { label: "Rejoindre la communauté", href: "/commu" }
-      },
-      {
-        id: "art-challenge",
-        title: "L’ART Challenge",
-        img: "/pics/cat/cat-art-challenge.svg",
-        alt: "Illustration : l’ART Challenge",
-        text: "Une à deux fois par an, je lance l’ART Challenge : un concours d’art visuel ouvert à tous. Thème, récompenses, galerie des gagnants… tout est sur sa page dédiée. Et si c’était ton tour de participer ?",
-        cta: { label: "Découvrir l’ART Challenge", href: "/art-challenge" }
       }
     ];
 
