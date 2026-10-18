@@ -3,6 +3,228 @@
    ═══════════════════════════════════════════════════════════════════════ */
 
 
+/* ═══ FILTRE PAR COULEUR ═══ */
+.creations-toolbar {
+  position: relative;
+  margin-bottom: 35px;
+}
+
+.color-filter {
+  position: absolute;
+  top: 50%;
+  right: 2%;
+  transform: translateY(-50%);
+}
+
+.filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 5px 16px rgba(0, 0, 0, 0.08),
+    inset 0 0 10px rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  font-family: 'Rubik', sans-serif;
+  font-weight: 600;
+  font-size: 1.15rem;
+  cursor: pointer;
+  transition: background 0.25s ease, border-color 0.25s ease, transform 0.15s ease;
+}
+
+.filter-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-1px);
+}
+
+.filter-btn:active {
+  transform: scale(0.96);
+}
+
+.filter-btn-icon {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.filter-btn-label {
+  white-space: nowrap;
+}
+
+.filter-btn.is-open {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.filter-panel {
+  position: absolute;
+  /* top / right fixés dynamiquement par script.js, alignés sur le bouton */
+  width: 200px;
+  padding: 12px;
+  background: var(--filter-panel-bg);
+  border: none;
+  border-radius: 25px;
+  box-shadow:
+    0 20px 50px 10px rgb(0 0 0 / 25%),
+    inset 0 0 16px rgb(255 255 255 / 30%);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px) scale(0.96);
+  transform-origin: top right;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.filter-panel.is-open {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.filter-panel::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 22px;
+  width: 16px;
+  height: 16px;
+  background: var(--filter-panel-bg);
+  border-radius: 2px 0 0 0;
+  box-shadow: inset 2px 2px 7px 0px rgba(255, 255, 255, 0.16);
+  transform: rotate(45deg);
+}
+
+.filter-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.filter-panel-reset {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.35s ease;
+}
+
+.filter-panel-reset:hover {
+  background: rgba(255, 255, 255, 0.16);
+  transform: rotate(45deg);
+}
+
+.filter-panel-reset-icon {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.filter-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+.filter-swatches::-webkit-scrollbar {
+  width: 5px;
+}
+
+.filter-swatches::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.filter-chip {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.filter-chip:hover {
+  transform: translateY(-1px);
+}
+
+.filter-chip-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--chip-color, #999);
+  border: 1.6px solid rgba(255, 255, 255, 0.26);
+  transition: all 0.18s ease;
+}
+
+.filter-chip.is-active .filter-chip-dot {
+  transform: scale(0.85);
+  box-shadow:
+    0 0 0 1.8px rgba(0, 0, 0, 0.6),
+    0 0 0 4px rgba(255, 255, 255, 0.4);
+}
+
+.grid-item.is-hidden {
+  display: none;
+}
+
+/* --- État "aucun résultat" --- */
+.filter-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.filter-empty-state[hidden] {
+  display: none;
+}
+
+.filter-empty-icon {
+  width: 40px;
+  height: 40px;
+  opacity: 0.45;
+}
+
+.filter-empty-state p {
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Rubik', sans-serif;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+@media (max-width: 480px) {
+  .filter-btn-label {
+    display: none;
+  }
+  
+  .filter-btn-icon {
+    width: 31px;
+    height: 31px;
+  }
+
+  .filter-btn {
+    padding: 5px 5px;
+  }
+}
+
+
 /* ═══ BOUTON SIGNALER SUR CHAQUE COMMENTAIRE ═══ */
 .lb-comment-report {
   position: absolute;
