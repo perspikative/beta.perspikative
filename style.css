@@ -1422,7 +1422,8 @@ main.creations {
      calquée sur l'état .active de #lightbox (auparavant héritée de l'overlay). */
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.25s ease, visibility 0.25s;
+  /* synchronisé avec .lightbox-overlay (0.24s) et .lightbox-arrow */
+  transition: opacity 0.24s ease, visibility 0.24s;
 }
 
 #lightbox.active ~ .lightbox-close {
@@ -3871,14 +3872,33 @@ body {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+  /* opacity/visibility calées EXACTEMENT sur la durée réelle de
+     .lightbox-overlay (0.24s, cf. règle de .lightbox-overlay plus bas dans
+     ce fichier) pour que les flèches — désormais flottantes et indépendantes
+     du DOM de la lightbox — disparaissent pile en même temps qu'elle,
+     desktop et mobile. */
+  transition: opacity 0.24s ease, visibility 0.24s ease, transform 0.2s ease;
 }
 
 #lightbox.active ~ .lightbox-nav-arrows .lightbox-arrow {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.24s ease, visibility 0.24s ease, transform 0.2s ease;
+}
+
+/* 🔧 script.js pose un style inline (btn.style.opacity = '0.3' ou '1') sur
+   lb-prev/lb-next à chaque navigation pour les assombrir quand désactivées.
+   Un style inline a toujours priorité sur une règle externe : sans ce
+   !important, l'opacité restait bloquée à sa dernière valeur inline même
+   après la fermeture de la lightbox (c'était la vraie cause du "flottement").
+   Scopé à #lightbox:not(.active) pour ne forcer l'opacité à 0 QUE lightbox
+   fermée, sans toucher à l'assombrissement 0.3 voulu par le JS lightbox ouverte. */
+#lightbox:not(.active) ~ .lightbox-nav-arrows .lightbox-arrow {
+  opacity: 0 !important;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.24s ease, visibility 0.24s ease, transform 0.2s ease;
 }
 
 .lightbox-arrow:hover {
@@ -3889,12 +3909,16 @@ body {
     0 6px 20px rgba(0, 0, 0, 0.32);
 }
 
-.lightbox-arrow:disabled {
+/* 🔧 Scopé à #lightbox.active : sans ça, cette règle (plus spécifique que
+   .lightbox-arrow de base) imposait opacity:1 même lightbox fermée, et la
+   flèche désactivée (prev sur la 1ère image / next sur la dernière) restait
+   visible à l'écran au lieu de disparaître en même temps que la lightbox. */
+#lightbox.active ~ .lightbox-nav-arrows .lightbox-arrow:disabled {
   opacity: 1;
   cursor: default;
   pointer-events: none;
   transform: translateX(0%) translateY(-50%) scale(1);
-  transition: 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.24s ease, visibility 0.24s ease, transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .lightbox-arrow img {
@@ -3935,7 +3959,7 @@ body {
     flex-shrink: 0;
   }
   
-  .lightbox-arrow:disabled {
+  #lightbox.active ~ .lightbox-nav-arrows .lightbox-arrow:disabled {
     cursor: default;
     pointer-events: none;
     transform: none;
