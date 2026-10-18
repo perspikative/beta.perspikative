@@ -20,9 +20,12 @@ permalink: /portfolio/illustrations
   <link rel="icon" type="image/png" href="/favicon-light.png" media="(prefers-color-scheme: dark)">
   <link rel="icon" type="image/png" href="/favicon-dark.png" media="(prefers-color-scheme: light)">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
   <link rel="stylesheet" href="/style.css" />
   <link rel="stylesheet" href="/portfolio/portfolio.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@700&display=swap" rel="stylesheet" />
+  
   <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap" rel="stylesheet" />
   
   <script type="module" src="/js/firebase.js"></script>
@@ -378,224 +381,473 @@ permalink: /portfolio/illustrations
     });
   </script>
 
-  <!-- ═══ ZOOM PLEIN ÉCRAN DE L'ŒUVRE (FLIP : depuis/vers la position d'origine) ═══ -->
+  <!-- ═══ ZOOM PLEIN ÉCRAN DE L'ŒUVRE (FLIP uniforme + zoom / déplacement / pinch) ═══ -->
   <script>
   (function () {
     const sourceImg   = document.getElementById('lightbox-img');
     const zoomOverlay = document.getElementById('zoom-overlay');
     const zoomImg     = document.getElementById('zoom-img');
+    const lightbox    = document.getElementById('lightbox');
 
     if (!sourceImg || !zoomOverlay || !zoomImg) return;
 
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const TRANSFORM_TRANSITION = reduceMotion
-      ? 'opacity .15s linear'
-      : 'transform 0.62s cubic-bezier(0.65, 0, 0.35, 1), border-radius 0.62s cubic-bezier(0.65, 0, 0.35, 1)';
-    const PINCH_TRANSITION = reduceMotion
-      ? 'opacity .15s linear'
-      : 'transform 0.4s cubic-bezier(0.34, 1.4, 0.64, 1)'; // léger overshoot, sensation "punchy" au double-zoom
+    // ─── Réglages ────────────────────────────────────────────────────────
+    const reduceMotion      = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const OPEN_MS           = 560;   // ouverture (miniature → plein écran)
+    const CLOSE_MS          = 480;   // fermeture (retour à la miniature)
+    const ZOOM_MS           = 320;   // double-clic / double-tap / touches + -
+    const WHEEL_MS          = 140;   // lissage de la molette
+    const SETTLE_MS         = 300;   // rattrapage après un geste qui dépasse les limites
+    const DOUBLE_TAP_MS     = 280;
+    const TAP_SLOP          = 6;     // px de tolérance avant de considérer un « glissement »
+    const FULLSCREEN_RADIUS = 12;    // rayon des coins en plein écran (px, taille VISUELLE)
+    const MIN_DOUBLE_ZOOM   = 2;     // niveau du zoom au double-clic
 
-    function isTouchDevice() {
-      return window.matchMedia('(pointer: coarse)').matches;
+    const easeInOut = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+    const easeOut   = t => 1 - Math.pow(1 - t, 3);
+    const clamp     = (v, a, b) => Math.min(b, Math.max(a, v));
+
+    // ─── État ────────────────────────────────────────────────────────────
+    // status : 'closed' | 'opening' | 'open' | 'closing'
+    let status = 'closed';
+    // view : position/échelle courantes de l'image (coordonnées écran)
+    //   x, y   : coin haut-gauche   s : échelle UNIFORME
+    //   cx, cy : rognage (px de l'image) pour les miniatures en object-fit: cover
+    //   r      : rayon des coins VISUEL (px à l'écran)
+    let view = { x: 0, y: 0, s: 1, cx: 0, cy: 0, r: 0 };
+    // fit : taille de l'image « ajustée à l'écran » (échelle 1) + limites de zoom
+    const fit = { w: 0, h: 0, max: 4, dbl: MIN_DOUBLE_ZOOM };
+    let anim = null;
+    let refitPending = false;
+
+    // L'image garde TOUJOURS son ratio : l'élément a la taille finale (échelle 1)
+    // et on ne fait que le translater / l'agrandir uniformément → plus de déformation.
+    Object.assign(zoomImg.style, {
+      position: 'fixed', top: '0', left: '0', margin: '0',
+      maxWidth: 'none', maxHeight: 'none', objectFit: 'fill',
+      transformOrigin: '0 0', transition: 'none',
+      borderRadius: '0', boxShadow: 'none',
+      touchAction: 'none', userSelect: 'none', webkitUserSelect: 'none'
+    });
+    zoomImg.draggable = false;
+    zoomImg.addEventListener('dragstart', e => e.preventDefault());
+    zoomOverlay.style.touchAction = 'none';
+    zoomOverlay.setAttribute('role', 'dialog');
+    zoomOverlay.setAttribute('aria-label', 'Image en plein écran');
+
+    // ─── Géométrie ───────────────────────────────────────────────────────
+    const vw = () => document.documentElement.clientWidth || window.innerWidth;
+    const vh = () => window.innerHeight;
+    const padding = () => (vw() <= 700 ? 16 : 48);
+
+    function computeFit() {
+      const r  = sourceImg.getBoundingClientRect();
+      const nW = sourceImg.naturalWidth  || r.width;
+      const nH = sourceImg.naturalHeight || r.height;
+      const p  = padding();
+      // Jamais d'agrandissement au-delà du natif, toujours dans le viewport moins la marge
+      const ratio = Math.max(0.05, Math.min((vw() - p * 2) / nW, (vh() - p * 2) / nH, 1));
+      fit.w = nW * ratio;
+      fit.h = nH * ratio;
+
+      // Zoom max : ~3× la taille « 1 pixel d'image = 1 pixel d'écran »
+      const dpr = window.devicePixelRatio || 1;
+      const oneToOne = nW / dpr / fit.w;
+      fit.max = Math.min(10, Math.max(4, oneToOne * 3));
+      fit.dbl = MIN_DOUBLE_ZOOM;
+
+      zoomImg.style.width  = fit.w + 'px';
+      zoomImg.style.height = fit.h + 'px';
     }
 
-    let isZoomed = false;      // plein écran ouvert (taille "normale")
-    let isPinched = false;     // en plus, zoomé x2
-    let isAnimating = false;
-    let baseTarget = null;     // { left, top, width, height } de l'état plein écran "normal"
-
-    // Marge de respiration autour de l'image en plein écran (px), réduite sur mobile
-    function getViewportPadding() {
-      return window.innerWidth <= 700 ? 16 : 48;
+    function fitView() {
+      return { x: (vw() - fit.w) / 2, y: (vh() - fit.h) / 2, s: 1, cx: 0, cy: 0, r: FULLSCREEN_RADIUS };
     }
 
-    // Calcule la taille finale de l'image centrée, en conservant son ratio,
-    // dans les limites du viewport moins la marge.
-    function computeTargetRect(naturalW, naturalH) {
-      const padding = getViewportPadding();
-      const maxW = window.innerWidth - padding * 2;
-      const maxH = window.innerHeight - padding * 2;
-      const ratio = Math.min(maxW / naturalW, maxH / naturalH, 1 /* jamais d'agrandissement au-delà du natif */);
-      const w = naturalW * ratio;
-      const h = naturalH * ratio;
+    function readRadius(el) {
+      const cs = getComputedStyle(el);
+      const raw = cs.borderTopLeftRadius || '0';
+      const n = parseFloat(raw) || 0;
+      if (!n) return 0;
+      if (raw.includes('%')) {
+        const b = el.getBoundingClientRect();
+        return (n / 100) * Math.min(b.width, b.height);
+      }
+      return n;
+    }
+
+    // État de départ/arrivée = l'image de la lightbox, telle qu'on la voit
+    function sourceState() {
+      const r  = sourceImg.getBoundingClientRect();
+      const cs = getComputedStyle(sourceImg);
+      const cover = cs.objectFit === 'cover';
+
+      const sx = r.width / fit.w, sy = r.height / fit.h;
+      const s  = cover ? Math.max(sx, sy) : Math.min(sx, sy); // échelle uniforme
+      const w  = fit.w * s, h = fit.h * s;
+
+      // Rayon : celui de l'image, ou à défaut celui de son conteneur si celui-ci rogne
+      let radius = readRadius(sourceImg);
+      const parent = sourceImg.parentElement;
+      if (!radius && parent && getComputedStyle(parent).overflow !== 'visible') radius = readRadius(parent);
+
       return {
-        width: w,
-        height: h,
-        left: (window.innerWidth - w) / 2,
-        top: (window.innerHeight - h) / 2
+        x: r.left + (r.width  - w) / 2,
+        y: r.top  + (r.height - h) / 2,
+        s,
+        cx: cover ? Math.max(0, (w - r.width)  / 2) / s : 0,
+        cy: cover ? Math.max(0, (h - r.height) / 2) / s : 0,
+        r: radius
       };
     }
 
-    function setTransform(rect, refWidth) {
-      const scaleX = rect.width / refWidth;
-      const scaleY = rect.height / (parseFloat(zoomImg.style.height) || rect.height);
-      zoomImg.style.transform = `translate(${rect.left}px, ${rect.top}px) scale(${scaleX}, ${scaleY})`;
+    // Limites de déplacement pour une échelle donnée (image centrée si plus petite que l'écran)
+    function bounds(s) {
+      const W = fit.w * s, H = fit.h * s, w = vw(), h = vh();
+      return {
+        minX: W <= w ? (w - W) / 2 : w - W,  maxX: W <= w ? (w - W) / 2 : 0,
+        minY: H <= h ? (h - H) / 2 : h - H,  maxY: H <= h ? (h - H) / 2 : 0
+      };
     }
 
-    function openZoom() {
-      if (isAnimating || isZoomed || !sourceImg.src) return;
-      isAnimating = true;
+    // Effet « élastique » quand on tire au-delà des bords pendant un geste
+    const rubber = d => (d * 0.5) / (1 + d / 120);
+    const soft = (v, min, max) => v < min ? min - rubber(min - v) : v > max ? max + rubber(v - max) : v;
 
-      const startRect = sourceImg.getBoundingClientRect();
-      const naturalW = sourceImg.naturalWidth || startRect.width;
-      const naturalH = sourceImg.naturalHeight || startRect.height;
+    // Nouvelle position pour que le point (px, py) de l'écran reste fixe quand l'échelle change
+    function zoomAt(base, s, px, py) {
+      const k = s / base.s;
+      return { x: px - (px - base.x) * k, y: py - (py - base.y) * k };
+    }
 
-      zoomImg.src = sourceImg.src;
+    // ─── Rendu ───────────────────────────────────────────────────────────
+    function render() {
+      zoomImg.style.transform = `translate(${view.x}px, ${view.y}px) scale(${view.s})`;
+      // Le rayon est exprimé dans le repère de l'image → divisé par l'échelle
+      // pour que les coins gardent la même taille visuelle (et restent circulaires).
+      const rr = view.r / view.s;
+      zoomImg.style.clipPath = `inset(${view.cy}px ${view.cx}px round ${rr}px)`;
+    }
+
+    function updateCursor(dragging) {
+      zoomImg.style.cursor = dragging ? 'grabbing' : (view.s > 1.01 ? 'grab' : '');
+    }
+
+    // ─── Animation (une seule mécanique pour ouverture, fermeture, zooms) ─
+    const KEYS = ['x', 'y', 's', 'cx', 'cy', 'r'];
+
+    function stopAnim() {
+      if (anim) { cancelAnimationFrame(anim.raf); anim = null; zoomImg.style.willChange = ''; }
+    }
+
+    function animateTo(to, ms, ease, done) {
+      stopAnim();
+      const target = Object.assign({}, view, to);
+      if (reduceMotion || ms <= 0) {
+        Object.assign(view, target);
+        render(); updateCursor(false);
+        if (done) done();
+        return;
+      }
+      const from = Object.assign({}, view);
+      const t0 = performance.now();
+      const a = anim = { to: target, raf: 0 };
+      zoomImg.style.willChange = 'transform';
+      const step = (now) => {
+        if (anim !== a) return;
+        const p = Math.min(1, (now - t0) / ms);
+        const e = ease(p);
+        for (const k of KEYS) view[k] = from[k] + (target[k] - from[k]) * e;
+        render();
+        if (p < 1) {
+          a.raf = requestAnimationFrame(step);
+        } else {
+          anim = null;
+          zoomImg.style.willChange = '';
+          updateCursor(false);
+          if (done) done();
+        }
+      };
+      a.raf = requestAnimationFrame(step);
+    }
+
+    // ─── Ouverture / fermeture ───────────────────────────────────────────
+    async function openZoom() {
+      if (status !== 'closed' || !sourceImg.src) return;
+      status = 'opening';
+
+      zoomImg.src = sourceImg.currentSrc || sourceImg.src;
       zoomImg.alt = sourceImg.alt || '';
+      try { await zoomImg.decode(); } catch (_) { /* image déjà en cache : on continue */ }
+      if (status !== 'opening') return; // fermé entre-temps
 
-      // Position/taille de départ = image cliquée (First), sans transition
-      zoomImg.style.transition = 'none';
-      zoomImg.style.height = startRect.height + 'px';
-      zoomImg.style.width = startRect.width + 'px';
-      zoomImg.style.transform = `translate(${startRect.left}px, ${startRect.top}px) scale(1)`;
-      zoomImg.classList.remove('zoom-flat');
+      computeFit();
+      const start = sourceState();      // à mesurer AVANT de masquer la source
+      Object.assign(view, start);
+      render();
 
       sourceImg.classList.add('zoom-source-hidden');
       zoomOverlay.classList.add('active');
 
-      requestAnimationFrame(() => {
-        void zoomImg.offsetHeight; // reflow forcé
-        zoomImg.style.transition = TRANSFORM_TRANSITION;
-
-        baseTarget = computeTargetRect(naturalW, naturalH);
-        zoomImg.style.height = startRect.height + 'px';
-        zoomImg.style.width = startRect.width + 'px';
-        setTransform(baseTarget, startRect.width);
-        zoomImg.classList.add('zoom-flat');
+      animateTo(fitView(), OPEN_MS, easeInOut, () => {
+        status = 'open';
+        if (refitPending) { refitPending = false; refit(); }
       });
+    }
 
-      const onEnd = (e) => {
-        if (e.target !== zoomImg || e.propertyName !== 'transform') return;
-        zoomImg.removeEventListener('transitionend', onEnd);
-        isAnimating = false;
-        isZoomed = true;
-      };
-      zoomImg.addEventListener('transitionend', onEnd);
+    function finishClose() {
+      sourceImg.classList.remove('zoom-source-hidden');
+      zoomOverlay.classList.remove('active');
+      zoomImg.removeAttribute('src');
+      zoomImg.style.willChange = '';
+      zoomImg.style.cursor = '';
+      status = 'closed';
     }
 
     function closeZoom() {
-      if (isAnimating || !isZoomed) return;
-      isAnimating = true;
-      isPinched = false;
+      if (status !== 'open') return;
+      status = 'closing';
+      pointers.clear();
+      gesture = null;
+      clearTimeout(tapTimer);
+      // Revient à la miniature depuis l'état courant (même si on est zoomé / déplacé)
+      animateTo(sourceState(), CLOSE_MS, easeInOut, finishClose);
+    }
 
-      const endRect = sourceImg.getBoundingClientRect();
-      const currentHeight = parseFloat(zoomImg.style.height) || endRect.height;
-      const currentWidth  = parseFloat(zoomImg.style.width) || endRect.width;
+    // Annulation brutale (lightbox fermée ou image changée pendant le zoom)
+    function hardReset() {
+      stopAnim();
+      pointers.clear();
+      gesture = null;
+      clearTimeout(tapTimer);
+      refitPending = false;
+      finishClose();
+    }
 
-      requestAnimationFrame(() => {
-        void zoomImg.offsetHeight;
-        zoomImg.style.transition = TRANSFORM_TRANSITION;
-        const targetScaleX = endRect.width / currentWidth;
-        const targetScaleY = endRect.height / currentHeight;
-        zoomImg.style.transform = `translate(${endRect.left}px, ${endRect.top}px) scale(${targetScaleX}, ${targetScaleY})`;
-        zoomImg.classList.remove('zoom-flat');
+    function refit() {
+      stopAnim();
+      pointers.clear();
+      gesture = null;
+      computeFit();
+      Object.assign(view, fitView());
+      render(); updateCursor(false);
+    }
+
+    // ─── Zoom à un point donné ───────────────────────────────────────────
+    function zoomBy(factor, px, py, ms) {
+      if (status !== 'open') return;
+      const base = anim ? anim.to : view;   // on cumule sur la cible en cours (molette fluide)
+      const s = clamp(base.s * factor, 1, fit.max);
+      const p = zoomAt(base, s, px, py);
+      const b = bounds(s);
+      animateTo({ s, x: clamp(p.x, b.minX, b.maxX), y: clamp(p.y, b.minY, b.maxY) }, ms, easeOut);
+    }
+
+    function toggleZoom(px, py) {
+      if (status !== 'open') return;
+      if (view.s > 1.05) {
+        animateTo(fitView(), ZOOM_MS, easeOut);
+      } else {
+        const s = fit.dbl;
+        const p = zoomAt(view, s, px, py);
+        const b = bounds(s);
+        animateTo({ s, x: clamp(p.x, b.minX, b.maxX), y: clamp(p.y, b.minY, b.maxY) }, ZOOM_MS, easeOut);
+      }
+    }
+
+    // Ramène l'image dans les limites après un geste (pinch trop fort, tirage au bord…)
+    function settle() {
+      const s = clamp(view.s, 1, fit.max);
+      const p = s === view.s ? view : zoomAt(view, s, vw() / 2, vh() / 2);
+      const b = bounds(s);
+      const x = clamp(p.x, b.minX, b.maxX);
+      const y = clamp(p.y, b.minY, b.maxY);
+      if (Math.abs(x - view.x) < 0.5 && Math.abs(y - view.y) < 0.5 && Math.abs(s - view.s) < 0.001) return;
+      animateTo({ x, y, s }, SETTLE_MS, easeOut);
+    }
+
+    // ─── Gestes : un doigt/souris = déplacer, deux doigts = pincer ───────
+    const pointers = new Map();
+    let gesture = null;
+    let lastTap = { t: 0, x: 0, y: 0 };
+    let tapTimer = null;
+
+    function beginGesture(first) {
+      const pts = [...pointers.values()];
+      if (first) gesture = { moved: false, pinched: false };
+      const base = { x: view.x, y: view.y, s: view.s };
+      if (pts.length >= 2) {
+        const [a, b] = pts;
+        gesture.mode = 'pinch';
+        gesture.pinched = true;
+        gesture.moved = true;
+        gesture.d0 = Math.hypot(a.x - b.x, a.y - b.y) || 1;
+        gesture.mx0 = (a.x + b.x) / 2;
+        gesture.my0 = (a.y + b.y) / 2;
+        gesture.base = base;
+      } else {
+        gesture.mode = 'pan';
+        gesture.ax = pts[0].x;
+        gesture.ay = pts[0].y;
+        gesture.base = base;
+      }
+    }
+
+    zoomImg.addEventListener('pointerdown', (e) => {
+      if (status !== 'open') return;
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      e.preventDefault();
+      stopAnim();
+      try { zoomImg.setPointerCapture(e.pointerId); } catch (_) {}
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      beginGesture(pointers.size === 1);
+      if (pointers.size === 1) updateCursor(true);
+    });
+
+    zoomImg.addEventListener('pointermove', (e) => {
+      const p = pointers.get(e.pointerId);
+      if (!p || !gesture) return;
+      p.x = e.clientX; p.y = e.clientY;
+
+      if (gesture.mode === 'pinch') {
+        const [a, b] = [...pointers.values()];
+        const d  = Math.hypot(a.x - b.x, a.y - b.y);
+        const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+        const s  = clamp(gesture.base.s * d / gesture.d0, 0.7, fit.max * 1.25);
+        const k  = s / gesture.base.s;
+        // Le point de l'image qui était sous le milieu des doigts les suit
+        const x = mx - (gesture.mx0 - gesture.base.x) * k;
+        const y = my - (gesture.my0 - gesture.base.y) * k;
+        const bd = bounds(s);
+        view.s = s;
+        view.x = soft(x, bd.minX, bd.maxX);
+        view.y = soft(y, bd.minY, bd.maxY);
+        render();
+      } else {
+        const dx = e.clientX - gesture.ax, dy = e.clientY - gesture.ay;
+        if (!gesture.moved && Math.hypot(dx, dy) > TAP_SLOP) gesture.moved = true;
+        if (view.s > 1.001) {
+          const bd = bounds(view.s);
+          view.x = soft(gesture.base.x + dx, bd.minX, bd.maxX);
+          view.y = soft(gesture.base.y + dy, bd.minY, bd.maxY);
+          render();
+        }
+      }
+    });
+
+    function endPointer(e, cancelled) {
+      if (!pointers.has(e.pointerId)) return;
+      pointers.delete(e.pointerId);
+      try { zoomImg.releasePointerCapture(e.pointerId); } catch (_) {}
+      if (!gesture) return;
+
+      if (pointers.size > 0) { beginGesture(false); return; } // 2 doigts → 1 : on reprend en déplacement
+
+      const wasTap = !cancelled && !gesture.moved && !gesture.pinched;
+      const wasMoved = gesture.moved;
+      gesture = null;
+      updateCursor(false);
+
+      if (wasTap) handleTap(e);
+      else if (wasMoved) settle();
+    }
+    zoomImg.addEventListener('pointerup',     (e) => endPointer(e, false));
+    zoomImg.addEventListener('pointercancel', (e) => endPointer(e, true));
+
+    // Simple clic (souris) : dézoome si on est zoomé, sinon ferme.
+    // Simple tap (tactile) : rien (la fermeture se fait en touchant le fond).
+    // Double clic / double tap : zoom ↔ ajusté, centré sur le point touché.
+    function handleTap(e) {
+      const now = performance.now();
+      const x = e.clientX, y = e.clientY, type = e.pointerType;
+      const isDouble = now - lastTap.t < DOUBLE_TAP_MS && Math.hypot(x - lastTap.x, y - lastTap.y) < 30;
+
+      clearTimeout(tapTimer);
+      if (isDouble) {
+        lastTap.t = 0;
+        toggleZoom(x, y);
+        return;
+      }
+      lastTap = { t: now, x, y };
+      tapTimer = setTimeout(() => {
+        lastTap.t = 0;
+        if (type !== 'mouse' || status !== 'open') return;
+        if (view.s > 1.05) animateTo(fitView(), ZOOM_MS, easeOut);
+        else closeZoom();
+      }, DOUBLE_TAP_MS);
+    }
+
+    // Le « click » natif ne doit pas remonter à l'overlay (qui ferme tout)
+    zoomImg.addEventListener('click', (e) => e.stopPropagation());
+
+    // Clic sur le fond (hors image) : ferme toujours, mobile et desktop
+    zoomOverlay.addEventListener('click', (e) => {
+      if (e.target === zoomOverlay) closeZoom();
+    });
+
+    // ─── Molette / pincement trackpad (Chrome, Firefox, Edge) ────────────
+    zoomOverlay.addEventListener('wheel', (e) => {
+      if (status === 'closed') return;
+      e.preventDefault();
+      if (status !== 'open') return;
+      const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? vh() : 1;
+      const dy = clamp(e.deltaY * unit, -300, 300);
+      zoomBy(Math.exp(-dy * (e.ctrlKey ? 0.01 : 0.0018)), e.clientX, e.clientY, WHEEL_MS);
+    }, { passive: false });
+
+    // ─── Pincement trackpad Safari (desktop) ─────────────────────────────
+    if ('GestureEvent' in window && !window.matchMedia('(pointer: coarse)').matches) {
+      let g = null;
+      zoomOverlay.addEventListener('gesturestart', (e) => {
+        e.preventDefault();
+        if (status !== 'open') return;
+        stopAnim();
+        g = { base: { x: view.x, y: view.y, s: view.s }, px: e.clientX, py: e.clientY };
       });
-
-      const onEnd = (e) => {
-        if (e.target !== zoomImg || e.propertyName !== 'transform') return;
-        zoomImg.removeEventListener('transitionend', onEnd);
-        sourceImg.classList.remove('zoom-source-hidden');
-        zoomOverlay.classList.remove('active');
-        zoomImg.src = '';
-        baseTarget = null;
-        isAnimating = false;
-        isZoomed = false;
-      };
-      zoomImg.addEventListener('transitionend', onEnd);
+      zoomOverlay.addEventListener('gesturechange', (e) => {
+        e.preventDefault();
+        if (!g) return;
+        const s = clamp(g.base.s * e.scale, 0.7, fit.max * 1.25);
+        const p = zoomAt(g.base, s, g.px, g.py);
+        const bd = bounds(s);
+        view.s = s;
+        view.x = soft(p.x, bd.minX, bd.maxX);
+        view.y = soft(p.y, bd.minY, bd.maxY);
+        render();
+      });
+      zoomOverlay.addEventListener('gestureend', (e) => {
+        e.preventDefault();
+        if (g) { g = null; settle(); }
+      });
     }
 
-    // Zoom x2 in-place, centré sur le point de double-clic/double-tap.
-    // Un second double-clic/tap ramène à baseTarget (dézoom).
-    function togglePinchZoom(clientX, clientY) {
-      if (!isZoomed || isAnimating || !baseTarget) return;
-
-      zoomImg.style.transition = PINCH_TRANSITION;
-      void zoomImg.offsetHeight;
-
-      if (!isPinched) {
-        const factor = 2;
-        const w = baseTarget.width * factor;
-        const h = baseTarget.height * factor;
-        // Centre l'agrandissement sur le point cliqué, en restant dans le viewport
-        let left = baseTarget.left - (clientX - baseTarget.left) * (factor - 1);
-        let top  = baseTarget.top  - (clientY - baseTarget.top)  * (factor - 1);
-        const pad = getViewportPadding();
-        left = Math.min(pad, Math.max(window.innerWidth - w - pad, left));
-        top  = Math.min(pad, Math.max(window.innerHeight - h - pad, top));
-        setTransform({ left, top, width: w, height: h }, parseFloat(zoomImg.style.width));
-        isPinched = true;
-      } else {
-        setTransform(baseTarget, parseFloat(zoomImg.style.width));
-        isPinched = false;
-      }
-    }
-
-    // ─── Détection double-clic (desktop) / double-tap (mobile) sur l'image,
-    //     vs simple clic/tap qui ferme tout ──────────────────────────────
-    let clickCount = 0;
-    let clickTimer = null;
-    const DOUBLE_CLICK_DELAY = 280;
-
-    zoomImg.addEventListener('click', (e) => {
-      e.stopPropagation();
-      clickCount++;
-      if (clickCount === 1) {
-        clickTimer = setTimeout(() => {
-          clickCount = 0;
-          // Simple clic : sur desktop uniquement, ferme tout.
-          // Sur mobile, un simple tap sur l'image ne fait rien
-          // (fermeture réservée au clic sur l'overlay).
-          if (!isTouchDevice()) closeZoom();
-        }, DOUBLE_CLICK_DELAY);
-      } else {
-        clearTimeout(clickTimer);
-        clickCount = 0;
-        togglePinchZoom(e.clientX, e.clientY);
-      }
+    // ─── Clavier ─────────────────────────────────────────────────────────
+    document.addEventListener('keydown', (e) => {
+      if (status !== 'open') return;
+      if (e.key === 'Escape') closeZoom();
+      else if (e.key === '+' || e.key === '=') zoomBy(1.5, vw() / 2, vh() / 2, ZOOM_MS);
+      else if (e.key === '-' || e.key === '_') zoomBy(1 / 1.5, vw() / 2, vh() / 2, ZOOM_MS);
+      else if (e.key === '0') animateTo(fitView(), ZOOM_MS, easeOut);
     });
 
-    // Clic sur l'overlay (en dehors de l'image) : ferme toujours, mobile et desktop
-    zoomOverlay.addEventListener('click', () => {
-      closeZoom();
-    });
-
+    // ─── Redimensionnement / rotation ────────────────────────────────────
     sourceImg.addEventListener('click', openZoom);
 
-    // Fermeture avec Échap
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && isZoomed) closeZoom();
-    });
-
-    // Si la fenêtre est redimensionnée pendant le zoom, on recalcule la cible sans à-coup
     window.addEventListener('resize', () => {
-      if (!isZoomed) return;
-      const naturalW = sourceImg.naturalWidth;
-      const naturalH = sourceImg.naturalHeight;
-      baseTarget = computeTargetRect(naturalW, naturalH);
-      zoomImg.style.transition = 'none';
-      setTransform(baseTarget, parseFloat(zoomImg.style.width));
-      isPinched = false;
-      void zoomImg.offsetHeight;
-      zoomImg.style.transition = TRANSFORM_TRANSITION;
+      if (status === 'closed') return;
+      if (status !== 'open') { refitPending = true; return; }
+      refit();
     });
 
-    // Si la lightbox parente se ferme (ou change d'image), on annule proprement le zoom
-    const lightbox = document.getElementById('lightbox');
-    if (lightbox) {
-      const observer = new MutationObserver(() => {
-        if (!lightbox.classList.contains('active') && isZoomed) {
-          zoomOverlay.classList.remove('active', 'zoom-flat');
-          sourceImg.classList.remove('zoom-source-hidden');
-          zoomImg.src = '';
-          zoomImg.style.transition = 'none';
-          baseTarget = null;
-          isZoomed = false;
-          isPinched = false;
-          isAnimating = false;
-        }
-      });
-      observer.observe(lightbox, { attributes: true, attributeFilter: ['class'] });
-    }
+    // Si la lightbox parente se ferme, ou si son image change, on annule proprement le zoom
+    const observer = new MutationObserver(() => {
+      if (status === 'closed') return;
+      if (lightbox && !lightbox.classList.contains('active')) hardReset();
+    });
+    if (lightbox) observer.observe(lightbox, { attributes: true, attributeFilter: ['class'] });
+
+    const srcObserver = new MutationObserver(() => { if (status !== 'closed') hardReset(); });
+    srcObserver.observe(sourceImg, { attributes: true, attributeFilter: ['src', 'srcset'] });
   })();
   </script>
 
