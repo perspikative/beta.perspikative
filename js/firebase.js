@@ -6,6 +6,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/fireba
 import {
   getFirestore,
   collection,
+  collectionGroup,
   query,
   where,
   limit,
@@ -61,6 +62,13 @@ window.__prspkAuth = auth;
 
 window.__prspkFire = {
   collection,
+  // Nécessaire à profile.js pour retrouver, lors de la suppression d'un
+  // compte, TOUS les commentaires de l'utilisateur sur toutes les œuvres
+  // (requête collectionGroup("comments").where("uid", "==", uid)).
+  // Manquait ici : sans cet export, la suppression des commentaires était
+  // silencieusement ignorée (le code avait un garde-fou dessus, mais
+  // c'est quand même à corriger).
+  collectionGroup,
   query,
   where,
   limit,
