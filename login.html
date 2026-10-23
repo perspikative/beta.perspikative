@@ -860,7 +860,7 @@ permalink: /login
           <div class="field">
             <label for="reg-pwd">Mot de passe</label>
             <div class="pwd-wrap">
-              <input type="password" id="reg-pwd" name="password" placeholder="6 caractères min." autocomplete="new-password" required maxlength="100" />
+              <input type="password" id="reg-pwd" name="password" placeholder="8 caractères min." autocomplete="new-password" required maxlength="100" />
               <button type="button" class="pwd-toggle" aria-label="Afficher le mot de passe" data-target="reg-pwd">
                 <img class="pwd-toggle-icon" id="eye-register" src="/icons/visibility.svg" alt="" width="18" height="18" />
               </button>
@@ -873,7 +873,7 @@ permalink: /login
                     <img class="req-cross" src="/icons/cross.svg" alt="" />
                     <img class="req-check" src="/icons/check.svg" alt="" />
                   </span>
-                  <span>6 caractères</span>
+                  <span>8 caractères</span>
                 </li>
                 <li id="req-upper" data-req="upper">
                   <span class="req-icon">
@@ -1022,11 +1022,15 @@ permalink: /login
 
   function firebaseErrMsg(code) {
     const map = {
-      'auth/user-not-found':         'Aucun compte trouvé avec cet e-mail.',
-      'auth/wrong-password':         'Mot de passe incorrect.',
+      // Volontairement IDENTIQUE pour ces trois codes : donner un message
+      // différent selon que l'e-mail existe ou non permettrait à n'importe
+      // qui de vérifier si une adresse est inscrite chez nous (énumération
+      // de comptes). Même message générique dans tous les cas.
+      'auth/user-not-found':         'E-mail ou mot de passe incorrect.',
+      'auth/wrong-password':         'E-mail ou mot de passe incorrect.',
       'auth/invalid-credential':     'E-mail ou mot de passe incorrect.',
       'auth/email-already-in-use':   'Cet e-mail est déjà utilisé.',
-      'auth/weak-password':          'Mot de passe trop faible (6 caractères min.).',
+      'auth/weak-password':          'Mot de passe trop faible (8 caractères min.).',
       'auth/invalid-email':          'Adresse e-mail invalide.',
       'auth/popup-closed-by-user':   'Connexion Google annulée.',
       'auth/too-many-requests':      'Trop de tentatives. Réessaie dans quelques minutes.',
@@ -1130,7 +1134,13 @@ permalink: /login
   const pwdRequirements  = document.getElementById('pwdRequirements');
   const registerBtn      = registerForm.querySelector('.btn-primary');
 
-  const PWD_MIN = 6;
+  // ⚠️ Doit rester synchronisé avec le paramètre équivalent dans
+  // Firebase Console → Authentication → Settings → Password policy :
+  // changer cette valeur ici ne suffit pas, le serveur doit l'appliquer
+  // aussi, sinon un appel direct à l'API Firebase Auth (hors de cette
+  // page) pourrait encore créer un compte avec un mot de passe de 6
+  // caractères.
+  const PWD_MIN = 8;
   const PWD_MAX = 100;
 
   function getPwdChecks(pwd) {
