@@ -122,7 +122,13 @@ permalink: /actus/2026/nouveautes-de-la-recherche
         <img src="/pics/actus/2026/nouveautes-de-la-recherche.webp" alt="Image de couverture">
       </div>
       <h1 class="article-title">Nouveautés de la recherche</h1>
-      <p class="article-date">Publié le 4 avril 2026</p>
+      <div class="article-meta">
+        <p class="article-date">Publié le 4 avril 2026</p>
+        <div class="article-authors">
+          <span class="authors-label">Écrit par</span>
+          <div class="authors-avatars" id="authorsAvatars"></div>
+        </div>
+      </div>
     </section>
 
     <section class="article-body">
@@ -285,18 +291,21 @@ shareButton.addEventListener("click", async () => {
       <a href="https://www.instagram.com/perspikative" target="_blank" aria-label="Instagram">
         <img src="/icons/instagram.svg" alt="Instagram">
       </a>
+      <a href="https://discord.com/invite/c5w9ucgDZH" target="_blank" aria-label="Discord">
+        <img src="/icons/discord.svg" alt="Discord">
+      </a>
       <a href="https://youtube.com/@perspikative" target="_blank" aria-label="YouTube">
         <img src="/icons/youtube.svg" alt="YouTube">
       </a>
-      <a href="https://www.pinterest.com/perspikative" target="_blank" aria-label="Pinterest">
-        <img src="/icons/pinterest.svg" alt="Pinterest">
-      </a>
     </div>
-
-    <p>&copy; 2026 Perspikative. Tous droits réservés.</p>
+        
+    <p>&copy; 2026 Perspikative™. Tous droits réservés.</p>
     <p><a href="/mentions-legales" class="footer-link">Mentions légales</a></p>
     <p><a href="/politique-de-confidentialite" class="footer-link">Politique de confidentialité</a></p>
+    <p><a href="/terms-of-service" class="footer-link">Conditions d'utilisation</a></p>
+    <p><a href="/help-center" class="footer-link">Centre d'aide</a></p>
     <p><a href="/position-ia" class="footer-link">Position sur l'IA</a></p>
+    <p><a href="/brand-guidelines" class="footer-link">Brand guidelines</a></p>
   </footer>
 
   <a href="/rechercher" class="search-float-btn" title="Rechercher">
@@ -304,5 +313,61 @@ shareButton.addEventListener("click", async () => {
   </a>
 
   <script src="/script.js"></script>
+
+  <!-- ============================================================
+       AUTEURS DE L'ARTICLE — photos de profil (Firestore)
+       À adapter sur chaque page répliquée : remplace les UID
+       ci-dessous par ceux du/des auteur(s) de CET article.
+  ============================================================= -->
+  <script type="module">
+    import { db } from "/js/firebase.js";
+    import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+    const AUTHOR_UIDS = [
+      "Dsj5CIxUn8bqhhgdACxBcaB4HFB2"
+    ];
+
+    const DEFAULT_AVATAR = "/pics/default-avatar.png";
+
+    async function loadArticleAuthors() {
+      const container = document.getElementById("authorsAvatars");
+      if (!container || AUTHOR_UIDS.length === 0) return;
+
+      const authors = await Promise.all(AUTHOR_UIDS.map(async (uid) => {
+        try {
+          const snap = await getDoc(doc(db, "publicProfiles", uid));
+          const data = snap.exists() ? snap.data() : {};
+          const photoURL = data.photoURL || DEFAULT_AVATAR;
+          const username = data.username || null;
+          return { uid, photoURL, username };
+        } catch (err) {
+          console.error("Erreur chargement profil auteur :", uid, err);
+          return { uid, photoURL: DEFAULT_AVATAR, username: null };
+        }
+      }));
+
+      container.innerHTML = "";
+      container.classList.toggle("single-author", authors.length === 1);
+
+      authors.forEach((author, index) => {
+        const link = document.createElement("a");
+        // Lien vers /@username si dispo, sinon on reste sur la page (pas de profil public)
+        link.href = author.username ? "/@" + author.username : "#";
+        link.className = "author-avatar";
+        link.title = "Voir le profil";
+        link.style.zIndex = String(authors.length - index);
+
+        const img = document.createElement("img");
+        img.src = author.photoURL;
+        img.alt = "Photo de profil de l'auteur";
+        img.loading = "lazy";
+
+        link.appendChild(img);
+        container.appendChild(link);
+      });
+    }
+
+    loadArticleAuthors();
+  </script>
 </body>
 </html>
