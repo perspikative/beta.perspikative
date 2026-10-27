@@ -31,6 +31,7 @@ cover_alt: "Image de couverture"
 share_text: "Découvre cet article sur Perspikative !"
 authors:
   - "Dsj5CIxUn8bqhhgdACxBcaB4HFB2"
+  - "Dsj5CIxUn8bqhhgdACxBcaB4HFB2"
 
 related_articles:
   - title: "Nouveautés de la recherche"
