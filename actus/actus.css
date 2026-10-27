@@ -1,24 +1,52 @@
 /* =========================================================
-   Page article — base mobile-first, édge-à-édge
-   Structure : .article-page > .article-cover + .article-content
-   (titre, date, texte, auteurs, partage dans un seul bloc continu)
-   Les articles similaires (.article-related) sont HORS de .article-page.
+   Page article — système de carte mobile-first
+   .article-page > .article-cover + .article-content (carte
+   continue, coins arrondis en haut uniquement) puis
+   .article-footer-row (auteurs + partage, en dessous, en chips)
+   Les articles similaires (.article-related) restent HORS de .article-page.
    ========================================================= */
 
+:root {
+  --page-bg: #f4f4f5;
+  --card-bg: #ffffff;
+  --chip-bg: rgba(0, 0, 0, 0.05);
+  --text-title: #111111;
+  --text-date: rgba(17, 17, 17, 0.6);
+  --text-body: rgba(17, 17, 17, 0.82);
+  --hairline: rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page-bg: #0c0c0d;
+    --card-bg: #1a1a1c;
+    --chip-bg: rgba(255, 255, 255, 0.08);
+    --text-title: #ffffff;
+    --text-date: rgba(255, 255, 255, 0.65);
+    --text-body: rgba(255, 255, 255, 0.85);
+    --hairline: rgba(255, 255, 255, 0.12);
+  }
+}
+
+/* ---------- Page : fond, marges mobiles, tout centré ---------- */
 .article-page {
   display: flex;
   flex-direction: column;
+  align-items: center;
   width: 100%;
   margin: 0;
-  padding: 0;
+  padding: 14px 14px 48px;
+  background: var(--page-bg);
 }
 
-/* ---------- Image de couverture, plein écran, collée aux bords ---------- */
+/* ---------- Image de couverture : marge au-dessus, coins arrondis en haut ---------- */
 .article-cover {
   width: 100%;
+  max-width: 640px;
+  margin-top: 10px;
   aspect-ratio: 4 / 5;
   overflow: hidden;
-  border-radius: 0;
+  border-radius: 28px 28px 0 0;
   opacity: 0;
   animation: fadeUp 1s ease forwards;
 }
@@ -36,78 +64,93 @@
   display: block;
 }
 
-/* ---------- Bloc continu : remonte légèrement sur l'image pour créer
-   une continuité visuelle (coins arrondis en haut uniquement) ---------- */
+/* ---------- Bloc continu : même largeur que la cover, se fond dedans ---------- */
 .article-content {
-  position: relative;
-  margin-top: -24px;
-  background: Canvas;
-  border-radius: 24px 24px 0 0;
-  padding: 22px 18px 40px;
   width: 100%;
+  max-width: 640px;
+  margin-top: -1px;
+  background: var(--card-bg);
+  padding: 24px 20px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
-/* ---------- Titre ---------- */
+/* ---------- Titre + date, centrés ---------- */
 .article-title {
   font-family: "Maneola", serif;
-  font-size: 2.1rem;
+  font-size: 2rem;
   font-weight: 700;
   letter-spacing: 0.03rem;
   text-transform: uppercase;
-  line-height: 1;
+  line-height: 1.05;
   margin: 0;
+  color: var(--text-title);
 }
 
 .article-date {
-  font-size: 0.95rem;
-  opacity: 0.8;
+  font-size: 0.9rem;
   letter-spacing: 0.15rem;
   text-transform: uppercase;
   margin: 0.6rem 0 1.6rem;
+  color: var(--text-date);
 }
 
-/* ---------- Corps du texte ---------- */
+/* ---------- Corps du texte : lisible, donc aligné à gauche ---------- */
 .article-body {
   width: 100%;
   font-family: "Rubik", system-ui, sans-serif;
-  line-height: 1.5;
+  line-height: 1.55;
+  text-align: left;
+  color: var(--text-body);
 }
 
 .article-lead {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
   font-weight: 600;
   margin-bottom: 0.4rem;
-  letter-spacing: -0.4px;
+  letter-spacing: -0.3px;
+  color: var(--text-title);
 }
 
 .article-body p:not(.article-lead) {
-  opacity: 0.9;
-  font-size: 1.02rem;
+  font-size: 1rem;
   letter-spacing: -0.1px;
 }
 
 .article-body ul {
-  opacity: 0.9;
-  font-size: 1.02rem;
+  font-size: 1rem;
   letter-spacing: -0.1px;
   padding-left: 1.2rem;
 }
 
-/* ---------- Auteurs, repoussés en bas de l'article (avant le partage) ---------- */
+/* ---------- Rangée basse : auteurs + partage, en chips arrondies ---------- */
+.article-footer-row {
+  width: 100%;
+  max-width: 640px;
+  margin-top: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
 .article-authors {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 2.4rem;
-  padding-top: 1.4rem;
-  border-top: 1px solid rgba(128, 128, 128, 0.25);
+  background: var(--chip-bg);
+  border-radius: 999px;
+  padding: 10px 16px 10px 10px;
 }
 
 .authors-label {
-  font-size: 0.95rem;
-  opacity: 0.8;
-  letter-spacing: 0.15rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.1rem;
   text-transform: uppercase;
+  color: var(--text-date);
 }
 
 .authors-avatars {
@@ -117,14 +160,13 @@
 
 .author-avatar {
   display: block;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  margin-left: -20px;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  border: 2px solid var(--card-bg);
+  margin-left: -14px;
+  transition: transform 0.25s ease;
 }
 
 .authors-avatars .author-avatar:first-child {
@@ -132,8 +174,8 @@
 }
 
 .authors-avatars.single-author .author-avatar {
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
   margin-left: 0;
 }
 
@@ -145,8 +187,7 @@
 }
 
 .author-avatar:hover {
-  transform: translateY(-3px) scale(1.06);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px) scale(1.06);
   z-index: 999 !important;
 }
 
@@ -154,10 +195,10 @@
 .btn-glass {
   display: inline-block;
   padding: 8px 16px;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: white;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
   border-radius: 45px;
@@ -170,52 +211,41 @@
 }
 
 .btn-glass:hover {
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow:
-    0 4px 16px rgba(0,0,0,0.15),
-    inset 0 0 10px rgba(255 255 255 / 0.3);
+  background: rgba(255, 255, 255, 0.14);
 }
 
 /* ---------- Partage d'article ---------- */
 .article-share {
   display: flex;
-  justify-content: center;
-  width: 100%;
-  margin-top: 2rem;
 }
 
 .share-button {
   display: flex;
   gap: 6px;
-  padding: 12px 20px;
+  align-items: center;
+  padding: 11px 18px;
   border-radius: 50px;
   border: none;
-  background: rgba(20,20,20,0.65);
+  background: rgba(20,20,20,0.75);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: white;
   font-family: "Rubik", system-ui, sans-serif;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 500;
-  opacity: 0.9;
   transition:
     background 0.25s ease,
-    transform 0.2s ease,
-    box-shadow 0.25s ease;
+    transform 0.2s ease;
 }
 
 .share-icon {
-  width: 19px;
-  height: 19px;
+  width: 18px;
+  height: 18px;
   opacity: 0.9;
-  transition:
-    width 0.2s ease,
-    height 0.2s ease,
-    opacity 0.2s ease;
 }
 
 .share-button:hover {
-  background: rgba(20,20,20,0.7);
+  background: rgba(20,20,20,0.85);
   transform: translateX(2px);
 }
 
@@ -224,81 +254,83 @@
 }
 
 /* =========================================================
-   Articles similaires — hors de .article-page, propre bloc
+   Articles similaires — hors de .article-page
    ========================================================= */
 .article-related {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 18px 40px;
+  padding: 10px 18px 40px;
+  background: var(--page-bg);
+}
+
+.similar-article,
+.article-related h2 {
+  text-align: center;
+  font-family: "Maneola", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.08rem;
+  text-transform: uppercase;
+  color: var(--text-title);
 }
 
 .similar-article {
-  text-align: center;
-  font-size: 1.4rem;
-  margin-top: 1rem;
-  margin-bottom: 1.2rem;
-  letter-spacing: 1px;
+  font-size: 1.3rem;
+  margin: 1rem 0 1.2rem;
 }
 
 .article-related h2 {
-  font-family: "Maneola", sans-serif;
-  font-size: 1.4rem;
-  font-weight: 700;
+  font-size: 1.3rem;
   line-height: 1.5rem;
-  letter-spacing: 0.08rem;
-  text-transform: uppercase;
 }
 
 .related-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 24px;
+  gap: 20px;
 }
 
 /* =========================================================
-   Écrans plus larges — on reprend un peu de respiration
-   et un rendu plus "carte" pour le confort de lecture
+   Écrans plus larges — davantage de respiration
    ========================================================= */
 @media (min-width: 700px) {
+  .article-page {
+    padding: 28px 24px 60px;
+  }
+
   .article-cover {
     aspect-ratio: 5 / 3;
+    margin-top: 16px;
+    border-radius: 32px 32px 0 0;
   }
 
   .article-content {
-    margin-top: -40px;
-    border-radius: 32px 32px 0 0;
-    padding: 32px 40px 60px;
-    max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
+    padding: 36px 44px 36px;
   }
 
   .article-title {
-    font-size: 3.4rem;
-    letter-spacing: 0.1rem;
+    font-size: 3rem;
   }
 
   .article-date {
-    font-size: 1.05rem;
-    letter-spacing: 0.2rem;
+    font-size: 1rem;
   }
 
   .article-lead {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
   }
 
   .article-body p:not(.article-lead),
   .article-body ul {
-    font-size: 1.1rem;
+    font-size: 1.08rem;
   }
 
   .article-related {
-    padding: 0 30px 60px;
+    padding: 10px 30px 60px;
   }
 
   .similar-article,
   .article-related h2 {
-    font-size: 1.8rem;
+    font-size: 1.7rem;
   }
 }
