@@ -680,12 +680,12 @@ body.menu-open .blur-overlay {
     backdrop-filter: blur(4px) saturate(130%);
     -webkit-backdrop-filter: blur(4px) saturate(130%);
     filter: brightness(102%);
-    transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
     box-shadow: var(--nav-mobile-shadow);
   }
 
   .mobile-nav.at-bottom {
-    transform: translate(-50%, 0) scale(0.9) translateY(8px);
+    transform: translate(-50%, 0) scale(0.9) translateY(0px);
   }
 
   .mobile-nav .nav-icon {
