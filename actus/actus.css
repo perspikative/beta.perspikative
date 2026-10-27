@@ -179,6 +179,7 @@
   font-size: 1.8rem;
   font-weight: 700;
   line-height: 1.6rem;
+  color: #ffffff;
   letter-spacing: 0.08rem;
   text-transform: uppercase;
   margin-top: 1rem;
@@ -310,6 +311,7 @@
   font-size: 1rem;
   font-weight: 500;
   opacity: 0.9;
+  cursor: pointer;
   transition: 
     background 0.25s ease,
     transform 0.2s ease,
