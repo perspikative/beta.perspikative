@@ -549,9 +549,61 @@ body.menu-open .blur-overlay {
   display: flex;
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.5s ease, transform 0.5s ease; /* plus doux */
   visibility: visible;
   pointer-events: auto;
+  /* Le menu "tombe" légèrement du haut puis rebondit à peine avant de se stabiliser */
+  animation: menu-drop-bounce 0.46s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes menu-drop-bounce {
+  0% {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(2px);
+  }
+  78% {
+    transform: translateY(-1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Les boutons du menu suivent le même mouvement, à peine décalés dans le temps */
+#menuToggle:checked ~ .mobile-menu ul li a {
+  animation: menu-item-bounce 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+#menuToggle:checked ~ .mobile-menu ul li:nth-child(1) a { animation-delay: 0.04s; }
+#menuToggle:checked ~ .mobile-menu ul li:nth-child(2) a { animation-delay: 0.07s; }
+#menuToggle:checked ~ .mobile-menu ul li:nth-child(3) a { animation-delay: 0.10s; }
+#menuToggle:checked ~ .mobile-menu ul li:nth-child(4) a { animation-delay: 0.13s; }
+#menuToggle:checked ~ .mobile-menu ul li:nth-child(5) a { animation-delay: 0.16s; }
+
+@keyframes menu-item-bounce {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #menuToggle:checked ~ .mobile-menu,
+  #menuToggle:checked ~ .mobile-menu ul li a {
+    animation: none;
+  }
 }
 
 
