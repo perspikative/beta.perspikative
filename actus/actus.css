@@ -211,7 +211,7 @@
   }
 
   .article-body {
-    padding: 0 20px;
+    padding: 0px;
   }
 
   .article-related {
@@ -242,7 +242,7 @@
   }
 
   .article-cover {
-    border-radius: 20px;
+    border-radius: 26px;
     opacity: 0;
     animation: fadeUp 1s ease forwards;
     box-shadow: 0 8px 18px rgba(0,0,0,0.08);
