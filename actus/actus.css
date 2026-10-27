@@ -1,6 +1,6 @@
 /* Container général */
 .article-page {
-  padding: 60px 30px 60px 30px;
+  padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
