@@ -242,7 +242,7 @@
   }
 
   .article-cover {
-    border-radius: 16px;
+    border-radius: 20px;
     opacity: 0;
     animation: fadeUp 1s ease forwards;
     box-shadow: 0 8px 18px rgba(0,0,0,0.08);
@@ -251,7 +251,7 @@
 
 @media (max-width: 800px) {
   main.article-page {
-    padding-left: 0px
+    padding-left: 0px;
   }
 }
 
