@@ -115,7 +115,7 @@
 }
 
 .author-avatar:hover {
-  transform: translateY(-3px) scale(1.06);
+  transform: scale(1.1);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
   z-index: 999 !important;
 }
@@ -267,10 +267,11 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
   max-width: 900px;
-  margin: 0 auto 60px;
+  margin-right: 40px;
+  margin-bottom: 24px;
 }
 
 .authors-button,
@@ -279,7 +280,7 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  min-height: 52px;
+  min-height: 50px;
   padding: 7px 16px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 50px;
