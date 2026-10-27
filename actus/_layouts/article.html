@@ -134,11 +134,7 @@
 
       <h1 class="article-title">{{ page.title | escape }}</h1>
       <div class="article-meta">
-        <p class="article-date">{{ page.published_date | default: page.date | escape }}</p>
-        <div class="article-authors">
-          <span class="authors-label">Écrit par</span>
-          <div class="authors-avatars" id="authorsAvatars"></div>
-        </div>
+        <p class="article-date"><span class="article-date-label">Publié le</span> {{ page.published_date | default: page.date | escape }}</p>
       </div>
     </section>
 
@@ -146,7 +142,12 @@
       {{ content }}
     </section>
 
-    <section class="article-share">
+    <section class="article-actions" aria-label="Actions de l'article">
+      <div class="authors-button" role="group" aria-label="Auteurs de l'article">
+        <span class="authors-label">Écrit par</span>
+        <div class="authors-avatars" id="authorsAvatars"></div>
+      </div>
+
       <button class="share-button" id="shareArticle" type="button">
         <img src="/icons/share.svg" alt="" class="share-icon">
         <span>Partager cet article</span>
