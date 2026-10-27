@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-radius: 30px;
 }
 
 /* Hero — titre + image + date */
@@ -25,7 +26,7 @@
 .article-cover {
   aspect-ratio: 5 / 3;
   overflow: hidden;
-  border-radius: 20px;
+  border-radius: 30px;
   opacity: 0;
   animation: fadeUp 1s ease forwards;
   box-shadow: 0 8px 18px rgba(0,0,0,0.08);
@@ -169,6 +170,8 @@
 .article-related {
   width: 100%;
   max-width: 1200px;
+  align-self: center;
+  margin-bottom: 3.6rem;
 }
 
 .article-related h2 {
@@ -191,10 +194,8 @@
 /* Responsive */
 @media (max-width: 768px) {
   .article-page {
-    padding-left: 0px; !important
-    padding-right: 0px; !important
+    padding: 0;
     gap: 20px;
-    padding-top: 50px;
   }
 
   .article-title {
@@ -249,8 +250,7 @@
 
 @media (max-width: 800px) {
   main.article-page {
-    padding-left: 30px !important;
-    padding-right: 30px !important;
+    padding-left: 0px
   }
 }
 
