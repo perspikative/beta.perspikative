@@ -93,7 +93,7 @@
   border: none;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   flex: 0 0 auto;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: all 0.2s ease;
 }
 
 .authors-avatars .author-avatar:first-child {
@@ -114,7 +114,7 @@
 }
 
 .author-avatar:hover {
-  transform: scale(1.1);
+  transform: scale(1.06);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
   z-index: 999 !important;
 }
@@ -205,6 +205,7 @@
 
   .article-body {
     padding: 0px;
+    margin-bottom: 2.8rem;
   }
 
   .article-related {
@@ -336,19 +337,22 @@
     gap: 10px;
     width: 100%;
     padding: 0 16px;
-    margin-bottom: 40px;
+    margin: 38px;
     box-sizing: border-box;
   }
 
   .authors-button,
   .share-button {
     width: 100%;
-    max-width: 360px;
+    max-width: 300px;
     min-height: 50px;
   }
 
   .authors-button {
     justify-content: center;
+    background: none;
+    box-shadow: none;
+    border: none;
   }
 
   .share-button {
