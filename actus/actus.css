@@ -95,6 +95,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   flex: 0 0 auto;
   transition: all 0.2s ease;
+  margin-left: -16px;
 }
 
 .authors-avatars .author-avatar:first-child {
