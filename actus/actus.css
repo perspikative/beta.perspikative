@@ -9,6 +9,7 @@
 
 /* Hero — titre + image + date */
 .article-hero {
+  width: 100%;
   max-width: 900px;
   text-align: center;
 }
@@ -48,42 +49,33 @@
 .article-date {
   font-size: 1.1rem;
   opacity: 0.8;
-  letter-spacing: 0.2rem;
-  text-transform: uppercase;
+  letter-spacing: 0.08rem;
   margin: 0;
+  text-align: center;
 }
 
-/* Bloc meta : date + auteurs (desktop = sur la même ligne) */
+.article-date-label {
+  font-weight: 500;
+}
+
+/* La date reste seule et centrée sous le titre. */
 .article-meta {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-wrap: wrap;
-  gap: 14px;
+  width: 100%;
   margin-top: 0.6rem;
   margin-bottom: 3rem;
-}
-
-.article-meta::before {
-  content: "•";
-  opacity: 0.5;
-}
-
-.article-meta .article-date {
-  order: -1;
-}
-
-.article-authors {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  text-align: center;
 }
 
 .authors-label {
-  font-size: 1.1rem;
-  opacity: 0.8;
-  letter-spacing: 0.2rem;
-  text-transform: uppercase;
+  font-size: 1rem;
+  font-weight: 500;
+  opacity: 0.9;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
 }
 
 /* Avatars empilés */
@@ -100,7 +92,8 @@
   overflow: hidden;
   border: 2px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  margin-left: -20px;
+  flex: 0 0 auto;
+  margin-left: -12px;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -223,23 +216,12 @@
   
   .article-date {
     font-size: 0.96rem;
-    letter-spacing: 0.2rem;
-  }
-  
-  .authors-label {
-    font-size: 0.96rem;
-    letter-spacing: 0.2rem;
+    letter-spacing: 0.04rem;
   }
 
   .article-meta {
-    flex-direction: column;
-    gap: 1px;
     margin-top: 0.8rem;
     margin-bottom: 2.6rem;
-  }
-
-  .article-meta::before {
-    display: none;
   }
 
   .article-cover {
@@ -287,68 +269,97 @@
 
 
 
-/* Partage d'article */
-.article-share{
+/* Actions en bas de l'article : auteurs à gauche, partage à droite. */
+.article-actions {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
+  gap: 12px;
   width: 100%;
-  margin-right: 100px;
-  margin-bottom: 60px;
+  max-width: 900px;
+  margin: 0 auto 60px;
 }
 
-/* Bouton principal */
-.share-button{
+/* Bloc visuel « Écrit par » ; les avatars restent des liens vers les profils. */
+.authors-button,
+.share-button {
   display: flex;
-  gap: 6px;
-  padding: 12px 20px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 7px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 50px;
-  border: none;
-  background: rgba(20,20,20,0.65);
+  background: rgba(20, 20, 20, 0.65);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1),
+              inset 0 0 8px rgba(255, 255, 255, 0.08);
   color: white;
   font-family: "Rubik", system-ui, sans-serif;
   font-size: 1rem;
   font-weight: 500;
-  opacity: 0.9;
-  cursor: pointer;
-  transition: 
-    background 0.25s ease,
-    transform 0.2s ease,
-    box-shadow 0.25s ease;
+  line-height: 1.2;
+  opacity: 0.95;
+  box-sizing: border-box;
 }
 
-/* Icône */
-.share-icon{
+.authors-button {
+  flex: 0 0 auto;
+}
+
+/* Bouton de partage */
+.share-button {
+  gap: 8px;
+  padding: 7px 20px;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+}
+
+.share-icon {
   width: 19px;
   height: 19px;
+  flex: 0 0 auto;
   opacity: 0.9;
-  transition: 
-    width 0.2s ease,
-    height 0.2s ease,
-    opacity 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
-/* Hover desktop */
-.share-button:hover{
-  background: rgba(20,20,20,0.7);
-  transform: translateX(2px);
+.share-button:hover {
+  background: rgba(20, 20, 20, 0.78);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15),
+              inset 0 0 10px rgba(255, 255, 255, 0.12);
 }
 
-/* Click */
-.share-button:active{
+.share-button:active {
   transform: translateY(0);
 }
 
-/* Responsive */
-@media (max-width: 700px){
-  .article-share{
-    display: flex;
+@media (max-width: 768px) {
+  .article-actions {
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    margin-right: 0px;
+    gap: 10px;
+    width: 100%;
+    padding: 0 16px;
+    margin-bottom: 40px;
+    box-sizing: border-box;
   }
 
-  .share-button{
-    margin-right: 0;
+  .authors-button,
+  .share-button {
+    width: 100%;
+    max-width: 360px;
+    min-height: 50px;
+  }
+
+  .authors-button {
+    justify-content: center;
+  }
+
+  .share-button {
+    margin: 0;
   }
 }
