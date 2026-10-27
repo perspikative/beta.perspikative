@@ -125,64 +125,63 @@
   <div class="blur-overlay"></div>
 
   <main class="article-page">
-    <section class="article-hero">
-      {% if page.cover %}
-      <div class="article-cover">
-        <img src="{{ page.cover | relative_url }}" alt="{{ page.cover_alt | default: page.title | escape }}">
-      </div>
-      {% endif %}
-
-      <h1 class="article-title">{{ page.title | escape }}</h1>
-      <div class="article-meta">
-        <p class="article-date">{{ page.published_date | default: page.date | escape }}</p>
-        <div class="article-authors">
-          <span class="authors-label">Écrit par</span>
-          <div class="authors-avatars" id="authorsAvatars"></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="article-body">
-      {{ content }}
-    </section>
-
-    <section class="article-share">
-      <button class="share-button" id="shareArticle" type="button">
-        <img src="/icons/share.svg" alt="" class="share-icon">
-        <span>Partager cet article</span>
-      </button>
-    </section>
-
-    {% if page.related_articles %}
-    <section class="article-related">
-      <h2 class="similar-article">LIRE DES ARTICLES SIMILAIRES</h2>
-      <div class="related-grid">
-        <section class="blog-grid">
-          {% for item in page.related_articles %}
-          <a href="{{ item.url | escape }}" class="blog-link">
-            <article class="blog-card">
-              <div class="blog-image">
-                <img src="{{ item.cover | relative_url }}" alt="{{ item.cover_alt | default: item.title | escape }}" loading="lazy">
-                <span class="blog-tag {{ item.category_class | default: 'fonctionnalite' | escape }}">{{ item.category_label | escape }}</span>
-              </div>
-              <div class="blog-content">
-                <div class="blog-header">
-                  <h2>{{ item.title | escape }}</h2>
-                  <div class="blog-date">
-                    <img src="/icons/calendar.svg" alt="Date">
-                    <span>{{ item.display_date | escape }}</span>
-                  </div>
-                </div>
-                <p>{{ item.description | escape }}</p>
-              </div>
-            </article>
-          </a>
-          {% endfor %}
-        </section>
-      </div>
-    </section>
+    {% if page.cover %}
+    <div class="article-cover">
+      <img src="{{ page.cover | relative_url }}" alt="{{ page.cover_alt | default: page.title | escape }}">
+    </div>
     {% endif %}
+
+    <div class="article-content">
+      <h1 class="article-title">{{ page.title | escape }}</h1>
+      <p class="article-date">{{ page.published_date | default: page.date | escape }}</p>
+
+      <section class="article-body">
+        {{ content }}
+      </section>
+
+      <div class="article-authors">
+        <span class="authors-label">Écrit par</span>
+        <div class="authors-avatars" id="authorsAvatars"></div>
+      </div>
+
+      <section class="article-share">
+        <button class="share-button" id="shareArticle" type="button">
+          <img src="/icons/share.svg" alt="" class="share-icon">
+          <span>Partager cet article</span>
+        </button>
+      </section>
+    </div>
   </main>
+
+  {% if page.related_articles %}
+  <section class="article-related">
+    <h2 class="similar-article">LIRE DES ARTICLES SIMILAIRES</h2>
+    <div class="related-grid">
+      <section class="blog-grid">
+        {% for item in page.related_articles %}
+        <a href="{{ item.url | escape }}" class="blog-link">
+          <article class="blog-card">
+            <div class="blog-image">
+              <img src="{{ item.cover | relative_url }}" alt="{{ item.cover_alt | default: item.title | escape }}" loading="lazy">
+              <span class="blog-tag {{ item.category_class | default: 'fonctionnalite' | escape }}">{{ item.category_label | escape }}</span>
+            </div>
+            <div class="blog-content">
+              <div class="blog-header">
+                <h2>{{ item.title | escape }}</h2>
+                <div class="blog-date">
+                  <img src="/icons/calendar.svg" alt="Date">
+                  <span>{{ item.display_date | escape }}</span>
+                </div>
+              </div>
+              <p>{{ item.description | escape }}</p>
+            </div>
+          </article>
+        </a>
+        {% endfor %}
+      </section>
+    </div>
+  </section>
+  {% endif %}
 
   <footer>
     <div class="social-icons">
