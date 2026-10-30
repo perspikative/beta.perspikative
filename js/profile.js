@@ -618,10 +618,12 @@ async function loadLikedDrawings(uid) {
 onAuthStateChanged(auth, async (user) => {
 
     if (!user) {
+        localStorage.removeItem('isLoggedIn'); // 👈 LIGNE À AJOUTER
         window.location.href = "/login";
         return;
     }
 
+    localStorage.setItem('isLoggedIn', 'true'); // 👈 LIGNE À AJOUTER
     currentUser = user;
 
     // Tout ce qui vient de Firebase Auth est déjà disponible localement
@@ -1405,70 +1407,24 @@ btnDeleteAccount.addEventListener("click", async () => {
 
     try {
         // Nettoyage des données Firestore associées avant suppression du
-        // compte Auth. Important : Firestore ne supprime JAMAIS les
-        // sous-collections d'un document automatiquement quand ce document
-        // est supprimé (ex: users/{uid}/likedDrawings survivrait à la
-        // suppression de users/{uid} si on ne la vidait pas explicitement).
-        // On nettoie donc tout, dans un ordre qui n'a pas d'importance
-        // (chaque suppression est indépendante), puis seulement ensuite on
-        // supprime le compte Auth lui-même.
+        // compte Auth. Les trois suppressions doivent réussir : si l'une
+        // échoue (règle Firestore, coupure réseau...), on bloque la
+        // suppression du compte Auth plutôt que de laisser des restes
+        // orphelins dans Firestore.
         const { db, fns } = getFire();
         if (db && fns) {
-            const uid = currentUser.uid;
-
-            // 1) Commentaires de l'utilisateur, sur TOUTES les œuvres.
-            // Requête "collection group" sur "comments" filtrée par uid :
-            // nécessite que firebase-init.js expose aussi collectionGroup,
-            // query et where (en plus de collection/getDocs déjà utilisés
-            // ci-dessous), ET qu'un index Firestore existe pour cette
-            // requête (Firestore Console → Indexes → Collection group
-            // "comments", champ "uid"). Sans cet index, l'appel échoue avec
-            // une erreur "FAILED_PRECONDITION" contenant un lien pour le
-            // créer en un clic.
-            if (fns.collectionGroup && fns.query && fns.where) {
-                const commentsSnap = await fns.getDocs(
-                    fns.query(fns.collectionGroup(db, "comments"), fns.where("uid", "==", uid))
-                );
-                for (const commentDoc of commentsSnap.docs) {
-                    await fns.deleteDoc(commentDoc.ref);
-                }
-            } else {
-                console.warn(
-                    "Suppression des commentaires ignorée : collectionGroup/query/where " +
-                    "ne sont pas exposés par firebase-init.js."
-                );
-            }
-
-            // 2) Œuvres likées (sous-collection users/{uid}/likedDrawings).
-            const likedSnap = await fns.getDocs(fns.collection(db, "users", uid, "likedDrawings"));
-            for (const likedDoc of likedSnap.docs) {
-                await fns.deleteDoc(likedDoc.ref);
-            }
-
-            // 3) Réseaux sociaux (sous-collection
-            // publicProfiles/{uid}/socialMedia) — sinon ce document reste
-            // lisible par quiconque connaît l'uid (lecture publique, règle
-            // "allow read: if true"), même une fois le compte supprimé.
-            const socialSnap = await fns.getDocs(fns.collection(db, "publicProfiles", uid, "socialMedia"));
-            for (const socialDoc of socialSnap.docs) {
-                await fns.deleteDoc(socialDoc.ref);
-            }
-
-            // 4) Compteur de limite de commentaires (commentLimits/{uid}).
-            await fns.deleteDoc(fns.doc(db, "commentLimits", uid));
-
-            // 5) Libère le @ (usernames/{username}) s'il existait, pour
-            // qu'il redevienne disponible pour quelqu'un d'autre.
+            // Libère le @ (usernames/{username}) s'il existait, pour qu'il
+            // redevienne disponible pour quelqu'un d'autre.
             if (currentUsername) {
                 await fns.deleteDoc(fns.doc(db, "usernames", currentUsername));
             }
 
-            // 6) Supprime le profil public minimal (username, usernameDisplay,
+            // Supprime le profil public minimal (username, usernameDisplay,
             // photoURL) — plus rien de visible publiquement pour cet uid.
-            await fns.deleteDoc(fns.doc(db, "publicProfiles", uid));
+            await fns.deleteDoc(fns.doc(db, "publicProfiles", currentUser.uid));
 
-            // 7) Supprime le profil complet (bio, isPublic, etc.).
-            await fns.deleteDoc(fns.doc(db, "users", uid));
+            // Supprime le profil complet (bio, isPublic, etc.).
+            await fns.deleteDoc(fns.doc(db, "users", currentUser.uid));
         }
 
         await deleteUser(currentUser);
