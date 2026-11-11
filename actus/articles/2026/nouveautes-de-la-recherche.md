@@ -32,14 +32,14 @@ cta:
   url: /rechercher
 
 related_articles:
-  - title: "Nouveautés de la recherche"
-    url: /actus/2026/nouveautes-de-la-recherche
-    cover: /pics/actus/2026/nouveautes-de-la-recherche.webp
-    cover_alt: "Nouveautés de la recherche"
-    category_class: fonctionnalite
-    category_label: "fonctionnalité"
-    display_date: "01/04/2026"
-    description: "Recherche dynamique, nouvelles fonctionnalités et bien plus ! Découvrez les dernières fonctionnalités"
+  - title: "Pourquoi j'ai changé mes filigranes"
+    url: /actus/2026/pourquoi-jai-change-mes-filigranes
+    cover: /pics/actus/2026/pourquoi-jai-change-mes-filigranes.webp
+    cover_alt: "Pourquoi j'ai changé mes filigranes"
+    category_class: blog
+    category_label: "blog"
+    display_date: "14/05/2026"
+    description: "Découvrez comment le retrait du filigrane change tout sur mes dessins."
   - title: "Perspikative Birthday"
     url: /actus/2026/perspikative-birthday
     cover: /pics/actus/2026/perspikative-birthday.webp
