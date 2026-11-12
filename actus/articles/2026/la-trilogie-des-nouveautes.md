@@ -60,7 +60,7 @@ related_articles:
 
 <p class="article-lead">Chapitre 1 : Lier l’Utile à l’Agréable</p>
 <p>
-  On commence doucement avec
+  Le premier chapitre est révélateur. Il ne cherche pas à impressioner, il porte bien son nom : lier l'utile à l'agréable. Ce premier chapitre apporte une base améliorée du site, des fondations plus solides pour ce qu'il y a à suivre. Cette première partie comprend l'ensemble des petites corrections apportées au site. On commence doucement avec
 </p>
 
 <p class="article-lead">Chapitre 2 : Contempler est un Art</p>
