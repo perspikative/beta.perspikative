@@ -383,23 +383,26 @@
 
 
 
-.article-body img {
+.article-image {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: calc(100% - 72px);
-  margin: 1.8rem auto;
-  margin-left: 36px;
-  margin-right: 36px;
+  margin: 1.8rem 36px;
+}
+
+.article-image img {
+  width: 100%;
+  max-width: 600px; /* nettement plus étroit sur desktop */
   border-radius: 24px;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
 }
 
 @media (max-width: 768px) {
-  .article-body img {
-    width: calc(100% - 72px);
-    margin-top: 1.4rem;
-    margin-bottom: 1.4rem;
+  .article-image {
+    margin: 1.4rem 36px;
+  }
+  .article-image img {
+    max-width: none; /* reprend toute la largeur dispo en mobile */
     border-radius: 18px;
   }
 }
