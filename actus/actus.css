@@ -392,9 +392,15 @@
 
 .article-image img {
   width: 100%;
-  max-width: 600px; /* nettement plus étroit sur desktop */
+  max-width: 400px; /* desktop : nettement plus compact */
   border-radius: 24px;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+}
+
+@media (max-width: 1024px) {
+  .article-image img {
+    max-width: 340px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -402,7 +408,7 @@
     margin: 1.4rem 36px;
   }
   .article-image img {
-    max-width: none; /* reprend toute la largeur dispo en mobile */
+    max-width: none;
     border-radius: 18px;
   }
 }
