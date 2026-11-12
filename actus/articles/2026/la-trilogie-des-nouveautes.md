@@ -66,7 +66,7 @@ related_articles:
   Ce chapitre apporte surtout une amélioration globale du site, avec divers bugs corrigés, un style global retravaillé ainsi que des animations uniformisées. 
 </p>
 <p>
-  La première nouveauté notable est l'amélioration de la page <a href="/rechercher" target="_blank">Rechercher</a>, possédant désormais un meilleur moteur de recherche avec une pertinence bien plus affinée des résultats de recherche, avec des corrections de bugs. 
+  La première nouveauté notable est l'amélioration de la page <a href="/rechercher" target="_blank">Rechercher</a>, possédant désormais un meilleur moteur de recherche avec une pertinence bien plus affinée des résultats de recherche, ainsi que quelques corrections de bugs. 
 </p>
 
 <p class="article-lead">Chapitre 2 : Contempler est un Art</p>
@@ -76,5 +76,5 @@ related_articles:
 
 <p class="article-lead">Chapitre 3 : Le Grand Final</p>
 <p>
-  En plus de ma signature dans mes dessins, j'ai donc décidé de mettre un “@perspikative” à la place du filigrane. Mais cette nouveauté devait se faire sous une condition : celle d'avoir une page @perspikative sur Instagram. Et depuis sa création, tous les dessins ont cette signature secondaire. Plus discrète et mieux intégrée à l'image, cette signature permet de reconnaître instantanément mes dessins tout en rappelant l'auteur. 
+  ...
 </p>
