@@ -60,12 +60,15 @@ related_articles:
 
 <p class="article-lead">Chapitre 1 : Lier l’Utile à l’Agréable</p>
 <p>
-  Le premier chapitre est révélateur. Il ne cherche pas à impressioner, il porte bien son nom : lier l'utile à l'agréable. Ce premier chapitre apporte une base améliorée du site, des fondations plus solides pour ce qu'il y a à suivre. Cette première partie comprend l'ensemble des petites corrections apportées au site. On commence doucement avec
+  Le premier chapitre est révélateur. Il ne cherche pas à impressioner, il porte bien son nom : lier l'utile à l'agréable. Ce premier chapitre apporte une base améliorée du site, des fondations plus solides pour ce qu'il y a à suivre. Cette première partie comprend l'ensemble des petites corrections apportées au site. Elle rend clairement le site plus agréable à utiliser.
+</p>
+<p>
+  Ce chapitre apporte surtout une amélioration globale du site, avec divers bugs corrigés, un style global retravaillé ainsi que des animations uniformisées. 
 </p>
 
 <p class="article-lead">Chapitre 2 : Contempler est un Art</p>
 <p>
-  En regardant mes anciens dessins, j'ai bel et bien remarqué que les filigranes prenaient trop de place, presque toute la largeur disponible. Et honnêtement, sur presque tous les dessins ça gâchait toute l'ambiance. La seule création qui semblait correcte avec est tout simplement un dessin que je trouve sans intérêt ; disons que ça rattrapait les défauts.
+  On commence doucement avec
 </p>
 
 <p class="article-lead">Chapitre 3 : Le Grand Final</p>
