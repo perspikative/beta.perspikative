@@ -47,10 +47,12 @@ related_articles:
 ---
 
 <p>
-  Il était une fois Perspikative. Perspikative avait son propre site. Mais un jour, Perspikative a décidé que son site méritait mieux. Et c’est à partir de ce jour que les Perspikativeurs découvrirent des nouveautés exaltantes…
+  « Il était une fois Perspikative. Perspikative avait son propre site. Mais un jour, Perspikative a décidé que son site méritait mieux. Et c’est à partir de ce jour que les Perspikativeurs découvrirent des nouveautés exaltantes… »
 </p>
+
+<p class="article-lead">Préambule</p>
 <p>
-  La Trilogie des Nouveautés est un évènement qui s'est déroulé sur Perspikative en août 2026. Depuis déjà de nombreux mois, j'améliorais le site. Au fur et à mesure que j'améliorais le site, j'accumulais des corrections de bugs des nouvelles fonctionnalités, des nouvelles pages...
+  La Trilogie des Nouveautés est un évènement qui s'est déroulé sur Perspikative en août 2026. Depuis déjà de nombreux mois, j'améliorais le site. Au fur et à mesure que j'améliorais le site, j'accumulais des corrections de bugs, de nouvelles fonctionnalités, des nouvelles pages...
 </p>
 
 <p class="article-lead">Chapitre 1 : Lier l’Utile à l’Agréable</p>
