@@ -488,7 +488,7 @@ header h1 {
   height: 100vh;
   backdrop-filter: blur(10px) saturate(118%);
   -webkit-backdrop-filter: blur(10px) saturate(118%);
-  background: transparent;
+  background: rgba(0, 0, 0, 0.14);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.32s cubic-bezier(0.32, 0, 0.08, 0.97);
@@ -1904,7 +1904,7 @@ main.creations {
 .blog-content p {
   font-size: 1.05rem;
   line-height: 1.1rem;
-  opacity: 0.85;
+  opacity: 0.8;
   color: #ffffff;
 }
 
@@ -1919,7 +1919,7 @@ main.creations {
 .blog-link:hover .blog-card {
   box-shadow:
     inset 0 0 12px rgba(255,255,255,0.2),
-    0 10px 30px rgba(0,0,0,0.2);
+    0 10px 30px rgba(0,0,0,0.12);
 }
 
 .blog-link:hover .blog-image img {
