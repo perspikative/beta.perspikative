@@ -60,13 +60,10 @@ related_articles:
 
 <p class="article-lead">Chapitre 1 : Lier l’Utile à l’Agréable</p>
 <p>
-  Le premier chapitre est révélateur. Il ne cherche pas à impressioner, il porte bien son nom : lier l'utile à l'agréable. Ce premier chapitre apporte une base améliorée du site, des fondations plus solides pour ce qu'il y a à suivre. Cette première partie comprend l'ensemble des petites corrections apportées au site. Elle rend clairement le site plus agréable à utiliser.
+  Le premier chapitre est révélateur. Il ne cherche pas à impressioner, il porte bien son nom : lier l'utile à l'agréable. Ce premier chapitre apporte une base améliorée du site, des fondations plus solides pour ce qu'il y a à suivre. Cette première partie comprend l'ensemble des petites corrections apportées au site. Elle rend clairement le site plus agréable à utiliser. Ce chapitre apporte surtout une amélioration globale du site, avec divers bugs corrigés, un style global retravaillé ainsi que des animations uniformisées. 
 </p>
 <p>
-  Ce chapitre apporte surtout une amélioration globale du site, avec divers bugs corrigés, un style global retravaillé ainsi que des animations uniformisées. 
-</p>
-<p>
-  La première nouveauté notable est l'amélioration de la page <a href="/rechercher" target="_blank">Rechercher</a>, possédant désormais un meilleur moteur de recherche avec une pertinence bien plus affinée des résultats de recherche, ainsi que quelques corrections de bugs. 
+  La première nouveauté notable est l'amélioration de la page <a href="/rechercher" target="_blank">Rechercher</a>, possédant désormais un meilleur moteur de recherche, avec une pertinence bien plus affinée des résultats de recherche, ainsi que quelques corrections de bugs. 
 </p>
 
 <p class="article-lead">Chapitre 2 : Contempler est un Art</p>
