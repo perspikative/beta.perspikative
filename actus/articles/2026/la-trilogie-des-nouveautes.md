@@ -58,12 +58,15 @@ related_articles:
   La Trilogie des Nouveautés est donc découpée en trois temps. Cet évènement s'est déroulé sur trois semaines, avec un Chapitre par semaine. Et le truc encore plus cool, c'est que chaque semaine les nouveautés annoncées étaient de plus en plus extraordinaires. Je vous laisse donc plonger dans cette aventure follement créative, qui risque de vous surprendre...
 </p>
 
-<p class="article-lead"><strong>Chapitre 1 :</strong> Lier l’Utile à l’Agréable</p>
+<p class="article-lead">Chapitre 1 : Lier l’Utile à l’Agréable</p>
 <p>
   Le premier chapitre est révélateur. Il ne cherche pas à impressioner, il porte bien son nom : lier l'utile à l'agréable. Ce premier chapitre apporte une base améliorée du site, des fondations plus solides pour ce qu'il y a à suivre. Cette première partie comprend l'ensemble des petites corrections apportées au site. Elle rend clairement le site plus agréable à utiliser.
 </p>
 <p>
   Ce chapitre apporte surtout une amélioration globale du site, avec divers bugs corrigés, un style global retravaillé ainsi que des animations uniformisées. 
+</p>
+<p>
+  La première nouveauté notable est l'amélioration de la page <a href="/rechercher" target="_blank">Rechercher</a>, possédant désormais un meilleur moteur de recherche avec une pertinence bien plus affinée des résultats de recherche, avec des corrections de bugs. 
 </p>
 
 <p class="article-lead">Chapitre 2 : Contempler est un Art</p>
