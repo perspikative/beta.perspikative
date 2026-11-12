@@ -70,6 +70,7 @@ related_articles:
 <p>
   On commence doucement avec
 </p>
+<img src="/portfolio/creations/46.webp" alt="Création présentée dans le Chapitre 2" loading="lazy">
 
 <p class="article-lead">Chapitre 3 : Le Grand Final</p>
 <p>
