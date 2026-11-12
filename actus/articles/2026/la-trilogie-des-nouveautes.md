@@ -52,7 +52,10 @@ related_articles:
 
 <p class="article-lead">Préambule</p>
 <p>
-  La Trilogie des Nouveautés est un évènement qui s'est déroulé sur Perspikative en août 2026. Depuis déjà de nombreux mois, j'améliorais le site. Au fur et à mesure que j'améliorais le site, j'accumulais des corrections de bugs, de nouvelles fonctionnalités, des nouvelles pages...
+  La Trilogie des Nouveautés est un évènement qui s'est déroulé sur Perspikative en août 2026. Depuis déjà de nombreux mois, j'améliorais le site. Au fur et à mesure que j'améliorais le site, j'accumulais des corrections de bugs, de nouvelles fonctionnalités, des nouvelles pages... Vous ne savez pas à quel point je passe des heures entières sur mon site, à tâter de nouvelles pistes. Pour moi, je ne pouvais pas me contenter d'améliorer le site par-ci par-là, sans ne rien en faire en retour. Il fallait que je transforme ces nombreuses heures de travail en un petit évènement qui donnerai de la valeur à mon travail. Et cela m'arraigeait, puisque je cherchais depuis un bon bout de temps un moyen d'annoncer une nouveauté majeure sur le site...
+</p>
+<p>
+  La Trilogie des Nouveautés est donc découpée en trois temps. Cet évènement s'est déroulé sur trois semaines, avec un Chapitre par semaine. Et le truc encore plus cool, c'est que chaque semaine les nouveautés annoncées étaient de plus en plus extraordinaires.
 </p>
 
 <p class="article-lead">Chapitre 1 : Lier l’Utile à l’Agréable</p>
@@ -67,5 +70,5 @@ related_articles:
 
 <p class="article-lead">Chapitre 3 : Le Grand Final</p>
 <p>
-  En plus de ma signature dans mes dessins, j'ai donc décidé de mettre un “@perspikative” à la place du filigrane. Mais cette nouveauté devait se faire sous une condition : celle d'avoir une page @perspikative sur Instagram. Et depuis sa création, tous les dessins ont cette signature secondaire. Plus discrète et mieux intégrée à l'image, cette signature permet de reconnaître instantanément mes dessins tout en rappelant l'auteur.
+  En plus de ma signature dans mes dessins, j'ai donc décidé de mettre un “@perspikative” à la place du filigrane. Mais cette nouveauté devait se faire sous une condition : celle d'avoir une page @perspikative sur Instagram. Et depuis sa création, tous les dessins ont cette signature secondaire. Plus discrète et mieux intégrée à l'image, cette signature permet de reconnaître instantanément mes dessins tout en rappelant l'auteur. 
 </p>
