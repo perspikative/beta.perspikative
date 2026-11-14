@@ -383,6 +383,11 @@
 
 
 
+
+
+
+
+
 .article-image {
   display: flex;
   align-items: center;
@@ -392,7 +397,7 @@
 
 .article-image img {
   width: 100%;
-  max-width: 400px; /* desktop : nettement plus compact */
+  max-width: 400px;
   border-radius: 24px;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
 }
