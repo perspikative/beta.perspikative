@@ -34,7 +34,7 @@ cta:
 related_articles:
   - title: "Pourquoi j'ai changé mes filigranes"
     url: /actus/2026/pourquoi-jai-change-mes-filigranes
-    cover: /pics/actus/2026/pourquoi-jai-change-mes-filigranes.webp
+    cover: /pics/actus/articles/2026/cover/pourquoi-jai-change-mes-filigranes.webp
     cover_alt: "Pourquoi j'ai changé mes filigranes"
     category_class: blog
     category_label: "blog"
@@ -88,14 +88,13 @@ related_articles:
   <img src="/pics/actus/articles/2026/pics/barre-de-navigation-mobile.webp" alt="Image d'illustration - barre de navigation mobile" loading="lazy">
 </div>
 
+<p><strong>3. Effet de verre :</strong></p>
 
 <p class="article-lead">Chapitre 2 : Contempler est un Art</p>
 <p>
   On commence doucement avec
 </p>
-<div class="article-image">
-  <img src="/portfolio/creations/46.webp" alt="Création présentée dans le Chapitre 2" loading="lazy">
-</div>
+
 
 <p class="article-lead">Chapitre 3 : Le Grand Final</p>
 <p>
