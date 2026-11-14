@@ -82,7 +82,7 @@ related_articles:
 
 <p><strong>2. Barre de navigation mobile retravaillée :</strong></p>
 <p>
-  Ce premier chapitre étant consacré à rendre le site plus esthétique et agréable, la barre de navigation mobile en avait bien besoin. Le flou d’arrière-plan a été amélioré, les proportions de la barre ajustées, et un flou progressif a ajouté en-dessous pour mettre en valeur la barre de navigation, et pour réduire la distraction sous
+  Ce premier chapitre étant consacré à rendre le site plus esthétique et agréable, la barre de navigation mobile en avait bien besoin. Le flou d’arrière-plan a été amélioré, les proportions de la barre ajustées, et un flou progressif a ajouté en-dessous. Ce flou progressif est probablement l'élément le plus satisfait de cette refonte de la barre de navigation. Il est discret, mais interpelle tout de même si on y fait attention. De plus, les ombres et les reflets de la barre de navigation ont été complètement revus, avec des paramètres variables en fonction du mode clair ou sombre du site (et oui, on peut faire ça).
 </p>
 
 <p class="article-lead">Chapitre 2 : Contempler est un Art</p>
