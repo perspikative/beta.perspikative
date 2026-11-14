@@ -102,12 +102,14 @@ related_articles:
 </p>
 
 
+<br>
 <p class="article-lead">Chapitre 2 : Contempler est un Art</p>
 <p>
   On commence doucement avec
 </p>
 
 
+<br>
 <p class="article-lead">Chapitre 3 : Le Grand Final</p>
 <p>
   ...
