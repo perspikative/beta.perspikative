@@ -68,11 +68,9 @@ related_articles:
 </p>
 <br>
 
+<p><strong>1. Amélioration de la page <a href="/rechercher" target="_blank">Rechercher</a> :</strong></p>
 <p>
-  <strong>1. Amélioration de la page <a href="/rechercher" target="_blank">Rechercher</a> :</strong> Depuis l'<a href="/actus/2026/nouveautes-de-la-recherche" target="_blank">article Nouveautés de la recherche</a> en avril dernier, la page possède un moteur de recherche amélioré, avec une pertinence des résultats de recherche bien plus affinée, de nouvelles fonctionnalités comme une section de mots-clés et quelques easter-eggs en plus. 
-</p>
-<p>
-  Cette page est en constante évolution, je suis persuadé que d'autres améliorations y seront apportées. Ce que j'aimerai faire prochainement sur cette page est l'amélioration du système d'historique de recherche, en faire quelque chose de plus complet et intégré aux <a href="/profile" target="_blank">profils Perspikative</a>. De même que je compte ajouter de nombreux autres easter-eggs, et je n'arrêterai jamais : la barre de recherche est l'endroit idéal pour cacher les surprises les plus absurdes ou dénoncer avec un peu de satire ce qui ne va pas dans notre monde.
+  Depuis l'<a href="/actus/2026/nouveautes-de-la-recherche" target="_blank">article Nouveautés de la recherche</a> en avril dernier, la page possède un moteur de recherche amélioré, avec une pertinence des résultats de recherche bien plus affinée, de nouvelles fonctionnalités comme une section de mots-clés et quelques easter-eggs en plus. Cette page est en constante évolution, je suis persuadé que d'autres améliorations y seront apportées. Ce que j'aimerai faire prochainement sur cette page est l'amélioration du système d'historique de recherche, en faire quelque chose de plus complet et intégré aux <a href="/profile" target="_blank">profils Perspikative</a>. De même que je compte ajouter de nombreux autres easter-eggs, et je n'arrêterai jamais : la barre de recherche est l'endroit idéal pour cacher les surprises les plus absurdes ou dénoncer avec un peu de satire ce qui ne va pas dans notre monde.
 </p>
 {% if page.cta %}
 <br>
@@ -80,8 +78,9 @@ related_articles:
 <br><br>
 {% endif %}
 
+<p><strong>2. Barre de navigation mobile retravaillée :</strong></p>
 <p>
-  2. Ce premier chapitre étant consacré à rendre le site plus esthétique et agréable,
+  Ce premier chapitre étant consacré à rendre le site plus esthétique et agréable,
 </p>
 
 <p class="article-lead">Chapitre 2 : Contempler est un Art</p>
