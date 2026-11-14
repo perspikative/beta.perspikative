@@ -63,16 +63,19 @@ related_articles:
   Le premier chapitre est révélateur. Il ne cherche pas à impressioner, il porte bien son nom : lier l'utile à l'agréable. Ce premier chapitre apporte une base améliorée du site, des fondations plus solides pour ce qu'il y a à suivre. Cette première partie comprend l'ensemble des petites corrections apportées au site. Elle rend clairement le site plus agréable à utiliser. Ce chapitre apporte surtout une amélioration globale du site, avec divers bugs corrigés, un style global retravaillé ainsi que des animations uniformisées. 
 </p>
 <p>
-  La première nouveauté notable est l'amélioration de la page <a href="/rechercher" target="_blank">Rechercher</a>, possédant désormais un meilleur moteur de recherche, avec une pertinence bien plus affinée des résultats de recherche, ainsi que quelques corrections de bugs. 
+  1. La première nouveauté notable est l'amélioration de la page <a href="/rechercher" target="_blank">Rechercher</a>, possédant désormais un meilleur moteur de recherche, avec une pertinence bien plus affinée des résultats de recherche, ainsi que quelques corrections de bugs. 
 </p>
-<div class="article-image">
-  <img src="/portfolio/creations/46.webp" alt="Création présentée dans le Chapitre 2" loading="lazy">
-</div>
+<p>
+  Depuis l'<a href="/actus/2026/nouveautes-de-la-recherche" target="_blank">article Nouveautés de la recherche</a>
+</p>
 
 <p class="article-lead">Chapitre 2 : Contempler est un Art</p>
 <p>
   On commence doucement avec
 </p>
+<div class="article-image">
+  <img src="/portfolio/creations/46.webp" alt="Création présentée dans le Chapitre 2" loading="lazy">
+</div>
 
 <p class="article-lead">Chapitre 3 : Le Grand Final</p>
 <p>
