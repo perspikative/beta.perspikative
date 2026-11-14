@@ -91,6 +91,7 @@ related_articles:
 </p>
 
 {% if page.cta %}
+<br>
 <a href="{{ page.cta.url | escape }}" class="btn-glass">{{ page.cta.label | escape }}</a>
 <br><br>
 {% endif %}
