@@ -89,6 +89,10 @@ related_articles:
 </div>
 
 <p><strong>3. Effet de verre :</strong></p>
+<p>
+  La barre de navigation mobile ne s'arrête pas là. L'arrivée du Liquid Glass d'Apple en 2025 m'avait beaucoup interpellé. Ce nouveau système me semblait juste extraordinaire, cet effet de verre liquide si réaliste. Simplement, j'aimais beaucoup cet effet, et il se trouve qu'à ce moment là je faisais mes premiers essais de code pour mon site. Je pense que le Liquid Glass m'a beaucoup inspiré, et quelque peu influencé dans ma manière de concevoir le site. 
+</p>
+
 
 <p class="article-lead">Chapitre 2 : Contempler est un Art</p>
 <p>
