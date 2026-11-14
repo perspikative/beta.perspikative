@@ -53,6 +53,7 @@ related_articles:
 <p>
   « Il était une fois Perspikative. Perspikative avait son propre site. Mais un jour, Perspikative a décidé que son site méritait mieux. Et c’est à partir de ce jour que les Perspikativeurs découvrirent des nouveautés exaltantes… »
 </p>
+<br>
 
 <p class="article-lead">Préambule</p>
 <p>
@@ -61,6 +62,7 @@ related_articles:
 <p>
   La Trilogie des Nouveautés est donc découpée en trois temps. Cet évènement s'est déroulé sur trois semaines, avec un Chapitre par semaine. Et le truc encore plus cool, c'est que chaque semaine les nouveautés annoncées étaient de plus en plus extraordinaires. Je vous laisse donc plonger dans cette aventure follement créative, qui risque de vous surprendre...
 </p>
+<br>
 
 <p class="article-lead">Chapitre 1 : Lier l’Utile à l’Agréable</p>
 <p>
@@ -80,7 +82,7 @@ related_articles:
 
 <p><strong>2. Barre de navigation mobile retravaillée :</strong></p>
 <p>
-  Ce premier chapitre étant consacré à rendre le site plus esthétique et agréable,
+  Ce premier chapitre étant consacré à rendre le site plus esthétique et agréable, la barre de navigation mobile en avait bien besoin. Le flou d’arrière-plan a été amélioré, les proportions de la barre ajustées, et un flou progressif a ajouté en-dessous pour mettre en valeur la barre de navigation, et pour réduire la distraction sous
 </p>
 
 <p class="article-lead">Chapitre 2 : Contempler est un Art</p>
