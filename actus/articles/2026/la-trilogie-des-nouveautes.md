@@ -66,12 +66,12 @@ related_articles:
 <p>
   Le premier chapitre est révélateur. Il ne cherche pas à impressioner, il porte bien son nom : lier l'utile à l'agréable. Ce premier chapitre apporte une base améliorée du site, des fondations plus solides pour ce qu'il y a à suivre. Cette première partie comprend l'ensemble des petites corrections apportées au site. Elle rend clairement le site plus agréable à utiliser. Ce chapitre apporte surtout une amélioration globale du site, avec divers bugs corrigés, un style global retravaillé ainsi que des animations uniformisées. 
 </p>
-<ul>
+<p>
   1. La première nouveauté notable est l'amélioration de la page <a href="/rechercher" target="_blank">Rechercher</a>. Depuis l'<a href="/actus/2026/nouveautes-de-la-recherche" target="_blank">article Nouveautés de la recherche</a> en avril dernier, la page possède un moteur de recherche amélioré, avec une pertinence des résultats de recherche bien plus affinée, de nouvelles fonctionnalités comme une section de mots-clés et quelques easter-eggs en plus. 
-</ul>
-<ul>
+</p>
+<p>
   Cette page est en constante évolution, je suis persuadé que d'autres améliorations y seront apportées. Ce que j'aimerai faire prochainement sur cette page est l'amélioration du système d'historique de recherche, en faire quelque chose de plus complet et intégré aux <a href="/profile" target="_blank">profils Perspikative</a>. De même que je compte ajouter de nombreux autres easter-eggs, et je n'arrêterai jamais : la barre de recherche est l'endroit idéal pour cacher les surprises les plus absurdes ou dénoncer avec un peu de satire ce qui ne va pas dans notre monde.
-</ul>
+</p>
 
 {% if page.cta %}
 <br>
