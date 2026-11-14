@@ -72,12 +72,15 @@ related_articles:
 <p>
   Cette page est en constante évolution, je suis persuadé que d'autres améliorations y seront apportées. Ce que j'aimerai faire prochainement sur cette page est l'amélioration du système d'historique de recherche, en faire quelque chose de plus complet et intégré aux <a href="/profile" target="_blank">profils Perspikative</a>. De même que je compte ajouter de nombreux autres easter-eggs, et je n'arrêterai jamais : la barre de recherche est l'endroit idéal pour cacher les surprises les plus absurdes ou dénoncer avec un peu de satire ce qui ne va pas dans notre monde.
 </p>
-
 {% if page.cta %}
 <br>
 <a href="{{ page.cta.url | escape }}" class="btn-glass">{{ page.cta.label | escape }}</a>
 <br><br>
 {% endif %}
+
+<p>
+  2. Ce premier chapitre étant consacré à rendre le site plus esthétique et agréable,
+</p>
 
 <p class="article-lead">Chapitre 2 : Contempler est un Art</p>
 <p>
