@@ -82,10 +82,10 @@ related_articles:
 
 <p><strong>2. Barre de navigation mobile retravaillée :</strong></p>
 <p>
-  Ce premier chapitre étant consacré à rendre le site plus esthétique et agréable, la barre de navigation mobile en avait bien besoin. Le flou d’arrière-plan a été amélioré, les proportions de la barre ajustées, et un flou progressif a ajouté en-dessous. Ce flou progressif est probablement l'élément le plus satisfait de cette refonte de la barre de navigation. Il est discret, mais interpelle tout de même si on y fait attention. De plus, les ombres et les reflets de la barre de navigation ont été complètement revus, avec des paramètres variables en fonction du mode clair ou sombre du site (et oui, on peut faire ça). Voici un comparatif avant/après des changements de la barre de navigation :
+  Ce premier chapitre étant consacré à rendre le site plus esthétique et agréable, la barre de navigation mobile en avait bien besoin. Le flou d’arrière-plan a été amélioré, les proportions de la barre ajustées, et un flou progressif a ajouté en-dessous. Ce flou progressif est probablement l'élément le plus satisfait de cette refonte de la barre de navigation. Il est discret, mais interpelle tout de même si on y fait attention. De plus, les ombres et les reflets de la barre de navigation ont été complètement revus, avec des paramètres variables en fonction du mode clair ou sombre du site (et oui, on peut faire ça). Voici un comparatif avant (en haut)/après (en bas) des changements de la barre de navigation :
 </p>
 <div class="article-image">
-  <img src="/portfolio/creations/46.webp" alt="Création présentée dans le Chapitre 2" loading="lazy">
+  <img src="/pics/actus/articles/2026/pics/barre-de-navigation-mobile.webp" alt="Image d'illustration - barre de navigation mobile" loading="lazy">
 </div>
 
 
