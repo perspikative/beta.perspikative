@@ -80,7 +80,7 @@ related_articles:
 <br><br>
 {% endif %}
 
-<p><strong>2. Barre de navigation mobile retravaillée :</strong></p>
+<p><strong>2. Barre de navigation retravaillée :</strong></p>
 <p>
   Ce premier chapitre étant consacré à rendre le site plus esthétique et agréable, la barre de navigation mobile en avait bien besoin. Le flou d’arrière-plan a été amélioré, les proportions de la barre ajustées, et un flou progressif a ajouté en-dessous. Ce flou progressif est probablement l'élément le plus satisfait de cette refonte de la barre de navigation. Il est discret, mais interpelle tout de même si on y fait attention. De plus, les ombres et les reflets de la barre de navigation ont été complètement revus, avec des paramètres variables en fonction du mode clair ou sombre du site (et oui, on peut faire ça). Voici un comparatif avant (en haut)/après (en bas) des changements de la barre de navigation :
 </p>
@@ -88,9 +88,17 @@ related_articles:
   <img src="/pics/actus/articles/2026/pics/barre-de-navigation-mobile.webp" alt="Image d'illustration - barre de navigation mobile" loading="lazy">
 </div>
 
-<p><strong>3. Effet de verre :</strong></p>
+<p><strong>3. La réfraction au cœur de tout :</strong></p>
 <p>
   La barre de navigation mobile ne s'arrête pas là. L'arrivée du Liquid Glass d'Apple en 2025 m'avait beaucoup interpellé. Ce nouveau système me semblait juste extraordinaire, cet effet de verre liquide si réaliste. Simplement, j'aimais beaucoup cet effet, et il se trouve qu'à ce moment là je faisais mes premiers essais de code pour mon site. Je pense que le Liquid Glass m'a beaucoup inspiré, et quelque peu influencé dans ma manière de concevoir le site. 
+</p>
+<p>
+  Dans cet élan de rendre mon site meilleur, je pensais déjà depuis longtemps à rendre cette barre de navigation mobile beaucoup plus "iOSesque", si je puis dire. Je me suis donc renseigné sur tous les éléments qui rendaient cette barre très naturelle et réaliste, en lisant plusieurs articles qui expliquaient cela. Même en trouvant ça très ingénieux, la question restait la même : comment recréer cet effet pour le web ? Un système d'exploitation et un navigateur web ne sont pas la même chose, et les navigateurs ne sont pas tous pareils (la galère vraiment). L'indice que je relevais le plus pertinent était la réfraction de l'élément. La réfraction déforme l'arrière-plan sur les bords pour donner une perspective et une impression de 3D à l'élément. J'ai alors trouvé des projets open source qui travaillait sur l'expérimentation de cette chose qu'est la réfraction. L'IA m'a également aidé à paufiner cet effet. Et ainsiest né la réfraction sur la barre de navigation mobile ! Cet effet est n'est malheureusement pas disponible sur des navigateurs comme Safari ou Firefox, mais seulement sur des navigateurs qui utilisent Chromium (Google, Samsung Internet...).
+</p>
+
+<p><strong>4. Les fameuses pages légales :</strong></p>
+<p>
+  Ce n'est peut-être qu'un détail pour vous, mais les pages légales sont finalement les plus importantes de ce chapitre de nouveautés. En effet, elles apportent toute la clarté du site, dont certaines sont obligatoires. Avec le Chapitre final, l'arrivée d'une toute nouvelle page est primordiale : les <a href="/terms-of-service" target="_blank">conditions d'utilisation</a>.
 </p>
 
 
