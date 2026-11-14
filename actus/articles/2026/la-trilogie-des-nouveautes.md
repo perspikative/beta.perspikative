@@ -64,7 +64,7 @@ related_articles:
 </p>
 <br>
 
-<p class="article-lead">Chapitre 1 : Lier l’Utile à l’Agréable</p>
+<p class="article-lead">🌱 Chapitre 1 : Lier l’Utile à l’Agréable</p>
 <p>
   Le premier chapitre est révélateur. Il ne cherche pas à impressioner, il porte bien son nom : lier l'utile à l'agréable. Ce premier chapitre apporte une base améliorée du site, des fondations plus solides pour ce qu'il y a à suivre. Cette première partie comprend l'ensemble des petites corrections apportées au site. Elle rend clairement le site plus agréable à utiliser. Ce chapitre apporte surtout une amélioration globale du site, avec divers bugs corrigés, un style global retravaillé ainsi que des animations uniformisées. 
 </p>
@@ -103,14 +103,14 @@ related_articles:
 
 
 <br>
-<p class="article-lead">Chapitre 2 : Contempler est un Art</p>
+<p class="article-lead">⭐️ Chapitre 2 : Contempler est un Art</p>
 <p>
   On commence doucement avec
 </p>
 
 
 <br>
-<p class="article-lead">Chapitre 3 : Le Grand Final</p>
+<p class="article-lead">🎉 Chapitre 3 : Le Grand Final</p>
 <p>
   ...
 </p>
