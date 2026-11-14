@@ -20,7 +20,7 @@ keywords:
 
 og_description: "📰 Découvre cet article sur Perspikative !"
 og_image: "https://perspikative.com/pics/meta/actus/2026/la-trilogie-des-nouveautes.jpg"
-cover: /pics/actus/2026/la-trilogie-des-nouveautes.webp
+cover: /pics/actus/articles/2026/cover/la-trilogie-des-nouveautes.webp
 cover_alt: "Image de couverture"
 
 share_text: "Découvre cet article sur Perspikative !"
@@ -42,7 +42,7 @@ related_articles:
     description: "Découvrez comment le retrait du filigrane change tout sur mes dessins."
   - title: "Nouveautés de la recherche"
     url: /actus/2026/nouveautes-de-la-recherche
-    cover: /pics/actus/2026/nouveautes-de-la-recherche.webp
+    cover: /pics/actus/articles/2026/cover/nouveautes-de-la-recherche.webp
     cover_alt: "Nouveautés de la recherche"
     category_class: fonctionnalite
     category_label: "fonctionnalité"
