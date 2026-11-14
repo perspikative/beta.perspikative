@@ -74,7 +74,7 @@ related_articles:
 </ul>
 
 {% if page.cta %}
-<br><br>
+<br>
 <a href="{{ page.cta.url | escape }}" class="btn-glass">{{ page.cta.label | escape }}</a>
 <br><br>
 {% endif %}
