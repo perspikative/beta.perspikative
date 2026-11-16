@@ -1,11 +1,11 @@
 ---
 layout: article
-permalink: /actus/2026/la-trilogie-des-nouveautes
+permalink: /actus/2026/la-trilogie-des-nouveautes-part-1
 
-title: "La Trilogie des Nouveautés"
+title: "La Trilogie des Nouveautés - Part 1"
 date: 2026-11-16
 published_date: "Publié le 16 novembre 2026"
-description: "Découvrez les dernières nouveautés de la recherche sur Perspikative ! Améliorations, nouvelles fonctionnalités et bien plus encore pour une expérience de recherche optimale."
+description: "La fin de l'été 2026 a offert une avalanche de nouveautés pour le site, en 3 chapitres. Voici le premier."
 keywords:
   - Perspikative
   - nouveautés
@@ -19,8 +19,8 @@ keywords:
   - comptes
 
 og_description: "📰 Découvre cet article sur Perspikative !"
-og_image: "https://perspikative.com/pics/meta/actus/2026/la-trilogie-des-nouveautes.jpg"
-cover: /pics/actus/articles/2026/cover/la-trilogie-des-nouveautes.webp
+og_image: "https://perspikative.com/pics/meta/actus/2026/la-trilogie-des-nouveautes-part-1.jpg"
+cover: /pics/actus/articles/2026/cover/la-trilogie-des-nouveautes-part-1.webp
 cover_alt: "Image de couverture"
 
 share_text: "Découvre cet article sur Perspikative !"
@@ -99,18 +99,4 @@ related_articles:
 <p><strong>4. Les fameuses pages légales :</strong></p>
 <p>
   Ce n'est peut-être qu'un détail pour vous, mais les pages légales sont finalement les plus importantes de ce chapitre de nouveautés. En effet, elles apportent toute la clarté du site, dont certaines sont obligatoires. Avec le Chapitre final, l'arrivée d'une toute nouvelle page est primordiale : les <a href="/terms-of-service" target="_blank">conditions d'utilisation</a>. Elles instaurent les règles de base pour le bien-vivre ensemble sur le site. La modification de la <a href="/politique-de-confidentialite" target="_blank">politique de confidentialité</a> a aussi été faite minutieusement, afin de rendre clair l'utilisation de vos données (vous inquiétez pas, je vais pas vous manger ni vendre vos données). Une petite modification a également été faite dans les mentions légales <a href="/mentions-legales" target="_blank">mentions légales</a>, du côté des crédits. 
-</p>
-
-
-<br>
-<p class="article-lead">⭐️ Chapitre 2 : Contempler est un Art</p>
-<p>
-  On commence doucement avec
-</p>
-
-
-<br>
-<p class="article-lead">🎉 Chapitre 3 : Le Grand Final</p>
-<p>
-  ...
 </p>
