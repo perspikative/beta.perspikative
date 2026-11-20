@@ -51,16 +51,7 @@ related_articles:
 ---
 
 <p>
-  « Il était une fois Perspikative. Perspikative avait son propre site. Mais un jour, Perspikative a décidé que son site méritait mieux. Et c’est à partir de ce jour que les Perspikativeurs découvrirent des nouveautés exaltantes… »
-</p>
-<br>
-
-<p class="article-lead">Préambule</p>
-<p>
-  La Trilogie des Nouveautés est un évènement qui s'est déroulé sur Perspikative en août 2026. Depuis déjà de nombreux mois, j'améliorais le site. Au fur et à mesure que j'améliorais le site, j'accumulais des corrections de bugs, de nouvelles fonctionnalités, des nouvelles pages... Vous ne savez pas à quel point je passe des heures entières sur mon site, à tâter de nouvelles pistes. Pour moi, je ne pouvais pas me contenter d'améliorer le site par-ci par-là, sans ne rien en faire en retour. Il fallait que je transforme ces nombreuses heures de travail en un petit évènement qui donnerai de la valeur à mon travail. Et cela m'arraigeait, puisque je cherchais depuis un bon bout de temps un moyen d'annoncer une nouveauté majeure sur le site...
-</p>
-<p>
-  La Trilogie des Nouveautés est donc découpée en trois temps. Cet évènement s'est déroulé sur trois semaines, avec un Chapitre par semaine. Et le truc encore plus cool, c'est que chaque semaine les nouveautés annoncées étaient de plus en plus extraordinaires. Je vous laisse donc plonger dans cette aventure follement créative, qui risque de vous surprendre...
+  « Perspikative continuait son périple dans l’amélioration de son site, cherchant les moindres détails qui n’allaient pas. Puis quelque chose de frappant : le portfolio ne convenait pas. Ses idées étaient différentes, Perspikative voulait quelque chose de différent. Contempler est un art, et c’est ainsi que le portfolio du site est devenu magnifique... »
 </p>
 <br>
 
