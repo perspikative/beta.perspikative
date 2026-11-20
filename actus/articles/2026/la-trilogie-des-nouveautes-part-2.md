@@ -57,7 +57,7 @@ related_articles:
 
 <p class="article-lead">🌱 Chapitre 2 : Contempler est un Art</p>
 <p>
-  Ce second chapitre fait un pas 
+  Ce second chapitre fait bien avancer les choses. Les nouveautés sont d'un ordre supérieur par rapport au <a href="/actus/2026/la-trilogie-des-nouveautes-part-1" target="_blank">Chapitre 1</a>. 
 </p>
 <br>
 
