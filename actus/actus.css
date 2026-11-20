@@ -167,6 +167,7 @@
   max-width: 1200px;
   align-self: center;
   margin-bottom: 3.6rem;
+  margin-top: 3.6rem;
 }
 
 .article-related h2 {
@@ -177,7 +178,7 @@
   color: #ffffff;
   letter-spacing: 0.02rem;
   text-transform: uppercase;
-  margin-top: 1rem;
+  margin-top: 3rem;
 }
 
 .related-grid {
