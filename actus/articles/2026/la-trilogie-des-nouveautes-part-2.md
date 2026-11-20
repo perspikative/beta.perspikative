@@ -32,7 +32,7 @@ cta:
   url: /rechercher
 
 related_articles:
-- title: "La Trilogie des Nouveautés"
+- title: "La Trilogie des Nouveautés - Part 1"
   url: /actus/2026/la-trilogie-des-nouveautes-part-1
   cover: /pics/actus/articles/2026/cover/la-trilogie-des-nouveautes-part-1.webp
   cover_alt: "La Trilogie des Nouveautés- Part 1"

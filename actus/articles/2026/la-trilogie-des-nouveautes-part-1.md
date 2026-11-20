@@ -32,6 +32,14 @@ cta:
   url: /rechercher
 
 related_articles:
+  - title: "La Trilogie des Nouveautés - Part 2"
+    url: /actus/2026/la-trilogie-des-nouveautes-part-2
+    cover: /pics/actus/articles/2026/cover/la-trilogie-des-nouveautes-part-2.webp
+    cover_alt: "La Trilogie des Nouveautés- Part 2"
+    category_class: évènement
+    category_label: "évènement"
+    display_date: "23/11/2026"
+    description: "La fin de l'été 2026 a offert une avalanche de nouveautés pour le site, en 3 chapitres. Voici le second."
   - title: "Pourquoi j'ai changé mes filigranes"
     url: /actus/2026/pourquoi-jai-change-mes-filigranes
     cover: /pics/actus/articles/2026/cover/pourquoi-jai-change-mes-filigranes.webp
@@ -40,14 +48,6 @@ related_articles:
     category_label: "blog"
     display_date: "14/05/2026"
     description: "Découvrez comment le retrait du filigrane change tout sur mes dessins."
-  - title: "Nouveautés de la recherche"
-    url: /actus/2026/nouveautes-de-la-recherche
-    cover: /pics/actus/articles/2026/cover/nouveautes-de-la-recherche.webp
-    cover_alt: "Nouveautés de la recherche"
-    category_class: fonctionnalite
-    category_label: "fonctionnalité"
-    display_date: "01/04/2026"
-    description: "Recherche dynamique, nouvelles fonctionnalités et bien plus ! Découvrez les dernières fonctionnalités"
 ---
 
 <p>
