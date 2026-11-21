@@ -63,10 +63,10 @@ related_articles:
 
 <p><strong>1. Galerie dynamique :</strong></p>
 <p>
-  C'est le début de tout. Avant, les galeries du portfolio était très lourde à charger. La page chargeait simultanément 2 versions de la galerie, une version desktop (ordinateur) et une version mobile. Résultat : la page chargeait lentement, et consommait plus données pour récupérer les éléments. La structure de la page était aussi plus conséquent. Mais j'ai décidé de remédier à ça. fois..
+  C'est le début de tout. Avant, les galeries du portfolio était très lourde à charger. La page chargeait simultanément 2 versions de la galerie, une version desktop (ordinateur) et une version mobile. Résultat : la page chargeait lentement, et consommait plus de données pour récupérer les éléments. La structure de la page était aussi plus conséquente. Mais j'ai décidé de remédier à ça...
 </p>
 <p>
-  Désormais, les galeries du portfolio utilise une structure commune pour chaque version du site. Que vous consultiez le site depuis votre smartphone, tablette ou depuis un ordinateur, c'est la même structure qui est utilisée. 
+  Désormais, les galeries du portfolio utilise une structure commune pour chaque version du site. Que vous consultiez le site depuis votre smartphone, tablette ou depuis un ordinateur, c'est la même structure qui est utilisée. A partir de là, le poids des pages a bien diminué. Mais ici, je parle bien de « galerie dynamique ».
 </p>
 {% if page.cta %}
 <br>
