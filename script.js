@@ -320,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
       toast = document.createElement('div');
       toast.id = 'share-toast';
       toast.className = 'share-toast';
-      toast.textContent = 'Lien copié ! 🔗';
+      toast.textContent = 'Lien copié !';
       document.body.appendChild(toast);
     }
     toast.classList.add('visible');
