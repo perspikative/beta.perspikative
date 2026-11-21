@@ -61,7 +61,7 @@ related_articles:
 </p>
 <br>
 
-<p><strong>1. Galerie dynamique :</strong></p>
+<p><strong>1. Une galerie dynamique</strong></p>
 <p>
   C'est le début de tout. Avant, les galeries du portfolio était très lourde à charger. La page chargeait simultanément 2 versions de la galerie, une version desktop (ordinateur) et une version mobile. Résultat : la page chargeait lentement, et consommait plus de données pour récupérer les éléments. La structure de la page était aussi plus conséquente. Mais j'ai décidé de remédier à ça...
 </p>
@@ -77,12 +77,12 @@ related_articles:
 <br><br>
 {% endif %}
 
-<p><strong>2. Barre de navigation retravaillée :</strong></p>
+<p><strong>2. Filtrer par couleur, c'est possible</strong></p>
 <p>
-  Ce premier chapitre étant consacré à rendre le site plus esthétique et agréable, la barre de navigation mobile en avait bien besoin. Le flou d’arrière-plan a été amélioré, les proportions de la barre ajustées, et un flou progressif a ajouté en-dessous. Ce flou progressif est probablement l'élément le plus satisfait de cette refonte de la barre de navigation. Il est discret, mais interpelle tout de même si on y fait attention. De plus, les ombres et les reflets de la barre de navigation ont été complètement revus, avec des paramètres variables en fonction du mode clair ou sombre du site (et oui, on peut faire ça). Voici un comparatif avant (en haut)/après (en bas) des changements de la barre de navigation :
+  C'est probablement l'une des fonctionnalités que je trouve le plus cool. Quelque part, c'est assez banal, mais c'est une fonctionnalité amusante (et pratique, encore heureux).
 </p>
 <div class="article-image">
-  <img src="/pics/actus/articles/2026/pics/barre-de-navigation-mobile.webp" alt="Image d'illustration - barre de navigation mobile" loading="lazy">
+  <img src="/pics/actus/articles/2026/pics/bouton-filtrer.webp" alt="Image d'illustration - barre de navigation mobile" loading="lazy">
 </div>
 
 <p><strong>3. La réfraction au cœur de tout :</strong></p>
