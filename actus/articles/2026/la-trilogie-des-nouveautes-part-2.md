@@ -69,7 +69,7 @@ related_articles:
   Désormais, les galeries du portfolio utilise une structure commune pour chaque version du site. Que vous consultiez le site depuis votre smartphone, tablette ou depuis un ordinateur, c'est la même structure qui est utilisée. À partir de là, le poids des pages a bien diminué. Mais ici, je parle bien de « galerie dynamique ». En fait, j'utilisais différentes structures des galeries en une même page afin de disposer les œuvres d'une certaine façon. Sur mobile, 2 colonnes, et sur version desktop 3 colonnes. Mais maintenant que j'utilise une structure commune, comment choisir la disposition de mes œuvres ? Eh bien, j'ai fais appel à 2 scripts open-source...
 </p>
 <p>
-  Les scripts sont des bibliothèques JavaScript développées par <a href="https://desandro.com/" target="_blank">David Desandro</a>. On y retrouve la bibliothèque <a href="https://masonry.desandro.com" target="_blank">Masonry (v4)</a>, qui permet d'organiser les oeuvres du portfolio en grille dynamique. Les images se replacent seules en fonction du code ; ainsi que la bibliothèque <a href="https://imagesloaded.desandro.com/" target="_blank">imagesLoaded (v5)</a>, facultative, mais qui permet de détecter le chargement des images et faciliter le calcul de la disposition des galeries.
+  Les scripts sont des bibliothèques JavaScript développées par <a href="https://desandro.com/" target="_blank">David Desandro</a>. On y retrouve la bibliothèque <a href="https://masonry.desandro.com" target="_blank">Masonry (v4)</a>, qui permet d'organiser les œuvres du portfolio en grille dynamique. Les images se replacent seules en fonction du code ; ainsi que la bibliothèque <a href="https://imagesloaded.desandro.com/" target="_blank">imagesLoaded (v5)</a>, facultative, mais qui permet de détecter le chargement des images et faciliter le calcul de la disposition des galeries.
 </p>
 {% if page.cta %}
 <br>
@@ -85,7 +85,7 @@ related_articles:
   <img src="/pics/actus/articles/2026/pics/bouton-filtrer.webp" alt="Image d'illustration - barre de navigation mobile" loading="lazy">
 </div>
 <p>
-  Il vous suffit d'appuer dessus pour qu'un panneau s'ouvre avec différentes couleurs. 
+  Il vous suffit d'appuyer dessus pour qu'un panneau s'ouvre avec différentes couleurs. Le filtrage se fait par combinaisons de couleurs : toutes les couleurs que vous selectionnerez seront présentes dans les œuvres. Au plus vous sélectionnez de couleurs, au plus les résultats sont affinés. Si vous sélectionnez trop de couleurs, vous risquez de n'avoir aucun résultat (puisque jusqu'à présent, aucune œuvre ne contient toutes les couleurs présentes). Pour réinitaliser le filtre et voir toutes les œuvres par ordre chronologique, il vous suffit d'appuer sur la petite flèche Actualiser
 </p>
 
 <p><strong>3. La réfraction au cœur de tout :</strong></p>
