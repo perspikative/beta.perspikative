@@ -61,9 +61,12 @@ related_articles:
 </p>
 <br>
 
-<p><strong>1. Amélioration de la page <a href="/rechercher" target="_blank">Rechercher</a> :</strong></p>
+<p><strong>1. Galerie dynamique :</strong></p>
 <p>
-  Depuis l'<a href="/actus/2026/nouveautes-de-la-recherche" target="_blank">article Nouveautés de la recherche</a> en avril dernier, la page possède un moteur de recherche amélioré, avec une pertinence des résultats de recherche bien plus affinée, de nouvelles fonctionnalités comme une section de mots-clés et quelques easter-eggs en plus. Cette page est en constante évolution, je suis persuadé que d'autres améliorations y seront apportées. Ce que j'aimerai faire prochainement sur cette page est l'amélioration du système d'historique de recherche, en faire quelque chose de plus complet et intégré aux <a href="/profile" target="_blank">profils Perspikative</a>. De même que je compte ajouter de nombreux autres easter-eggs, et je n'arrêterai jamais : la barre de recherche est l'endroit idéal pour cacher les surprises les plus absurdes ou dénoncer avec un peu de satire ce qui ne va pas dans notre monde.
+  C'est le début de tout. Avant, les galeries du portfolio était très lourde à charger. La page chargeait simultanément 2 versions de la galerie, une version desktop (ordinateur) et une version mobile. Résultat : la page chargeait lentement, et consommait plus données pour récupérer les éléments. La structure de la page était aussi plus conséquent. Mais j'ai décidé de remédier à ça. fois..
+</p>
+<p>
+  Désormais, les galeries du portfolio utilise une structure commune pour chaque version du site. Que vous consultiez le site depuis votre smartphone, tablette ou depuis un ordinateur, c'est la même structure qui est utilisée. 
 </p>
 {% if page.cta %}
 <br>
