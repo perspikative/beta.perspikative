@@ -524,15 +524,38 @@
 #zoom-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  /* Le fond est porté par ::before afin de pouvoir s'effacer pendant le swipe. */
+  background: transparent;
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   cursor: zoom-out;
+  isolation: isolate;
   z-index: 10050; /* au-dessus de .lightbox-close (10002) et des flèches */
   transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#zoom-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  opacity: calc(1 - var(--zoom-dismiss-progress, 0));
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+
+/* Pas de retard visuel pendant que le doigt déplace l'image. */
+#zoom-overlay.is-interacting::before {
+  transition: none;
+}
+
+/* Le fond se retire complètement quand le swipe a été validé. */
+#zoom-overlay.is-dismissing::before {
+  opacity: 0;
 }
 
 #zoom-overlay.active {
@@ -545,11 +568,16 @@
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 1;
   transform-origin: top left;
   border-radius: 28px;
   cursor: zoom-in;
   will-change: transform, border-radius;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-user-drag: none;
   transition:
     transform 0.62s cubic-bezier(0.65, 0, 0.35, 1),
     border-radius 0.62s cubic-bezier(0.65, 0, 0.35, 1);
