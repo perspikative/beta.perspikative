@@ -116,7 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeBtn      = document.getElementById('lightbox-close');
   const lbLikeBtn     = document.getElementById('lb-like-btn');
   const lbLikeIcon    = document.getElementById('lb-like-icon');
-  const lbLikeHalo    = document.getElementById('lb-like-halo');
   const lbShareBtn    = document.getElementById('lb-share-btn');
   const lbCopyBtn     = document.getElementById('lb-copy-btn');
   const lbPrevBtn     = document.getElementById('lb-prev');
@@ -291,76 +290,72 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ── Animation like ──────────────────────────────────────────────────────
-  // Déclenchée uniquement quand on LIKE (pas au dé-like). Elle vit sur
-  // l'image de la lightbox (.lightbox-left), indépendamment de la position
-  // du bouton : un petit "pop" + halo lumineux sur l'image, et une volée
-  // de particules de formes variées (pas que des cœurs) qui en jaillissent.
-  var LB_PARTICLE_SHAPES = ['♥', '✦', '✧', '✩', '●', '✳', '✯'];
-
   function animateLike(liked) {
-    if (!liked) return;
-
-    // Pop du bouton lui-même
-    if (lbLikeBtn) {
-      lbLikeBtn.classList.remove('like-pop');
-      void lbLikeBtn.offsetWidth;
-      lbLikeBtn.classList.add('like-pop');
-    }
-
-    var stage = document.getElementById('lightbox-left');
-    if (!stage) return;
-
-    // Pop + flash de couleur sur l'image elle-même (indépendant du bouton)
-    if (lightboxImg) {
-      lightboxImg.classList.remove('image-liked-anim');
-      void lightboxImg.offsetWidth;
-      lightboxImg.classList.add('image-liked-anim');
-      lightboxImg.addEventListener('animationend', function handler() {
-        lightboxImg.classList.remove('image-liked-anim');
-        lightboxImg.removeEventListener('animationend', handler);
-      });
-    }
-
-    // Halo qui s'étend depuis le centre de l'image
-    if (lbLikeHalo) {
-      lbLikeHalo.classList.remove('burst');
-      void lbLikeHalo.offsetWidth;
-      lbLikeHalo.classList.add('burst');
-    }
-
-    spawnLikeParticles(stage);
+    if (!liked || !lbLikeBtn) return;
+    lbLikeBtn.classList.remove('like-pop');
+    void lbLikeBtn.offsetWidth;
+    lbLikeBtn.classList.add('like-pop');
+    spawnHearts(lbLikeBtn);
   }
 
-  function spawnLikeParticles(stage) {
-    var count = 10;
-    for (var i = 0; i < count; i++) {
-      var particle = document.createElement('span');
-      particle.className = 'lb-like-particle';
-      particle.textContent = LB_PARTICLE_SHAPES[Math.floor(Math.random() * LB_PARTICLE_SHAPES.length)];
-
-      // Réparties tout autour du centre de l'image, avec un peu d'aléatoire
-      var angle = (360 / count) * i + (Math.random() * 24 - 12);
-      var rad   = angle * Math.PI / 180;
-      var dist  = 70 + Math.random() * 90;
-      var tx    = Math.cos(rad) * dist;
-      var ty    = Math.sin(rad) * dist;
-      var rot   = (Math.random() * 360 - 180) + 'deg';
-      var size  = 12 + Math.random() * 14;
-      var dur   = 0.6 + Math.random() * 0.4;
-      var delay = Math.random() * 120;
-
-      particle.style.setProperty('--tx', tx + 'px');
-      particle.style.setProperty('--ty', ty + 'px');
-      particle.style.setProperty('--tr', rot);
-      particle.style.setProperty('--size', size + 'px');
-      particle.style.setProperty('--duration', dur + 's');
-      particle.style.setProperty('--delay', delay + 'ms');
-      particle.style.setProperty('--color', 'hsl(' + (340 + Math.random() * 40 - 20) + ', 85%, 62%)');
-
-      stage.appendChild(particle);
-      particle.addEventListener('animationend', function() { this.remove(); });
+  function spawnHearts(btn) {
+    for (var i = 0; i < 6; i++) {
+      var heart = document.createElement('span');
+      heart.className = 'like-particle';
+      heart.textContent = '♥';
+      var angle = Math.random() * 160 - 80;
+      var dist  = 30 + Math.random() * 30;
+      heart.style.setProperty('--angle', angle + 'deg');
+      heart.style.setProperty('--dist', dist + 'px');
+      heart.style.setProperty('--delay', (i * 40) + 'ms');
+      btn.appendChild(heart);
+      heart.addEventListener('animationend', function() { this.remove(); });
     }
   }
+
+  // ── Double-clic sur l'image : like + cœur qui vole vers le bouton ─────
+  // Ne déclenche jamais le dé-like (comme Instagram) : un double-clic sur
+  // une image déjà likée ne fait que rejouer le petit cœur, sans toucher
+  // à Firestore.
+  function flyHeartToLikeButton(x, y) {
+    if (!lbLikeBtn) return;
+    var btnRect = lbLikeBtn.getBoundingClientRect();
+    var endX = btnRect.left + btnRect.width / 2;
+    var endY = btnRect.top + btnRect.height / 2;
+
+    var heart = document.createElement('span');
+    heart.className = 'lb-dbltap-heart';
+    heart.textContent = '♥';
+    heart.style.left = x + 'px';
+    heart.style.top  = y + 'px';
+    heart.style.setProperty('--dx', (endX - x) + 'px');
+    heart.style.setProperty('--dy', (endY - y) + 'px');
+
+    document.body.appendChild(heart);
+    heart.addEventListener('animationend', function() { heart.remove(); });
+  }
+
+  if (lightboxImg) {
+    lightboxImg.addEventListener('dblclick', function(e) {
+      if (!currentId) return;
+
+      flyHeartToLikeButton(e.clientX, e.clientY);
+
+      if (!currentFirebaseUser) {
+        openLoginPrompt();
+        return;
+      }
+
+      // On ne like que si ce n'est pas déjà liké : le double-clic ne sert
+      // jamais à retirer un like.
+      if (!likedCache[currentId]) {
+        toggleLikeInFirestore(currentId, getCurrentSourceForLike());
+      } else {
+        animateLike(true);
+      }
+    });
+  }
+
 
   // ── Toast partage ────────────────────────────────────────────────────────
   function showShareToast() {
