@@ -1,4 +1,4 @@
-const CACHE_NAME = 'perspikative-v1.7.0';
+const CACHE_NAME = 'perspikative-v1.7.2';
 
 const PRECACHE_ASSETS = [
   '/',
