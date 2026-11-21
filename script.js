@@ -289,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
     lbLikeBtn.classList.toggle('liked', isLiked);
   }
 
-  // ── Animation like ──────────────────────────────────────────────────────
+  // ── Animation like ───────────────────────────────────────────────────────
   function animateLike(liked) {
     if (!liked || !lbLikeBtn) return;
     lbLikeBtn.classList.remove('like-pop');
@@ -302,7 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for (var i = 0; i < 6; i++) {
       var heart = document.createElement('span');
       heart.className = 'like-particle';
-      heart.textContent = '♥';
+      heart.textContent = '\u2665';
       var angle = Math.random() * 160 - 80;
       var dist  = 30 + Math.random() * 30;
       heart.style.setProperty('--angle', angle + 'deg');
@@ -312,50 +312,6 @@ document.addEventListener('DOMContentLoaded', () => {
       heart.addEventListener('animationend', function() { this.remove(); });
     }
   }
-
-  // ── Double-clic sur l'image : like + cœur qui vole vers le bouton ─────
-  // Ne déclenche jamais le dé-like (comme Instagram) : un double-clic sur
-  // une image déjà likée ne fait que rejouer le petit cœur, sans toucher
-  // à Firestore.
-  function flyHeartToLikeButton(x, y) {
-    if (!lbLikeBtn) return;
-    var btnRect = lbLikeBtn.getBoundingClientRect();
-    var endX = btnRect.left + btnRect.width / 2;
-    var endY = btnRect.top + btnRect.height / 2;
-
-    var heart = document.createElement('span');
-    heart.className = 'lb-dbltap-heart';
-    heart.textContent = '♥';
-    heart.style.left = x + 'px';
-    heart.style.top  = y + 'px';
-    heart.style.setProperty('--dx', (endX - x) + 'px');
-    heart.style.setProperty('--dy', (endY - y) + 'px');
-
-    document.body.appendChild(heart);
-    heart.addEventListener('animationend', function() { heart.remove(); });
-  }
-
-  if (lightboxImg) {
-    lightboxImg.addEventListener('dblclick', function(e) {
-      if (!currentId) return;
-
-      flyHeartToLikeButton(e.clientX, e.clientY);
-
-      if (!currentFirebaseUser) {
-        openLoginPrompt();
-        return;
-      }
-
-      // On ne like que si ce n'est pas déjà liké : le double-clic ne sert
-      // jamais à retirer un like.
-      if (!likedCache[currentId]) {
-        toggleLikeInFirestore(currentId, getCurrentSourceForLike());
-      } else {
-        animateLike(true);
-      }
-    });
-  }
-
 
   // ── Toast partage ────────────────────────────────────────────────────────
   function showShareToast() {
