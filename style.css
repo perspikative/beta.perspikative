@@ -4196,13 +4196,13 @@ body {
 .lb-comment-body {
   flex: none;
   background: rgba(255, 255, 255, 0.07);
-  border-radius: 17px;
+  border-radius: 6px 17px 17px 17px;
   padding: 8px 12px;
   box-sizing: border-box;
   min-width: 0;
   max-width: 84%;
   position: relative;
-  transition: all 0.2 ease;
+  transition: all 0.2s ease;
   box-shadow:
     inset 0 0 10px rgba(255, 255, 255, 0.2),
     0 4px 12px rgba(0, 0, 0, 0.1);
