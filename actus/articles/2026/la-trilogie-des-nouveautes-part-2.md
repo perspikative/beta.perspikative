@@ -66,8 +66,7 @@ related_articles:
   C'est le début de tout. Avant, les galeries du portfolio était très lourde à charger. La page chargeait simultanément 2 versions de la galerie, une version desktop (ordinateur) et une version mobile. Résultat : la page chargeait lentement, et consommait plus de données pour récupérer les éléments. La structure de la page était aussi plus conséquente. Mais j'ai décidé de remédier à ça...
 </p>
 <p>
-  Désormais, les galeries du portfolio utilise une structure commune pour chaque version du site. Que vous consultiez le site depuis votre smartphone, tablette ou depuis un ordinateur, c'est la même structure qui est utilisée. À partir de là, le poids des pages a bien diminué. Mais ici, je parle bien de « galerie dynamique ».
-  En fait, j'utilisais différentes structures des galeries en une même page afin de disposer les œuvres d'une certaine façon. Sur mobile, 2 colonnes, et sur version desktop 3 colonnes. Mais maintenant que j'utilise 
+  Désormais, les galeries du portfolio utilise une structure commune pour chaque version du site. Que vous consultiez le site depuis votre smartphone, tablette ou depuis un ordinateur, c'est la même structure qui est utilisée. À partir de là, le poids des pages a bien diminué. Mais ici, je parle bien de « galerie dynamique ». En fait, j'utilisais différentes structures des galeries en une même page afin de disposer les œuvres d'une certaine façon. Sur mobile, 2 colonnes, et sur version desktop 3 colonnes. Mais maintenant que j'utilise une structure commune, comment choisir la disposition de mes œuvres ? Eh bien, j'ai fait appel à un script open-source...
 </p>
 {% if page.cta %}
 <br>
