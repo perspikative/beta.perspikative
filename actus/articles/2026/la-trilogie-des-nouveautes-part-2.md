@@ -79,11 +79,14 @@ related_articles:
 
 <p><strong>2. Filtrer par couleur, c'est possible</strong></p>
 <p>
-  C'est probablement l'une des fonctionnalités que je trouve le plus cool. Quelque part, c'est assez banal, mais c'est une fonctionnalité amusante (et pratique, encore heureux).
+  C'est probablement l'une des fonctionnalités que je trouve le plus cool. Quelque part, c'est assez banal, mais c'est une fonctionnalité amusante (et pratique, encore heureux). Depuis les débuts du portfolio, je savais que je voulais ce petit bouton Filtrer. Et le voilà !
 </p>
 <div class="article-image">
   <img src="/pics/actus/articles/2026/pics/bouton-filtrer.webp" alt="Image d'illustration - barre de navigation mobile" loading="lazy">
 </div>
+<p>
+  Il vous suffit d'appuer dessus pour qu'un panneau s'ouvre avec différentes couleurs. 
+</p>
 
 <p><strong>3. La réfraction au cœur de tout :</strong></p>
 <p>
