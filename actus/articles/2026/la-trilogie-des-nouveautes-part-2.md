@@ -85,7 +85,10 @@ related_articles:
   <img src="/pics/actus/articles/2026/pics/bouton-filtrer.webp" alt="Image d'illustration - barre de navigation mobile" loading="lazy">
 </div>
 <p>
-  Il vous suffit d'appuyer dessus pour qu'un panneau s'ouvre avec différentes couleurs. Le filtrage se fait par combinaisons de couleurs : toutes les couleurs que vous selectionnerez seront présentes dans les œuvres. Au plus vous sélectionnez de couleurs, au plus les résultats sont affinés. Si vous sélectionnez trop de couleurs, vous risquez de n'avoir aucun résultat (puisque jusqu'à présent, aucune œuvre ne contient toutes les couleurs présentes). Pour réinitaliser le filtre et voir toutes les œuvres par ordre chronologique, il vous suffit d'appuer sur la petite flèche Actualiser
+  Il vous suffit d'appuyer dessus pour qu'un panneau s'ouvre avec différentes couleurs. Le filtrage se fait par combinaisons de couleurs : toutes les couleurs que vous selectionnerez seront présentes dans les œuvres. Au plus vous sélectionnez de couleurs, au plus les résultats sont affinés. Si vous sélectionnez trop de couleurs, vous risquez de n'avoir aucun résultat (puisque jusqu'à présent, aucune œuvre ne contient toutes les couleurs présentes). Pour réinitaliser le filtre et voir toutes les œuvres par ordre chronologique, il vous suffit d'appuer sur la petite flèche Actualiser.
+</p>
+<p>
+  Pour l'instant, il est seuelemnt possible de trier ces œuvres par couleur. Mais plus tard, pourquoi pas pas les trier par années, thème ou encore popularité ?
 </p>
 
 <p><strong>3. La réfraction au cœur de tout :</strong></p>
