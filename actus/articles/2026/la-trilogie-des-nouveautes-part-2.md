@@ -1,6 +1,6 @@
 ---
 layout: article
-permalink: /actus/2026/la-trilogie-des-nouveautes-part-2/
+permalink: /actus/2026/la-trilogie-des-nouveautes-part-2
 
 title: "La Trilogie des Nouveautés - Part 2"
 date: 2026-11-23
