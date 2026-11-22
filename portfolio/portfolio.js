@@ -29,9 +29,6 @@
     const TAP_SLOP          = 6;     // px de tolérance avant de considérer un « glissement »
     const FULLSCREEN_RADIUS = 12;    // rayon des coins en plein écran (px, taille VISUELLE)
     const MIN_DOUBLE_ZOOM   = 2;     // niveau du zoom au double-clic
-    const DISMISS_DISTANCE  = 125;   // distance verticale avant fermeture par glissement
-    const DISMISS_FLICK     = 0.65;  // vitesse verticale minimale (px/ms) pour un geste rapide
-    const DISMISS_FLICK_MIN = 70;    // déplacement minimal d'un geste rapide
 
     const easeInOut = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
     const easeOut   = t => 1 - Math.pow(1 - t, 3);
@@ -63,15 +60,12 @@
     zoomImg.addEventListener('dragstart', e => e.preventDefault());
     zoomOverlay.style.touchAction = 'none';
     zoomOverlay.setAttribute('role', 'dialog');
-    zoomOverlay.setAttribute('aria-modal', 'true');
     zoomOverlay.setAttribute('aria-label', 'Image en plein écran');
-    zoomOverlay.setAttribute('aria-hidden', 'true');
 
     // ─── Géométrie ───────────────────────────────────────────────────────
     const vw = () => document.documentElement.clientWidth || window.innerWidth;
     const vh = () => window.innerHeight;
     const padding = () => (vw() <= 700 ? 16 : 48);
-    const isMobileTouch = () => window.matchMedia('(max-width: 700px), (pointer: coarse)').matches;
 
     function computeFit() {
       const r  = sourceImg.getBoundingClientRect();
@@ -209,10 +203,6 @@
       if (status !== 'closed' || !sourceImg.src) return;
       status = 'opening';
 
-      // Nettoie un éventuel état de fermeture par glissement précédent.
-      zoomOverlay.classList.remove('is-interacting', 'is-dismissing');
-      zoomOverlay.style.removeProperty('--zoom-dismiss-progress');
-
       zoomImg.src = sourceImg.currentSrc || sourceImg.src;
       zoomImg.alt = sourceImg.alt || '';
       try { await zoomImg.decode(); } catch (_) { /* image déjà en cache : on continue */ }
@@ -224,7 +214,6 @@
       render();
 
       sourceImg.classList.add('zoom-source-hidden');
-      zoomOverlay.setAttribute('aria-hidden', 'false');
       zoomOverlay.classList.add('active');
 
       animateTo(fitView(), OPEN_MS, easeInOut, () => {
@@ -236,17 +225,9 @@
     function finishClose() {
       sourceImg.classList.remove('zoom-source-hidden');
       zoomOverlay.classList.remove('active');
-      zoomOverlay.setAttribute('aria-hidden', 'true');
       zoomImg.removeAttribute('src');
       zoomImg.style.willChange = '';
       zoomImg.style.cursor = '';
-
-      // Pendant une fermeture par glissement, le fond reste transparent
-      // pendant que l'overlay termine sa transition vers visibility:hidden.
-      if (!zoomOverlay.classList.contains('is-dismissing')) {
-        zoomOverlay.classList.remove('is-interacting');
-        zoomOverlay.style.removeProperty('--zoom-dismiss-progress');
-      }
       status = 'closed';
     }
 
@@ -256,32 +237,8 @@
       pointers.clear();
       gesture = null;
       clearTimeout(tapTimer);
-      lastTap.t = 0;
-      zoomOverlay.classList.remove('is-interacting');
-      zoomOverlay.style.removeProperty('--zoom-dismiss-progress');
-      // Revient à la miniature depuis l'état courant (même si on est zoomé / déplacé).
+      // Revient à la miniature depuis l'état courant (même si on est zoomé / déplacé)
       animateTo(sourceState(), CLOSE_MS, easeInOut, finishClose);
-    }
-
-    // Fermeture spécifique au geste mobile : l'image continue sa descente
-    // et quitte l'écran au lieu de revenir à sa miniature.
-    function dismissZoomBySwipe() {
-      if (status !== 'open') return;
-      status = 'closing';
-      pointers.clear();
-      gesture = null;
-      clearTimeout(tapTimer);
-      lastTap.t = 0;
-      zoomOverlay.classList.remove('is-interacting');
-      zoomOverlay.classList.add('is-dismissing');
-      zoomOverlay.style.setProperty('--zoom-dismiss-progress', '1');
-
-      animateTo({
-        x: view.x,
-        y: vh() + 48,
-        s: Math.max(0.85, view.s * 0.94),
-        r: 0
-      }, 260, easeInOut, finishClose);
     }
 
     // Annulation brutale (lightbox fermée ou image changée pendant le zoom)
@@ -356,17 +313,10 @@
         gesture.my0 = (a.y + b.y) / 2;
         gesture.base = base;
       } else {
-        const point = pts[0];
-        // À l'échelle normale, un doigt mobile peut tirer l'image vers le bas
-        // pour fermer la sur-lightbox. Une image zoomée reste déplaçable.
-        const canDismiss = point.type === 'touch' && isMobileTouch() && view.s <= 1.05;
-        gesture.mode = canDismiss ? 'dismiss-pending' : 'pan';
-        gesture.ax = point.x;
-        gesture.ay = point.y;
+        gesture.mode = 'pan';
+        gesture.ax = pts[0].x;
+        gesture.ay = pts[0].y;
         gesture.base = base;
-        gesture.lastY = point.y;
-        gesture.lastMoveAt = performance.now();
-        gesture.velocityY = 0;
       }
     }
 
@@ -376,7 +326,7 @@
       e.preventDefault();
       stopAnim();
       try { zoomImg.setPointerCapture(e.pointerId); } catch (_) {}
-      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY, type: e.pointerType });
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
       beginGesture(pointers.size === 1);
       if (pointers.size === 1) updateCursor(true);
     });
@@ -384,8 +334,7 @@
     zoomImg.addEventListener('pointermove', (e) => {
       const p = pointers.get(e.pointerId);
       if (!p || !gesture) return;
-      p.x = e.clientX;
-      p.y = e.clientY;
+      p.x = e.clientX; p.y = e.clientY;
 
       if (gesture.mode === 'pinch') {
         const [a, b] = [...pointers.values()];
@@ -393,7 +342,7 @@
         const mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
         const s  = clamp(gesture.base.s * d / gesture.d0, 0.7, fit.max * 1.25);
         const k  = s / gesture.base.s;
-        // Le point de l'image qui était sous le milieu des doigts les suit.
+        // Le point de l'image qui était sous le milieu des doigts les suit
         const x = mx - (gesture.mx0 - gesture.base.x) * k;
         const y = my - (gesture.my0 - gesture.base.y) * k;
         const bd = bounds(s);
@@ -402,96 +351,29 @@
         view.y = soft(y, bd.minY, bd.maxY);
         render();
       } else {
-        const dx = e.clientX - gesture.ax;
-        const dy = e.clientY - gesture.ay;
-
-        if (gesture.mode === 'dismiss-pending' && Math.hypot(dx, dy) > TAP_SLOP) {
-          gesture.moved = true;
-          if (dy > 0 && dy > Math.abs(dx) * 0.9) {
-            gesture.mode = 'dismiss';
-            zoomOverlay.classList.add('is-interacting');
-          } else {
-            gesture.mode = 'pan';
-          }
-        }
-
-        if (gesture.mode === 'dismiss') {
-          gesture.moved = true;
-          const now = performance.now();
-          const dt = Math.max(1, now - gesture.lastMoveAt);
-          gesture.velocityY = (e.clientY - gesture.lastY) / dt;
-          gesture.lastY = e.clientY;
-          gesture.lastMoveAt = now;
-
-          const pullY = Math.max(0, dy);
-          // L'image suit le doigt ; un léger amorti horizontal garde le geste naturel.
-          view.x = gesture.base.x + dx * 0.16;
-          view.y = gesture.base.y + pullY;
+        const dx = e.clientX - gesture.ax, dy = e.clientY - gesture.ay;
+        if (!gesture.moved && Math.hypot(dx, dy) > TAP_SLOP) gesture.moved = true;
+        if (view.s > 1.001) {
+          const bd = bounds(view.s);
+          view.x = soft(gesture.base.x + dx, bd.minX, bd.maxX);
+          view.y = soft(gesture.base.y + dy, bd.minY, bd.maxY);
           render();
-
-          const progress = clamp(pullY / (DISMISS_DISTANCE * 1.45), 0, 0.9);
-          zoomOverlay.style.setProperty('--zoom-dismiss-progress', progress.toFixed(3));
-        } else if (gesture.mode === 'pan') {
-          if (!gesture.moved && Math.hypot(dx, dy) > TAP_SLOP) gesture.moved = true;
-          if (view.s > 1.001) {
-            const bd = bounds(view.s);
-            view.x = soft(gesture.base.x + dx, bd.minX, bd.maxX);
-            view.y = soft(gesture.base.y + dy, bd.minY, bd.maxY);
-            render();
-          }
         }
       }
     });
 
     function endPointer(e, cancelled) {
       if (!pointers.has(e.pointerId)) return;
-      const point = pointers.get(e.pointerId);
-      if (!cancelled) {
-        point.x = e.clientX;
-        point.y = e.clientY;
-      }
       pointers.delete(e.pointerId);
       try { zoomImg.releasePointerCapture(e.pointerId); } catch (_) {}
       if (!gesture) return;
 
-      if (pointers.size > 0) { beginGesture(false); return; } // 2 doigts → 1 : on reprend en déplacement.
+      if (pointers.size > 0) { beginGesture(false); return; } // 2 doigts → 1 : on reprend en déplacement
 
       const wasTap = !cancelled && !gesture.moved && !gesture.pinched;
       const wasMoved = gesture.moved;
-      const wasDismiss = gesture.mode === 'dismiss';
-      let dismissDy = 0;
-      let velocityY = gesture.velocityY || 0;
-
-      if (wasDismiss && !cancelled) {
-        const now = performance.now();
-        const dt = Math.max(1, now - gesture.lastMoveAt);
-        const finalDelta = e.clientY - gesture.lastY;
-        if (Math.abs(finalDelta) > 0.5) velocityY = finalDelta / dt;
-        else velocityY *= Math.exp(-dt / 120);
-        dismissDy = Math.max(0, e.clientY - gesture.ay);
-        // Prend aussi en compte la dernière position pointerup, parfois distincte
-        // du dernier pointermove envoyé par le navigateur.
-        view.x = gesture.base.x + (e.clientX - gesture.ax) * 0.16;
-        view.y = gesture.base.y + dismissDy;
-        render();
-      }
-
       gesture = null;
       updateCursor(false);
-
-      if (wasDismiss) {
-        if (!cancelled && (dismissDy >= DISMISS_DISTANCE || (dismissDy >= DISMISS_FLICK_MIN && velocityY >= DISMISS_FLICK))) {
-          dismissZoomBySwipe();
-        } else {
-          // Geste trop court : l'image revient doucement au cadrage initial.
-          zoomOverlay.classList.remove('is-interacting');
-          zoomOverlay.style.setProperty('--zoom-dismiss-progress', '0');
-          animateTo(fitView(), SETTLE_MS, easeOut, () => {
-            zoomOverlay.style.removeProperty('--zoom-dismiss-progress');
-          });
-        }
-        return;
-      }
 
       if (wasTap) handleTap(e);
       else if (wasMoved) settle();
@@ -499,31 +381,26 @@
     zoomImg.addEventListener('pointerup',     (e) => endPointer(e, false));
     zoomImg.addEventListener('pointercancel', (e) => endPointer(e, true));
 
-    // Sur mobile, un tap ferme immédiatement ; le zoom se fait au pincement.
-    // Sur ordinateur, un clic ferme et un double-clic conserve le zoom ciblé.
+    // Simple clic (souris) : dézoome si on est zoomé, sinon ferme.
+    // Simple tap (tactile) : rien (la fermeture se fait en touchant le fond).
+    // Double clic / double tap : zoom ↔ ajusté, centré sur le point touché.
     function handleTap(e) {
       const now = performance.now();
       const x = e.clientX, y = e.clientY, type = e.pointerType;
+      const isDouble = now - lastTap.t < DOUBLE_TAP_MS && Math.hypot(x - lastTap.x, y - lastTap.y) < 30;
 
       clearTimeout(tapTimer);
-
-      if (type !== 'mouse') {
-        lastTap.t = 0;
-        closeZoom();
-        return;
-      }
-
-      const isDouble = now - lastTap.t < DOUBLE_TAP_MS && Math.hypot(x - lastTap.x, y - lastTap.y) < 30;
       if (isDouble) {
         lastTap.t = 0;
         toggleZoom(x, y);
         return;
       }
-
       lastTap = { t: now, x, y };
       tapTimer = setTimeout(() => {
         lastTap.t = 0;
-        if (status === 'open') closeZoom();
+        if (type !== 'mouse' || status !== 'open') return;
+        if (view.s > 1.05) animateTo(fitView(), ZOOM_MS, easeOut);
+        else closeZoom();
       }, DOUBLE_TAP_MS);
     }
 
