@@ -82,22 +82,23 @@ related_articles:
   C'est probablement l'une des fonctionnalités que je trouve le plus cool. Quelque part, c'est assez banal, mais c'est une fonctionnalité amusante (et pratique, encore heureux). Depuis les débuts du portfolio, je savais que je voulais ce petit bouton Filtrer. Et le voilà !
 </p>
 <div class="article-image">
-  <img src="/pics/actus/articles/2026/pics/bouton-filtrer.webp" alt="Image d'illustration - barre de navigation mobile" loading="lazy">
+  <img src="/pics/actus/articles/2026/pics/bouton-filtrer.webp" alt="Image d'illustration - bouton Filtrer" loading="lazy">
 </div>
 <p>
   Il vous suffit d'appuyer dessus pour qu'un panneau s'ouvre avec différentes couleurs. Le filtrage se fait par combinaisons de couleurs : toutes les couleurs que vous selectionnerez seront présentes dans les œuvres. Au plus vous sélectionnez de couleurs, au plus les résultats sont affinés. Si vous sélectionnez trop de couleurs, vous risquez de n'avoir aucun résultat (puisque jusqu'à présent, aucune œuvre ne contient toutes les couleurs présentes). Pour réinitaliser le filtre et voir toutes les œuvres par ordre chronologique, il vous suffit d'appuer sur la petite flèche Actualiser.
 </p>
 <p>
-  Pour l'instant, il est seuelemnt possible de trier ces œuvres par couleur. Mais plus tard, pourquoi pas pas les trier par années, thème ou encore popularité ?
+  Pour l'instant, il est seulement possible de trier ces œuvres par couleur. Mais plus tard, pourquoi pas les trier par années, thème ou encore popularité ? Le portfolio est plus complet ainsi, mais il manque toujours...
 </p>
+<br>
 
-<p><strong>3. La réfraction au cœur de tout :</strong></p>
+<p><strong>3. Des commentaires pour blablater</strong></p>
 <p>
-  La barre de navigation mobile ne s'arrête pas là. L'arrivée du Liquid Glass d'Apple en 2025 m'avait beaucoup interpellé. Ce nouveau système me semblait juste extraordinaire, cet effet de verre liquide si réaliste. Simplement, j'aimais beaucoup cet effet, et il se trouve qu'à ce moment là je faisais mes premiers essais de code pour mon site. Je pense que le Liquid Glass m'a beaucoup inspiré, et quelque peu influencé dans ma manière de concevoir le site. 
+  Que serait Perspikative sans interactions ? Pas grand chose effectivement, même s'il faut encore que je m'améliore. Cette idée d'ajouter une section commentaires dans les lightboxs (fenêtres) de mes œuvres n'est pas d'ajourd'hui, mais je me vois enfin vous la présenter !
 </p>
-<p>
-  Dans cet élan de rendre mon site meilleur, je pensais déjà depuis longtemps à rendre cette barre de navigation mobile beaucoup plus "iOSque", si je puis dire. Je me suis donc renseigné sur tous les éléments qui rendaient cette barre très naturelle et réaliste, en lisant plusieurs articles qui expliquaient cela. Même en trouvant ça très ingénieux, la question restait la même : comment recréer cet effet pour le web ? Un système d'exploitation et un navigateur web ne sont pas la même chose, et les navigateurs ne sont pas tous pareils (la galère vraiment). L'indice que je relevais le plus pertinent était la réfraction de l'élément. La réfraction déforme l'arrière-plan sur les bords pour donner une perspective et une impression de 3D à l'élément. J'ai alors trouvé des projets open source qui travaillait sur l'expérimentation de cette chose qu'est la réfraction. L'IA m'a également aidé à paufiner cet effet. Et ainsiest né la réfraction sur la barre de navigation mobile ! Cet effet est n'est malheureusement pas disponible sur des navigateurs comme Safari ou Firefox, mais seulement sur des navigateurs qui utilisent Chromium (Google, Samsung Internet...).
-</p>
+<div class="article-image">
+  <img src="/pics/actus/articles/2026/pics/section-commentaires.webp" alt="Image d'illustration -section commentaires" loading="lazy">
+</div>
 
 <p><strong>4. Les fameuses pages légales :</strong></p>
 <p>
