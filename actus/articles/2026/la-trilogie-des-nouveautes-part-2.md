@@ -3,7 +3,7 @@ layout: article
 permalink: /actus/2026/la-trilogie-des-nouveautes-part-2
 
 title: "La Trilogie des Nouveautés - Part 2"
-date: 2026-11-20
+date: 2026-11-23
 published_date: "Publié le 23 novembre 2026"
 description: "La fin de l'été 2026 a offert une avalanche de nouveautés pour le site, en 3 chapitres. Voici le second."
 keywords:
@@ -97,13 +97,37 @@ related_articles:
   Que serait Perspikative sans interactions ? Pas grand chose effectivement, même s'il faut encore que je m'améliore. Cette idée d'ajouter une section commentaires dans les lightboxs (fenêtres) de mes œuvres n'est pas d'ajourd'hui, mais je me vois enfin vous la présenter !
 </p>
 <div class="article-image">
-  <img src="/pics/actus/articles/2026/pics/section-commentaires.webp" alt="Image d'illustration -section commentaires" loading="lazy">
+  <img src="/pics/actus/articles/2026/pics/section-commentaires.webp" alt="Image d'illustration - section commentaires" loading="lazy">
 </div>
 <p>
-  En dessous de chaque œuvre, une section commentaire est présente
+  En dessous de chaque œuvre, une section commentaire est présente. On peut y retrouver la barre du champ de saisie et les bulles de commentaires, avec les photos de profil et les pseudos des Perspikativeurs. Cette section a été un vrai défi, car elle demande l'ajout de 4 scripts supplémentaires venant se charger sur le site, dont 3 rien que pour elle. On retrouve tout d'abord un script qui gère les commentaires (affichage, commentaire masqué ou supprimé), un script secret (non, vous saurez juste à l'article du Chapitre 3 hehe), puis un script qui gère les fondus des commentaires si il y en a plus de 5 (un script juste pour l'ésthétique finalement). Et enfin, un script qui gère la modération...
 </p>
 
-<p><strong>4. Les fameuses pages légales :</strong></p>
+<p><strong>4. Des limites (quand-même)</strong></p>
 <p>
-  Ce n'est peut-être qu'un détail pour vous, mais les pages légales sont finalement les plus importantes de ce chapitre de nouveautés. En effet, elles apportent toute la clarté du site, dont certaines sont obligatoires. Avec le Chapitre final, l'arrivée d'une toute nouvelle page est primordiale : les <a href="/terms-of-service" target="_blank">conditions d'utilisation</a>. Elles instaurent les règles de base pour le bien-vivre ensemble sur le site. La modification de la <a href="/politique-de-confidentialite" target="_blank">politique de confidentialité</a> a aussi été faite minutieusement, afin de rendre clair l'utilisation de vos données (vous inquiétez pas, je vais pas vous manger ni vendre vos données). Une petite modification a également été faite dans les mentions légales <a href="/mentions-legales" target="_blank">mentions légales</a>, du côté des crédits. 
+  À partir du moment où le champ est libre, les limites s'effondrent. Les <a href="/terms-of-service" target="_blank">conditions d'utilisation</a> du site servent entre autre à cela. Les commentaires sont un espace libre d'échange, avec certaines règles à respecter. Entre autre, la politesse y est primordiale. Perspikative a donc instaurer plusieurs mesures afin de garantir un espace libre et safe, avec entre autre :
+</p>
+<ul>
+  <li>La possession d'un profil Perspikative</li>
+  <li>Un nombre de commentaires limité à 5 par œuvre</li>
+  <li>Une liste de mots bannis (mots grossiers, insultants ou explicites)</li>
+  <li>Un système de signalement</li>
+</ul>
+<p>
+  Le système de signalement est une mesure très importante. Elle permet à n'importe quel Perspikativeur de signaler un commentaire qu'iel juge inapproprié. Un signalement est rapide et efficace à effectuer. Il vous suffit de cliquer sur le petit drapeau Signaler dans le coin supérieur droit d'un commentaire, puis sélectionner la catégorie qui correspond le plus au type d'infraction qui a été commis selon vous.
+</p>
+<div class="article-image">
+  <img src="/pics/actus/articles/2026/pics/signalement-de-commentaire.webp" alt="Image d'illustration - signalement de commentaire" loading="lazy">
+</div>
+<p>
+  Je reçois chaque signalement individuellement, anonymement si vous n'êtes pas connecté, et me permet de décider de garder ou supprimer le commentaire en fontion de l'infraction commise. À noter que si plusieurs Perspikativeurs signalent un même commentaire avant même que ne puisse agir, celui-ci sera masqué immédiatement
+</p>
+<div class="article-image">
+  <img src="/pics/actus/articles/2026/pics/commentaire-masque.webp" alt="Image d'illustration - commentaire masqué" loading="lazy">
+</div>
+<br>
+
+<p><strong>5. Naviguer en toute tranquilité</strong></p>
+<p>
+  Une dernière nouveauté, même si elle reste mineure, est celle de l'ajout de flèche de navigation au sein des lightboxs. C'est très utile si vous souhaitez passer d'une œuvre à une autre sans devoir sortir à chaque fois. Elles rendent l'expérience plus fluide, tout simplement.
 </p>
